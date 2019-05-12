@@ -1,4 +1,6 @@
-package frc.robot.common.control;
+package frc.common.control;
+
+import java.util.logging.Logger;
 
 /**
  * Our custom PID controller implementation.
@@ -6,6 +8,8 @@ package frc.robot.common.control;
  * Based off of faceincake's PID code from 2018 and 2019
  */
 public class PID {
+    private final Logger logger = Logger.getLogger(this.getClass().getName());
+
     private double kP, kI, kD;
     private double integral = 0.0;
     private double previous_error = 0.0;
@@ -23,6 +27,8 @@ public class PID {
         this.kI = ki;
         this.kD = kd;
 
+        logger.config("PID gains have been set to: "+kp+", "+ki+", "+kd);
+
         this.setpoint = 0.0;
     }
 
@@ -36,6 +42,7 @@ public class PID {
      */
     public void setSetpoint(double setpoint) {
         this.setpoint = setpoint;
+        logger.config("PID setpoint has been set to: "+setpoint);
     }
 
     /**
@@ -52,6 +59,8 @@ public class PID {
         this.kP = kp;
         this.kI = ki;
         this.kD = kd;
+
+        logger.config("PID gains have been reset to: "+kp+", "+ki+", "+kd);
     }
 
     /**

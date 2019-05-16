@@ -1,5 +1,7 @@
 package frc.common.wrappers;
 
+import java.util.logging.Logger;
+
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.cscore.VideoSource.ConnectionStrategy;
 import edu.wpi.cscore.MjpegServer;
@@ -12,6 +14,8 @@ import frc.common.utils.FileUtils;
  * Stream a USB camera feed over http to a driverstation
  */
 public class Camera {
+    private final Logger logger = Logger.getLogger(this.getClass().getName());
+
     UsbCamera camera;
     MjpegServer camera_server;
 
@@ -26,6 +30,7 @@ public class Camera {
         this.camera.setVideoMode(VideoMode.PixelFormat.kMJPEG, 320, 240, 15);
         this.camera_server = new MjpegServer(name, http_port);
         this.camera_server.setSource(this.camera);
+        logger.info(name +" initalized on TCP port " + http_port);
     }
 
     /**
@@ -40,6 +45,7 @@ public class Camera {
         this.camera.setVideoMode(VideoMode.PixelFormat.kMJPEG, 320, 240, 15);
         this.camera_server = new MjpegServer(name, http_port);
         this.camera_server.setSource(this.camera);
+        logger.info(name +" (USB port "+ usb_port +") initalized on TCP port " + http_port);
     }
 
     /**
@@ -59,11 +65,17 @@ public class Camera {
      * @param filepath Path to json file
      */
     public void loadJsonConfig(String filepath) {
+        //Temp filepath fix for @ewpratten's computer
+        if (filepath == "/home/ewpratten/frc/MiniBot/deploy/maincamera.json") {
+            filepath = "/home/ewpratten/frc/MiniBot/src/main/deploy/maincamera.json";
+        }
+
         try {
             String config = FileUtils.readFile(filepath);
             this.camera.setConfigJson(config);
+            logger.info("Camera config has been loaded from: " + filepath);
         } catch (Exception e) {
-            System.out.println("WARNING: Unable to load camera config file: " + filepath);
+            logger.warning("Unable to load camera config file: " + filepath);
         }  
     }
 
@@ -73,10 +85,10 @@ public class Camera {
      * @param enabled Should the camera always be streaming video?
      */
     public void keepCameraAwake(boolean enabled) {
-        if (enabled) {
-            this.camera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
-        } else {
-            this.camera.setConnectionStrategy(ConnectionStrategy.kAutoManage);
-        }
+        ConnectionStrategy strategy = enabled ? ConnectionStrategy.kKeepOpen : ConnectionStrategy.kAutoManage;
+        String strategy_string = enabled ? "Stay Awake" : "Auto Manage";
+        
+        this.camera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
+        logger.info("Camera connection mode has been set to: "+ strategy_string);
     }
 }

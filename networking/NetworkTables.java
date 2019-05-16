@@ -1,4 +1,4 @@
-package frc.common.wrappers;
+package frc.common.networking;
 
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTable;

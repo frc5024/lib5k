@@ -1,6 +1,7 @@
 package frc.common.wrappers;
 
-import java.util.logging.Logger;
+import frc.common.utils.RobotLogger;
+import frc.common.utils.RobotLogger.Level;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.cscore.VideoSource.ConnectionStrategy;
@@ -14,10 +15,12 @@ import frc.common.utils.FileUtils;
  * Stream a USB camera feed over http to a driverstation
  */
 public class Camera {
-    private final Logger logger = Logger.getLogger(this.getClass().getName());
+    private final RobotLogger logger = RobotLogger.getInstance();
 
     UsbCamera camera;
     MjpegServer camera_server;
+
+    String name;
 
     /**
      * Initalize with basic params
@@ -30,7 +33,8 @@ public class Camera {
         this.camera.setVideoMode(VideoMode.PixelFormat.kMJPEG, 320, 240, 15);
         this.camera_server = new MjpegServer(name, http_port);
         this.camera_server.setSource(this.camera);
-        logger.info(name +" initalized on TCP port " + http_port);
+        System.out.println(name + " initialized on TCP port " + http_port);
+        this.name = name;
     }
 
     /**
@@ -45,7 +49,8 @@ public class Camera {
         this.camera.setVideoMode(VideoMode.PixelFormat.kMJPEG, 320, 240, 15);
         this.camera_server = new MjpegServer(name, http_port);
         this.camera_server.setSource(this.camera);
-        logger.info(name +" (USB port "+ usb_port +") initalized on TCP port " + http_port);
+        System.out.println(name + " (USB port " + usb_port + ") initialized on TCP port " + http_port);
+        this.name = name;
     }
 
     /**
@@ -57,6 +62,7 @@ public class Camera {
      */
     public void setResolution(int height, int width, int fps) {
         this.camera.setVideoMode(VideoMode.PixelFormat.kMJPEG, height, width, fps);
+        logger.log(name +"'s resolution set to " + width + "x" + height, Level.kLibrary);
     }
 
     /**
@@ -73,9 +79,9 @@ public class Camera {
         try {
             String config = FileUtils.readFile(filepath);
             this.camera.setConfigJson(config);
-            logger.info("Camera config has been loaded from: " + filepath);
+            logger.log(name +"'s config has been loaded from: " + filepath, Level.kLibrary);
         } catch (Exception e) {
-            logger.warning("Unable to load camera config file: " + filepath);
+            logger.log("Unable to load camera config file: " + filepath, Level.kWarning);
         }  
     }
 
@@ -89,6 +95,6 @@ public class Camera {
         String strategy_string = enabled ? "Stay Awake" : "Auto Manage";
         
         this.camera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
-        logger.info("Camera connection mode has been set to: "+ strategy_string);
+        logger.log(name +"'s connection mode has been set to: "+ strategy_string, Level.kLibrary);
     }
 }

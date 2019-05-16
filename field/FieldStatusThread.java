@@ -1,13 +1,14 @@
 package frc.common.field;
 
-import java.util.logging.Logger;
+import frc.common.utils.RobotLogger;
+import frc.common.utils.RobotLogger.Level;
 
 import edu.wpi.first.wpilibj.Notifier;
 
 import frc.common.field.Match;
 
 public class FieldStatusThread {
-    private final Logger logger = Logger.getLogger(this.getClass().getName());
+    private final RobotLogger logger = RobotLogger.getInstance();
 
     Notifier thread;
 
@@ -20,12 +21,12 @@ public class FieldStatusThread {
     }
 
     public void start(double period) {
-        logger.info("FieldStatusThread Starting");
+        logger.log("FieldStatusThread Starting", Level.kRobot);
         this.thread.startPeriodic(period);
     }
 
     public void stop() {
-        logger.warning("FieldStatusThread has been stopped");
+        logger.log("FieldStatusThread has been stopped", Level.kWarning);
         this.thread.stop();
     }
 

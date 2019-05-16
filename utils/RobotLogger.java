@@ -14,11 +14,20 @@ public class RobotLogger{
      * The kRobot level will immeadiatly push to the console, everything else is queued until the next notifier cycle
      */
     public enum Level {
-        kRobot, kInfo, kWarning
+        kRobot, kInfo, kWarning, kLibrary
     }
 
     private RobotLogger() {
         this.notifier = new Notifier(this::pushLogs);
+    }
+
+    /**
+     * Start the periodic logger
+     * 
+     * @param period The logging notifier period time in seconds
+     */
+    public void start(double period){
+        this.notifier.startPeriodic(period);
     }
     
     /**
@@ -95,6 +104,9 @@ public class RobotLogger{
             break;
         case kRobot:
             level_str = "ROBOT: ";
+            break;
+        case kLibrary:
+            level_str = "LIBRARY: ";
             break;
         default:
             level_str = "UNK: ";

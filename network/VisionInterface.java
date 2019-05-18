@@ -1,4 +1,4 @@
-package frc.common.networking;
+package frc.common.network;
 
 import edu.wpi.first.wpilibj.Notifier;
 

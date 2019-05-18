@@ -6,10 +6,10 @@ package frc.common.control;
  * http://www.mimirgames.com/articles/games/joystick-input-and-using-deadbands/ 
  * 
  * Formula:
- * ((w * x * x * x + (1.0 - w) * x) - (abs(x) / x) * (w * d * d * d + (1.0 - w) * d)) / (1.0 - (w * d * d * d + (1.0 - w) * d))
+ * y = ((w * (x ^ 3)  + (1.0 - w) * x) - (abs(x) / x) * (w * (d ^ 3) + (1.0 - w) * d)) / (1.0 - (w * (d ^ 3) + (1.0 - w) * d))
  * 
  * This can be visualized on desmos:
- * https://www.desmos.com/calculator/atypxowbv8
+ *https://www.desmos.com/calculator/awcputalxe
  */
 
 public class CubicDeadband {

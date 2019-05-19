@@ -8,8 +8,9 @@ import frc.common.utils.RobotLogger;
 import frc.common.utils.RobotLogger.Level;
 
 /**
- * Inspired by 254's 2017 codebase
+ * Monitor the connection status to the driversttion
  * 
+ * Inspired by 254's 2017 codebase:
  * https://github.com/Team254/FRC-2017-Public/blob/master/src/com/team254/frc2017/subsystems/ConnectionMonitor.java
  */
 public class ConnectionMonitor {

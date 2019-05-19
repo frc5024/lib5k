@@ -8,8 +8,9 @@ import edu.wpi.cscore.VideoSource.ConnectionStrategy;
 import edu.wpi.cscore.MjpegServer;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.cscore.VideoMode;
-
+import edu.wpi.cscore.VideoSink;
 import frc.common.utils.FileUtils;
+import frc.common.network.NetworkTables;
 
 /**
  * Stream a USB camera feed over http to a driverstation
@@ -19,6 +20,7 @@ public class Camera {
 
     UsbCamera camera;
     MjpegServer camera_server;
+    NetworkTables nt;
 
     String name;
 
@@ -34,7 +36,9 @@ public class Camera {
         this.camera_server = new MjpegServer(name, http_port);
         this.camera_server.setSource(this.camera);
         System.out.println(name + " initialized on TCP port " + http_port);
+
         this.name = name;
+        initNT();
     }
 
     /**
@@ -50,7 +54,16 @@ public class Camera {
         this.camera_server = new MjpegServer(name, http_port);
         this.camera_server.setSource(this.camera);
         System.out.println(name + " (USB port " + usb_port + ") initialized on TCP port " + http_port);
+
         this.name = name;
+        initNT();
+    }
+
+    private void initNT(){
+        this.nt = NetworkTables.getInstance();
+
+        nt.getEntry("cameras/" + name, "alive").setBoolean(true);
+        nt.getEntry("cameras/" + name, "isVisionMode").setBoolean(false);
     }
 
     /**
@@ -93,8 +106,12 @@ public class Camera {
     public void keepCameraAwake(boolean enabled) {
         ConnectionStrategy strategy = enabled ? ConnectionStrategy.kKeepOpen : ConnectionStrategy.kAutoManage;
         String strategy_string = enabled ? "Stay Awake" : "Auto Manage";
-        
+
         this.camera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
-        logger.log(name +"'s connection mode has been set to: "+ strategy_string, Level.kLibrary);
+        logger.log(name + "'s connection mode has been set to: " + strategy_string, Level.kLibrary);
+    }
+    
+    public UsbCamera getCameraSever() {
+        return camera;
     }
 }

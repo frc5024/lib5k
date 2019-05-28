@@ -4,6 +4,8 @@ import frc.common.utils.RobotLogger;
 import frc.common.utils.RobotLogger.Level;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.wpilibj.SendableBase;
+import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
 import edu.wpi.cscore.VideoSource.ConnectionStrategy;
 import edu.wpi.cscore.MjpegServer;
 import edu.wpi.cscore.UsbCamera;
@@ -59,7 +61,7 @@ public class Camera {
         initNT();
     }
 
-    private void initNT(){
+    private void initNT() {
         this.nt = NetworkTables.getInstance();
 
         nt.getEntry("cameras/" + name, "alive").setBoolean(true);

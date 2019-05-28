@@ -9,6 +9,15 @@ public class NetworkTables {
 
     NetworkTableInstance inst = NetworkTableInstance.getDefault();
 
+    /**
+     * Dont ever call this. Bad things can happen.
+     * 
+     * This function only exsists for use during robot configuration
+     */
+    public void setPeriod(double period) {
+        this.inst.setUpdateRate(period);
+    }
+
     public static NetworkTables getInstance() {
         if (instance == null) {
             instance = new NetworkTables();

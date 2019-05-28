@@ -80,4 +80,22 @@ public class GearBox{
     public boolean getInverseMotion() {
         return this.is_inverse_motion;
     }
+
+    /**
+     * Get the master controller
+     * 
+     * @return the front talon
+     */
+    public WPI_TalonSRX getMaster() {
+        return this.front;
+    }
+
+    /**
+     * Set the GearBox speed
+     * 
+     * @param speed Percent output
+     */
+    public void set(double speed) {
+        this.front.set(speed);
+    }
 }

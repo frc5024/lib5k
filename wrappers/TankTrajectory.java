@@ -115,8 +115,8 @@ public class TankTrajectory{
      */
     public void stop(){
         this.follower_notifier.stop();
-        this.left_gearbox.front.set(0.0);
-        this.right_gearbox.front.set(0.0);
+        this.left_gearbox.set(0.0);
+        this.right_gearbox.set(0.0);
         this.is_finished = true;
 
         /* Reset inverse motion mode on gearboxes if needed */
@@ -153,11 +153,11 @@ public class TankTrajectory{
             double turn = 0.8 * (-1.0 / 80.0) * heading_difference;
 
             if (this.path_inverted) {
-                this.left_gearbox.front.set((right_speed - turn)*-1);
-                this.right_gearbox.front.set((left_speed + turn)*-1);
+                this.left_gearbox.set((right_speed - turn)*-1);
+                this.right_gearbox.set((left_speed + turn)*-1);
             } else {
-                this.left_gearbox.front.set(left_speed + turn);
-                this.right_gearbox.front.set(right_speed - turn);
+                this.left_gearbox.set(left_speed + turn);
+                this.right_gearbox.set(right_speed - turn);
             }
         }
     }

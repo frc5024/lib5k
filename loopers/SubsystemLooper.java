@@ -27,29 +27,27 @@ public class SubsystemLooper extends Looper {
         logger.log("[Subsystem Looper] Registered " + subsystem.name, Level.kRobot);
     }
 
-    private double timedExecute(Runnable function) {
-        double start = Timer.getFPGATimestamp();
-
-        // Run the function
-        try {
-            function.run();
-        } catch (Exception e) {
-            logger.log("[Subsystem Looper] A registered subsystem failed to execute");
-            logger.log("" + e);
-        }
-        
-        // Return execution time
-        return Timer.getFPGATimestamp() - start;
-    }
-
     @Override
     protected void update() {
         double inputTime = 0;
 
         // Run and check total time for inputs
         for (LoopableSubsystem subsystem : subsystems) {
-            subsystem.last_timestamp = Timer.getFPGATimestamp();
-            inputTime += timedExecute(subsystem::periodicInput);
+
+            double start = Timer.getFPGATimestamp();
+            subsystem.last_timestamp = start;
+
+            // Run the function
+            try {
+                subsystem.periodicInput();
+            } catch (Exception e) {
+                logger.log("[Subsystem Looper] A registered subsystem failed to execute");
+                logger.log("" + e);
+            }
+
+            // Return execution time
+            inputTime += Timer.getFPGATimestamp() - start;
+
         }
 
         if (inputTime > (period / 2)) {
@@ -61,8 +59,21 @@ public class SubsystemLooper extends Looper {
 
         // Run and check total time for inputs
         for (LoopableSubsystem subsystem : subsystems) {
-            subsystem.last_timestamp = Timer.getFPGATimestamp();
-            outputTime += timedExecute(subsystem::periodicOutput);
+
+            double start = Timer.getFPGATimestamp();
+            subsystem.last_timestamp = start;
+
+            // Run the function
+            try {
+                subsystem.periodicInput();
+            } catch (Exception e) {
+                logger.log("[Subsystem Looper] A registered subsystem failed to execute");
+                logger.log("" + e);
+            }
+
+            // Return execution time
+            outputTime += Timer.getFPGATimestamp() - start;
+
         }
 
         if (outputTime > (period / 2)) {

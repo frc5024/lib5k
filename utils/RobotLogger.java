@@ -77,10 +77,17 @@ public class RobotLogger{
      * Push all queued messages to netocnsole, the clear the buffer
      */
     private void pushLogs() {
-        for (String x : this.periodic_buffer){
-            System.out.println(x);
+        
+        // this.periodic_buffer = new ArrayList<String>();
+        try {
+            for (String x : this.periodic_buffer){
+                System.out.println(x);
+            }
+            periodic_buffer.clear();
+        } catch (Exception e) {
+            System.out.println("Tried to push concurrently");
         }
-        this.periodic_buffer = new ArrayList<String>();
+        
     }
 
     /**

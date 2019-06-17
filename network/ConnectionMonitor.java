@@ -22,7 +22,7 @@ public class ConnectionMonitor {
 
     private double timeout = 0.5;
     private double timestamp = 0.0;
-    private boolean is_connected = false;
+    private boolean is_connected, just_connected, just_disconnected = false;
     private boolean last_connection_state = true; // Set to true to force a log to be pushed on boot
 
 
@@ -89,6 +89,13 @@ public class ConnectionMonitor {
         if (is_connected != last_connection_state) {
             String connection_action = (is_connected) ? "regained" : "lost";
 
+            // set the "justs"
+            if (is_connected) {
+                just_connected = true;
+            } else {
+                just_disconnected = true;
+            }
+
             logger.log("[ConnectionMonitor] The robot has " + connection_action + " connection!", Level.kRobot);
         }
 
@@ -105,4 +112,23 @@ public class ConnectionMonitor {
         return is_connected;
     }
     
+    /**
+     * Has the robot connected since the last time this function was called?
+     * (sticky)
+     */
+    public boolean justConnected() {
+        boolean output = just_connected;
+        just_connected = false;
+        return output;
+    }
+
+    /**
+     * Has the robot disconnected since the last time this function was called?
+     * (sticky)
+     */
+    public boolean justDisconnected() {
+        boolean output = just_disconnected;
+        just_disconnected = false;
+        return output;
+    }
 }

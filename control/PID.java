@@ -80,4 +80,10 @@ public class PID {
 
         return (this.kP * error) + (this.kI * this.integral) + (this.kD * derivative);
     }
+
+    // (this.kP * this.setpoint - sensor_reading) + (this.kI * this.integral) + (this.kD * derivative)
+
+    public double getError() {
+        return Math.abs(previous_error);
+    }
 }

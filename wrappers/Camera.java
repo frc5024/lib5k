@@ -18,6 +18,10 @@ import frc.common.network.NetworkTables;
  * Stream a USB camera feed over http to a driverstation
  */
 public class Camera {
+    public enum ConfigType {
+        kPrimary, kSecondary
+    }
+
     private final RobotLogger logger = RobotLogger.getInstance();
 
     UsbCamera camera;
@@ -26,10 +30,12 @@ public class Camera {
 
     String name;
 
+    String primary_config, secondary_config;
+
     /**
      * Initalize with basic params
      * 
-     * @param name Friendly name of camera
+     * @param name      Friendly name of camera
      * @param http_port TCP port for camera stream. MUST be from 1181 to 1191
      */
     public Camera(String name, int http_port) {
@@ -46,9 +52,9 @@ public class Camera {
     /**
      * Initalize with basic params
      * 
-     * @param name Friendly name of camera
+     * @param name      Friendly name of camera
      * @param http_port TCP port for camera stream. MUST be from 1181 to 1191
-     * @param usb_port USB port (starting from 0)
+     * @param usb_port  USB port (starting from 0)
      */
     public Camera(String name, int http_port, int usb_port) {
         this.camera = CameraServer.getInstance().startAutomaticCapture(usb_port);
@@ -72,12 +78,12 @@ public class Camera {
      * Set the camera resolution and framerate
      * 
      * @param height Height in pixels
-     * @param width Width in pixels
-     * @param fps Frames per second
+     * @param width  Width in pixels
+     * @param fps    Frames per second
      */
     public void setResolution(int height, int width, int fps) {
         this.camera.setVideoMode(VideoMode.PixelFormat.kMJPEG, height, width, fps);
-        logger.log(name +"'s resolution set to " + width + "x" + height, Level.kLibrary);
+        logger.log(name + "'s resolution set to " + width + "x" + height, Level.kLibrary);
     }
 
     /**
@@ -85,19 +91,21 @@ public class Camera {
      * 
      * @param filepath Path to json file
      */
-    public void loadJsonConfig(String filepath) {
-        //Temp filepath fix for @ewpratten's computer
+    public void loadJsonConfig(String filepath, ConfigType type) {
+        // Temp filepath fix for @ewpratten's computer
         if (filepath == "/home/ewpratten/frc/MiniBot/deploy/maincamera.json") {
             filepath = "/home/ewpratten/frc/MiniBot/src/main/deploy/maincamera.json";
         }
 
         try {
             String config = FileUtils.readFile(filepath);
+
             this.camera.setConfigJson(config);
-            logger.log(name +"'s config has been loaded from: " + filepath, Level.kLibrary);
+
+            logger.log(name + "'s config has been loaded from: " + filepath, Level.kLibrary);
         } catch (Exception e) {
             logger.log("Unable to load camera config file: " + filepath, Level.kWarning);
-        }  
+        }
     }
 
     /**
@@ -112,7 +120,7 @@ public class Camera {
         this.camera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
         logger.log(name + "'s connection mode has been set to: " + strategy_string, Level.kLibrary);
     }
-    
+
     public UsbCamera getCameraSever() {
         return camera;
     }

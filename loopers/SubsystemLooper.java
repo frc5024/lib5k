@@ -21,6 +21,8 @@ public class SubsystemLooper extends Looper {
 
     /**
      * Register a LoopableSubsystem with the looper
+     * 
+     * @param subsystem LoopableSubsystem to register with the looper
      */
     public void register(LoopableSubsystem subsystem) {
         subsystems.add(subsystem);
@@ -28,7 +30,12 @@ public class SubsystemLooper extends Looper {
     }
 
     @Override
-    protected void update() {
+    /**
+     * Execute the periodic functions for each subsystem
+     * 
+     * MUST BE RUN MANUALLY 
+     */
+    public void update() {
         double inputTime = 0;
 
         // Run and check total time for inputs
@@ -85,7 +92,14 @@ public class SubsystemLooper extends Looper {
         this.dt = inputTime + outputTime;
     }
 
+    /**
+     * Outputs telemetry data from the Looper and all subsystems to SmartDashboard
+     */
     public void outputTelemetry() {
         SmartDashboard.putNumber("SubsystemLooper DT", dt);
+
+        for (LoopableSubsystem subsystem : subsystems) {
+            subsystem.outputTelemetry();
+        }
     }
 }

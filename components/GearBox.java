@@ -38,10 +38,12 @@ public class GearBox{
         this.front.configPeakCurrentLimit(peakCurrent, timeout);
         this.front.configPeakCurrentDuration(peakDuration, timeout);
         this.front.configContinuousCurrentLimit(holdCurrent, timeout);
+        front.enableCurrentLimit(true);
 
         this.rear.configPeakCurrentLimit(peakCurrent, timeout);
         this.rear.configPeakCurrentDuration(peakDuration, timeout);
         this.rear.configContinuousCurrentLimit(holdCurrent, timeout);
+        rear.enableCurrentLimit(true);
     }
 
     /**

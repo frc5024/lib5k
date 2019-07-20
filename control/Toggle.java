@@ -16,6 +16,8 @@ public class Toggle {
     /**
      * This is to be used in a situation were you are not looking to toggle the
      * value, just read
+     * 
+     * @return Current output of the Toggle
      */
     public boolean get() {
         return m_currentOutput;

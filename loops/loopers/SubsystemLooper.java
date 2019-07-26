@@ -35,8 +35,7 @@ public class SubsystemLooper extends Looper {
     @Override
     /**
      * Execute the periodic functions for each subsystem
-     * 
-     * MUST BE RUN MANUALLY 
+     *  
      */
     public void update() {
         double inputTime = 0;
@@ -61,13 +60,13 @@ public class SubsystemLooper extends Looper {
         }
 
         if (inputTime > (period / 2)) {
-            logger.log("[SubsystemLooper] Subsystem inputs are using more than half of the alotted looper time",
+            logger.log("[SubsystemLooper] Subsystem inputs are using more than half of the allotted looper time",
                     Level.kWarning);
         }
 
         double outputTime = 0;
 
-        // Run and check total time for inputs
+        // Run and check total time for outputs
         for (LoopableSubsystem subsystem : subsystems) {
 
             double start = Timer.getFPGATimestamp();
@@ -75,7 +74,7 @@ public class SubsystemLooper extends Looper {
 
             // Run the function
             try {
-                subsystem.periodicInput();
+                subsystem.periodicOutput();
             } catch (Exception e) {
                 logger.log("[Subsystem Looper] A registered subsystem failed to execute");
                 logger.log("" + e);
@@ -87,7 +86,7 @@ public class SubsystemLooper extends Looper {
         }
 
         if (outputTime > (period / 2)) {
-            logger.log("[SubsystemLooper] Subsystem outputs are using more than half of the alotted looper time",
+            logger.log("[SubsystemLooper] Subsystem outputs are using more than half of the allotted looper time",
                     Level.kWarning);
         }
 

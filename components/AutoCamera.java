@@ -43,6 +43,6 @@ public class AutoCamera {
 
     public AutoCamera(String name, int usb_slot) {
         m_UsbCamera = CameraServer.getInstance().startAutomaticCapture(name, usb_slot);
-        m_UsbCamera.setVideoMode(VideoMode.PixelFormat.kMJPEG, width, height, fps)
+        m_UsbCamera.setVideoMode(VideoMode.PixelFormat.kMJPEG, 320, 240, 15);
     }
 }

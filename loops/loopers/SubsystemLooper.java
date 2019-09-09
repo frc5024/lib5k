@@ -32,6 +32,15 @@ public class SubsystemLooper extends Looper {
         logger.log("[Subsystem Looper] Registered " + subsystem.name, Level.kRobot);
     }
 
+    /**
+     * Intarface for registering multiple subsystems
+     */
+    public void registerAll(LoopableSubsystem ... subsystems ){
+        for (LoopableSubsystem subsystem : subsystems) {
+            register(subsystem);
+        }
+    }
+
     @Override
     /**
      * Execute the periodic functions for each subsystem

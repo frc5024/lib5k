@@ -107,7 +107,8 @@ public class RobotLogger{
         // Turn enum level into string
         switch (log_level) {
         case kInfo:
-            level_str = "INFO: ";
+            // level_str = "INFO: ";
+            level_str = "";
             break;
         case kWarning:
             level_str = "WARNING: ";

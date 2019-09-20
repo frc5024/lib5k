@@ -15,10 +15,10 @@ public class BlinkinDriver extends SendableBase {
         // kRED(0.61),
         // kRED(0.61),
         // kRED(0.61),
-        // kRED(0.61),
+        kShotWhite(-0.81),
         kStrobeBlue(-0.09),
         kStrobeRed(-0.11),
-        kChase(0.01),
+        kChase(-0.29),
         kGreen(0.77), kOrange(0.65), kOff(0.99), BLUE(0.61);
 
         private double m_pwmVal;

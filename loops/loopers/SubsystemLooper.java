@@ -115,4 +115,11 @@ public class SubsystemLooper extends Looper {
             subsystem.outputTelemetry();
         }
     }
+
+
+    public void stopAll() {
+        for (LoopableSubsystem subsystem: subsystems) {
+            subsystem.stop();
+        }
+    }
 }

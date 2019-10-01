@@ -92,8 +92,4 @@ public class GearBox{
     public void set(double speed) {
         this.front.set(speed);
     }
-
-    // public double getRPM() {
-        
-    // }
 }

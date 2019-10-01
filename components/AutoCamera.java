@@ -53,9 +53,6 @@ public class AutoCamera {
         m_UsbCamera = CameraServer.getInstance().startAutomaticCapture(name, usb_slot);
         m_UsbCamera.setVideoMode(VideoMode.PixelFormat.kMJPEG, 320, 240, 15);
 
-        // Create an mjpg server
-        // m_cameraServer = new MjpegServer(name, port);
-
         // Add self to shuffleboard
         Shuffleboard.getTab("DriverStation").add(m_UsbCamera);
     }
@@ -78,10 +75,6 @@ public class AutoCamera {
      * @param filepath Path to json file
      */
     public void loadJsonConfig(String filepath) {
-        // Temp filepath fix for @ewpratten's computer
-        if (filepath == "/home/ewpratten/frc/MiniBot/deploy/maincamera.json") {
-            filepath = "/home/ewpratten/frc/MiniBot/src/main/deploy/maincamera.json";
-        }
 
         try {
             String config = FileUtils.readFile(filepath);
@@ -106,6 +99,5 @@ public class AutoCamera {
         m_UsbCamera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
         logger.log(m_UsbCamera.getName() + "'s connection mode has been set to: " + strategy_string, Level.kLibrary);
     }
-
 
 }

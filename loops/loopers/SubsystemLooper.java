@@ -118,8 +118,10 @@ public class SubsystemLooper extends Looper {
 
 
     public void stopAll() {
+
         for (LoopableSubsystem subsystem: subsystems) {
             subsystem.stop();
         }
+        
     }
 }

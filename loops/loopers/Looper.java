@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.Notifier;
 /**
  * An abstract for anything that can be looped. Basically a wrapper for a Notifier
  */
+
 public abstract class Looper {
     protected Notifier thread;
     protected double period;

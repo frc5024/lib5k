@@ -61,7 +61,7 @@ public class PID {
         this.kI = ki;
         this.kD = kd;
 
-        logger.log("PID gains have been reset to: "+kp+", "+ki+", "+kd, kLibrary);
+        logger.log("PID gains have been reset to: "+kp+", "+ki+", "+kd, Level.kLibrary);
     }
 
     /**

@@ -1,5 +1,6 @@
 package frc.lib5k.components;
 
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 /**
@@ -28,6 +29,12 @@ public class GearBox {
         this.front.configFactoryDefault();
         this.rear.configFactoryDefault();
         this.rear.follow(this.front);
+
+        if (backEncoders) {
+            rear.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
+        } else {
+            front.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
+        }
     }
 
     /**

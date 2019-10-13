@@ -1,5 +1,7 @@
 package frc.lib5k.control;
 
+import edu.wpi.first.wpilibj.SendableBase;
+import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
 import frc.lib5k.kinematics.PIDProfile;
 import frc.lib5k.utils.RobotLogger;
 import frc.lib5k.utils.RobotLogger.Level;
@@ -9,7 +11,7 @@ import frc.lib5k.utils.RobotLogger.Level;
  * 
  * Based off of faceincake's PID code from 2018 and 2019
  */
-public class PID {
+public class PID extends SendableBase {
     RobotLogger logger = RobotLogger.getInstance();
 
     private double kP, kI, kD;
@@ -43,6 +45,11 @@ public class PID {
         logger.log("PID gains have been set to: " + kp + ", " + ki + ", " + kd, Level.kLibrary);
 
         this.setpoint = 0.0;
+
+        // Handle sendable naming
+        String name = getClass().getName();
+        setName(name.substring(name.lastIndexOf('.') + 1));
+
     }
 
     /**
@@ -130,10 +137,28 @@ public class PID {
         return output;
     }
 
-    // (this.kP * this.setpoint - sensor_reading) + (this.kI * this.integral) +
-    // (this.kD * derivative)
-
     public double getError() {
         return Math.abs(previous_error);
     }
+
+    public void reset() {
+        has_constraints = false;
+        integral = 0.0;
+        previous_error = 0.0;
+    }
+
+    /**
+     * This is for use by WPIlib. Basically tricking it into thinking this is a
+     * built-in class.
+     */
+    @Override
+    public void initSendable(SendableBuilder builder) {
+        builder.setSmartDashboardType("PIDController");
+        builder.setSafeState(this::reset);
+        builder.addDoubleProperty("p", () -> kP, (double p) -> kP = p);
+        builder.addDoubleProperty("i", () -> kI, (double i) -> kI = i);
+        builder.addDoubleProperty("d", () -> kD, (double d) -> kD = d);
+        builder.addDoubleProperty("setpoint", () -> setpoint, (double setpoint) -> this.setpoint = setpoint);
+    }
+
 }

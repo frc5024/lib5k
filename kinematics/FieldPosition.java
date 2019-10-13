@@ -1,7 +1,7 @@
 package frc.lib5k.kinematics;
 
 /**
- * Used to denote a robot position (field-relative)
+ * Used to denote a robot position 
  */
 public class FieldPosition {
     double x, y, theta;

@@ -1,7 +1,7 @@
 package frc.lib5k.kinematics;
 
 /**
- * Used to denote a robot position 
+ * Used to denote a robot position
  */
 public class FieldPosition {
     double x, y, theta;
@@ -16,11 +16,19 @@ public class FieldPosition {
         this.theta = theta;
     }
 
+    /**
+     * Strafe distance
+     */
     public double getX() {
         return x;
 
     }
 
+    /**
+     * Forward distance
+     * 
+     * @return
+     */
     public double getY() {
         return y;
     }
@@ -39,6 +47,19 @@ public class FieldPosition {
 
     public void setTheta(double theta) {
         this.theta = theta;
+    }
+
+    /**
+     * Get a new field-relative position from origin + rel
+     * 
+     * @param origin Original field-relative point
+     * @param rel    Point relative to origin to transform by
+     * @return New point
+     */
+    public static FieldPosition transformBy(FieldPosition origin, FieldPosition rel) {
+        return new FieldPosition(origin.getX() + rel.getY() * Math.cos(rel.getX() + origin.getTheta()),
+                origin.getY() + rel.getY() * Math.cos(rel.getX() + origin.getTheta()),
+                origin.getTheta() + rel.getTheta());
     }
 
 }

@@ -16,15 +16,18 @@ public abstract class EncoderBase {
     }
 
     public double getMeters(int tpr, double wheel_circumference) {
-        return ((getTicks() / tpr) * wheel_circumference) / 100.0;
+        return (((double) getTicks() / tpr) * wheel_circumference) / 100.0;
     }
 
     public double getMetersPerCycle(int tpr, double wheel_circumference) {
-        return ((getSpeed() / tpr) * wheel_circumference) / 100.0;
+        return (((double) getSpeed() / tpr) * wheel_circumference) / 100.0;
     }
 
     public void zero() {
         encoder_offset = getRawTicks();
+        speed = 0;
+        previous_ticks = 0;
+        pastSpeeds.clear();
     }
 
     public void fullReset() {

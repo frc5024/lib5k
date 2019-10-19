@@ -20,6 +20,7 @@ public class PID extends SendableBase {
     private double setpoint;
     private boolean has_constraints = false;
     private double min_output, max_output;
+    private int pause_duration = 0;
 
     /**
      * Create a PID controller using a PIDProfile
@@ -116,8 +117,22 @@ public class PID extends SendableBase {
      *         into a motor
      */
     public double feed(double sensor_reading) {
+
+        return feedError(this.setpoint - sensor_reading); // Error = Target - Actual
+
+    }
+
+    /**
+     * Feed the controller with a sensor error
+     * 
+     * @param sensor_reading The current control loop error
+     * 
+     * @return The output of the controller. This generally should be fed directly
+     *         into a motor
+     */
+    public double feedError(double error) {
         /* Do the math */
-        double error = this.setpoint - sensor_reading; // Error = Target - Actual
+
         this.integral += (error * 0.02);
         double derivative = (error - this.previous_error) / 0.02;
 
@@ -138,13 +153,35 @@ public class PID extends SendableBase {
     }
 
     public double getError() {
-        return Math.abs(previous_error);
+        return previous_error;
     }
+
+    /**
+     * Checks if the error is within a reasonable range, then waits a bit before returning completion
+     * 
+     * @param epsilon Accepted error
+     * @return Has the loop finished?
+     */
+    public boolean isFinished(double epsilon) {
+		double error = Math.abs(previous_error);
+
+		// close enough to target
+		if (error <= epsilon) {
+			pause_duration++;
+		}
+		// not close enough to target
+		else {
+			pause_duration = 0;
+		}
+
+		return pause_duration > 5; // Make sure this value has settled
+	}
 
     public void reset() {
         has_constraints = false;
         integral = 0.0;
         previous_error = 0.0;
+        pause_duration = 0;
     }
 
     /**

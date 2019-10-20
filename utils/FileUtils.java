@@ -3,7 +3,10 @@ package frc.lib5k.utils;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.RobotBase;
 
 /**
  * Tools for working with the filesystem
@@ -37,5 +40,17 @@ public class FileUtils {
      */
     public static String constructDeployPath(String filename) {
         return getDeployPath() + filename;
+    }
+
+    public static String getHome() {
+
+        // Check if the robot is real
+        if (RobotBase.isReal()) {
+            // Return the real env home directory path
+            return "/home/lvuser/";
+        } else {
+            // Determine the simulated code directory
+            return Filesystem.getLaunchDirectory().getPath() + "/simulated/home/lvuser/";
+        }
     }
 }

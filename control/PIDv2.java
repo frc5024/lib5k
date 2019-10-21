@@ -189,8 +189,8 @@ public class PIDv2 extends SendableBase {
         double output = pVal + iVal + dVal;
 
         // limit the output
-        output = Math.min(output, this.maxOutput);
-        output = Math.max(output, -this.maxOutput);
+        // output = Math.min(output, this.maxOutput);
+        // output = Math.max(output, -this.maxOutput);
 
         if (output > 0) {
             if (output < this.minOutput) {
@@ -202,8 +202,12 @@ public class PIDv2 extends SendableBase {
             }
         }
 
+        output = Math.max(-maxOutput, Math.min(maxOutput, output));
+
         // store current value as previous for next cycle
         this.previousError = error;
+
+        System.out.println("LMT: "+output);
 
         return output;
     }

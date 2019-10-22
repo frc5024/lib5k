@@ -62,4 +62,8 @@ public class FieldPosition {
                 origin.getTheta() + rel.getTheta());
     }
 
+    public String toString(){
+        return "(" + x + ", " + y + ", " + theta + ")";
+    }
+
 }

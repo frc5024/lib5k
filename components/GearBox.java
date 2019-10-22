@@ -31,9 +31,9 @@ public class GearBox {
         this.rear.follow(this.front);
 
         if (backEncoders) {
-            rear.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
+            rear.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
         } else {
-            front.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
+            front.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
         }
     }
 

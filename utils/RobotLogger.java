@@ -1,5 +1,6 @@
 package frc.lib5k.utils;
 
+import java.io.File;
 import java.util.ArrayList;
 import edu.wpi.first.wpilibj.Notifier;
 
@@ -23,6 +24,12 @@ public class RobotLogger {
 
     private RobotLogger() {
         this.notifier = new Notifier(this::pushLogs);
+
+        // Build local log path
+        File f = new File(FileUtils.getHome() + "rrlogs");
+        if (!f.exists()) {
+			f.mkdir();
+		}
     }
 
     /**
@@ -127,4 +134,5 @@ public class RobotLogger {
 
         return level_str + msg;
     }
+
 }

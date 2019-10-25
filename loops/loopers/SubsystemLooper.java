@@ -95,11 +95,6 @@ public class SubsystemLooper extends Looper {
         }
 
 
-        // TODO: change this to 2/3 from 1/2
-        // if (outputTime > (period / 2)) {
-        //     logger.log("[SubsystemLooper] Subsystem outputs are using more than half of the allotted looper time",
-        //             Level.kWarning);
-        // }
 
         // Calculate dt
         this.dt = inputTime + outputTime;

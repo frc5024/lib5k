@@ -6,6 +6,15 @@ package frc.lib5k.kinematics;
 public class FieldPosition {
     double x, y, theta;
 
+    /**
+     * Copy constructor for a FieldPosition
+     * 
+     * @param position FieldPosition to copy from
+     */
+    public FieldPosition(FieldPosition position) {
+        this(position.getX(), position.getY(), position.getTheta());
+    }
+
     public FieldPosition(double x, double y) {
         this(x, y, 0);
     }

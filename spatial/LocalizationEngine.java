@@ -24,7 +24,7 @@ public class LocalizationEngine {
      * 
      * @return
      */
-    public LocalizationEngine getInstance() {
+    public static LocalizationEngine getInstance() {
         if (m_instance == null) {
             m_instance = new LocalizationEngine();
         }

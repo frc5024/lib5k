@@ -2,6 +2,11 @@ package frc.lib5k.utils;
 
 public class Mathutils {
 
+    public static void main(String[] args) {
+        System.out.println(getWrappedError(270, 0.0));
+        System.out.println(getWrappedError(0.0, 270.0));
+    }
+
     /**
      * This allows the angle to respect 'wrapping', where 360 and 0 are the same
      * value

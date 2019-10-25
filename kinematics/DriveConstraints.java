@@ -7,7 +7,7 @@ public class DriveConstraints {
     double minV, maxV, maxTurn;
 
     public DriveConstraints(double minVelocity, double maxVelocity) {
-        this(minVelocity, maxVelocity, 100);
+        this(minVelocity, maxVelocity, 1);
     }
 
     /**

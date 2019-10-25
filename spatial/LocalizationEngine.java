@@ -1,5 +1,6 @@
 package frc.lib5k.spatial;
 
+import frc.lib5k.kinematics.Error2D;
 import frc.lib5k.kinematics.FieldPosition;
 import frc.lib5k.utils.Mathutils;
 
@@ -20,6 +21,7 @@ public class LocalizationEngine {
 
     /**
      * Get the current {@link LocalizationEngine} instance
+     * 
      * @return
      */
     public LocalizationEngine getInstance() {
@@ -65,6 +67,34 @@ public class LocalizationEngine {
     }
 
     /**
+     * Get the rotated 2D error from the robot's current location to a goal position
+     * 
+     * @param goalPosition Goal position (where the robot wants to be)
+     * @return Error from current position to goal
+     */
+    public Error2D getRotatedError(FieldPosition goalPosition) {
+
+        // Get the current position of the robot
+        FieldPosition robotPosition = getRobotPosition();
+
+        // Get the current and goal positions as Error2D objects
+        Error2D currentPosition = new Error2D(robotPosition.getX(), robotPosition.getY());
+        Error2D finalPosition = new Error2D(goalPosition.getX(), goalPosition.getY());
+
+        // Rotate both Errors to the goal theta
+        currentPosition.rotateBy(goalPosition.getTheta());
+        finalPosition.rotateBy(goalPosition.getTheta());
+
+        // Determine the X and Y errors
+        double xError = finalPosition.getX() - currentPosition.getX();
+        double yError = finalPosition.getY() - currentPosition.getY();
+
+        // Return a new Error2D object containing the position error
+        return new Error2D(xError, yError);
+
+    }
+
+    /**
      * Force-set the robot location
      * 
      * @param position Robot position
@@ -83,8 +113,8 @@ public class LocalizationEngine {
     }
 
     /**
-     * Get a reference to the current {@link FieldPosition} object. This should only be used
-     * if you know what you are doing.
+     * Get a reference to the current {@link FieldPosition} object. This should only
+     * be used if you know what you are doing.
      * 
      * @return Local object reference
      */

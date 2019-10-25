@@ -1,5 +1,6 @@
 package frc.lib5k.kinematics;
 
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import frc.lib5k.control.PIDv2;
 import frc.lib5k.spatial.LocalizationEngine;
 import frc.lib5k.utils.Mathutils;
@@ -95,6 +96,7 @@ public class MovementPlanner {
                 finished = true;
                 speed = 0.0;
                 turn = 0.0;
+                reset();
             }
         } else if (Math.abs(error.getY()) < epsilon) {
 
@@ -102,6 +104,7 @@ public class MovementPlanner {
             finished = true;
             speed = 0.0;
             turn = 0.0;
+            reset();
         }
 
         // Return a movementSegment containing the system outputs
@@ -109,7 +112,25 @@ public class MovementPlanner {
     }
 
     /**
-     * Reset the MovementPlanner. This should be called after each segment has been completed
+     * Publish PIDController objects to Shuffleboard in the "MovementPlanner" tab
+     */
+    public void publishPIDControllers() {
+        publishPIDControllers("MovementPlanner");
+    }
+
+    /**
+     * Publish PIDController objects to Shuffleboard
+     * 
+     * @param tabName Shuffleboard tab name
+     */
+    public void publishPIDControllers(String tabName) {
+        Shuffleboard.getTab(tabName).add("ForwardPID", m_forwardController);
+        Shuffleboard.getTab(tabName).add("TurnPID", m_turnController);
+    }
+
+    /**
+     * Reset the MovementPlanner. This should be called after each segment has been
+     * completed
      */
     public void reset() {
         m_forwardController.reset();

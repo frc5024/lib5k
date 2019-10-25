@@ -107,4 +107,12 @@ public class MovementPlanner {
         // Return a movementSegment containing the system outputs
         return new MovementSegment(speed, turn, finished);
     }
+
+    /**
+     * Reset the MovementPlanner. This should be called after each segment has been completed
+     */
+    public void reset() {
+        m_forwardController.reset();
+        m_turnController.reset();
+    }
 }

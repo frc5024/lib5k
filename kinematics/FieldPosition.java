@@ -15,10 +15,23 @@ public class FieldPosition {
         this(position.getX(), position.getY(), position.getTheta());
     }
 
+    /**
+     * A field-relative point in space (in meters)
+     * 
+     * @param x Left-right position from driverstation glass
+     * @param y Forward position from driverstation glass
+     */
     public FieldPosition(double x, double y) {
         this(x, y, 0);
     }
 
+    /**
+     * A field-relative point in space (in meters)
+     * 
+     * @param x     Left-right position from driverstation glass
+     * @param y     Forward position from driverstation glass
+     * @param theta Angle from driverstation glass
+     */
     public FieldPosition(double x, double y, double theta) {
         this.x = x;
         this.y = y;
@@ -71,8 +84,8 @@ public class FieldPosition {
                 origin.getTheta() + rel.getTheta());
     }
 
-    public String toString(){
-        return "(" + x + ", " + y + ", " + theta + ")";
+    public String toString() {
+        return String.format("(%.2f, %.2f, %.2f)", x, y, theta);
     }
 
 }

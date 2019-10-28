@@ -5,7 +5,7 @@ package frc.lib5k.kinematics;
  */
 public class MovementSegment {
     private double speed, turn = 0.0;
-    private boolean complete = false;
+    private Boolean complete = false;
 
     /**
      * Create a new MovementSegment
@@ -30,5 +30,9 @@ public class MovementSegment {
 
     public boolean isFinished() {
         return complete;
+    }
+
+    public String toString() {
+        return String.format("(%.2f, %.2f, %s)", speed, turn, complete.toString());
     }
 }

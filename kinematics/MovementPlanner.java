@@ -55,6 +55,7 @@ public class MovementPlanner {
 
         // Increase turning aggression based on path progress
         double turnModifier = (error.getX() * turnRate);
+        // turnModifier = 1;
 
         // Bind the turnModifier to the max turn rate or 0
         double maxTurn = constraints.getMaxTurn();
@@ -107,8 +108,10 @@ public class MovementPlanner {
             reset();
         }
 
+        MovementSegment segment = new MovementSegment(speed, turn, finished);
+        System.out.println(error + "" + segment);
         // Return a movementSegment containing the system outputs
-        return new MovementSegment(speed, turn, finished);
+        return segment;
     }
 
     /**

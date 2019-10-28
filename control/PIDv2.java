@@ -207,7 +207,7 @@ public class PIDv2 extends SendableBase {
         // store current value as previous for next cycle
         this.previousError = error;
 
-        System.out.println("LMT: "+output);
+        // System.out.println("LMT: "+output);
 
         return output;
     }

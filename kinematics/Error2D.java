@@ -1,25 +1,25 @@
 package frc.lib5k.kinematics;
 
 public class Error2D {
-    private double x, y = 0.0;
-    
-    /**
-     * Create a new Error2D
-     * 
-     * @param x X error
-     * @param y Y error
-     */
-    public Error2D(double x, double y) {
-        this.x = x;
-        this.y = y;
-    }
+	private double x, y = 0.0;
 
-    /**
-     * Rotate the Error by and angle (in degrees)
-     * 
-     * @param angle Angle to rotate goal by
-     */
-    public void rotateBy(double angle) {
+	/**
+	 * Create a new Error2D
+	 * 
+	 * @param x X error
+	 * @param y Y error
+	 */
+	public Error2D(double x, double y) {
+		this.x = x;
+		this.y = y;
+	}
+
+	/**
+	 * Rotate the Error by and angle (in degrees)
+	 * 
+	 * @param angle Angle to rotate goal by
+	 */
+	public void rotateBy(double angle) {
 		angle = Math.toRadians(angle);
 
 		double _x = x * Math.cos(angle) - y * Math.sin(angle);
@@ -29,7 +29,7 @@ public class Error2D {
 		this.y = _y;
 	}
 
-    public double getX() {
+	public double getX() {
 		return this.x;
 	}
 
@@ -46,6 +46,6 @@ public class Error2D {
 	}
 
 	public String toString() {
-		return "(" + x + ", " + y + ")";
+		return String.format("(%.2f, %.2f)", x, y);
 	}
 }

@@ -58,11 +58,13 @@ public class LocalizationEngine {
         double lastY = m_robotPosition.getY();
 
         // Add the new location to the old location
-        m_robotPosition.setX(lastX + (distance * Math.cos(Math.toRadians(heading))));
-        m_robotPosition.setY(lastY + (distance * Math.sin(Math.toRadians(heading))));
+        m_robotPosition.setX(lastX + (distance * Math.sin(Math.toRadians(heading))));
+        m_robotPosition.setY(lastY + (distance * Math.cos(Math.toRadians(heading))));
 
         // Set the robot heading
         m_robotPosition.setTheta(Mathutils.wrapGyro(heading));
+
+        // System.out.println(m_robotPosition);
 
     }
 

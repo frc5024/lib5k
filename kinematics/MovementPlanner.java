@@ -53,6 +53,7 @@ public class MovementPlanner {
             error.setX(-error.getX());
         }
 
+
         // Increase turning aggression based on path progress
         double turnModifier = (error.getX() * turnRate);
         // turnModifier = 1;

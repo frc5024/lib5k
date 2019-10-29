@@ -20,6 +20,7 @@ public class Error2D {
 	 * @param angle Angle to rotate goal by
 	 */
 	public void rotateBy(double angle) {
+		// Note to self: this works perfectly fine. Don't question it
 		angle = Math.toRadians(angle);
 
 		double _x = x * Math.cos(angle) - y * Math.sin(angle);

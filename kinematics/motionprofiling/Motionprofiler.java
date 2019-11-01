@@ -4,6 +4,7 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj.Notifier;
 import frc.lib5k.components.EncoderBase;
+import frc.lib5k.kinematics.DriveSignal;
 import frc.lib5k.kinematics.PIDProfile;
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
@@ -16,18 +17,17 @@ public class Motionprofiler {
      * A collection of motor data
      */
     public class MotionOutput {
-        public double l, r;
+        public DriveSignal signal;
         public boolean finished;
 
-        public MotionOutput(double l, double r, boolean finished) {
-            this.l = l;
-            this.r = r;
+        public MotionOutput(DriveSignal signal, boolean finished) {
+            this.signal = signal;
             this.finished = finished;
         }
 
         public void reset() {
-            l = 0.0;
-            r = 0.0;
+            signal.setL(0.0);
+            signal.setR(0.0);
             finished = true;
         }
     }
@@ -76,7 +76,7 @@ public class Motionprofiler {
         // Set locals
         this.m_profile = profile;
         this.m_pidProfile = pid_profile;
-        this.m_output = new MotionOutput(0.0, 0.0, true);
+        this.m_output = new MotionOutput(new DriveSignal(0.0, 0.0), true);
         this.m_tpr = ticks_per_rev;
 
         this.m_wheelbaseWidth = wheelbaseWidth;
@@ -195,8 +195,8 @@ public class Motionprofiler {
         }
 
         // Set the output
-        m_output.l = leftOut;
-        m_output.r = rightOut;
+        m_output.signal.setL(leftOut);
+        m_output.signal.setR(rightOut);
         m_output.finished = m_leftFollower.isFinished() || m_rightFollower.isFinished();
 
     }

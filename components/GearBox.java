@@ -38,6 +38,10 @@ public class GearBox {
         } else {
             front.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
         }
+
+        // Set voltage comensation
+        front.enableVoltageCompensation(true);
+        rear.enableVoltageCompensation(true);
     }
 
     /**

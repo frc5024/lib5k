@@ -27,7 +27,8 @@ public class Mathutils {
     }
 
     /**
-     * Gets the error between two angles and allows crossing the 360/0 degree boundary
+     * Gets the error between two angles and allows crossing the 360/0 degree
+     * boundary
      * 
      * @param currentAngle Current angle
      * @param desiredAngle Desired/goal angle
@@ -44,5 +45,16 @@ public class Mathutils {
         // Return the final difference
         return distance * sign;
 
+    }
+
+    /**
+     * Returns value clamped between low and high boundaries.
+     *
+     * @param value Value to clamp.
+     * @param low   The lower boundary to which to clamp value.
+     * @param high  The higher boundary to which to clamp value.
+     */
+    public static double clamp(double value, double low, double high) {
+        return Math.max(low, Math.min(value, high));
     }
 }

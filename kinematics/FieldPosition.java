@@ -84,6 +84,31 @@ public class FieldPosition {
     }
 
     /**
+     * Get the rotated 2D error from the robot's current location to a goal position
+     * 
+     * @param goalPosition Goal position (where the robot wants to be)
+     * @return Error from current position to goal
+     */
+    public Error2D getRotatedError(FieldPosition goalPosition){
+
+        // Get the current and goal positions as Error2D objects
+        Error2D currentPosition = new Error2D(this.getX(), this.getY());
+        Error2D finalPosition = new Error2D(goalPosition.getX(), goalPosition.getY());
+
+        // Rotate both Errors to the goal theta
+        currentPosition.rotateBy(goalPosition.getTheta());
+        finalPosition.rotateBy(goalPosition.getTheta());
+
+        // Determine the X and Y errors
+        double xError = finalPosition.getX() - currentPosition.getX();
+        double yError = finalPosition.getY() - currentPosition.getY();
+
+        // Return a new Error2D object containing the position error
+        return new Error2D(xError, yError);
+
+    }
+
+    /**
      * Get a new field-relative position from origin + rel
      * 
      * @param origin Original field-relative point

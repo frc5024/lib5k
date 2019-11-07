@@ -39,6 +39,20 @@ public class RaiderDrive {
         m_speedFilter.setRate(rate);
     }
 
+    public DriveSignal normalize(DriveSignal signal) {
+
+        // Find the maximum magnitude between both wheels
+        double magnitude = Math.max(Math.abs(signal.getL()), Math.abs(signal.getR()));
+
+        // Scale back motors if the max magnitude is greater than the max output (1.0)
+        if (magnitude > 1.) {
+            signal.setL(signal.getL() / magnitude);
+            signal.setR(signal.getR() / magnitude);
+        }
+
+        return signal;
+    }
+
     /**
      * Compute motor outputs in a similar way to WPILib's ArcadeDrive
      * 
@@ -62,12 +76,8 @@ public class RaiderDrive {
         // Create signal form control speeds
         DriveSignal signal = new DriveSignal(speed + rotation, speed - rotation);
 
-        // Normalize speeds
-        double magnitude = Math.max(Math.abs(signal.getL()), Math.abs(signal.getR()));
-        if (magnitude > 1.) {
-            signal.setL(signal.getL() / magnitude);
-            signal.setR(signal.getR() / magnitude);
-        }
+        // Normalize the signal
+        signal = normalize(signal);
 
         // Return the signal
         return signal;
@@ -99,12 +109,8 @@ public class RaiderDrive {
         // Create signal form control speeds
         DriveSignal signal = new DriveSignal(speed + Math.abs(speed) * rotation, speed - Math.abs(speed) * rotation);
 
-        // Normalize speeds
-        double magnitude = Math.max(Math.abs(signal.getL()), Math.abs(signal.getR()));
-        if (magnitude > 1.) {
-            signal.setL(signal.getL() / magnitude);
-            signal.setR(signal.getR() / magnitude);
-        }
+        // Normalize the signal
+        signal = normalize(signal);
 
         // Return the signal
         return signal;
@@ -133,9 +139,22 @@ public class RaiderDrive {
             rotation = m_turnDeadband.feed(rotation);
         }
 
+        // TODO: Move these to CubicDeadband
+        // Stop speed from being NaN
+        if (Double.isNaN(speed)) {
+            speed = 0.0000001;
+        }
+
+        // Stop speed from being NaN
+        if (Double.isNaN(rotation)) {
+            rotation = 0.0000001;
+        }
+
         // Calculate direct speed conversion (rate-based turning)
         double rate_l = speed + rotation;
         double rate_r = speed - rotation;
+
+        System.out.println(rate_l);
 
         // Calculate constant-curvature speeds
         double curv_l = speed + Math.abs(speed) * rotation;
@@ -149,12 +168,19 @@ public class RaiderDrive {
         avg_l = Mathutils.clamp(avg_l, -1., 1.);
         avg_r = Mathutils.clamp(avg_r, -1., 1.);
 
+        // Create a DriveSignal
+        DriveSignal signal = new DriveSignal(avg_l, avg_r);
+
+        // Normalize the signal
+        signal = normalize(signal);
+
         // Return the drive signal
-        return new DriveSignal(avg_l, avg_r);
+        return signal;
 
     }
 
     public void reset() {
         m_speedFilter.reset();
     }
+
 }

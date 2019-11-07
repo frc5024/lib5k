@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-
-import edu.wpi.first.hal.FRCNetComm;
 import edu.wpi.first.hal.HAL;
 import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
@@ -57,7 +55,7 @@ public class RR_HAL {
         } else {
             frc_year = "unknown";
         }
-        
+
         // Format output
         return String.format("%s (Lib5K %s)", wpi_version, frc_year);
 
@@ -90,7 +88,7 @@ public class RR_HAL {
                     // Write language name
                     output.write(language.getBytes(StandardCharsets.UTF_8));
 
-                    // Write WPI version
+                    // Write library version
                     output.write(version.getBytes(StandardCharsets.UTF_8));
                 }
 

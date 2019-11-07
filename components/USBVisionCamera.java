@@ -2,7 +2,7 @@ package frc.lib5k.components;
 
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.Timer;
+import frc.lib5k.roborio.FPGAClock;
 
 public class USBVisionCamera extends AutoCamera {
 
@@ -13,7 +13,7 @@ public class USBVisionCamera extends AutoCamera {
     private Solenoid m_relay;
     private LEDMode m_desiredMode;
     private Notifier m_thread;
-    private final double blink_ms = 50;
+    private final double blink_ms = 25;
 
     public USBVisionCamera(String name, int usb_slot, int pcm_port) {
         this(name, usb_slot, 0, pcm_port);
@@ -65,7 +65,7 @@ public class USBVisionCamera extends AutoCamera {
             m_relay.set(false);
             break;
         case BLINK:
-            boolean should_enable = ((Timer.getFPGATimestamp()*100 % (blink_ms*2)) - blink_ms) >= 0;
+            boolean should_enable = FPGAClock.getMillisecondCycle(blink_ms);
             m_relay.set(should_enable);
             break;
         default:

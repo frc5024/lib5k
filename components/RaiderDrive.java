@@ -154,7 +154,7 @@ public class RaiderDrive {
         double rate_l = speed + rotation;
         double rate_r = speed - rotation;
 
-        System.out.println(rate_l);
+        // System.out.println(rate_l);
 
         // Calculate constant-curvature speeds
         double curv_l = speed + Math.abs(speed) * rotation;

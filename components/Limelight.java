@@ -43,6 +43,10 @@ public class Limelight {
         this.m_isPortrait = is_portrait;
     }
 
+    public void setCamMode(int mode){
+        m_limelightData.getEntry("camMode").setNumber(mode);
+    }
+
     /**
      * Set the Limelight pipeline id
      * 

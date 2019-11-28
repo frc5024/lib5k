@@ -25,12 +25,29 @@ public class Limelight {
     NetworkTableEntry getPipe = table.getEntry("getpipe");
 
     public class LimelightTarget {
+        double tx;
+        double ty;
+        double ta;
+        double ts;
+        double tshort;
+        double tlong;
+        String camtran;        
+
+        public LimelightTarget(double tx, double ty, double ta, double ts, double tshort, double tlong, String camtran){
+            this.tx = tx;
+            this.ty = ty;
+            this.ta = ta;
+            this.ts = ts;
+            this.tshort = tshort;
+            this.tlong = tlong;
+            this.camtran = camtran;
+        }
         /**
          * Horizontal Offset From Crosshair To Target
          * @return -27 degrees to 27 degrees
          */
         public double getX() {
-            return tx.getDouble(0.0);
+            return tx;
         }
 
         /**
@@ -38,7 +55,7 @@ public class Limelight {
          * @return -20.5 degrees to 20.5 degrees 
          */
         public double getY() {
-            return tx.getDouble(0.0);
+            return ty;
         }
 
         /**
@@ -46,7 +63,7 @@ public class Limelight {
          * @return 0% of image to 100% of image
          */
         public double getArea() {
-            return ta.getDouble(0.0);
+            return ta;
         }
         
         /**
@@ -54,7 +71,7 @@ public class Limelight {
          * @return -90 degrees to 0 degrees
          */
         public double getSkew() {
-            return ts.getDouble(0.0);
+            return ts;
         }
         
         /**
@@ -62,7 +79,7 @@ public class Limelight {
          * @return pixels
          */
         public double getShortestSide() {
-            return tshort.getDouble(0.0);
+            return tshort;
         }
         
         /**
@@ -70,7 +87,7 @@ public class Limelight {
          * @return pixels
          */
         public double getLongestSide() {
-            return tlong.getDouble(0.0);
+            return tlong;
         }
         
         /**
@@ -78,7 +95,7 @@ public class Limelight {
          * @return 6 numbers: Translation (x,y,y) Rotation(pitch,yaw,roll)
          */
         public String getTranslationOrNull() {
-            return camtran.getString("");
+            return camtran;
         }
     }
     
@@ -87,23 +104,23 @@ public class Limelight {
     * @return true or false
     */
     public boolean isTargetVisible() {
-        return (int)tv.getNumber(0) == 1;
+        return tv.getNumber(0).intValue() == 1;
     }
 
     /**
     * True active pipeline index of the camera      
     * @return 0-9
     */
-    public int getPipelineID() {
-        return (int)getPipe.getNumber(0);
+    public double getPipelineID() {
+        return (double)getPipe.getNumber(0);
     }
 
     /**
-    * TODO
-    * @return null
+    * returns a snap shot of limelight target data
+    * @return limelightTarget
     */
     public LimelightTarget getTarget() {
-        return null;
+        return new LimelightTarget(tx.getDouble(0.0),ty.getDouble(0.0),ta.getDouble(0.0),ts.getDouble(0.0),tshort.getDouble(0.0),tlong.getDouble(0.0),camtran.getString(null));
     }
 
     /**

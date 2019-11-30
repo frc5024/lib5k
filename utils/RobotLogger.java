@@ -28,8 +28,8 @@ public class RobotLogger {
         // Build local log path
         File f = new File(FileUtils.getHome() + "rrlogs");
         if (!f.exists()) {
-			f.mkdir();
-		}
+            f.mkdir();
+        }
     }
 
     /**
@@ -63,6 +63,10 @@ public class RobotLogger {
         this.log(msg, Level.kInfo);
     }
 
+    public void log(String msg, Level log_level) {
+        log("", msg, log_level);
+    }
+
     /**
      * Logs a message to netconsole with a custom log level. The kRobot level will
      * immediately push to the console, everything else is queued until the next
@@ -71,8 +75,8 @@ public class RobotLogger {
      * @param msg       The message to log
      * @param log_level the Level to log the message at
      */
-    public void log(String msg, Level log_level) {
-        String display_string = toString(msg, log_level);
+    public void log(String component, String msg, Level log_level) {
+        String display_string = toString(component, msg, log_level);
 
         // If the log level is kRobot, just print to netconsole, then return
         if (log_level == Level.kRobot) {
@@ -109,7 +113,7 @@ public class RobotLogger {
      * 
      * @return The formatted output string
      */
-    private String toString(String msg, Level log_level) {
+    private String toString(String component, String msg, Level log_level) {
         String level_str;
 
         // Turn enum level into string
@@ -132,7 +136,7 @@ public class RobotLogger {
             break;
         }
 
-        return level_str + msg;
+        return String.format("%s%s %s", level_str, (component.equals("")) ? component : "[" + component + "]", msg);
     }
 
 }

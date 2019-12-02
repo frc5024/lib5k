@@ -130,13 +130,8 @@ public class RaiderDrive {
      */
     public DriveSignal computeSemiConst(double speed, double rotation, boolean enableDeadband) {
 
-        // Slew limit speed
-        // speed = m_speedFilter.feed(speed);
-
         // Optionally apply deadbands
         if (enableDeadband) {
-            // speed = m_speedDeadband.feed(speed);
-            // rotation = m_turnDeadband.feed(rotation);
 
             speed = Math.copySign(speed * speed, speed);
             rotation = Math.copySign(rotation * rotation, rotation);

@@ -23,13 +23,13 @@ public class Latch {
     }
 
     public boolean get() {
-
+        return state;
     }
 
     /**
      * Resets the state of the Latch
      */
-    public void resest() {
+    public void reset() {
         state = false;
     }
 }

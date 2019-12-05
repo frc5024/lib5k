@@ -162,6 +162,9 @@ public class RaiderDrive {
         double avg_l = (rate_l + curv_l) / 2;
         double avg_r = (rate_r + curv_r) / 2;
 
+        // double avg_l = (2*rate_l + curv_l) / 3;
+        // double avg_r = (2*rate_r + curv_r) / 3;
+
         // Clamp motor outputs
         avg_l = Mathutils.clamp(avg_l, -1., 1.);
         avg_r = Mathutils.clamp(avg_r, -1., 1.);

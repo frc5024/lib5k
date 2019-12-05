@@ -1,6 +1,8 @@
 package frc.lib5k.roborio;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
@@ -98,6 +100,34 @@ public class RR_HAL {
             }
         } else {
             System.out.println("Cannot write custom FRC Version in a simulation");
+        }
+    }
+
+    /**
+     * Returns the name of the robot
+     * if the name cannot be found, returns Unknown Robot
+     * @return robot name
+     */
+    public static String getRobotName() {
+
+        // Try to write to FRC Version file
+        try {
+            final File file = new File("/home/lvuser/robotName");
+
+            FileReader reader = new FileReader(file);
+
+            BufferedReader br = new BufferedReader(reader);
+
+            String fileContent = "";
+
+            fileContent = br.readLine();
+
+            br.close();
+            reader.close();
+
+            return fileContent;
+        } catch (Exception e) {
+            return "Unknown Robot";
         }
     }
 }

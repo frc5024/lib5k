@@ -5,23 +5,24 @@ import java.util.function.Consumer;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import frc.lib5k.components.motors.motorsensors.TalonEncoder;
+import frc.lib5k.components.sensors.EncoderBase;
+import frc.lib5k.components.sensors.IEncoderProvider;
 import frc.lib5k.interfaces.Loggable;
 import frc.lib5k.utils.RobotLogger;
 import frc.lib5k.utils.RobotLogger.Level;
 
 /**
  * Collection of multiple WPI_TalonSRX controllers that wraps a
- * SpeedControllerGroup, and exposes a SpeedController
+ * SpeedControllerGroup
  */
-public class TalonSRXCollection implements IMotorCollection, ICurrentController, Loggable {
+public class TalonSRXCollection extends SpeedControllerGroup
+        implements IMotorCollection, ICurrentController, IEncoderProvider, Loggable {
     RobotLogger logger = RobotLogger.getInstance();
 
     /* Talon SRX Objects */
     private WPI_TalonSRX master;
     private WPI_TalonSRX[] slaves;
-
-    /* Wrapped SpeedController */
-    SpeedControllerGroup m_controllerGroup;
 
     /* Locals */
     private String name;
@@ -29,13 +30,11 @@ public class TalonSRXCollection implements IMotorCollection, ICurrentController,
     private boolean inverted, voltageCompEnabled, currentLimited;
 
     public TalonSRXCollection(WPI_TalonSRX master, WPI_TalonSRX... slaves) {
+        super(master, slaves);
 
         // Set talons
         this.master = master;
         this.slaves = slaves;
-
-        // Set SpeedControllerGroup
-        m_controllerGroup = new SpeedControllerGroup(master, slaves);
 
         // Defult the master
         master.configFactoryDefault();
@@ -56,7 +55,7 @@ public class TalonSRXCollection implements IMotorCollection, ICurrentController,
     public void set(double speed) {
         output = speed;
 
-        m_controllerGroup.set(speed);
+        super.set(speed);
     }
 
     @Override
@@ -68,38 +67,16 @@ public class TalonSRXCollection implements IMotorCollection, ICurrentController,
     }
 
     @Override
-    public double get() {
-        return m_controllerGroup.get();
-    }
-
-    @Override
     public void setInverted(boolean isInverted) {
         inverted = isInverted;
-        m_controllerGroup.setInverted(isInverted);
-
-    }
-
-    @Override
-    public boolean getInverted() {
-        return m_controllerGroup.getInverted();
-    }
-
-    @Override
-    public void disable() {
-        m_controllerGroup.disable();
-
-    }
-
-    @Override
-    public void stopMotor() {
-        m_controllerGroup.stopMotor();
+        super.setInverted(isInverted);
 
     }
 
     @Override
     public void pidWrite(double output) {
         this.output = output;
-        m_controllerGroup.pidWrite(output);
+        super.pidWrite(output);
 
     }
 
@@ -178,6 +155,11 @@ public class TalonSRXCollection implements IMotorCollection, ICurrentController,
         for (WPI_TalonSRX talon : slaves) {
             consumer.accept(talon);
         }
+    }
+
+    @Override
+    public EncoderBase getEncoder() {
+        return new TalonEncoder(master);
     }
 
     /**

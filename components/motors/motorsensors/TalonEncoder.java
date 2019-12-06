@@ -4,6 +4,9 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import frc.lib5k.components.sensors.EncoderBase;
 
+/**
+ * Wrap a TalonSRX encoder as an EncoderBase
+ */
 public class TalonEncoder extends EncoderBase {
 
     private WPI_TalonSRX talon;

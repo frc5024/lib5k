@@ -4,6 +4,7 @@ import java.util.function.Consumer;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import frc.lib5k.components.motors.interfaces.ICurrentController;
 import frc.lib5k.components.motors.interfaces.IMotorCollection;
@@ -14,6 +15,7 @@ import frc.lib5k.components.sensors.IEncoderProvider;
 import frc.lib5k.interfaces.Loggable;
 import frc.lib5k.utils.RobotLogger;
 import frc.lib5k.utils.RobotLogger.Level;
+import frc.lib5k.utils.telemetry.ComponentTelemetry;
 
 /**
  * Collection of multiple WPI_TalonSRX controllers that wraps a
@@ -31,6 +33,9 @@ public class TalonSRXCollection extends SpeedControllerGroup
     private String name;
     private double output, currentThresh, currentHold;
     private boolean inverted, voltageCompEnabled, currentLimited;
+
+    /* Telemetry */
+    private NetworkTable telemetryTable;
 
     public TalonSRXCollection(WPI_TalonSRX master, WPI_TalonSRX... slaves) {
         super(master, slaves);
@@ -51,6 +56,9 @@ public class TalonSRXCollection extends SpeedControllerGroup
 
         // Determine name
         name = String.format("TalonSRXCollection (Master ID %d)", master.getDeviceID());
+
+        // Get the telemetry NetworkTable
+        telemetryTable = ComponentTelemetry.getInstance().getTableForComponent(name);
 
     }
 
@@ -189,9 +197,12 @@ public class TalonSRXCollection extends SpeedControllerGroup
 
     @Override
     public void updateTelemetry() {
-        // TODO Auto-generated method stub
-
-        // TODO: lib5k NT table
+        telemetryTable.getEntry("Output").setNumber(output);
+        telemetryTable.getEntry("Is Inverted").setBoolean(inverted);
+        telemetryTable.getEntry("Is Current Limited").setBoolean(currentLimited);
+        telemetryTable.getEntry("Voltage Compensation").setBoolean(voltageCompEnabled);
+        telemetryTable.getEntry("Curent Threshold").setNumber(currentThresh);
+        telemetryTable.getEntry("Current Hold").setNumber(currentHold);
 
     }
 

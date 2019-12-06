@@ -13,6 +13,7 @@ import frc.lib5k.components.motors.motorsensors.TalonEncoder;
 import frc.lib5k.components.sensors.EncoderBase;
 import frc.lib5k.components.sensors.IEncoderProvider;
 import frc.lib5k.interfaces.Loggable;
+import frc.lib5k.utils.Mathutils;
 import frc.lib5k.utils.RobotLogger;
 import frc.lib5k.utils.RobotLogger.Level;
 import frc.lib5k.utils.telemetry.ComponentTelemetry;
@@ -175,8 +176,22 @@ public class TalonSRXCollection extends SpeedControllerGroup
     }
 
     @Override
-    public EncoderBase getEncoder() {
+    public EncoderBase getDefaultEncoder() {
         return new TalonEncoder(master);
+    }
+
+    @Override
+    public EncoderBase getEncoder(int id) {
+        // Clamp the ID to the number of slaved + 1 (the master)
+        id = (int) Mathutils.clamp(id, 0, slaves.length);
+
+        // Check if the ID is for the master
+        if (id == 0) {
+            return new TalonEncoder(master);
+        }
+
+        // Otherwise, get the encoder from the list of slaves
+        return new TalonEncoder(slaves[id]);
     }
 
     /**

@@ -5,6 +5,9 @@ import java.util.function.Consumer;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import frc.lib5k.components.motors.interfaces.ICurrentController;
+import frc.lib5k.components.motors.interfaces.IMotorCollection;
+import frc.lib5k.components.motors.interfaces.IMotorGroupSafety;
 import frc.lib5k.components.motors.motorsensors.TalonEncoder;
 import frc.lib5k.components.sensors.EncoderBase;
 import frc.lib5k.components.sensors.IEncoderProvider;
@@ -17,7 +20,7 @@ import frc.lib5k.utils.RobotLogger.Level;
  * SpeedControllerGroup
  */
 public class TalonSRXCollection extends SpeedControllerGroup
-        implements IMotorCollection, ICurrentController, IEncoderProvider, Loggable {
+        implements IMotorCollection, ICurrentController, IEncoderProvider, IMotorGroupSafety, Loggable {
     RobotLogger logger = RobotLogger.getInstance();
 
     /* Talon SRX Objects */
@@ -133,6 +136,12 @@ public class TalonSRXCollection extends SpeedControllerGroup
         forEachSlave((slave) -> {
             slave.enableVoltageCompensation(on);
         });
+
+    }
+
+    @Override
+    public void setMasterMotorSafety(boolean enabled) {
+        master.setSafetyEnabled(enabled);
 
     }
 

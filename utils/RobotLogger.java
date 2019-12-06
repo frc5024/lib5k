@@ -67,6 +67,10 @@ public class RobotLogger {
         log("", msg, log_level);
     }
 
+    public void log(String component, String msg) {
+        log(component, msg, Level.kInfo);
+    }
+
     /**
      * Logs a message to netconsole with a custom log level. The kRobot level will
      * immediately push to the console, everything else is queued until the next

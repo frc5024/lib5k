@@ -1,4 +1,4 @@
-package frc.lib5k.components.motors;
+package frc.lib5k.components.motors.interfaces;
 
 /**
  * Common interface for devices that with current output controls

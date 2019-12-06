@@ -1,17 +1,21 @@
-package frc.lib5k.components;
+package frc.lib5k.components.motors.motorsensors;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import frc.lib5k.components.sensors.EncoderBase;
+
 public class TalonEncoder extends EncoderBase {
-    WPI_TalonSRX talon;
+
+    private WPI_TalonSRX talon;
 
     public TalonEncoder(WPI_TalonSRX talon) {
         this.talon = talon;
+
     }
 
     @Override
     public int getRawTicks() {
         return talon.getSelectedSensorPosition();
     }
-    
+
 }

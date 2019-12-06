@@ -37,9 +37,14 @@ public class TalonSRXCollection implements IMotorCollection, ICurrentController,
         // Set SpeedControllerGroup
         m_controllerGroup = new SpeedControllerGroup(master, slaves);
 
+        // Defult the master
+        master.configFactoryDefault();
+
         // Slave each slave
         forEachSlave((slave) -> {
+            slave.configFactoryDefault();
             slave.follow(master);
+
         });
 
         // Determine name
@@ -111,6 +116,9 @@ public class TalonSRXCollection implements IMotorCollection, ICurrentController,
         forEachSlave((slave) -> {
             TalonHelper.configCurrentLimit(slave, threshold, hold, duration, timeout);
         });
+
+        // Enable limits
+        enableCurrentLimit(true);
     }
 
     /**

@@ -3,7 +3,7 @@ package frc.lib5k.kinematics.motionprofiling;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj.Notifier;
-import frc.lib5k.components.EncoderBase;
+import frc.lib5k.components.sensors.EncoderBase;
 import frc.lib5k.kinematics.DriveSignal;
 import frc.lib5k.kinematics.PIDProfile;
 import jaci.pathfinder.Pathfinder;

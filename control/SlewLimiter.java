@@ -51,4 +51,13 @@ public class SlewLimiter {
         limit = rate;
     }
 
+    /**
+     * Get the maximum amount of change allowed by the system
+     * 
+     * @return Maximum change
+     */
+    public double getRate() {
+        return limit;
+    }
+
 }

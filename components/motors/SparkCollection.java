@@ -7,7 +7,9 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import frc.lib5k.components.motors.interfaces.IMotorCollection;
+import frc.lib5k.components.motors.interfaces.IRampRateController;
 import frc.lib5k.components.motors.interfaces.IVoltageOutputController;
+import frc.lib5k.control.TimedSlewLimiter;
 import frc.lib5k.interfaces.Loggable;
 import frc.lib5k.utils.RobotLogger;
 import frc.lib5k.utils.RobotLogger.Level;
@@ -17,10 +19,11 @@ import frc.lib5k.utils.telemetry.ComponentTelemetry;
  * Collection of multiple Spark controllers that wraps a SpeedControllerGroup
  */
 public class SparkCollection extends SpeedControllerGroup
-        implements IMotorCollection, IVoltageOutputController, Loggable {
+        implements IMotorCollection, IVoltageOutputController, IRampRateController, Loggable {
     RobotLogger logger = RobotLogger.getInstance();
 
     /* Motor controllers */
+    @SuppressWarnings("unused")
     private Spark master;
     private Spark[] slaves;
 
@@ -30,12 +33,19 @@ public class SparkCollection extends SpeedControllerGroup
     private String name;
     private NetworkTable telemetryTable;
 
+    /* Locals */
+    private TimedSlewLimiter slewLimiter;
+
     public SparkCollection(Spark master, Spark... slaves) {
         super(master, slaves);
 
         // Set locals
         this.master = master;
         this.slaves = slaves;
+
+        // Configure a slew limiter with no slew
+        slewLimiter = new TimedSlewLimiter(0.0);
+        slewLimiter.setEnabled(false);
 
         // Determine name
         name = String.format("SparkCollection (Master ID %d)", master.getChannel());
@@ -49,7 +59,8 @@ public class SparkCollection extends SpeedControllerGroup
     public void set(double speed) {
         output = speed;
 
-        super.set(speed);
+        // Process, then set the speed
+        super.set(slewLimiter.feed(speed));
     }
 
     @Override
@@ -108,6 +119,23 @@ public class SparkCollection extends SpeedControllerGroup
         return voltage_estimate;
     }
 
+    @Override
+    public void setRampRate(double secondsToFull) {
+        slewLimiter.setRate(secondsToFull);
+
+    }
+
+    @Override
+    public double getRampRate() {
+        return slewLimiter.getRate();
+    }
+
+    @Override
+    public void enableRampRateLimiting(boolean enabled) {
+        slewLimiter.setEnabled(enabled);
+
+    }
+
     /**
      * For-Each over each slave controller
      * 
@@ -122,7 +150,7 @@ public class SparkCollection extends SpeedControllerGroup
     @Override
     public void logStatus() {
         // Build info string
-        String data = String.format("Output: %.2f, Inverted %b", output, inverted);
+        String data = String.format("Output: %.2f, Inverted %b, Ramp rate: %.2f", output, inverted, getRampRate());
 
         // Log string
         logger.log(name, data, Level.kInfo);
@@ -133,6 +161,7 @@ public class SparkCollection extends SpeedControllerGroup
     public void updateTelemetry() {
         telemetryTable.getEntry("Output").setNumber(output);
         telemetryTable.getEntry("Is Inverted").setBoolean(inverted);
+        telemetryTable.getEntry("Ramp Rate").setNumber(getRampRate());
 
     }
 

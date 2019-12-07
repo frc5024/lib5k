@@ -7,7 +7,9 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import frc.lib5k.components.motors.interfaces.IMotorCollection;
+import frc.lib5k.components.motors.interfaces.IRampRateController;
 import frc.lib5k.components.motors.interfaces.IVoltageOutputController;
+import frc.lib5k.control.TimedSlewLimiter;
 import frc.lib5k.interfaces.Loggable;
 import frc.lib5k.utils.ObjectCounter;
 import frc.lib5k.utils.RobotLogger;
@@ -19,7 +21,7 @@ import frc.lib5k.utils.telemetry.ComponentTelemetry;
  * SpeedControllerGroup
  */
 public class MixedMotorCollection extends SpeedControllerGroup
-        implements IMotorCollection, IVoltageOutputController, Loggable {
+        implements IMotorCollection, IVoltageOutputController, IRampRateController, Loggable {
     RobotLogger logger = RobotLogger.getInstance();
 
     /* Motor controllers */
@@ -35,12 +37,19 @@ public class MixedMotorCollection extends SpeedControllerGroup
     /* ID tracking */
     private static ObjectCounter idCounter = new ObjectCounter();
 
+    /* Locals */
+    private TimedSlewLimiter slewLimiter;
+
     public MixedMotorCollection(SpeedController master, SpeedController... slaves) {
         super(master, slaves);
 
         // Set locals
         this.master = master;
         this.slaves = slaves;
+
+        // Configure a slew limiter with no slew
+        slewLimiter = new TimedSlewLimiter(0.0);
+        slewLimiter.setEnabled(false);
 
         // Determine name
         name = String.format("MixedMotorCollection (Master ID %d)", idCounter.getNewID());
@@ -111,6 +120,23 @@ public class MixedMotorCollection extends SpeedControllerGroup
         double voltage_estimate = get() * busVoltage;
 
         return voltage_estimate;
+    }
+
+    @Override
+    public void setRampRate(double secondsToFull) {
+        slewLimiter.setRate(secondsToFull);
+
+    }
+
+    @Override
+    public double getRampRate() {
+        return slewLimiter.getRate();
+    }
+
+    @Override
+    public void enableRampRateLimiting(boolean enabled) {
+        slewLimiter.setEnabled(enabled);
+
     }
 
     /**

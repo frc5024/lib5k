@@ -6,9 +6,11 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
+
 import frc.lib5k.components.motors.interfaces.ICurrentController;
 import frc.lib5k.components.motors.interfaces.IMotorCollection;
 import frc.lib5k.components.motors.interfaces.IMotorGroupSafety;
+import frc.lib5k.components.motors.interfaces.IVoltageOutputController;
 import frc.lib5k.components.motors.motorsensors.TalonEncoder;
 import frc.lib5k.components.sensors.EncoderBase;
 import frc.lib5k.components.sensors.IEncoderProvider;
@@ -22,8 +24,8 @@ import frc.lib5k.utils.telemetry.ComponentTelemetry;
  * Collection of multiple WPI_TalonSRX controllers that wraps a
  * SpeedControllerGroup
  */
-public class TalonSRXCollection extends SpeedControllerGroup
-        implements IMotorCollection, ICurrentController, IEncoderProvider, IMotorGroupSafety, Loggable {
+public class TalonSRXCollection extends SpeedControllerGroup implements IMotorCollection, ICurrentController,
+        IEncoderProvider, IMotorGroupSafety, IVoltageOutputController, Loggable {
     RobotLogger logger = RobotLogger.getInstance();
 
     /* Talon SRX Objects */
@@ -89,6 +91,34 @@ public class TalonSRXCollection extends SpeedControllerGroup
     public void pidWrite(double output) {
         this.output = output;
         super.pidWrite(output);
+
+    }
+
+    @Override
+    public void setVoltage(double volts) {
+
+        // Determine Robot bus voltage
+        double busVoltage = master.getBusVoltage();
+
+        // Just stop the motor if the bus is at 0V
+        // Many things would go wrong otherwise (do you really want a div-by-zero error
+        // on your drivetrain?)
+        if (busVoltage == 0.0) {
+            set(0.0);
+            return;
+        }
+
+        // Convert voltage to a motor speed
+        double calculated_speed = volts / busVoltage;
+
+        // Set the output to the calculated speed
+        set(calculated_speed);
+
+    }
+
+    @Override
+    public double getEstimatedVoltage() {
+        return master.getMotorOutputVoltage();
 
     }
 

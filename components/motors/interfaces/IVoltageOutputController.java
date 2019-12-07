@@ -7,7 +7,8 @@ package frc.lib5k.components.motors.interfaces;
 public interface IVoltageOutputController {
 
     /**
-     * Set desired controller output in volts
+     * Set desired controller output in volts. Negative voltage will result in
+     * reverse output
      * 
      * @param volts Controller output
      */

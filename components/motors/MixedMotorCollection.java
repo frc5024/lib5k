@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import frc.lib5k.components.motors.interfaces.IMotorCollection;
 import frc.lib5k.interfaces.Loggable;
+import frc.lib5k.utils.ObjectCounter;
 import frc.lib5k.utils.RobotLogger;
 import frc.lib5k.utils.RobotLogger.Level;
 import frc.lib5k.utils.telemetry.ComponentTelemetry;
@@ -29,8 +30,7 @@ public class MixedMotorCollection extends SpeedControllerGroup implements IMotor
     private NetworkTable telemetryTable;
 
     /* ID tracking */
-    private static int count = 0;
-    private int id;
+    private static ObjectCounter idCounter = new ObjectCounter();
 
     public MixedMotorCollection(SpeedController master, SpeedController... slaves) {
         super(master, slaves);
@@ -39,11 +39,8 @@ public class MixedMotorCollection extends SpeedControllerGroup implements IMotor
         this.master = master;
         this.slaves = slaves;
 
-        // Determine ID
-        id = count++;
-
         // Determine name
-        name = String.format("MixedMotorCollection (Master ID %d)", id);
+        name = String.format("MixedMotorCollection (Master ID %d)", idCounter.getNewID());
 
         // Get the telemetry NetworkTable
         telemetryTable = ComponentTelemetry.getInstance().getTableForComponent(name);

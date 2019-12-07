@@ -1,13 +1,24 @@
 package frc.lib5k.simulation.mock.sensors;
 
+import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.SpeedController;
-import frc.lib5k.components.EncoderBase;
+import frc.lib5k.components.sensors.EncoderBase;
+import frc.lib5k.interfaces.Loggable;
 import frc.lib5k.roborio.FPGAClock;
+import frc.lib5k.utils.ObjectCounter;
+import frc.lib5k.utils.RobotLogger;
+import frc.lib5k.utils.telemetry.ComponentTelemetry;
 
 /**
  * Simulate an encoder.
  */
-public class MockEncoder extends EncoderBase {
+public class MockEncoder extends EncoderBase implements Loggable {
+
+    /* Telemetry */
+    RobotLogger logger = RobotLogger.getInstance();
+    NetworkTable telemetryTable;
+    private static ObjectCounter idCounter = new ObjectCounter();
+    private String name;
 
     /* Locals */
     private SpeedController controller;
@@ -25,10 +36,18 @@ public class MockEncoder extends EncoderBase {
      * @param max_rpm       Motor maximum RPM
      */
     public MockEncoder(SpeedController controller, int tpr, double gearbox_ratio, double max_rpm) {
+
+        // Set locals
         this.controller = controller;
         this.tpr = tpr;
         this.gearbox_ratio = gearbox_ratio;
         this.max_rpm = max_rpm;
+
+        // Determine name for telemetry
+        name = String.format("MockEncoder (ID %d)", idCounter.getNewID());
+
+        // Get the telemetry NetworkTable
+        telemetryTable = ComponentTelemetry.getInstance().getTableForComponent(name);
     }
 
     @Override
@@ -59,6 +78,27 @@ public class MockEncoder extends EncoderBase {
 
         // Run other update code
         super.update();
+    }
+
+    @Override
+    public void logStatus() {
+
+        // Build statis string
+        String status = String.format("Ticks: %d, TPR: %d, Gear Ratio: %.3f, Max RPM: %.2f", ticks, tpr, gearbox_ratio,
+                max_rpm);
+
+        // Log status string
+        logger.log(name, status);
+
+    }
+
+    @Override
+    public void updateTelemetry() {
+        telemetryTable.getEntry("Ticks").setNumber(ticks);
+        telemetryTable.getEntry("TPR").setNumber(tpr);
+        telemetryTable.getEntry("Gear Ratio").setNumber(gearbox_ratio);
+        telemetryTable.getEntry("Max RPM").setNumber(max_rpm);
+
     }
 
 }

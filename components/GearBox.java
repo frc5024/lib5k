@@ -7,6 +7,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
  * A GearBox is a wrapper for any pair of WPI_TalonSRX motor controllers where
  * the first controller has an encoder attached.
  */
+@Deprecated(since = "Kickoff 2020", forRemoval = true)
 public class GearBox {
     public WPI_TalonSRX front, rear;
 

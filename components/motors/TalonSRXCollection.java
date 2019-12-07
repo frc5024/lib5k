@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import frc.lib5k.components.motors.interfaces.ICurrentController;
 import frc.lib5k.components.motors.interfaces.IMotorCollection;
 import frc.lib5k.components.motors.interfaces.IMotorGroupSafety;
+import frc.lib5k.components.motors.interfaces.IRampRateController;
 import frc.lib5k.components.motors.interfaces.IVoltageOutputController;
 import frc.lib5k.components.motors.motorsensors.TalonEncoder;
 import frc.lib5k.components.sensors.EncoderBase;
@@ -25,7 +26,7 @@ import frc.lib5k.utils.telemetry.ComponentTelemetry;
  * SpeedControllerGroup
  */
 public class TalonSRXCollection extends SpeedControllerGroup implements IMotorCollection, ICurrentController,
-        IEncoderProvider, IMotorGroupSafety, IVoltageOutputController, Loggable {
+        IEncoderProvider, IMotorGroupSafety, IVoltageOutputController, IRampRateController, Loggable {
     RobotLogger logger = RobotLogger.getInstance();
 
     /* Talon SRX Objects */
@@ -34,7 +35,7 @@ public class TalonSRXCollection extends SpeedControllerGroup implements IMotorCo
 
     /* Locals */
     private String name;
-    private double output, currentThresh, currentHold;
+    private double output, currentThresh, currentHold, rampRate;
     private boolean inverted, voltageCompEnabled, currentLimited;
 
     /* Telemetry */
@@ -179,6 +180,29 @@ public class TalonSRXCollection extends SpeedControllerGroup implements IMotorCo
     }
 
     @Override
+    public void setRampRate(double secondsToFull) {
+        rampRate = secondsToFull;
+
+    }
+
+    @Override
+    public double getRampRate() {
+        return rampRate;
+    }
+
+    @Override
+    public void enableRampRateLimiting(boolean enabled) {
+
+        // Handle TalonSRX configuration
+        if (enabled) {
+            master.configOpenloopRamp(rampRate);
+        } else {
+            master.configOpenloopRamp(0.0);
+        }
+
+    }
+
+    @Override
     public void setMasterMotorSafety(boolean enabled) {
         master.setSafetyEnabled(enabled);
 
@@ -232,8 +256,8 @@ public class TalonSRXCollection extends SpeedControllerGroup implements IMotorCo
 
         // Build info string
         String data = String.format(
-                "Output: %.2f, Inverted %b, Current limited: %b, Voltage Compensation: %b, Current threshold: %.2f, Current hold: %.2f",
-                output, inverted, currentLimited, voltageCompEnabled, currentThresh, currentHold);
+                "Output: %.2f, Inverted %b, Current limited: %b, Voltage Compensation: %b, Current threshold: %.2f, Current hold: %.2f, Ramp rate: %.2f",
+                output, inverted, currentLimited, voltageCompEnabled, currentThresh, currentHold, rampRate);
 
         // Log string
         logger.log(name, data, Level.kInfo);
@@ -248,6 +272,7 @@ public class TalonSRXCollection extends SpeedControllerGroup implements IMotorCo
         telemetryTable.getEntry("Voltage Compensation").setBoolean(voltageCompEnabled);
         telemetryTable.getEntry("Curent Threshold").setNumber(currentThresh);
         telemetryTable.getEntry("Current Hold").setNumber(currentHold);
+        telemetryTable.getEntry("Ramp Rate").setNumber(rampRate);
 
     }
 

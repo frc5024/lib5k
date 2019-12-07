@@ -97,7 +97,7 @@ public class TalonSRXCollection extends SpeedControllerGroup implements IMotorCo
     @Override
     public void setVoltage(double volts) {
 
-        // Determine Robot bus voltage
+        // Determine TalonSRX input bus voltage
         double busVoltage = master.getBusVoltage();
 
         // Just stop the motor if the bus is at 0V

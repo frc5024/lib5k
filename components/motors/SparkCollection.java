@@ -3,19 +3,21 @@ package frc.lib5k.components.motors;
 import java.util.function.Consumer;
 
 import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import frc.lib5k.components.motors.interfaces.IMotorCollection;
+import frc.lib5k.components.motors.interfaces.IVoltageOutputController;
 import frc.lib5k.interfaces.Loggable;
 import frc.lib5k.utils.RobotLogger;
 import frc.lib5k.utils.RobotLogger.Level;
 import frc.lib5k.utils.telemetry.ComponentTelemetry;
 
 /**
- * Collection of multiple Spark controllers that wraps a
- * SpeedControllerGroup
+ * Collection of multiple Spark controllers that wraps a SpeedControllerGroup
  */
-public class SparkCollection extends SpeedControllerGroup implements IMotorCollection, Loggable {
+public class SparkCollection extends SpeedControllerGroup
+        implements IMotorCollection, IVoltageOutputController, Loggable {
     RobotLogger logger = RobotLogger.getInstance();
 
     /* Motor controllers */
@@ -70,6 +72,40 @@ public class SparkCollection extends SpeedControllerGroup implements IMotorColle
         this.output = output;
         super.pidWrite(output);
 
+    }
+
+    @Override
+    public void setVoltage(double volts) {
+
+        // Determine Robot bus voltage
+        double busVoltage = RobotController.getBatteryVoltage();
+
+        // Just stop the motor if the bus is at 0V
+        // Many things would go wrong otherwise (do you really want a div-by-zero error
+        // on your drivetrain?)
+        if (busVoltage == 0.0) {
+            set(0.0);
+            return;
+        }
+
+        // Convert voltage to a motor speed
+        double calculated_speed = volts / busVoltage;
+
+        // Set the output to the calculated speed
+        set(calculated_speed);
+
+    }
+
+    @Override
+    public double getEstimatedVoltage() {
+
+        // Determine Robot bus voltage
+        double busVoltage = RobotController.getBatteryVoltage();
+
+        // Convert percent output to voltage
+        double voltage_estimate = get() * busVoltage;
+
+        return voltage_estimate;
     }
 
     /**

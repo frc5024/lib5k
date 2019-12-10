@@ -11,13 +11,23 @@ import frc.lib5k.components.gyroscopes.interfaces.IGyroscope;
  */
 public class NavX extends AHRS implements IGyroscope {
 
+    private static NavX m_instance = null;
+
     public NavX(){
         this(Port.kMXP);
     }
 
-    public NavX(SPI.Port port){
+    public NavX(SPI.Port port) {
         super(port);
 
+    }
+    
+    public static NavX getInstance(){
+        if (m_instance == null){
+            m_instance = new NavX();
+        }
+
+        return m_instance;
     }
 
     @Override

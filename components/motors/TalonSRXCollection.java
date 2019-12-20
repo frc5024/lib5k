@@ -2,6 +2,7 @@ package frc.lib5k.components.motors;
 
 import java.util.function.Consumer;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.networktables.NetworkTable;
@@ -246,6 +247,18 @@ public class TalonSRXCollection extends SpeedControllerGroup implements IMotorCo
 
         // Otherwise, get the encoder from the list of slaves
         return new TalonEncoder(slaves[id]);
+    }
+
+    public void setNeutralMode(NeutralMode mode) {
+
+        // Set master mode
+        master.setNeutralMode(mode);
+
+        // Set slaves modes
+        forEachSlave((talon) -> {
+            talon.setNeutralMode(mode);
+        });
+
     }
 
     /**

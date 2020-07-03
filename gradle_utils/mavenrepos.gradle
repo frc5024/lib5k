@@ -1,0 +1,47 @@
+repositories {
+    // Main repos
+    jcenter()
+    mavenCentral()
+    mavenLocal()
+
+    // FRC repos
+    maven { setUrl("https://jitpack.io")}
+    maven { setUrl("https://frcmaven.wpi.edu/artifactory/release/")}
+    maven { setUrl("https://repo1.maven.org/maven2/")}
+    maven { setUrl("http://devsite.ctr-electronics.com/maven/release/")}
+    maven { setUrl("http://www.revrobotics.com/content/sw/color-sensor-v3/sdk/maven/")}
+    maven { setUrl("https://www.revrobotics.com/content/sw/max/sdk/maven/")}
+}
+
+// dependencies {
+
+//     // WPILib
+//     implementation("edu.wpi.first.wpilibj:wpilibj-java:${project.WPI_VERSION}")
+//     implementation("edu.wpi.first.hal:hal-java:${project.WPI_VERSION}")
+//     implementation("edu.wpi.first.wpiutil:wpiutil-java:${project.WPI_VERSION}")
+
+//     // WPILib Extras
+//     implementation("edu.wpi.first.ntcore:ntcore-java:${project.WPI_VERSION}")
+//     implementation("edu.wpi.first.cscore:cscore-java:${project.WPI_VERSION}")
+//     implementation("edu.wpi.first.cameraserver:cameraserver-java:${project.WPI_VERSION}")
+
+//     // WPILib command framework
+//     implementation("edu.wpi.first.wpilibNewCommands:wpilibNewCommands-java:${project.WPI_VERSION}")
+
+//     // NavX
+//     implementation("com.kauailabs.navx.frc:navx-java:${project.NAVX_VERSION}")
+
+//     // CTRE
+//     implementation("com.ctre.phoenix:api-java:${project.CTRE_VERSION}")
+//     implementation("com.ctre.phoenix:wpiapi-java:${project.CTRE_VERSION}")
+
+//     // REV Robotics
+//     implementation("com.revrobotics.frc:ColorSensorV3-java:${project.REV_COLOR_VERSION}")
+//     implementation("com.revrobotics.frc:SparkMax-java:${project.REV_SPARK_VERSION}")
+
+//     // Math utils
+//     implementation 'com.github.ewpratten:ewmath:master-SNAPSHOT'
+
+//     // LibVEC (simple vectors)
+//     implementation 'com.github.ewpratten:libvec:master-SNAPSHOT'
+// }

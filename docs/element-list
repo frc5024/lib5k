@@ -5,10 +5,14 @@ io.github.frc5024.lib5k.control_loops.models
 io.github.frc5024.lib5k.hardware.common.drivebase
 io.github.frc5024.lib5k.hardware.common.motors.interfaces
 io.github.frc5024.lib5k.hardware.common.sensors.interfaces
+io.github.frc5024.lib5k.hardware.ctre.motors
+io.github.frc5024.lib5k.hardware.ctre.sensors
 io.github.frc5024.lib5k.hardware.generic.cameras
 io.github.frc5024.lib5k.hardware.generic.gyroscopes
 io.github.frc5024.lib5k.hardware.generic.ledstrips
+io.github.frc5024.lib5k.hardware.generic.motors
 io.github.frc5024.lib5k.hardware.generic.motors.motorcollection
+io.github.frc5024.lib5k.hardware.generic.pneumatics
 io.github.frc5024.lib5k.hardware.generic.sensors
 io.github.frc5024.lib5k.hardware.generic.sensors.interfaces
 io.github.frc5024.lib5k.hardware.generic.servos

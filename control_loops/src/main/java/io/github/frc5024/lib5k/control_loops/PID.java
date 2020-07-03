@@ -4,8 +4,8 @@ import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SendableRegistry;
 import io.github.frc5024.lib5k.control_loops.models.PIDProfile;
-import frc.lib5k.utils.RobotLogger;
-import frc.lib5k.utils.RobotLogger.Level;
+import io.github.frc5024.lib5k.logging.RobotLogger;
+import io.github.frc5024.lib5k.logging.RobotLogger.Level;
 
 /**
  * Our custom PID controller implementation.

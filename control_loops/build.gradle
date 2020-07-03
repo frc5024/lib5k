@@ -33,6 +33,9 @@ dependencies {
 
     // Logging
     implementation project(":logging")
+
+    // FPGA timing
+    implementation project(":hardware:ni")
 }
 
 sourceSets {

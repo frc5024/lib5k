@@ -6,7 +6,9 @@ io.github.frc5024.lib5k.hardware.common.drivebase
 io.github.frc5024.lib5k.hardware.common.motors.interfaces
 io.github.frc5024.lib5k.hardware.common.sensors.interfaces
 io.github.frc5024.lib5k.hardware.ctre.motors
+io.github.frc5024.lib5k.hardware.ctre.motors.collections
 io.github.frc5024.lib5k.hardware.ctre.sensors
+io.github.frc5024.lib5k.hardware.ctre.util
 io.github.frc5024.lib5k.hardware.generic.cameras
 io.github.frc5024.lib5k.hardware.generic.gyroscopes
 io.github.frc5024.lib5k.hardware.generic.ledstrips

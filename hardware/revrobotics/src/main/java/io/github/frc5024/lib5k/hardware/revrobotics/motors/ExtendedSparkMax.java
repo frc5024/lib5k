@@ -15,7 +15,10 @@ import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.RR_HAL;
 import io.github.frc5024.lib5k.hardware.revrobotics.sensors.SparkMaxEncoder;
 import io.github.frc5024.lib5k.hardware.common.sensors.interfaces.CommonEncoder;
 
-
+/**
+ * An extension of the CANSparkMax with simulation support, and mappings from
+ * CANEncoder to CommonEncoder for hot-swappability with CTRE products
+ */
 public class ExtendedSparkMax extends CANSparkMax implements Sendable {
 
     // HALSIM
@@ -35,37 +38,36 @@ public class ExtendedSparkMax extends CANSparkMax implements Sendable {
     }
 
     /**
-	 * Returns and object for interfacing with the encoder connected to the 
-	 * encoder pins or front port of the SPARK MAX.
-	 * 
-	 * The default encoder type is assumed to be the hall effect for brushless.
-	 * This can be modified for brushed DC to use a quadrature encoder.
-	 * 
-	 * Assumes that the encoder the is integrated encoder, configured as:
-	 * EncoderType.kHallEffect, 0 counts per revolution.
-	 * 
-	 * @return An object for interfacing with the integrated encoder.
-	 */
+     * Returns and object for interfacing with the encoder connected to the encoder
+     * pins or front port of the SPARK MAX.
+     * 
+     * The default encoder type is assumed to be the hall effect for brushless. This
+     * can be modified for brushed DC to use a quadrature encoder.
+     * 
+     * Assumes that the encoder the is integrated encoder, configured as:
+     * EncoderType.kHallEffect, 0 counts per revolution.
+     * 
+     * @return An object for interfacing with the integrated encoder.
+     */
     public CommonEncoder getCommonEncoder() {
         return getCommonEncoder(EncoderType.kHallSensor, 0);
     }
 
     /**
-	 * Returns and object for interfacing with the encoder connected to the 
-	 * encoder pins or front port of the SPARK MAX.
-	 * 
-	 * The default encoder type is assumed to be the hall effect for brushless.
-	 * This can be modified for brushed DC to use a quadrature encoder.
-	 * 
-	 * @param sensorType The encoder type for the motor: kHallEffect or kQuadrature
-	 * @param counts_per_rev The counts per revolution of the encoder
-	 * @return An object for interfacing with an encoder
-	 */
+     * Returns and object for interfacing with the encoder connected to the encoder
+     * pins or front port of the SPARK MAX.
+     * 
+     * The default encoder type is assumed to be the hall effect for brushless. This
+     * can be modified for brushed DC to use a quadrature encoder.
+     * 
+     * @param sensorType     The encoder type for the motor: kHallEffect or
+     *                       kQuadrature
+     * @param counts_per_rev The counts per revolution of the encoder
+     * @return An object for interfacing with an encoder
+     */
     public CommonEncoder getCommonEncoder(EncoderType sensorType, int counts_per_rev) {
         return new SparkMaxEncoder(this, sensorType, counts_per_rev);
     }
-
-    
 
     @Override
     public void set(double speed) {
@@ -105,5 +107,5 @@ public class ExtendedSparkMax extends CANSparkMax implements Sendable {
         builder.addDoubleProperty("Value", this::get, this::set);
 
     }
-    
+
 }

@@ -2,6 +2,7 @@ package io.github.frc5024.lib5k.hardware.generic.sensors.interfaces;
 
 import io.github.frc5024.lib5k.hardware.generic.sensors.EncoderBase;
 
+@Deprecated(since="July 2020", forRemoval = true)
 public interface IEncoderProvider {
 
     /**

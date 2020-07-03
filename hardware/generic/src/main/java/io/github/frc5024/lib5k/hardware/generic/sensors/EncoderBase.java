@@ -12,6 +12,7 @@ import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.FPGAClock;
 /**
  * Base for encoders
  */
+@Deprecated(since="July 2020", forRemoval = true)
 public abstract class EncoderBase implements PeriodicComponent {
     int encoder_offset;
     private int speed = 0;

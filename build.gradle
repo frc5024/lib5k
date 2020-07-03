@@ -19,7 +19,7 @@ apply plugin: 'nebula-aggregate-javadocs'
 
 allprojects{
     apply plugin: "java"
-}
+} 
 
 
 // task document {

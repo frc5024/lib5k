@@ -7,11 +7,12 @@ The software libraries that power all Raider Robotics projects.
 
 This repository is split into modules. This allows us to only import what we need per project instead of loading unnecessary libs (for example, parts management does not need access to CTRE libs). The following table lists all avalible modules, and their uses.
 
-| Gradle Name    | JitPack Name  | Description                                                          | Docs                                                               |
-|----------------|---------------|----------------------------------------------------------------------|--------------------------------------------------------------------|
-| `:purepursuit` | `purepursuit` | This library contains everything needed for autonomous path planning | none                                                               |
-| `:libKontrol`  | `libKontrol`  | This library contains tools for building state machines              | [webdocs](https://cs.5024.ca/webdocs/docs/tutorials/statemachines) |
-| `:asyncHAL`    | `asyncHAL`    | An asynchronous extension to the RoboRIO HAL                         | [github](asyncHAL/README.md)                                       |
+| Gradle Name    | JitPack Name  | Description                                                                              | Docs                                                               |
+|----------------|---------------|------------------------------------------------------------------------------------------|--------------------------------------------------------------------|
+| `:purepursuit` | `purepursuit` | This library contains everything needed for autonomous path planning                     |                                                                    |
+| `:libKontrol`  | `libKontrol`  | This library contains tools for building state machines                                  | [webdocs](https://cs.5024.ca/webdocs/docs/tutorials/statemachines) |
+| `:asyncHAL`    | `asyncHAL`    | An asynchronous extension to the RoboRIO HAL                                             | [github](asyncHAL/README.md)                                       |
+| `:waterfall`   | `waterfall`   | A library for serializing and storing the large amounts of data that come off our robots | [github](waterfall/README.md)                                      |
 
 ## Development
 
@@ -24,8 +25,7 @@ Any folder containing a `build.gradle` file can be a module. Make sure to add th
 ### Updating javadoc
 
  1. Run `./gradlew javadoc`
- 2. Make sure all projects are listed in `docs/index.md`
- 3. Push to git
+ 2. Push to git
 
 ## Troubleshooting
 

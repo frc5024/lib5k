@@ -1,1 +1,0 @@
-typeSearchIndex = [{"l":"All Classes","url":"allclasses-index.html"},{"p":"io.github.frc5024.purepursuit","l":"Follower"},{"p":"io.github.frc5024.purepursuit.pathgen","l":"Path"},{"p":"io.github.frc5024.purepursuit","l":"PurePursuitController"},{"p":"io.github.frc5024.purepursuit.util","l":"Smoothing"},{"p":"io.github.frc5024.purepursuit.pathgen","l":"SmoothPath"}]

@@ -5,7 +5,20 @@
  * Learn how to create Gradle builds at https://guides.gradle.org/creating-new-gradle-builds/
  */
 
-allprojects{
-    
-    
+buildscript {
+    repositories { jcenter() }
+
+    dependencies {
+        classpath 'com.netflix.nebula:gradle-aggregate-javadocs-plugin:2.2.+'
+    }
+}
+
+apply plugin: 'nebula-aggregate-javadocs'
+
+
+task document {
+    dependsOn "aggregateJavadocs"
+    doLast {
+        file("$rootProject.buildDir/docs/javadoc").renameTo(file("docs"))
+    }
 }

@@ -14,3 +14,4 @@ rootProject.name = 'lib5k'
 include ":purepursuit"
 include ":libKontrol"
 include ":asyncHAL"
+include ":waterfall"

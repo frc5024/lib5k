@@ -1,1 +1,0 @@
-typeSearchIndex = [{"l":"All Classes","url":"allclasses-index.html"},{"p":"io.github.frc5024.asynchal.sensors","l":"AsyncADXRS450_Gyro"},{"p":"io.github.frc5024.asynchal.sensors","l":"AsyncDigitalInput"},{"p":"io.github.frc5024.asynchal","l":"Pollable"},{"p":"io.github.frc5024.asynchal","l":"Poller"}]

@@ -1,5 +1,3 @@
-
-
 plugins {
     // Apply the java-library plugin to add support for Java Library
     id 'java-library'
@@ -25,38 +23,15 @@ dependencies {
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
     
-    // Math utils
-    implementation 'com.github.ewpratten:ewmath:master-SNAPSHOT'
 
     // WPILib
     implementation("edu.wpi.first.wpilibj:wpilibj-java:${project.WPI_VERSION}")
     implementation("edu.wpi.first.hal:hal-java:${project.WPI_VERSION}")
     implementation("edu.wpi.first.wpiutil:wpiutil-java:${project.WPI_VERSION}")
 
-    // Cameraserver
-    implementation("edu.wpi.first.cscore:cscore-java:${project.WPI_VERSION}")
-    implementation("edu.wpi.first.cameraserver:cameraserver-java:${project.WPI_VERSION}")
-
     // WPILib extras
     implementation("edu.wpi.first.ntcore:ntcore-java:${project.WPI_VERSION}")
 
-    // Common hardware lib
-    api project(":hardware:common")
-
-    // Control loops
-    implementation project(":control_loops")
-
-    // Logging
-    implementation project(":logging")
-
-    // HAL
-    implementation project(":hardware:ni")
-
-    // Telemetry
-    implementation project(":telemetry")
-
-    // Utils
-    implementation project(":utils")
 
 }
 

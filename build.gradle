@@ -16,6 +16,7 @@ buildscript {
 }
 
 apply plugin: 'nebula-aggregate-javadocs'
+apply plugin: "java-library"
 
 allprojects{
     apply plugin: "java"
@@ -54,4 +55,27 @@ task document(type: Javadoc, description: 'Generate javadocs from all child proj
 		delete "docs"
         file("$rootProject.buildDir/docs/javadoc").renameTo(file("docs"))
     }
+}
+
+subprojects.each { subproject ->
+  evaluationDependsOn(subproject.path)
+}
+task mmJar(type: Jar, dependsOn: subprojects.jar) {
+  subprojects.each { subproject ->
+    from subproject.configurations.archives.artifacts.files.collect {
+      zipTree(it)
+    }
+  }
+}
+
+task buildRelease(type: Jar, dependsOn: subprojects.fatJar){
+  delete file("_release")
+  doLast{
+    subprojects.each { subproject ->
+    from subproject.configurations.archives.artifacts.files.collect {
+        zipTree(it)
+      }
+    }
+    file("$rootProject.buildDir/libs/lib5k-"+project.version+".jar").renameTo(file("_release/lib5k-"+project.version+"-monolithic.jar"))
+  }
 }

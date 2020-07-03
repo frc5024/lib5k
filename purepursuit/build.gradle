@@ -48,5 +48,5 @@ sourceSets {
 // Generate a javadoc
 javadoc{
     source = "src/main/java"
-    destinationDir = reporting.file("docs/javadoc/purepursuit")
+    destinationDir = file("../docs/javadoc/purepursuit")
 }

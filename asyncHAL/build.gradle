@@ -49,5 +49,5 @@ sourceSets {
 // Generate a javadoc
 javadoc{
     source = "src/main/java"
-    destinationDir = reporting.file("docs/javadoc/asyncHAL")
+    destinationDir = file("../docs/javadoc/asyncHAL")
 }

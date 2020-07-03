@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"io.github.frc5024.purepursuit"},{"l":"io.github.frc5024.purepursuit.pathgen"},{"l":"io.github.frc5024.purepursuit.util"}]

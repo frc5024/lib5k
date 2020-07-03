@@ -3,6 +3,12 @@ The software libraries that power all Raider Robotics projects.
 
 *Javadoc can be found [here](https://frc5024.github.io/lib5k)*
 
+## Using
+
+The simplest way to use lib5k is to import the entire library (warning: this is quite big). This can be done by grabbing the latest `lib5k-<version>-monolithic.jar` file from the [releases page](https://github.com/frc5024/lib5k/releases/latest), and adding it to your project (here is a [tutorial](https://medium.com/@petehouston/compile-local-jar-files-with-gradle-a078e5c7a520)).
+
+If you would like to pick and choose which components you want, reference the chart below, and only add the jars you want.
+
 ## Modules
 
 This repository is split into modules. This allows us to only import what we need per project instead of loading unnecessary libs (for example, parts management does not need access to CTRE libs). The following table lists all avalible modules, and their uses.
@@ -38,6 +44,14 @@ Any folder containing a `build.gradle` file can be a module. Make sure to add th
 
  1. Run `./gradlew clean document`
  2. Push to git
+
+### Building a new release
+
+To build a new release, first update the version number at the top of `build.gradle`.
+
+Next, run `./gradlew clean buildRelease`. This will build all modules individually, then also build a packaged jar with everything in it. All files will be exported to the `_release` folder. Team members with permission to publish releases can then create a new GitHub release [here](https://github.com/frc5024/lib5k/releases/new).
+
+Otherwise, you can just use these files, and follow [the instructions above](#using).
 
 ## Troubleshooting
 

@@ -9,13 +9,13 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import io.github.frc5024.lib5k.hardware.common.motors.interfaces.IMotorCollection;
 import io.github.frc5024.lib5k.hardware.common.motors.interfaces.IRampRateController;
 import io.github.frc5024.lib5k.hardware.common.motors.interfaces.IVoltageOutputController;
-import frc.lib5k.control.TimedSlewLimiter;
-import frc.lib5k.interfaces.Loggable;
-import frc.lib5k.roborio.RR_HAL;
-import frc.lib5k.utils.ObjectCounter;
-import frc.lib5k.utils.RobotLogger;
-import frc.lib5k.utils.RobotLogger.Level;
-import frc.lib5k.utils.telemetry.ComponentTelemetry;
+import io.github.frc5024.lib5k.control_loops.TimedSlewLimiter;
+import io.github.frc5024.lib5k.logging.Loggable;
+import io.github.frc5024.lib5k.hardware.ni.roborio.RR_HAL;
+import io.github.frc5024.lib5k.utils.ObjectCounter;
+import io.github.frc5024.lib5k.logging.RobotLogger;
+import io.github.frc5024.lib5k.logging.RobotLogger.Level;
+import io.github.frc5024.lib5k.telemetry.ComponentTelemetry;
 
 /**
  * Collection of multiple motor controllers of mixed types that wraps a

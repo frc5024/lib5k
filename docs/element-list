@@ -1,6 +1,14 @@
 io.github.frc5024.asynchal
 io.github.frc5024.asynchal.sensors
+io.github.frc5024.lib5k.control_loops
+io.github.frc5024.lib5k.control_loops.models
 io.github.frc5024.lib5k.hardware.common.motors.interfaces
+io.github.frc5024.lib5k.hardware.generic.motors.motorcollection
+io.github.frc5024.lib5k.hardware.ni.roborio
+io.github.frc5024.lib5k.logging
+io.github.frc5024.lib5k.telemetry
+io.github.frc5024.lib5k.utils
+io.github.frc5024.lib5k.utils.interfaces
 io.github.frc5024.libkontrol.statemachines
 io.github.frc5024.purepursuit
 io.github.frc5024.purepursuit.pathgen

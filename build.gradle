@@ -5,6 +5,8 @@
  * Learn how to create Gradle builds at https://guides.gradle.org/creating-new-gradle-builds/
  */
 
+project.version = "1.0.0"
+
 buildscript {
     repositories { jcenter() }
 
@@ -48,6 +50,8 @@ task document(type: Javadoc, description: 'Generate javadocs from all child proj
 	}
 
     doLast {
+		println "Copying javadoc to docs folder"
+		delete "docs"
         file("$rootProject.buildDir/docs/javadoc").renameTo(file("docs"))
     }
 }

@@ -22,6 +22,8 @@ This repository is split into modules. This allows us to only import what we nee
 | `:hardware:ni`          | `hardware.ni`          | For interfacing with [NI](https://www.ni.com) products                                    |
 | `:control_loops`        | `control_loops`        | Classes and tools related to control theory                                               |
 | `:utils`                | `utils`                | Common utils and constants used by many modules                                           |
+| `:logging`              | `logging`              | Common logging classes                                                                    |
+| `:telemetry`            | `telemetry`            | Tools for network-based system telemetry                                                  |
 
 
 ## Development
@@ -34,7 +36,7 @@ Any folder containing a `build.gradle` file can be a module. Make sure to add th
 
 ### Updating javadoc
 
- 1. Run `./gradlew document`
+ 1. Run `./gradlew clean document`
  2. Push to git
 
 ## Troubleshooting

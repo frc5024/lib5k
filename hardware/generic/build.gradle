@@ -38,6 +38,20 @@ dependencies {
     // Common hardware lib
     api project(":hardware:common")
 
+    // Control loops
+    implementation project(":control_loops")
+
+    // Logging
+    implementation project(":logging")
+
+    // HAL
+    implementation project(":hardware:ni")
+
+    // Telemetry
+    implementation project(":telemetry")
+
+    // Utils
+    implementation project(":utils")
 
 }
 

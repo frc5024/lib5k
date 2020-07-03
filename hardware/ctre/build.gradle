@@ -28,6 +28,9 @@ dependencies {
     implementation("edu.wpi.first.wpilibj:wpilibj-java:${project.WPI_VERSION}")
     implementation("edu.wpi.first.hal:hal-java:${project.WPI_VERSION}")
     implementation("edu.wpi.first.wpiutil:wpiutil-java:${project.WPI_VERSION}")
+
+    // WPILib extras
+    implementation("edu.wpi.first.ntcore:ntcore-java:${project.WPI_VERSION}")
     
     // Math utils
     implementation 'com.github.ewpratten:ewmath:master-SNAPSHOT'
@@ -44,6 +47,12 @@ dependencies {
 
     // Utils
     implementation project(":utils")
+
+    // Logging
+    implementation project(":logging")
+
+    // Telemetry
+    implementation project(":telemetry")
 
     // Control loops
     implementation project(":control_loops")

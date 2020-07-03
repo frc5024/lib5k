@@ -23,9 +23,24 @@ dependencies {
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
+
+    // WPILib
+    implementation("edu.wpi.first.wpilibj:wpilibj-java:${project.WPI_VERSION}")
+    implementation("edu.wpi.first.hal:hal-java:${project.WPI_VERSION}")
+    implementation("edu.wpi.first.wpiutil:wpiutil-java:${project.WPI_VERSION}")
     
     // Math utils
     implementation 'com.github.ewpratten:ewmath:master-SNAPSHOT'
+
+    // CTRE
+    implementation("com.ctre.phoenix:api-java:${project.CTRE_VERSION}")
+    implementation("com.ctre.phoenix:wpiapi-java:${project.CTRE_VERSION}")
+
+    // Common hardware
+    api project(":hardware:common")
+
+    // RoboRIO HAL
+    implementation project(":hardware:ni")
 
 }
 

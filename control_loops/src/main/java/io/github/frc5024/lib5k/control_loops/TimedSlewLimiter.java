@@ -1,6 +1,6 @@
 package io.github.frc5024.lib5k.control_loops;
 
-import io.github.frc5024.lib5k.hardware.ni.roborio.FPGAClock;
+import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.FPGAClock;
 
 /**
  * An extension of SlewLimiter that acts a bit more like TalonSRX's rampRate

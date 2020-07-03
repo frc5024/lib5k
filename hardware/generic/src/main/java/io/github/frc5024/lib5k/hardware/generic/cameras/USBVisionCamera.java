@@ -2,7 +2,7 @@ package io.github.frc5024.lib5k.hardware.generic.cameras;
 
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.Solenoid;
-import io.github.frc5024.lib5k.hardware.ni.roborio.FPGAClock;
+import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.FPGAClock;
 
 public class USBVisionCamera extends AutoCamera {
 

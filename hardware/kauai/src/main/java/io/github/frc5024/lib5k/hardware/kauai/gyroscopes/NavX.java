@@ -12,7 +12,7 @@ import io.github.frc5024.lib5k.hardware.common.drivebase.IDifferentialDrivebase;
 import io.github.frc5024.lib5k.hardware.common.sensors.interfaces.ISimGyro;
 
 /**
- * A wrapper for the AHRS / NavX gyroscope
+ * A wrapper for the {@link AHRS} / NavX gyroscope
  * 
  * This wrapper adds support for gyro simulation, and adds some lib5k-specific
  * methods

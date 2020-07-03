@@ -11,7 +11,7 @@ import io.github.frc5024.lib5k.hardware.common.motors.interfaces.IRampRateContro
 import io.github.frc5024.lib5k.hardware.common.motors.interfaces.IVoltageOutputController;
 import io.github.frc5024.lib5k.control_loops.TimedSlewLimiter;
 import io.github.frc5024.lib5k.logging.Loggable;
-import io.github.frc5024.lib5k.hardware.ni.roborio.RR_HAL;
+import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.RR_HAL;
 import io.github.frc5024.lib5k.utils.ObjectCounter;
 import io.github.frc5024.lib5k.logging.RobotLogger;
 import io.github.frc5024.lib5k.logging.RobotLogger.Level;

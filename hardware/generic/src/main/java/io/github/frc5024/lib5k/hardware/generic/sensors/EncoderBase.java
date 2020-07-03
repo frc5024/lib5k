@@ -7,7 +7,7 @@ import edu.wpi.first.hal.SimDouble;
 import edu.wpi.first.wpilibj.SpeedController;
 import io.github.frc5024.lib5k.control_loops.SlewLimiter;
 import io.github.frc5024.lib5k.utils.interfaces.PeriodicComponent;
-import io.github.frc5024.lib5k.hardware.ni.roborio.FPGAClock;
+import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.FPGAClock;
 
 /**
  * Base for encoders

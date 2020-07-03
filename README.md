@@ -1,5 +1,7 @@
 # lib5k
-The software libraries that power all Raider Robotics projects
+The software libraries that power all Raider Robotics projects.
+
+*Javadoc can be found [here](frc5024.github.io/lib5k)*
 
 ## Modules
 
@@ -18,6 +20,12 @@ Many modules rely on third-party libraries. To upgrade the versions, edit the ap
 
 ### Adding a new module
 Any folder containing a `build.gradle` file can be a module. Make sure to add the new folder to `settings.gradle`. Otherwise, it will not be built
+
+### Updating javadoc
+
+ 1. Run `./gradlew javadoc`
+ 2. Make sure all projects are listed in `docs/index.md`
+ 3. Push to git
 
 ## Troubleshooting
 

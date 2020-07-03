@@ -1,13 +1,12 @@
-
-
 plugins {
     // Apply the java-library plugin to add support for Java Library
     id 'java-library'
 }
 
-apply from: "../../gradle_utils/libversions.gradle"
-apply from: "../../gradle_utils/simpleunittest.gradle"
-apply from: "../../gradle_utils/mavenrepos.gradle"
+apply from: "../gradle_utils/libversions.gradle"
+apply from: "../gradle_utils/simpleunittest.gradle"
+apply from: "../gradle_utils/mavenrepos.gradle"
+
 
 java {
     sourceCompatibility = JavaVersion.VERSION_11
@@ -23,7 +22,7 @@ dependencies {
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
-    
+
     // Math utils
     implementation 'com.github.ewpratten:ewmath:master-SNAPSHOT'
 
@@ -32,13 +31,8 @@ dependencies {
     implementation("edu.wpi.first.hal:hal-java:${project.WPI_VERSION}")
     implementation("edu.wpi.first.wpiutil:wpiutil-java:${project.WPI_VERSION}")
 
-    // WPILib extras
-    implementation("edu.wpi.first.ntcore:ntcore-java:${project.WPI_VERSION}")
-
-    // Common hardware lib
-    api project(":hardware:common")
-
-
+    // Logging
+    implementation project(":logging")
 }
 
 sourceSets {
@@ -53,9 +47,4 @@ sourceSets {
       srcDir 'src/test/java'
     }
   }
-}
-
-// Generate a javadoc
-javadoc{
-    source = "src/main/java"
 }

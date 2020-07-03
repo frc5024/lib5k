@@ -3,7 +3,10 @@ io.github.frc5024.asynchal.sensors
 io.github.frc5024.lib5k.control_loops
 io.github.frc5024.lib5k.control_loops.models
 io.github.frc5024.lib5k.hardware.common.motors.interfaces
+io.github.frc5024.lib5k.hardware.common.sensors.interfaces
 io.github.frc5024.lib5k.hardware.generic.motors.motorcollection
+io.github.frc5024.lib5k.hardware.generic.sensors
+io.github.frc5024.lib5k.hardware.generic.sensors.interfaces
 io.github.frc5024.lib5k.hardware.ni.roborio
 io.github.frc5024.lib5k.logging
 io.github.frc5024.lib5k.telemetry

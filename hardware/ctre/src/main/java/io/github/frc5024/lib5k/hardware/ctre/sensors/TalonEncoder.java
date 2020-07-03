@@ -34,13 +34,9 @@ public class TalonEncoder implements CommonEncoder, EncoderSimulation {
         this.cpr = cpr;
     }
 
-    @Override
-    public int getID() {
-        return 0;
-    }
 
     @Override
-    public void setInverted(boolean inverted) {
+    public void setPhaseInverted(boolean inverted) {
         this.phase = inverted;
         talon.setSensorPhase(inverted);
 

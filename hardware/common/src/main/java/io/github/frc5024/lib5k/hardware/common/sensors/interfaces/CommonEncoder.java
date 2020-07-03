@@ -8,12 +8,6 @@ package io.github.frc5024.lib5k.hardware.common.sensors.interfaces;
  */
 public interface CommonEncoder {
 
-    /**
-     * Get the ID of the connected sensor.
-     *
-     * @return The ID of the sensor
-     */
-    public int getID();
 
     /**
      * Set the phase of the encoder so that it is set to be in phase with the motor
@@ -21,7 +15,7 @@ public interface CommonEncoder {
      * 
      * @param inverted The phase of the sensor
      */
-    public void setInverted(boolean inverted);
+    public void setPhaseInverted(boolean inverted);
 
     /**
      * Get the phase of the sensor. This will just return false if the user tries to

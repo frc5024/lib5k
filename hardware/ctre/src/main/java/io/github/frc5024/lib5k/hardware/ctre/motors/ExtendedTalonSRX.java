@@ -22,7 +22,7 @@ public class ExtendedTalonSRX extends WPI_TalonSRX {
      * Get the attached encoder
      * @return Encoder
      */
-    public CommonEncoder getEncoder(int cpr) {
+    public CommonEncoder getCommonEncoder(int cpr) {
         return new TalonEncoder(this, cpr);
     }
     

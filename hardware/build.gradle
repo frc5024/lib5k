@@ -28,6 +28,7 @@ dependencies {
     api project(":hardware:generic")
     api project(":hardware:kauai")
     api project(":hardware:ctre")
+    api project(":hardware:ni")
     api project(":hardware:revrobotics")
 }
 

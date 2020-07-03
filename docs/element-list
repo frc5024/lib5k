@@ -19,6 +19,8 @@ io.github.frc5024.lib5k.hardware.generic.servos
 io.github.frc5024.lib5k.hardware.kauai.gyroscopes
 io.github.frc5024.lib5k.hardware.ni.roborio
 io.github.frc5024.lib5k.hardware.ni.roborio.fpga
+io.github.frc5024.lib5k.hardware.revrobotics.motors
+io.github.frc5024.lib5k.hardware.revrobotics.sensors
 io.github.frc5024.lib5k.logging
 io.github.frc5024.lib5k.telemetry
 io.github.frc5024.lib5k.utils

@@ -7,8 +7,9 @@ This repository is split into modules. This allows us to only import what we nee
 
 | Gradle Name    | JitPack Name  | Description                                                          | Docs                                                               |
 |----------------|---------------|----------------------------------------------------------------------|--------------------------------------------------------------------|
-| `:purepursuit` | `purepursuit` | This library contains everything needed for autonomous path planning | NONE                                                               |
-| `:libKontrol`  | `libKontrol`  | This library contains tools for building state machines              | [Webdocs](https://cs.5024.ca/webdocs/docs/tutorials/statemachines) |
+| `:purepursuit` | `purepursuit` | This library contains everything needed for autonomous path planning | none                                                               |
+| `:libKontrol`  | `libKontrol`  | This library contains tools for building state machines              | [webdocs](https://cs.5024.ca/webdocs/docs/tutorials/statemachines) |
+| `:asyncHAL`    | `asyncHAL`    | An asynchronous extension to the RoboRIO HAL                         | [github](asyncHAL/README.md)                                       |
 
 ## Development
 

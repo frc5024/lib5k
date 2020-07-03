@@ -1,0 +1,55 @@
+package io.github.frc5024.asynchal;
+
+import java.util.ArrayList;
+
+import edu.wpi.first.wpilibj.Notifier;
+
+/**
+ * You have been lied to. This library is not fully real-time. I don't want to
+ * deal with writing a JNI wrapper for some FPGA DMA code, so this quick-refresh
+ * loop is the best you'll get for callbacks.
+ */
+public class Poller {
+    private static Poller instance;
+
+    private Notifier thread;
+
+    private ArrayList<Pollable> pollables = new ArrayList<>();
+
+    private Poller() {
+
+        // Start up the polling thread
+        this.thread = new Notifier(this::update);
+        this.thread.startPeriodic(0.01);
+    }
+
+    public static Poller getInstance() {
+        if (instance == null) {
+            instance = new Poller();
+        }
+        return instance;
+    }
+
+    /**
+     * Register a pollable component
+     * @param p Pollable
+     */
+    public void register(Pollable p) {
+        pollables.add(p);
+    }
+
+    /**
+     * de-Register a pollable component
+     * @param p Pollable
+     */
+    public void deregister(Pollable p) {
+        pollables.remove(p);
+    }
+
+    private void update() {
+        for (Pollable p : pollables) {
+            p.checkForUpdates();
+        }
+    }
+
+}

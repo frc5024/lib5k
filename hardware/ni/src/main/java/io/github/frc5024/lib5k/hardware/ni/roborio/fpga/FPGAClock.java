@@ -1,4 +1,4 @@
-package io.github.frc5024.lib5k.hardware.ni.roborio;
+package io.github.frc5024.lib5k.hardware.ni.roborio.fpga;
 
 import edu.wpi.first.wpilibj.Timer;
 

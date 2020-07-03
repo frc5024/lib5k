@@ -1,4 +1,4 @@
-package io.github.frc5024.lib5k.hardware.ni.roborio;
+package io.github.frc5024.lib5k.hardware.ni.roborio.fpga;
 
 import java.io.BufferedReader;
 import java.io.File;

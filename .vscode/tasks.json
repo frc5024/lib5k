@@ -14,6 +14,26 @@
                 "kind": "build",
                 "isDefault": true
             }
+        },
+        {
+            "label": "test",
+            "type": "shell",
+            "command": "./gradlew test",
+            "problemMatcher": [
+                "$msCompile"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "jar",
+            "type": "shell",
+            "command": "./gradlew jar",
+            "problemMatcher": [
+                "$msCompile"
+            ]
         }
     ]
 }

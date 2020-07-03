@@ -12,3 +12,4 @@ rootProject.name = 'lib5k'
 
 // Add all modules here
 include ":purepursuit"
+include ":libKontrol"

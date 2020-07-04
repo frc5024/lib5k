@@ -68,14 +68,24 @@ task mmJar(type: Jar, dependsOn: subprojects.jar) {
   }
 }
 
-task buildRelease(type: Jar, dependsOn: subprojects.fatJar){
+task buildRelease(type: Jar){
   delete file("_release")
-  doLast{
-    subprojects.each { subproject ->
-    from subproject.configurations.archives.artifacts.files.collect {
-        zipTree(it)
-      }
-    }
-    file("$rootProject.buildDir/libs/lib5k-"+project.version+".jar").renameTo(file("_release/lib5k-"+project.version+"-monolithic.jar"))
-  }
+  delete file("$rootProject.buildDir/libs")
+  dependsOn subprojects.fatJar
+  dependsOn subprojects.jar
+  dependsOn project(":bundle").buildBundle
+  // doLast{
+  //   subprojects.each { subproject ->
+  //   from subproject.configurations.archives.artifacts.files.collect {
+  //       zipTree(it)
+  //     }
+  //   }
+  //   // fileTree("_release/modules").each {
+  //   //   from it
+  //   // }
+
+  //   // from fileTree("_release/modules").files.collect
+  //   println "$rootProject.buildDir/libs/lib5k-"+project.version+".jar"
+  //   file("$rootProject.buildDir/libs/lib5k-"+project.version+".jar").renameTo(file("_release/lib5k-"+project.version+"-monolithic.jar"))
+  // }
 }

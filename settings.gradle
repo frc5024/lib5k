@@ -9,6 +9,8 @@
 
 rootProject.name = 'lib5k'
 
+// Bundle build script
+include ":bundle"
 
 // Add all modules here
 include ":purepursuit"

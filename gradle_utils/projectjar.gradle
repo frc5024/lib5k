@@ -4,8 +4,9 @@ task fatJar(type: Jar) {
     //     	'Implementation-Version': version,
     //     	'Main-Class': 'com.mkyong.DateUtils'
     // }
+    // classifier = 'all'
     baseName = project.name + "-" + rootProject.version + '-module-all'
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
     destinationDir = file("$rootDir/_release/modules")
 }

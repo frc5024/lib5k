@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.TimedRobot;
 import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.FPGAClock;
 import io.github.frc5024.lib5k.logging.RobotLogger;
+import io.github.frc5024.lib5k.logging.USBLogger;
 import io.github.frc5024.lib5k.logging.RobotLogger.Level;
 
 /**
@@ -28,18 +29,18 @@ public class Main extends TimedRobot {
         logger.start(0.02);
 
         // Here, we need to start the Flywheel subsystem
-        
+
 
     }
 
     @Override
     public void teleopInit() {
-        logger.log("Teleop started");
+        logger.log("Robot", "Teleop started");
 
     }
 
     @Override
     public void disabledInit() {
-        logger.log("Robot disabled");
+        logger.log("Robot", "Robot disabled");
     }
 }

@@ -1,22 +1,52 @@
 
 
 plugins {
-    // Apply the java-library plugin to add support for Java Library
-    id 'java-library'
+    id "java"
+    id "edu.wpi.first.GradleRIO" version "2020.3.2" 
 }
 
 apply from: "../gradle_utils/libversions.gradle"
 apply from: "../gradle_utils/simpleunittest.gradle"
 apply from: "../gradle_utils/mavenrepos.gradle"
 
+// Change this to match the main class of any example you want to deploy
+def ROBOT_MAIN_CLASS = "io.github.frc5024.lib5k.examples.neo_flywheel.Main"
+
 java {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
 }
 
+// Define my targets (RoboRIO) and artifacts (deployable files)
+// This is added by GradleRIO's backing project EmbeddedTools.
+deploy {
+    targets {
+        roboRIO("roborio") {
+            // Team number is loaded either from the .wpilib/wpilib_preferences.json
+            // or from command line. If not found an exception will be thrown.
+            // You can use getTeamOrDefault(team) instead of getTeamNumber if you
+            // want to store a team number in this file.
+            team = frc.getTeamOrDefault(5024)
+        }
+    }
+    artifacts {
+        frcJavaArtifact('frcJava') {
+            targets << "roborio"
+            // Debug can be overridden by command line, for use with VSCode
+            debug = frc.getDebugOrDefault(false)
+        }
+        // Built in artifact to deploy arbitrary files to the roboRIO.
+        fileTreeArtifact('frcStaticFileDeploy') {
+            // The directory below is the local directory to deploy
+            files = fileTree(dir: 'src/main/deploy')
+            // Deploy to RoboRIO target, into /home/lvuser/deploy
+            targets << "roborio"
+            directory = '/home/lvuser/deploy'
+        }
+    }
+}
+
 dependencies {
-    // This dependency is exported to consumers, that is to say found on their compile classpath.
-    api 'org.apache.commons:commons-math3:3.6.1'
 
     // This dependency is used internally, and not exposed to consumers on their own compile classpath.
     implementation 'com.google.guava:guava:27.0.1-jre'
@@ -24,19 +54,44 @@ dependencies {
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
 
+    // Load Binaries for all native libs
+    nativeZip wpi.deps.wpilibJni(wpi.platforms.roborio)
+    nativeDesktopZip wpi.deps.wpilibJni(wpi.platforms.desktop)
+    nativeZip wpi.deps.vendor.jni(wpi.platforms.roborio)
+    nativeDesktopZip wpi.deps.vendor.jni(wpi.platforms.desktop)
+
     // WPILib
     implementation("edu.wpi.first.wpilibj:wpilibj-java:${project.WPI_VERSION}")
     implementation("edu.wpi.first.hal:hal-java:${project.WPI_VERSION}")
     implementation("edu.wpi.first.wpiutil:wpiutil-java:${project.WPI_VERSION}")
 
+    // WPILib Extras
+    implementation("edu.wpi.first.ntcore:ntcore-java:${project.WPI_VERSION}")
+    implementation("edu.wpi.first.cscore:cscore-java:${project.WPI_VERSION}")
+    implementation("edu.wpi.first.cameraserver:cameraserver-java:${project.WPI_VERSION}")
+
     // WPILib command framework
     implementation("edu.wpi.first.wpilibNewCommands:wpilibNewCommands-java:${project.WPI_VERSION}")
+
+    // NavX
+    implementation("com.kauailabs.navx.frc:navx-java:${project.NAVX_VERSION}")
+
+    // CTRE
+    implementation("com.ctre.phoenix:api-java:${project.CTRE_VERSION}")
+    implementation("com.ctre.phoenix:wpiapi-java:${project.CTRE_VERSION}")
+
+    // REV Robotics
+    implementation("com.revrobotics.frc:ColorSensorV3-java:${project.REV_COLOR_VERSION}")
+    implementation("com.revrobotics.frc:SparkMax-java:${project.REV_SPARK_VERSION}")
     
     // Math utils
     implementation 'com.github.ewpratten:ewmath:master-SNAPSHOT'
 
     // All of lib5k
     implementation project(":bundle")
+
+    // HALSIM
+    simulation wpi.deps.sim.gui(wpi.platforms.desktop, false)
 }
 
 sourceSets {
@@ -56,5 +111,15 @@ sourceSets {
 
 // Trick root build into thinking this has a jar
 task fatJar{
+
+}
+
+jar {
+    // Require other libraries
+    dependsOn ":bundle:jar"
+
+    // Bundle the JAR
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+    manifest edu.wpi.first.gradlerio.GradleRIOPlugin.javaManifest(ROBOT_MAIN_CLASS)
 
 }

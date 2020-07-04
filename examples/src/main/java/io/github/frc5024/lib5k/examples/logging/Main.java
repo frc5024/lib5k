@@ -29,7 +29,7 @@ public class Main extends TimedRobot {
 
         // In the constructor, if we need to log something, we must use a special flag.
         // This is just due to a quirk with the scheduler system.
-        logger.log("Hello from the constructor", Level.kRobot);
+        logger.log("Robot",  "Hello from the constructor", Level.kRobot);
 
         // It is very important to start the logger in the robot constructor (do not do this anywhere else)
         // 0.02ms was chosen as the period because it matches the main robot thread, and is the most reliable. but really anything can be used
@@ -40,20 +40,20 @@ public class Main extends TimedRobot {
     @Override
     public void autonomousInit() {
         // Since we are no longer in the constructor, we can log normally
-        logger.log("Autonomous has started");
+        logger.log("Robot",  "Autonomous has started");
 
     }
 
     @Override
     public void teleopInit() {
         // Here, we are going to log the timestamp when the robot enters teleop
-        logger.log(String.format("Teleop started %.2f seconds after robot boot", FPGAClock.getFPGASeconds()));
+        logger.log("Robot",  String.format("Teleop started %.2f seconds after robot boot", FPGAClock.getFPGASeconds()));
 
     }
 
     @Override
     public void disabledInit() {
         // Here, we will log a warning. This message will both be written to the log, and displayed in driverstation
-        logger.log("Robot disabled", Level.kWarning);
+        logger.log("Robot",  "Robot disabled", Level.kWarning);
     }
 }

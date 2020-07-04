@@ -24,21 +24,20 @@ dependencies {
     implementation("edu.wpi.first.hal:hal-java:${WPI_VERSION}")
     implementation("edu.wpi.first.wpiutil:wpiutil-java:${WPI_VERSION}")
 
-
     // WPILib command framework
     implementation("edu.wpi.first.wpilibNewCommands:wpilibNewCommands-java:${WPI_VERSION}")
 
     // Math utils
     implementation 'com.github.ewpratten:ewmath:master-SNAPSHOT'
 
-    // LibVEC (simple vectors)
-    implementation 'com.github.ewpratten:libvec:master-SNAPSHOT'
-
     // FPGA access
     implementation project(":hardware:ni")
 
+    // Utils
+    implementation project(":utils")
+
     // State machins
-    implementation 'com.github.frc5024:libKontrol:v1.0.0'
+    implementation project(":libKontrol")
 
     // EJML
     compile group: 'org.ejml', name: 'ejml-simple', version: '0.32'

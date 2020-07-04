@@ -55,14 +55,17 @@ task document(type: Javadoc, description: 'Generate javadocs from all child proj
 
     // source subprojects.collect { proj -> proj.sourceSets.main.allJava }  
 	subprojects.each { proj ->
-        println 'Adding ' + proj.projectDir + "/src/main/java"
-		proj.tasks.withType(Javadoc).each { javadocTask ->
-            println 'Found JavaDoc task'
-			source += javadocTask.source
-			classpath += javadocTask.classpath
-			excludes += javadocTask.excludes
-			includes += javadocTask.includes
-		}
+
+    if (proj.name != "examples"){
+      println 'Adding ' + proj.projectDir + "/src/main/java"
+      proj.tasks.withType(Javadoc).each { javadocTask ->
+        println 'Found JavaDoc task'
+        source += javadocTask.source
+        classpath += javadocTask.classpath
+        excludes += javadocTask.excludes
+        includes += javadocTask.includes
+		  }
+    }
 	}
 
     doLast {

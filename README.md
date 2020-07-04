@@ -5,7 +5,7 @@ The software libraries that power all Raider Robotics projects.
 
 ## Using
 
-The simplest way to use lib5k is to import the entire library (warning: this is quite big). This can be done by grabbing the latest `lib5k-<version>-monolithic.jar` file from the [releases page](https://github.com/frc5024/lib5k/releases/latest), and adding it to your project (here is a [tutorial](https://medium.com/@petehouston/compile-local-jar-files-with-gradle-a078e5c7a520)).
+The simplest way to use lib5k is to import the entire library (warning: this is quite big). This can be done by grabbing the latest `lib5k-bundle-<version>-monolithic.jar` file from the [releases page](https://github.com/frc5024/lib5k/releases/latest), and adding it to your project (here is a [tutorial](https://medium.com/@petehouston/compile-local-jar-files-with-gradle-a078e5c7a520)).
 
 If you would like to pick and choose which components you want, reference the chart below, and only add the jars you want.
 

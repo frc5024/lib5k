@@ -31,6 +31,7 @@ This repository is split into modules. This allows us to only import what we nee
 | `:utils`                | `utils`                | Common utils and constants used by many modules                                           |
 | `:logging`              | `logging`              | Common logging classes                                                                    |
 | `:telemetry`            | `telemetry`            | Tools for network-based system telemetry                                                  |
+| `:common_drive`         | `common_drive`         | Robot-agnostic drivetrain code                                                            |
 
 
 ## Development

@@ -11,8 +11,8 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import io.github.frc5024.common_drive.calculation.DifferentialDriveCalculation;
-import io.github.frc5024.common_drive.calculation.InputUtils;
-import io.github.frc5024.common_drive.calculation.InputUtils.ScalingMode;
+import io.github.frc5024.lib5k.utils.InputUtils;
+import io.github.frc5024.lib5k.utils.InputUtils.ScalingMode;
 import io.github.frc5024.common_drive.controller.PDFController;
 import io.github.frc5024.common_drive.controller.PIFController;
 import io.github.frc5024.common_drive.gearing.Gear;
@@ -516,7 +516,7 @@ public abstract class DriveTrainBase extends SubsystemBase {
      * @param left  Left side voltage
      * @param right Right side voltage
      */
-    private void writePercentOutputs(double left, double right)  {
+    private void writePercentOutputs(double left, double right) {
         this.writeVoltages(left * 12.0, right * 12.0);
     }
 

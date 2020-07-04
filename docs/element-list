@@ -1,6 +1,7 @@
 ca.retrylife.frc.limelight
 ca.retrylife.frc.limelight.controls
 ca.retrylife.frc.limelight.util
+edu.wpi.first.wpilibj.controller
 io.github.frc5024.asynchal
 io.github.frc5024.asynchal.sensors
 io.github.frc5024.common_drive

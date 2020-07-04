@@ -15,6 +15,10 @@ import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.RR_HAL;
 public class ExtendedTalonFX extends WPI_TalonFX {
     public CTREConfig config;
 
+    public ExtendedTalonFX(int id) {
+        this(id, new CTREConfig());
+    }
+
 
     public ExtendedTalonFX(int id, CTREConfig config) {
         super(id);

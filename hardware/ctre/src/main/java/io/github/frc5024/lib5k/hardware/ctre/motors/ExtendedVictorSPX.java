@@ -12,6 +12,9 @@ import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.RR_HAL;
 public class ExtendedVictorSPX extends WPI_VictorSPX {
     public CTREConfig config;
 
+    public ExtendedVictorSPX(int id){
+        this(id, new CTREConfig());
+    }
 
     public ExtendedVictorSPX(int id, CTREConfig config) {
         super(id);

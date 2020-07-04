@@ -1,3 +1,6 @@
+ca.retrylife.frc.limelight
+ca.retrylife.frc.limelight.controls
+ca.retrylife.frc.limelight.util
 io.github.frc5024.asynchal
 io.github.frc5024.asynchal.sensors
 io.github.frc5024.lib5k.control_loops

@@ -26,6 +26,7 @@ This repository is split into modules. This allows us to only import what we nee
 | `:hardware:revrobotics` | `hardware.revrobotics` | For interfacing with [REV Robotics](https://revrobotics.com/) products                    |
 | `:hardware:generic`     | `hardware.generic`     | For interfacing with KOP and custom hardware                                              |
 | `:hardware:ni`          | `hardware.ni`          | For interfacing with [NI](https://www.ni.com) products                                    |
+| `:hardware:limelight`   | `hardware.limelight`   | For interfacing with [Limelight](https://limelightvision.io/) products                    |
 | `:control_loops`        | `control_loops`        | Classes and tools related to control theory                                               |
 | `:utils`                | `utils`                | Common utils and constants used by many modules                                           |
 | `:logging`              | `logging`              | Common logging classes                                                                    |

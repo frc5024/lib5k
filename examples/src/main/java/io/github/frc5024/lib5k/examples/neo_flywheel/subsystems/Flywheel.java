@@ -1,4 +1,4 @@
-package io.github.frc5024.lib5k.examples.neo_flywheel;
+package io.github.frc5024.lib5k.examples.neo_flywheel.subsystems;
 
 import com.revrobotics.CANPIDController;
 import com.revrobotics.ControlType;

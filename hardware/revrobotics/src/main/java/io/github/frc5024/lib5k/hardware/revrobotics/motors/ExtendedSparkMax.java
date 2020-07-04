@@ -26,6 +26,13 @@ public class ExtendedSparkMax extends CANSparkMax implements Sendable {
     private SimDevice m_simDevice;
     private SimDouble m_simSpeed;
 
+
+    public ExtendedSparkMax(int deviceID, MotorType motorType){
+        super(deviceID, motorType);
+        this.config = new RevMotorConfig();
+
+    }
+
     public ExtendedSparkMax(int deviceID, RevMotorConfig config) {
         super(deviceID, config.motorType);
         this.config = config;

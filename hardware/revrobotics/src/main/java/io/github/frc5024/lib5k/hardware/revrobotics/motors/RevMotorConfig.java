@@ -61,4 +61,24 @@ public class RevMotorConfig {
 
     }
 
+    public RevMotorConfig(MotorType motorType) {
+
+        this.motorType = motorType;
+
+        this.restoreFactoryDefaults = true;
+
+        this.isInverted = false;
+
+        this.setCurrentLimit = false;
+
+        this.freeLimit = 30;
+
+        this.stallLimit = 0;
+
+        this.rpmLimit = 20000;
+
+        this.enableBrakes = false;
+
+    }
+
 }

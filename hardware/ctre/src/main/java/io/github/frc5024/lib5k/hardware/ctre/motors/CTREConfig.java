@@ -3,7 +3,7 @@ package io.github.frc5024.lib5k.hardware.ctre.motors;
 /**
  * A config class for Talons
  */
-public class TalonConfig {
+public class CTREConfig {
 
     // Should the motor be set to Factory Default
     public boolean configFactoryDefault;
@@ -41,7 +41,7 @@ public class TalonConfig {
     /**
      * Default Config Constructor
      */
-    public TalonConfig() {
+    public CTREConfig() {
         configFactoryDefault = true;
 
         setSafety = true;
@@ -78,7 +78,7 @@ public class TalonConfig {
      * @param timeoutMS Current limit timeout in milliseconds
      * @param encoderCPR Encoder Count per Reveloution
      */
-    public TalonConfig(boolean configFactoryDefault, boolean setSafety, boolean setInverted, boolean setBrake,
+    public CTREConfig(boolean configFactoryDefault, boolean setSafety, boolean setInverted, boolean setBrake,
             boolean setCurrentLimit, int peakAmps, int durationMS, int holdAmps, int timeoutMS, boolean enableCurrentLimit) {
 
         this.configFactoryDefault = configFactoryDefault;

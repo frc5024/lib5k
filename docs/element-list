@@ -3,6 +3,13 @@ ca.retrylife.frc.limelight.controls
 ca.retrylife.frc.limelight.util
 io.github.frc5024.asynchal
 io.github.frc5024.asynchal.sensors
+io.github.frc5024.common_drive
+io.github.frc5024.common_drive.calculation
+io.github.frc5024.common_drive.controller
+io.github.frc5024.common_drive.gearing
+io.github.frc5024.common_drive.geometry
+io.github.frc5024.common_drive.queue
+io.github.frc5024.common_drive.types
 io.github.frc5024.lib5k.control_loops
 io.github.frc5024.lib5k.control_loops.models
 io.github.frc5024.lib5k.hardware.common.drivebase

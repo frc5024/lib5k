@@ -5,7 +5,7 @@
  * Learn how to create Gradle builds at https://guides.gradle.org/creating-new-gradle-builds/
  */
 
-project.version = "1.0.0"
+
 
 buildscript {
     repositories { jcenter() }
@@ -15,12 +15,26 @@ buildscript {
     }
 }
 
+plugins {
+  id "com.gradle.build-scan" version "3.3.4"
+}
+
 apply plugin: 'nebula-aggregate-javadocs'
 apply plugin: "java-library"
+
+// LIB VERSION
+project.version = "1.0.0"
 
 allprojects{
     apply plugin: "java"
 } 
+
+gradleEnterprise {
+    buildScan {
+        termsOfServiceUrl = 'https://gradle.com/terms-of-service'
+        termsOfServiceAgree = 'yes'
+    }
+}
 
 
 // task document {

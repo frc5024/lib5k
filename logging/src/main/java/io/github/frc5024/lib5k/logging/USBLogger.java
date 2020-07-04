@@ -77,17 +77,19 @@ public class USBLogger implements AutoCloseable {
             // Stop the logging by blocking the thread
             return;
 
-        } else if (!m_lastUSBConnectionState && usbAttached) {
-            // Clear the message buffer
-            m_messageBuffer.clear();
-
-            // Split the logfile to re-start the logging session
-            try {
-                splitLogfile();
-            } catch (IOException e) {
-                DriverStation.reportError("Failed to write to external logfile on USB stick", false);
-            }
         }
+        ////* This is commented to fix log splitting bugs
+        // else if (!m_lastUSBConnectionState && usbAttached) {
+        //     // Clear the message buffer
+        //     m_messageBuffer.clear();
+
+        //     // Split the logfile to re-start the logging session
+        //     try {
+        //         splitLogfile();
+        //     } catch (IOException e) {
+        //         DriverStation.reportError("Failed to write to external logfile on USB stick", false);
+        //     }
+        // }
 
         // Set the last known usb state
         m_lastUSBConnectionState = usbAttached;

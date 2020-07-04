@@ -40,11 +40,8 @@ public class Main extends TimedRobot {
         // For info on how unix filepaths work, see:
         // https://www.geeksforgeeks.org/absolute-relative-pathnames-unix/
         //
-        // It is generally good to use <filename>-<date>.txt as a filename so we can
-        // understand when logs were written later on.
-        //
         // For this example, the 2020 filepath format will be used
-        usbLogger = new USBLogger(String.format("RobotLogs-2020/live/roborio-%s.txt", LocalDate.now().toString()));
+        usbLogger = new USBLogger("RobotLogs-2020/live");
 
         // When reflecting to a USB, we need to tell the logger where to reflect
         logger.enableUSBLogging(usbLogger);

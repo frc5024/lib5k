@@ -10,9 +10,14 @@ import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.RR_HAL;
  *  - Small fixes for 2020 simulation voltage bugs in HALSIM
  */
 public class ExtendedVictorSPX extends WPI_VictorSPX {
+    public TalonConfig config;
 
-    public ExtendedVictorSPX(int id) {
+
+
+    public ExtendedVictorSPX(int id, TalonConfig config) {
         super(id);
+        this.config = config;
+
     }
     
     @Override
@@ -31,5 +36,13 @@ public class ExtendedVictorSPX extends WPI_VictorSPX {
         } else {
             super.setVoltage(outputVolts);
         }
+    }
+
+    public ExtendedVictorSPX makeSlave(int id){
+        ExtendedVictorSPX victor = CTREMotorFactory.createVictorSPX(id, this.config);
+    
+        victor.follow(this);
+
+        return victor;
     }
 }

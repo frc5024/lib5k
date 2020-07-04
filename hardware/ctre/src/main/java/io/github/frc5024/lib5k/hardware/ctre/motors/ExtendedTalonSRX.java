@@ -13,9 +13,13 @@ import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.RR_HAL;
  *  - Small fixes for 2020 simulation voltage bugs in HALSIM
  */
 public class ExtendedTalonSRX extends WPI_TalonSRX {
+    public TalonConfig config;
 
-    public ExtendedTalonSRX(int id) {
+
+    public ExtendedTalonSRX(int id, TalonConfig config) {
         super(id);
+        this.config = config;
+        
     }
 
     /**
@@ -43,4 +47,16 @@ public class ExtendedTalonSRX extends WPI_TalonSRX {
             super.setVoltage(outputVolts);
         }
     }
+
+    public ExtendedTalonSRX makeSlave(int id){
+        ExtendedTalonSRX slave = CTREMotorFactory.createTalonSRX(id, this.config);
+
+        slave.follow(this);
+
+        return slave;
+
+
+    }
+
+
 }

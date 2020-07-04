@@ -9,7 +9,7 @@ apply from: "../gradle_utils/mavenrepos.gradle"
 dependencies{
     println "Fetching dependancies for bundle"
     rootProject.subprojects.each{
-        if (it.name != "bundle"){
+        if (it.name != "bundle" && it.name != "examples"){
             println it.name
             api it
         }

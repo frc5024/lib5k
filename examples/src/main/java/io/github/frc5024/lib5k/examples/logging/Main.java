@@ -9,6 +9,10 @@ import io.github.frc5024.lib5k.logging.RobotLogger.Level;
 /**
  * This example robot program shows how to set up a logger, and write messages
  * to it.
+ * 
+ * All messages are written to RioLog (https://docs.wpilib.org/en/stable/docs/software/wpilib-overview/viewing-console-output.html)
+ * 
+ * Any message with the kWarning flag will also be printed directly to DriverStation
  */
 public class Main extends TimedRobot {
 

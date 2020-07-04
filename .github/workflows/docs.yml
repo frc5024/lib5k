@@ -1,5 +1,5 @@
 name: Deploy docs
-on: [pull_request, push]
+on: [push]
 jobs:
   # gradle:
   #   strategy:
@@ -27,6 +27,11 @@ jobs:
       - uses: eskatos/gradle-command-action@v1
         with:
           arguments: clean document --scan
+
+      - name: Check GitHub Pages status
+        uses: crazy-max/ghaction-github-status@v1
+        with:
+          pages_threshold: major_outage
 
       - name: Deploy to GitHub Pages
         if: success()

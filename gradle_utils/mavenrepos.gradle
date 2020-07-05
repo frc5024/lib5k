@@ -1,3 +1,7 @@
+
+
+apply plugin: "edu.wpi.first.GradleRIO"
+
 repositories {
     // Main repos
     jcenter()
@@ -12,6 +16,16 @@ repositories {
     maven { setUrl("http://www.revrobotics.com/content/sw/color-sensor-v3/sdk/maven/")}
     maven { setUrl("https://www.revrobotics.com/content/sw/max/sdk/maven/")}
 }
+
+dependencies{
+    implementation wpi.deps.wpilib()
+    nativeZip wpi.deps.wpilibJni(wpi.platforms.roborio)
+    nativeDesktopZip wpi.deps.wpilibJni(wpi.platforms.desktop)
+
+    implementation wpi.deps.vendor.java()
+    nativeZip wpi.deps.vendor.jni(wpi.platforms.roborio)
+    nativeDesktopZip wpi.deps.vendor.jni(wpi.platforms.desktop)
+  }
 
 // dependencies {
 

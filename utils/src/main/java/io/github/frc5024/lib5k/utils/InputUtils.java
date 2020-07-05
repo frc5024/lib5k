@@ -1,8 +1,11 @@
 package io.github.frc5024.lib5k.utils;
 
+import io.github.frc5024.lib5k.utils.annotations.FieldTested;
+
 /**
  * Utils for working with drive inputs
  */
+@FieldTested(year=2020)
 public class InputUtils {
 
     /**

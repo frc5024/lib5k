@@ -1,4 +1,4 @@
-package io.github.frc5024.lib5k.examples.neo_flywheel;
+package io.github.frc5024.lib5k.examples.tbh_flywheel;
 
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -8,8 +8,8 @@ import io.github.frc5024.lib5k.logging.RobotLogger;
 import io.github.frc5024.lib5k.logging.USBLogger;
 
 /**
- * This example robot program contains an off-board PID flywheel controller and support
- * for user input to control it. This file is build on top of the "usblogging"
+ * This example robot program contains a simple TBH flywheel controller and support
+ * for user input to control it. This file is build on top of the "neo_flywheel"
  * example
  */
 public class Main extends TimedRobot {

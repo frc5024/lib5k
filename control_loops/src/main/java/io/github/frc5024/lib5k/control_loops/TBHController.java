@@ -1,5 +1,6 @@
 package io.github.frc5024.lib5k.control_loops;
 
+import io.github.frc5024.lib5k.control_loops.base.SettlingController;
 import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.FPGAClock;
 
 /**
@@ -14,7 +15,7 @@ import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.FPGAClock;
  * This is based off of this paper:
  * https://www.chiefdelphi.com/t/paper-take-back-half-shooter-wheel-speed-control/121640
  */
-public class TBHController {
+public class TBHController extends SettlingController {
 
     // Controller gain
     private double gain;
@@ -54,7 +55,8 @@ public class TBHController {
     /**
      * Reset the controller
      */
-    public void reset() {
+    @Override
+    public void resetInternals() {
         tbh = 0.0;
         previousError = 0.0;
         output = 0.0;
@@ -63,13 +65,8 @@ public class TBHController {
         lastTime = FPGAClock.getFPGAMilliseconds();
     }
 
-    /**
-     * Calculate the controller output
-     * 
-     * @param error Error in system (goal - current)
-     * @return Output
-     */
-    public double calculate(double error) {
+    @Override
+    protected double calculate(double error) {
 
         // Calculate dt
         double time = FPGAClock.getFPGAMilliseconds();

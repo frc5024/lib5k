@@ -157,7 +157,8 @@
      background-color:#ffffff;
  }
  .topNav {
-     background-color:#4D7A97;
+     background-color:#003368;
+     /* #4D7A97; */
      color:#FFFFFF;
      float:left;
      padding:0;
@@ -172,7 +173,8 @@
  }
  .bottomNav {
      margin-top:10px;
-     background-color:#4D7A97;
+     background-color:#003368;
+     /* #4D7A97; */
      color:#FFFFFF;
      float:left;
      padding:0;
@@ -237,7 +239,8 @@
      text-transform:uppercase;
  }
  .navBarCell1Rev {
-     background-color:#F8981D;
+     background-color:#f8f072;
+     /* #F8981D; */
      color:#253441;
      margin: auto 5px;
  }
@@ -481,7 +484,8 @@
      padding-bottom:7px;
      display:inline-block;
      float:left;
-     background-color:#F8981D;
+     background-color:#f8f072;
+     /* #F8981D; */
      border: none;
      height:16px;
  }
@@ -494,7 +498,8 @@
      margin-right:3px;
      display:inline-block;
      float:left;
-     background-color:#F8981D;
+     background-color:#f8f072;
+     /* #F8981D; */
      height:16px;
  }
  .memberSummary caption span.tableTab span, .packagesSummary caption span.tableTab span,
@@ -527,7 +532,8 @@
      width:5px;
      position:relative;
      float:left;
-     background-color:#F8981D;
+     background-color:#f8f072;
+     /* #F8981D; */
  }
  .memberSummary .activeTableTab .tabEnd, .packagesSummary .activeTableTab .tabEnd,
  .overviewSummary .activeTableTab .tabEnd, .typeSummary .activeTableTab .tabEnd {
@@ -536,7 +542,8 @@
      margin-right:3px;
      position:relative; 
      float:left;
-     background-color:#F8981D;
+     background-color:#f8f072;
+     /* #F8981D; */
  }
  .memberSummary .tableTab .tabEnd, .packagesSummary .tableTab .tabEnd,
  .overviewSummary .tableTab .tabEnd, .typeSummary .tableTab .tabEnd {

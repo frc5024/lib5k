@@ -35,6 +35,13 @@ This repository is split into modules. This allows us to only import what we nee
 | `:statespace`           | `statespace`           | State-space controllers for FRC                                                           |
 
 
+## History
+
+Lib5K has been in development since May 2019, has undergone a few major revisions, and has been used to help team 5024 win a couple *innovation in control* awards. This library was originally a summer project of [@ewpratten](https://github.com/ewpratten), but has since become the backbone of team 5024's software development workflow. Lib5K has, and will always be open source, so if you see one of our robots do something cool, you can come and take a look at the code that powers it (and even use it for yourself).
+
+If you or your team has made use of this library, or needs some help using it, contact a member of 5024, and we will gladly help out.
+
+
 ## Development
 
 ### Upgrading third-party library versions

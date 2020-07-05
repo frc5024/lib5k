@@ -20,6 +20,9 @@
      padding:0;
      height:100%;
      width:100%;
+
+     background:url(https://github.com/frc5024/lib5k/raw/master/5024-internal-docs.png) no-repeat right 80.1px;
+     background-size: 282px;
  }
  iframe {
      margin:0;
@@ -164,6 +167,8 @@
      padding-top:10px;
      overflow:hidden;
      font-size:12px; 
+
+     /* background: #4D7A97 url(https://github.com/frc5024/lib5k/raw/master/5024-internal-docs.png) no-repeat right top; */
  }
  .bottomNav {
      margin-top:10px;

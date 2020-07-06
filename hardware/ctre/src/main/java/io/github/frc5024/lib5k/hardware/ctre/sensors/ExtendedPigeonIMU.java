@@ -7,6 +7,9 @@ import io.github.frc5024.lib5k.hardware.common.drivebase.IDifferentialDrivebase;
 import io.github.frc5024.lib5k.hardware.common.sensors.interfaces.ISimGyro;
 import io.github.frc5024.lib5k.hardware.common.sensors.simulation.GyroSimUtil;
 
+/**
+ * A wrapper for the CTRE PigeonIMU that brings it into the 5024 ecosystem
+ */
 public class ExtendedPigeonIMU extends PigeonIMU implements ISimGyro {
 
     // Inversion tracker

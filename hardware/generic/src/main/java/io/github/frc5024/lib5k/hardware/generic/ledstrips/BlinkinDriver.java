@@ -3,11 +3,13 @@ package io.github.frc5024.lib5k.hardware.generic.ledstrips;
 import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
+import io.github.frc5024.lib5k.utils.annotations.FieldTested;
 
 /**
  * A wrapper for the REV Blinkin LED driver <br>
  * http://www.revrobotics.com/rev-11-1105/
  */
+@FieldTested(year = 2019)
 public class BlinkinDriver implements Sendable {
 
     public enum LEDSetting {

@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.SPI.Port;
 import io.github.frc5024.lib5k.hardware.common.drivebase.IDifferentialDrivebase;
 import io.github.frc5024.lib5k.hardware.common.sensors.interfaces.ISimGyro;
 import io.github.frc5024.lib5k.hardware.common.sensors.simulation.GyroSimUtil;
+import io.github.frc5024.lib5k.utils.annotations.FieldTested;
 
 /**
  * A wrapper for the {@see AHRS} / NavX gyroscope
@@ -14,6 +15,7 @@ import io.github.frc5024.lib5k.hardware.common.sensors.simulation.GyroSimUtil;
  * This wrapper adds support for gyro simulation, and adds some lib5k-specific
  * methods
  */
+@FieldTested(year = 2020)
 public class NavX extends AHRS implements ISimGyro {
 
     private static NavX m_instance = null;

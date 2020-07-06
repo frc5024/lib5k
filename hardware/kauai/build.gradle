@@ -33,6 +33,9 @@ dependencies {
     // Math utils
     implementation 'com.github.ewpratten:ewmath:master-SNAPSHOT'
 
+    // Utils
+    implementation project(":utils")
+
     // Common hardware lib
     api project(":hardware:common")
 

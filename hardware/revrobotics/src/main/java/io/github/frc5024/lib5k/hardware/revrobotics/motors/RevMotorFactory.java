@@ -22,7 +22,7 @@ public class RevMotorFactory{
      * @return a configured Spark Max motor
      */
     public static ExtendedSparkMax createSparkMax(int id, MotorType MotorType){
-        return createSparkMax(id, new RevMotorConfig(MotorType));
+        return createSparkMax(id, new RevConfig(MotorType));
     }
 
 
@@ -34,7 +34,7 @@ public class RevMotorFactory{
      * 
      * @return a configured Spark Max motor
      */
-    public static ExtendedSparkMax createSparkMax(int id, RevMotorConfig config){
+    public static ExtendedSparkMax createSparkMax(int id, RevConfig config){
 
         // Makes a spark Motor
         ExtendedSparkMax sparkMax = new ExtendedSparkMax(id, config);

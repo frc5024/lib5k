@@ -20,7 +20,7 @@ import io.github.frc5024.lib5k.hardware.common.sensors.interfaces.CommonEncoder;
  * CANEncoder to CommonEncoder for hot-swappability with CTRE products
  */
 public class ExtendedSparkMax extends CANSparkMax implements Sendable {
-    public RevMotorConfig config;
+    public RevConfig config;
 
     // HALSIM
     private SimDevice m_simDevice;
@@ -29,11 +29,11 @@ public class ExtendedSparkMax extends CANSparkMax implements Sendable {
 
     public ExtendedSparkMax(int deviceID, MotorType motorType){
         super(deviceID, motorType);
-        this.config = new RevMotorConfig();
+        this.config = new RevConfig(motorType);
 
     }
 
-    public ExtendedSparkMax(int deviceID, RevMotorConfig config) {
+    public ExtendedSparkMax(int deviceID, RevConfig config) {
         super(deviceID, config.motorType);
         this.config = config;
 

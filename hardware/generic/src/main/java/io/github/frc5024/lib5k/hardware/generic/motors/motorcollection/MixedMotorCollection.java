@@ -13,6 +13,7 @@ import io.github.frc5024.lib5k.control_loops.TimedSlewLimiter;
 import io.github.frc5024.lib5k.logging.Loggable;
 import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.RR_HAL;
 import io.github.frc5024.lib5k.utils.ObjectCounter;
+import io.github.frc5024.lib5k.utils.annotations.FieldTested;
 import io.github.frc5024.lib5k.logging.RobotLogger;
 import io.github.frc5024.lib5k.logging.RobotLogger.Level;
 import io.github.frc5024.lib5k.telemetry.ComponentTelemetry;
@@ -21,6 +22,8 @@ import io.github.frc5024.lib5k.telemetry.ComponentTelemetry;
  * Collection of multiple motor controllers of mixed types that wraps a
  * SpeedControllerGroup
  */
+@Deprecated(since="July 2020", forRemoval=false)
+@FieldTested(year=2020)
 public class MixedMotorCollection extends SpeedControllerGroup
         implements IMotorCollection, IVoltageOutputController, IRampRateController, Loggable {
     RobotLogger logger = RobotLogger.getInstance();

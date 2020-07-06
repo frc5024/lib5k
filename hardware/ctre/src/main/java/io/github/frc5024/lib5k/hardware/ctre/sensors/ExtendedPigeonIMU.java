@@ -8,7 +8,9 @@ import io.github.frc5024.lib5k.hardware.common.sensors.interfaces.ISimGyro;
 import io.github.frc5024.lib5k.hardware.common.sensors.simulation.GyroSimUtil;
 
 /**
- * A wrapper for the CTRE PigeonIMU that brings it into the 5024 ecosystem
+ * A wrapper for the CTRE PigeonIMU that brings it into the 5024 ecosystem.
+ * 
+ * http://www.ctr-electronics.com/gadgeteer-imu-module-pigeon.html#product_tabs_technical_resources
  */
 public class ExtendedPigeonIMU extends PigeonIMU implements ISimGyro {
 

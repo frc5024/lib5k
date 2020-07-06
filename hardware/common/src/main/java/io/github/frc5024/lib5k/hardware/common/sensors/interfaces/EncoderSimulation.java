@@ -3,7 +3,7 @@ package io.github.frc5024.lib5k.hardware.common.sensors.interfaces;
 import edu.wpi.first.wpilibj.SpeedController;
 import io.github.frc5024.lib5k.utils.interfaces.PeriodicComponent;
 
-public interface EncoderSimulation extends PeriodicComponent, CommonEncoder {
+public interface EncoderSimulation extends PeriodicComponent {
 
     /**
      * Init simulation for this encoder

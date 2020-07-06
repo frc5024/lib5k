@@ -7,7 +7,6 @@ import edu.wpi.first.hal.SimDouble;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SPI.Port;
-import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import io.github.frc5024.lib5k.hardware.common.drivebase.IDifferentialDrivebase;
 import io.github.frc5024.lib5k.hardware.common.sensors.interfaces.ISimGyro;
 

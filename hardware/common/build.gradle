@@ -33,6 +33,11 @@ dependencies {
     // utils
     implementation project(":utils")
 
+    // Control loops
+    implementation project(":control_loops")
+
+    // HAL
+    implementation project(":hardware:ni")
 
 }
 

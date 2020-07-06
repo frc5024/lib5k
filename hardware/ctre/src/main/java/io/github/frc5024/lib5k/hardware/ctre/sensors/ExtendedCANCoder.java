@@ -119,7 +119,7 @@ public class ExtendedCANCoder extends CANCoder implements CommonEncoder, Encoder
         if (m_simDevice != null) {
             return m_simTicks.get();
         }
-        return super.getPosition();
+        return super.getPosition() / 360.0;
     }
 
     @Override
@@ -128,7 +128,7 @@ public class ExtendedCANCoder extends CANCoder implements CommonEncoder, Encoder
         if (m_simDevice != null) {
             return m_simVelocity.get();
         }
-        return super.getVelocity();
+        return super.getVelocity() / 360.0;
     }
 
 }

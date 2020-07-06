@@ -317,7 +317,7 @@ public class GenericEncoder extends Encoder implements CommonEncoder, EncoderSim
         if (m_simDevice != null) {
             return m_simTicks.get();
         }
-        return super.get();
+        return super.get() / cpr;
     }
 
     @Override

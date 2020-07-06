@@ -8,6 +8,7 @@ import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.FPGAClock;
 import com.ctre.phoenix.motorcontrol.can.BaseTalon;
 
 import edu.wpi.first.hal.SimDouble;
+import edu.wpi.first.hal.SimBoolean;
 import edu.wpi.first.hal.SimDevice;
 import edu.wpi.first.wpilibj.SpeedController;
 
@@ -26,6 +27,8 @@ public class TalonEncoder implements CommonEncoder, EncoderSimulation {
     private SimDevice m_simDevice;
     private SimDouble m_simTicks;
     private SimDouble m_simRotations;
+    private SimDouble m_simVelocity;
+    private SimBoolean m_simInverted;
     private static int s_instanceCount = 0;
     private SlewLimiter m_simSlew;
 
@@ -34,16 +37,26 @@ public class TalonEncoder implements CommonEncoder, EncoderSimulation {
         this.cpr = cpr;
     }
 
-
     @Override
     public void setPhaseInverted(boolean inverted) {
-        this.phase = inverted;
-        talon.setSensorPhase(inverted);
+        // Handle simulation vs reality
+        if (m_simDevice != null) {
+            m_simInverted.set(inverted);
+        } else {
+            this.phase = inverted;
+            talon.setSensorPhase(inverted);
+        }
 
     }
 
     @Override
     public boolean getInverted() {
+        
+        // Handle simulation
+        if (m_simDevice != null) {
+            return m_simInverted.get();
+        }
+
         return this.phase;
     }
 
@@ -56,10 +69,10 @@ public class TalonEncoder implements CommonEncoder, EncoderSimulation {
     public double getVelocity() {
         return talon.getSelectedSensorVelocity() / 1000 / this.cpr;
     }
-    
+
     @Override
     public void initSimulationDevice(SpeedController controller, double gearbox_ratio, double max_rpm,
-    double ramp_time) {
+            double ramp_time) {
         // Set locals
         this.controller = controller;
         this.gearbox_ratio = gearbox_ratio;
@@ -70,8 +83,10 @@ public class TalonEncoder implements CommonEncoder, EncoderSimulation {
         m_simDevice = SimDevice.create("TalonEncoder", s_instanceCount + 1);
 
         if (m_simDevice != null) {
-            m_simTicks = m_simDevice.createDouble("Ticks", true, 0.0);
+            m_simTicks = m_simDevice.createDouble("Ticks", false, 0.0);
             m_simRotations = m_simDevice.createDouble("Rotations", true, 0.0);
+            m_simVelocity = m_simDevice.createDouble("RPM", true, 0.0);
+            m_simInverted = m_simDevice.createBoolean("Inverted", true, false);
         }
 
         // Move to next instance
@@ -98,9 +113,8 @@ public class TalonEncoder implements CommonEncoder, EncoderSimulation {
             double revs = (rpm / 60.0) * dt; // RPM -> RPS -> Multiply by seconds to find rotations since last update
             m_simTicks.set((int) (m_simTicks.get() + (revs * cpr)));
             m_simRotations.set((m_simRotations.get() + revs));
+            m_simVelocity.set(rpm);
         }
     }
-
-
 
 }

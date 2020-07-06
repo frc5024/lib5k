@@ -1,20 +1,17 @@
-package io.github.frc5024.lib5k.hardware.revrobotics.sensors;
+package io.github.frc5024.lib5k.hardware.ctre.sensors;
 
-import io.github.frc5024.lib5k.hardware.common.sensors.interfaces.CommonEncoder;
-import io.github.frc5024.lib5k.hardware.common.sensors.interfaces.EncoderSimulation;
-import io.github.frc5024.lib5k.control_loops.SlewLimiter;
-import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.FPGAClock;
+import com.ctre.phoenix.sensors.CANCoder;
 
-import com.revrobotics.CANEncoder;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.EncoderType;
-
-import edu.wpi.first.hal.SimDouble;
 import edu.wpi.first.hal.SimBoolean;
 import edu.wpi.first.hal.SimDevice;
+import edu.wpi.first.hal.SimDouble;
 import edu.wpi.first.wpilibj.SpeedController;
+import io.github.frc5024.lib5k.control_loops.SlewLimiter;
+import io.github.frc5024.lib5k.hardware.common.sensors.interfaces.CommonEncoder;
+import io.github.frc5024.lib5k.hardware.common.sensors.interfaces.EncoderSimulation;
+import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.FPGAClock;
 
-public class SparkMaxEncoder extends CANEncoder implements CommonEncoder, EncoderSimulation {
+public class ExtendedCANCoder extends CANCoder implements CommonEncoder, EncoderSimulation {
 
     private int cpr;
 
@@ -32,9 +29,14 @@ public class SparkMaxEncoder extends CANEncoder implements CommonEncoder, Encode
     private static int s_instanceCount = 0;
     private SlewLimiter m_simSlew;
 
-    public SparkMaxEncoder(CANSparkMax device, EncoderType sensorType, int counts_per_rev) {
-        super(device, sensorType, counts_per_rev);
-        this.cpr = counts_per_rev;
+    /**
+     * Constructor.
+     * 
+     * @param deviceNumber The CAN Device ID of the CANCoder.
+     */
+    public ExtendedCANCoder(int deviceNumber, int cpr) {
+        super(deviceNumber);
+        this.cpr = cpr;
     }
 
     @Override
@@ -47,7 +49,7 @@ public class SparkMaxEncoder extends CANEncoder implements CommonEncoder, Encode
         this.m_simSlew = new SlewLimiter(ramp_time);
 
         // Init sim device
-        m_simDevice = SimDevice.create("SparkMaxEncoder", s_instanceCount + 1);
+        m_simDevice = SimDevice.create("CANCoder", s_instanceCount + 1);
 
         if (m_simDevice != null) {
             m_simTicks = m_simDevice.createDouble("Ticks", false, 0.0);
@@ -58,6 +60,7 @@ public class SparkMaxEncoder extends CANEncoder implements CommonEncoder, Encode
 
         // Move to next instance
         s_instanceCount++;
+
     }
 
     @Override
@@ -82,15 +85,17 @@ public class SparkMaxEncoder extends CANEncoder implements CommonEncoder, Encode
             m_simRotations.set((m_simRotations.get() + revs));
             m_simVelocity.set(rpm);
         }
+
     }
 
     @Override
     public void setPhaseInverted(boolean inverted) {
+
         // Handle simulation vs reality
         if (m_simDevice != null) {
             m_simInverted.set(inverted);
         } else {
-            this.setInverted(inverted);
+            configSensorDirection(inverted);
         }
     }
 
@@ -101,8 +106,7 @@ public class SparkMaxEncoder extends CANEncoder implements CommonEncoder, Encode
         if (m_simDevice != null) {
             return m_simInverted.get();
         }
-
-        return super.getInverted();
+        return configGetSensorDirection();
     }
 
 }

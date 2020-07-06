@@ -62,11 +62,19 @@ public class TalonEncoder implements CommonEncoder, EncoderSimulation {
 
     @Override
     public double getPosition() {
+        // Handle simulation
+        if (m_simDevice != null) {
+            return m_simTicks.get();
+        }
         return talon.getSelectedSensorPosition() / this.cpr;
     }
 
     @Override
     public double getVelocity() {
+        // Handle simulation
+        if (m_simDevice != null) {
+            return m_simVelocity.get();
+        }
         return talon.getSelectedSensorVelocity() / 1000 / this.cpr;
     }
 

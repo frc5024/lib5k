@@ -105,4 +105,22 @@ public class SparkMaxEncoder extends CANEncoder implements CommonEncoder, Encode
         return super.getInverted();
     }
 
+    @Override
+    public double getPosition() {
+        // Handle simulation
+        if (m_simDevice != null) {
+            return m_simTicks.get();
+        }
+        return super.getPosition();
+    }
+
+    @Override
+    public double getVelocity() {
+        // Handle simulation
+        if (m_simDevice != null) {
+            return m_simVelocity.get();
+        }
+        return super.getVelocity();
+    }
+
 }

@@ -11,6 +11,9 @@ import io.github.frc5024.lib5k.hardware.common.sensors.interfaces.CommonEncoder;
 import io.github.frc5024.lib5k.hardware.common.sensors.interfaces.EncoderSimulation;
 import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.FPGAClock;
 
+/**
+ * A wrapper around CTRE's CANCoder that integrates with 5024's encoder system
+ */
 public class ExtendedCANCoder extends CANCoder implements CommonEncoder, EncoderSimulation {
 
     private int cpr;
@@ -33,6 +36,7 @@ public class ExtendedCANCoder extends CANCoder implements CommonEncoder, Encoder
      * Constructor.
      * 
      * @param deviceNumber The CAN Device ID of the CANCoder.
+     * @param cpr Sensor counts per rotation
      */
     public ExtendedCANCoder(int deviceNumber, int cpr) {
         super(deviceNumber);
@@ -107,6 +111,24 @@ public class ExtendedCANCoder extends CANCoder implements CommonEncoder, Encoder
             return m_simInverted.get();
         }
         return configGetSensorDirection();
+    }
+
+    @Override
+    public double getPosition() {
+        // Handle simulation
+        if (m_simDevice != null) {
+            return m_simTicks.get();
+        }
+        return super.getPosition();
+    }
+
+    @Override
+    public double getVelocity() {
+        // Handle simulation
+        if (m_simDevice != null) {
+            return m_simVelocity.get();
+        }
+        return super.getVelocity();
     }
 
 }

@@ -1,7 +1,9 @@
 package io.github.frc5024.lib5k.utils;
 
 import edu.wpi.first.wpilibj.util.Color;
+import io.github.frc5024.lib5k.utils.annotations.FieldTested;
 
+@FieldTested(year=2020)
 public class ColorUtils {
 
 

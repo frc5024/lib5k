@@ -3,7 +3,7 @@ package io.github.frc5024.lib5k.utils;
 import java.util.HashMap;
 
 import edu.wpi.first.wpiutil.CircularBuffer;
-
+import io.github.frc5024.lib5k.utils.annotations.FieldTested;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 
@@ -13,6 +13,7 @@ import ca.retrylife.ewmath.MathUtils;
 /**
  * RobotMath is an extension of MathUtils, with some overloads for robot-specific datatypes (the ewmath library is designed for general use, so excludes these functions)
  */
+@FieldTested(year=2019)
 public class RobotMath extends MathUtils{
 
     public static void main(String[] args) {

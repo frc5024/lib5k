@@ -1,9 +1,11 @@
 package io.github.frc5024.lib5k.utils;
 
+import io.github.frc5024.lib5k.utils.annotations.FieldTested;
 
 /**
  * A helper for counting the number of an object that exists
  */
+@FieldTested(year=2020)
 public class ObjectCounter {
 
     private int count;

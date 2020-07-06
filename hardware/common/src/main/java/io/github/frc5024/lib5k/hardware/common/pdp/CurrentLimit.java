@@ -32,7 +32,7 @@ public class CurrentLimit {
      * @param pdpChannel the pdp channel the motor is on
      * @param holdAmps the amps that the motor should hold at
      * @param spikeAmps the amps that the device can spike to
-     * @param duration the time the motor is allowed over the hold
+     * @param duration the time the motor is allowed over the hold, in seconds
      * @param voltageHook hook for setting the motor voltage
      */
     public CurrentLimit(int pdpChannel, double holdAmps, double spikeAmps, int duration, Consumer<Double> voltageHook){

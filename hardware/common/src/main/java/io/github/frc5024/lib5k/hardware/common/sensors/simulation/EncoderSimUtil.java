@@ -1,4 +1,4 @@
-package io.github.frc5024.lib5k.hardware.common.sensors;
+package io.github.frc5024.lib5k.hardware.common.sensors.simulation;
 
 import edu.wpi.first.hal.SimBoolean;
 import edu.wpi.first.hal.SimDevice;

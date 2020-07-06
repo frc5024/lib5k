@@ -1,6 +1,6 @@
 package io.github.frc5024.lib5k.hardware.revrobotics.sensors;
 
-import io.github.frc5024.lib5k.hardware.common.sensors.EncoderSimUtil;
+import io.github.frc5024.lib5k.hardware.common.sensors.simulation.EncoderSimUtil;
 import io.github.frc5024.lib5k.hardware.common.sensors.interfaces.EncoderSimulation;
 
 import com.revrobotics.CANEncoder;

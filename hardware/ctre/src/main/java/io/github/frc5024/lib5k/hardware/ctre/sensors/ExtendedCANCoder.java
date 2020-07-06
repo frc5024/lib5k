@@ -3,7 +3,7 @@ package io.github.frc5024.lib5k.hardware.ctre.sensors;
 import com.ctre.phoenix.sensors.CANCoder;
 
 import edu.wpi.first.wpilibj.SpeedController;
-import io.github.frc5024.lib5k.hardware.common.sensors.EncoderSimUtil;
+import io.github.frc5024.lib5k.hardware.common.sensors.simulation.EncoderSimUtil;
 import io.github.frc5024.lib5k.hardware.common.sensors.interfaces.EncoderSimulation;
 
 /**

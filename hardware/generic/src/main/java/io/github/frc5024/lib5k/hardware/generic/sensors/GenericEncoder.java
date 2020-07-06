@@ -3,7 +3,7 @@ package io.github.frc5024.lib5k.hardware.generic.sensors;
 import edu.wpi.first.wpilibj.DigitalSource;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedController;
-import io.github.frc5024.lib5k.hardware.common.sensors.EncoderSimUtil;
+import io.github.frc5024.lib5k.hardware.common.sensors.simulation.EncoderSimUtil;
 import io.github.frc5024.lib5k.hardware.common.sensors.interfaces.EncoderSimulation;
 
 public class GenericEncoder extends Encoder implements EncoderSimulation {

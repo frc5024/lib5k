@@ -1,21 +1,15 @@
 package io.github.frc5024.lib5k.hardware.revrobotics.sensors;
 
 import io.github.frc5024.lib5k.hardware.common.sensors.EncoderSimUtil;
-import io.github.frc5024.lib5k.hardware.common.sensors.interfaces.CommonEncoder;
 import io.github.frc5024.lib5k.hardware.common.sensors.interfaces.EncoderSimulation;
-import io.github.frc5024.lib5k.control_loops.SlewLimiter;
-import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.FPGAClock;
 
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.EncoderType;
 
-import edu.wpi.first.hal.SimDouble;
-import edu.wpi.first.hal.SimBoolean;
-import edu.wpi.first.hal.SimDevice;
 import edu.wpi.first.wpilibj.SpeedController;
 
-public class SparkMaxEncoder extends CANEncoder implements CommonEncoder, EncoderSimulation {
+public class SparkMaxEncoder extends CANEncoder implements EncoderSimulation {
 
     private CANSparkMax device;
     private int cpr;

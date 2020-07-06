@@ -46,7 +46,7 @@ public class ExtendedCANCoder extends CANCoder implements EncoderSimulation {
     public void setPhaseInverted(boolean inverted) {
 
         // Handle simulation vs reality
-        if (sim.simReady()) {
+        if (sim != null && sim.simReady()) {
             sim.setInverted(inverted);
         } else {
             configSensorDirection(inverted);
@@ -57,7 +57,7 @@ public class ExtendedCANCoder extends CANCoder implements EncoderSimulation {
     public boolean getInverted() {
 
         // Handle simulation
-        if (sim.simReady()) {
+        if (sim != null && sim.simReady()) {
             return sim.getInverted();
         }
         return configGetSensorDirection();
@@ -66,7 +66,7 @@ public class ExtendedCANCoder extends CANCoder implements EncoderSimulation {
     @Override
     public double getPosition() {
         // Handle simulation
-        if (sim.simReady()) {
+        if (sim != null && sim.simReady()) {
             return sim.getRotations();
         }
         return super.getPosition() / 360.0;
@@ -75,7 +75,7 @@ public class ExtendedCANCoder extends CANCoder implements EncoderSimulation {
     @Override
     public double getVelocity() {
         // Handle simulation
-        if (sim.simReady()) {
+        if (sim != null && sim.simReady()) {
             return sim.getVelocity();
         }
         return super.getVelocity() / 360.0;

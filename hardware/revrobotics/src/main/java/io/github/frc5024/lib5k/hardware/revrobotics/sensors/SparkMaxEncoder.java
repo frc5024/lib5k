@@ -35,7 +35,7 @@ public class SparkMaxEncoder extends CANEncoder implements EncoderSimulation {
     @Override
     public void setPhaseInverted(boolean inverted) {
         // Handle simulation vs reality
-        if (sim.simReady()) {
+        if (sim != null && sim.simReady()) {
             sim.setInverted(inverted);
         } else {
             this.setInverted(inverted);
@@ -46,7 +46,7 @@ public class SparkMaxEncoder extends CANEncoder implements EncoderSimulation {
     public boolean getInverted() {
 
         // Handle simulation
-        if (sim.simReady()) {
+        if (sim != null && sim.simReady()) {
             return sim.getInverted();
         }
 
@@ -56,7 +56,7 @@ public class SparkMaxEncoder extends CANEncoder implements EncoderSimulation {
     @Override
     public double getPosition() {
         // Handle simulation
-        if (sim.simReady()) {
+        if (sim != null && sim.simReady()) {
             return sim.getRotations();
         }
         return super.getPosition();
@@ -65,7 +65,7 @@ public class SparkMaxEncoder extends CANEncoder implements EncoderSimulation {
     @Override
     public double getVelocity() {
         // Handle simulation
-        if (sim.simReady()) {
+        if (sim != null && sim.simReady()) {
             return sim.getVelocity();
         }
         return super.getVelocity();

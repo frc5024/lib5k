@@ -5,10 +5,10 @@ plugins {
     id 'java-library'
 }
 
-apply from: "../../gradle_utils/libversions.gradle"
-apply from: "../../gradle_utils/simpleunittest.gradle"
-apply from: "../../gradle_utils/mavenrepos.gradle"
-apply from: "../../gradle_utils/projectjar.gradle"
+apply from: "../gradle_utils/libversions.gradle"
+apply from: "../gradle_utils/simpleunittest.gradle"
+apply from: "../gradle_utils/mavenrepos.gradle"
+apply from: "../gradle_utils/projectjar.gradle"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_11
@@ -24,20 +24,23 @@ dependencies {
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
+    
+    // Math utils
+    implementation 'com.github.ewpratten:ewmath:master-SNAPSHOT'
 
     // WPILib
     implementation("edu.wpi.first.wpilibj:wpilibj-java:${project.WPI_VERSION}")
     implementation("edu.wpi.first.hal:hal-java:${project.WPI_VERSION}")
     implementation("edu.wpi.first.wpiutil:wpiutil-java:${project.WPI_VERSION}")
 
-    // utils
+    // WPILib command framework
+    implementation("edu.wpi.first.wpilibNewCommands:wpilibNewCommands-java:${project.WPI_VERSION}")
+
+    // Utils
     implementation project(":utils")
 
-    // Control loops
-    implementation project(":control_loops")
-
-    // HAL
-    implementation project(":hardware:ni")
+    // Logging
+    implementation project(":logging")
 
 }
 

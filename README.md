@@ -33,6 +33,7 @@ This repository is split into modules. This allows us to only import what we nee
 | `:telemetry`            | `telemetry`            | Tools for network-based system telemetry                                                  |
 | `:common_drive`         | `common_drive`         | Robot-agnostic drivetrain code                                                            |
 | `:statespace`           | `statespace`           | State-space controllers for FRC                                                           |
+| `:auton_utils`          | `auton_utils`          | Wrappers for autonomous, and general robot program                                        |
 
 
 ## History

@@ -1,44 +1,55 @@
-package io.github.frc5024.lib5k.hardware.revrobotics.sensors;
+package io.github.frc5024.lib5k.hardware.ctre.sensors;
 
+import com.ctre.phoenix.sensors.CANCoder;
+
+import edu.wpi.first.wpilibj.SpeedController;
 import io.github.frc5024.lib5k.hardware.common.sensors.simulation.EncoderSimUtil;
 import io.github.frc5024.lib5k.hardware.common.sensors.interfaces.EncoderSimulation;
 
-import com.revrobotics.CANEncoder;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.EncoderType;
+/**
+ * A wrapper around CTRE's CANCoder that integrates with 5024's encoder system
+ */
+public class ExtendedCANCoder extends CANCoder implements EncoderSimulation {
 
-import edu.wpi.first.wpilibj.SpeedController;
-
-public class SparkMaxEncoder extends CANEncoder implements EncoderSimulation {
-
-    private CANSparkMax device;
     private int cpr;
+
+    // Simulation
     private EncoderSimUtil sim;
 
-    public SparkMaxEncoder(CANSparkMax device, EncoderType sensorType, int counts_per_rev) {
-        super(device, sensorType, counts_per_rev);
-        this.device = device;
-        this.cpr = counts_per_rev;
+    /**
+     * Constructor.
+     * 
+     * @param deviceNumber The CAN Device ID of the CANCoder.
+     * @param cpr Sensor counts per rotation
+     */
+    public ExtendedCANCoder(int deviceNumber, int cpr) {
+        super(deviceNumber);
+        this.cpr = cpr;
     }
 
     @Override
     public void initSimulationDevice(SpeedController controller, double gearbox_ratio, double max_rpm,
             double ramp_time) {
-        sim = new EncoderSimUtil("SparkMAX", device.getDeviceId(), cpr, controller, gearbox_ratio, max_rpm, ramp_time);
+        
+        sim = new EncoderSimUtil("CANCoder", getDeviceID(), cpr, controller, gearbox_ratio, max_rpm, ramp_time);
+
     }
 
     @Override
     public void update() {
+        // Handle simulation updates
         sim.update();
+
     }
 
     @Override
     public void setPhaseInverted(boolean inverted) {
+
         // Handle simulation vs reality
         if (sim != null && sim.simReady()) {
             sim.setInverted(inverted);
         } else {
-            this.setInverted(inverted);
+            configSensorDirection(inverted);
         }
     }
 
@@ -49,8 +60,7 @@ public class SparkMaxEncoder extends CANEncoder implements EncoderSimulation {
         if (sim != null && sim.simReady()) {
             return sim.getInverted();
         }
-
-        return super.getInverted();
+        return configGetSensorDirection();
     }
 
     @Override
@@ -59,7 +69,7 @@ public class SparkMaxEncoder extends CANEncoder implements EncoderSimulation {
         if (sim != null && sim.simReady()) {
             return sim.getRotations();
         }
-        return super.getPosition();
+        return super.getPosition() / 360.0;
     }
 
     @Override
@@ -68,7 +78,7 @@ public class SparkMaxEncoder extends CANEncoder implements EncoderSimulation {
         if (sim != null && sim.simReady()) {
             return sim.getVelocity();
         }
-        return super.getVelocity();
+        return super.getVelocity() / 360.0;
     }
 
 }

@@ -32,7 +32,7 @@ This repository is split into modules. This allows us to only import what we nee
 | `:logging`              | `logging`              | Common logging classes                                                                    |
 | `:telemetry`            | `telemetry`            | Tools for network-based system telemetry                                                  |
 | `:common_drive`         | `common_drive`         | Robot-agnostic drivetrain code                                                            |
-| `:statespace`           | `statespace`           | State-space controllers for FRC                                                           |
+| `:statespacev1`         | `statespacev1`         | State-space controllers for FRC (Version 1)                                               |
 | `:auton_utils`          | `auton_utils`          | Wrappers for autonomous, and general robot program                                        |
 
 

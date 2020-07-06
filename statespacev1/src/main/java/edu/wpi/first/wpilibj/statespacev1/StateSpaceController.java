@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package edu.wpi.first.wpilibj.controller;
+package edu.wpi.first.wpilibj.statespacev1;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,24 +24,19 @@ import edu.wpi.first.wpiutil.math.numbers.N1;
  * <p>For more on the underlying math, read
  * https://file.tavsys.net/control/state-space-guide.pdf.
  */
-@SuppressWarnings({"ClassTypeParameterName", "MemberName"})
-public class PeriodVariantController<States extends Num, Inputs extends Num, Outputs extends Num> {
-  private final PeriodVariantPlant<States, Inputs, Outputs> m_plant;
-  private boolean m_enabled;
-
-  /**
-   * Current reference.
-   */
-  private Matrix<States, N1> m_r;
-
-  /**
-   * Computed controller output after being capped.
-   */
-  private Matrix<Inputs, N1> m_u;
-
+@SuppressWarnings({"ClassTypeParameterName", "MemberName", "ParameterName"})
+public class StateSpaceController<States extends Num, Inputs extends Num, Outputs extends Num> {
+  private final StateSpacePlant<States, Inputs, Outputs> m_plant;
   @SuppressWarnings("LineLength")
   private final List<StateSpaceControllerCoeffs<States, Inputs, Outputs>> m_coefficients = new ArrayList<>();
   private int m_index;
+  private boolean m_enabled;
+
+  // Current reference.
+  private Matrix<States, N1> m_r;
+
+  // Computed controller output after being capped.
+  private Matrix<Inputs, N1> m_u;
 
   /**
    * Constructs a controller with the given coefficients and plant.
@@ -49,22 +44,11 @@ public class PeriodVariantController<States extends Num, Inputs extends Num, Out
    * @param controllerCoeffs Controller coefficients.
    * @param plant            The plant used for the feedforward calculation.
    */
-  @SuppressWarnings("LineLength")
-  public PeriodVariantController(StateSpaceControllerCoeffs<States, Inputs, Outputs> controllerCoeffs,
-                                 PeriodVariantPlant<States, Inputs, Outputs> plant) {
-    addCoefficients(controllerCoeffs);
+  public StateSpaceController(StateSpaceControllerCoeffs<States, Inputs, Outputs> controllerCoeffs,
+                              StateSpacePlant<States, Inputs, Outputs> plant) {
     m_plant = plant;
+    addCoefficients(controllerCoeffs);
     reset();
-  }
-
-  private void capU() {
-    for (int i = 0; i < m_plant.getInputs().getNum(); ++i) {
-      if (getU(i) > getCoefficients().getUmax(i)) {
-        m_u.set(i, 0, getCoefficients().getUmax(i));
-      } else if (getU(i) < getCoefficients().getUmin(i)) {
-        m_u.set(i, 0, getCoefficients().getUmin(i));
-      }
-    }
   }
 
   /**
@@ -95,7 +79,6 @@ public class PeriodVariantController<States extends Num, Inputs extends Num, Out
    * @param i Row of K.
    * @param j Column of K.
    */
-  @SuppressWarnings("ParameterName")
   public double getK(int i, int j) {
     return getK().get(i, j);
   }
@@ -113,7 +96,6 @@ public class PeriodVariantController<States extends Num, Inputs extends Num, Out
    * @param i Row of Kff.
    * @param j Column of Kff.
    */
-  @SuppressWarnings("ParameterName")
   public double getKff(int i, int j) {
     return getKff().get(i, j);
   }
@@ -130,7 +112,6 @@ public class PeriodVariantController<States extends Num, Inputs extends Num, Out
    *
    * @param i Row of r.
    */
-  @SuppressWarnings("ParameterName")
   public double getR(int i) {
     return getR().get(i, 0);
   }
@@ -147,7 +128,6 @@ public class PeriodVariantController<States extends Num, Inputs extends Num, Out
    *
    * @param i Row of u.
    */
-  @SuppressWarnings("ParameterName")
   public double getU(int i) {
     return getU().get(i, 0);
   }
@@ -165,7 +145,6 @@ public class PeriodVariantController<States extends Num, Inputs extends Num, Out
    *
    * @param x The current state x.
    */
-  @SuppressWarnings("ParameterName")
   public void update(Matrix<States, N1> x) {
     if (m_enabled) {
       m_u = getK().times(m_r.minus(x)).plus(getKff().times(m_r.minus(m_plant.getA().times(m_r))));
@@ -179,7 +158,6 @@ public class PeriodVariantController<States extends Num, Inputs extends Num, Out
    * @param x     The current state x.
    * @param nextR The next reference vector r.
    */
-  @SuppressWarnings("ParameterName")
   public void update(Matrix<States, N1> x, Matrix<States, N1> nextR) {
     if (m_enabled) {
       m_u = getK().times(m_r.minus(x)).plus(getKff().times(nextR.minus(m_plant.getA().times(m_r))));
@@ -188,29 +166,14 @@ public class PeriodVariantController<States extends Num, Inputs extends Num, Out
     }
   }
 
-  /**
-   * Adds the given coefficients to the controller for gain scheduling.
-   *
-   * @param coefficients Controller coefficients.
-   */
-  public void addCoefficients(StateSpaceControllerCoeffs<States, Inputs, Outputs> coefficients) {
-    m_coefficients.add(coefficients);
-  }
-
-  /**
-   * Returns the controller coefficients with the given index.
-   *
-   * @param index Index of coefficients.
-   */
-  public StateSpaceControllerCoeffs<States, Inputs, Outputs> getCoefficients(int index) {
-    return m_coefficients.get(index);
-  }
-
-  /**
-   * Returns the current controller coefficients.
-   */
-  public StateSpaceControllerCoeffs<States, Inputs, Outputs> getCoefficients() {
-    return getCoefficients(m_index);
+  private void capU() {
+    for (int i = 0; i < m_plant.getInputs().getNum(); ++i) {
+      if (getU(i) > getCoefficients().getUmax(i)) {
+        m_u.set(i, 0, getCoefficients().getUmax(i));
+      } else if (getU(i) < getCoefficients().getUmin(i)) {
+        m_u.set(i, 0, getCoefficients().getUmin(i));
+      }
+    }
   }
 
   /**
@@ -230,16 +193,39 @@ public class PeriodVariantController<States extends Num, Inputs extends Num, Out
   }
 
   /**
-   * Returns the current controller index.
+   * Returns the currnet controller index.
    */
   public int getIndex() {
     return m_index;
   }
 
   /**
-   * Returns whether this controller is enabled.
+   * Adds the given coefficients to the controller for gain scheduling.
+   */
+  public void addCoefficients(StateSpaceControllerCoeffs<States, Inputs, Outputs> coefficients) {
+    m_coefficients.add(coefficients);
+  }
+
+  /**
+   * Returns the controller coefficients with the given index.
    *
-   * @return Whether the output of this controller is enabled.
+   * @param index Index of coefficients.
+   */
+  public StateSpaceControllerCoeffs<States, Inputs, Outputs> getCoefficients(int index) {
+    return m_coefficients.get(index);
+  }
+
+  /**
+   * Returns the current controller coefficients.
+   */
+  public StateSpaceControllerCoeffs<States, Inputs, Outputs> getCoefficients() {
+    return getCoefficients(getIndex());
+  }
+
+  /**
+   * Returns whether the controller is currently enabled.
+   *
+   * @return If the controller's output is enabled
    */
   public boolean isEnabled() {
     return m_enabled;

@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package edu.wpi.first.wpilibj.controller;
+package edu.wpi.first.wpilibj.statespacev1;
 
 import java.util.ArrayList;
 import java.util.List;

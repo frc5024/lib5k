@@ -95,8 +95,8 @@ public class ExtendedPigeonIMU extends PigeonIMU implements ISimGyro {
         // Read a data frame from sensor
         super.getRawGyro(data);
 
-        // Return the X axis in dps
-        return data[0] * ((inverted) ? -1 : 1);
+        // Return the Z axis in dps
+        return data[2] * ((inverted) ? -1 : 1);
     }
 
     @Override
@@ -111,7 +111,7 @@ public class ExtendedPigeonIMU extends PigeonIMU implements ISimGyro {
     public void initDrivebaseSimulation(IDifferentialDrivebase drivebase) {
 
         // Set up simulation
-        sim = new GyroSimUtil("ExtendedPigeonIMU", super.getDeviceID(), drivebase);
+        sim = new GyroSimUtil("ExtendedPigeonIMU", super.getDeviceID(), drivebase, 0.02, 40.0);
         sim.start();
 
     }

@@ -1,4 +1,4 @@
-package io.github.frc5024.lib5k.hardware.generic.sensors.util;
+package io.github.frc5024.lib5k.hardware.common.sensors;
 
 import edu.wpi.first.hal.SimBoolean;
 import edu.wpi.first.hal.SimDevice;
@@ -140,6 +140,14 @@ public class EncoderSimUtil implements PeriodicComponent {
             return simTicks.get();
         }
         return 0.0;
+    }
+
+    /**
+     * Get if the simulation is ready
+     * @return Is ready?
+     */
+    public boolean simReady(){
+        return simDevice != null;
     }
 
 }

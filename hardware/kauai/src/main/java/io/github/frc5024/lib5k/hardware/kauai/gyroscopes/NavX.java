@@ -98,7 +98,6 @@ public class NavX extends AHRS implements ISimGyro {
         if (sim != null && sim.simReady()) {
             sim.reset();
         } else {
-            // CTRE doesn't really provide a reset for us to use
             super.reset();
         }
 
@@ -109,7 +108,7 @@ public class NavX extends AHRS implements ISimGyro {
         if (sim != null && sim.simReady()) {
             return sim.getAngle();
         }
-        return super.getCompassHeading() * ((inverted) ? -1 : 1);
+        return super.getAngle() * ((inverted) ? -1 : 1);
     }
 
     @Override

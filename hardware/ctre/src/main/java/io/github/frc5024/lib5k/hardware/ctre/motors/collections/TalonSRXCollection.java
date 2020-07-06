@@ -1,6 +1,5 @@
 package io.github.frc5024.lib5k.hardware.ctre.motors.collections;
 
-
 import java.util.function.Consumer;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -22,6 +21,7 @@ import io.github.frc5024.lib5k.control_loops.TimedSlewLimiter;
 import io.github.frc5024.lib5k.logging.Loggable;
 import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.RR_HAL;
 import io.github.frc5024.lib5k.utils.ObjectCounter;
+import io.github.frc5024.lib5k.utils.annotations.FieldTested;
 import io.github.frc5024.lib5k.logging.RobotLogger;
 import io.github.frc5024.lib5k.logging.RobotLogger.Level;
 import io.github.frc5024.lib5k.telemetry.ComponentTelemetry;
@@ -29,6 +29,8 @@ import io.github.frc5024.lib5k.telemetry.ComponentTelemetry;
  * Collection of multiple WPI_TalonSRX controllers that wraps a
  * SpeedControllerGroup
  */
+@Deprecated(since="July 2020", forRemoval=false)
+@FieldTested(year=2020)
 public class TalonSRXCollection extends SpeedControllerGroup implements IMotorCollection, ICurrentController,
          IMotorGroupSafety, IVoltageOutputController, IRampRateController, Loggable {
     RobotLogger logger = RobotLogger.getInstance();

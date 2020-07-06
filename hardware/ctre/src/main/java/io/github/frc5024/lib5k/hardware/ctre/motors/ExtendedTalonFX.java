@@ -19,7 +19,6 @@ public class ExtendedTalonFX extends WPI_TalonFX {
         this(id, new CTREConfig());
     }
 
-
     public ExtendedTalonFX(int id, CTREConfig config) {
         super(id);
         this.config = config;

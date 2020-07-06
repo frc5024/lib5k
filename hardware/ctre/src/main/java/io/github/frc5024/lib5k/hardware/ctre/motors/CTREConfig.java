@@ -32,9 +32,6 @@ public class CTREConfig {
     // Current limit timeout in milliseconds
     public int timeoutMS;
 
-    // Encoder Count per Reveloution
-    public int encoderCPR;
-
     // Should enable Current Limiting
     public boolean enableCurrentLimit;
 
@@ -42,28 +39,29 @@ public class CTREConfig {
      * Default Config Constructor
      */
     public CTREConfig() {
-        configFactoryDefault = true;
-
-        setSafety = true;
-
-        setInverted = true;
-
-        setBrake = false;
-
-        setCurrentLimit = true;
-
-        peakAmps = 33;
-
-        durationMS = 15;
-
-        holdAmps = 30;
-
-        timeoutMS = 0;
-
-        enableCurrentLimit = true;
-
+        this(true, true, true, false, true, 33, 15, 30, 0, true);    
     }
 
+    /**
+     * Config Constructor for changing motor inversion 
+     * @param setInverted should the motor be inverted
+     */
+    public CTREConfig(boolean setInverted){
+        this(true, true, setInverted, false, true, 33, 15, 30, 0, true);       
+    }
+
+    /**
+     * Config Constructor for Configuring Current Limits
+     * @param setCurrentLimit Should the current limit be set
+     * @param peakAmps Current limits peak amps
+     * @param durationMS Duration in milliseconds of current limit
+     * @param holdAmps Current limit hold amps
+     * @param timeoutMS Current limit timeout in milliseconds
+     * @param enableCurrentLimit should the current limit be enabled
+     */
+    public CTREConfig(boolean setCurrentLimit, int peakAmps, int durationMS, int holdAmps, int timeoutMS, boolean enableCurrentLimit){
+        this(true, true, true, false, setCurrentLimit, peakAmps, durationMS, holdAmps, timeoutMS, enableCurrentLimit); 
+    }
 
     /**
      * Creates a custom config
@@ -76,7 +74,7 @@ public class CTREConfig {
      * @param durationMS Duration in milliseconds of current limit
      * @param holdAmps Current limit hold amps
      * @param timeoutMS Current limit timeout in milliseconds
-     * @param encoderCPR Encoder Count per Reveloution
+     * @param enableCurrentLimit should the current limit be enabled
      */
     public CTREConfig(boolean configFactoryDefault, boolean setSafety, boolean setInverted, boolean setBrake,
             boolean setCurrentLimit, int peakAmps, int durationMS, int holdAmps, int timeoutMS, boolean enableCurrentLimit) {

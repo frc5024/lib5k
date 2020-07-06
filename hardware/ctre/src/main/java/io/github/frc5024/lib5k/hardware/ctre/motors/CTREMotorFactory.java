@@ -12,6 +12,16 @@ public class CTREMotorFactory {
     }
 
     /**
+     * Creates a Default TalonSRX Motor
+     * 
+     * @param id the motor id
+     * @return a TalonSRX with the default configuration
+     */
+    public static ExtendedTalonSRX createTalonSRX(int id){
+        return createTalonSRX(id, new CTREConfig());
+    }
+
+    /**
      * Creates a Talon SRX 
      * 
      * @param id the id of the motor
@@ -51,6 +61,16 @@ public class CTREMotorFactory {
     /**
      * Creates a TalonFX
      * 
+     * @param id the motor id
+     * @return a TalonFX motor that has the default configuration
+     */
+    public static ExtendedTalonFX createTalonFX(int id){
+        return createTalonFX(id, new CTREConfig());
+    }
+
+    /**
+     * Creates a TalonFX
+     * 
      * @param id the id of the motor
      * @param config the talon config
      * 
@@ -74,6 +94,17 @@ public class CTREMotorFactory {
 
         return talon;
 
+    }
+
+
+    /**
+     * Returns a VictorSPX motor
+     * 
+     * @param id the motor id
+     * @return A VictorSPX motor with the default configuration
+     */
+    public static ExtendedVictorSPX createVictorSPX(int id){
+        return createVictorSPX(id, new CTREConfig());
     }
 
     /**

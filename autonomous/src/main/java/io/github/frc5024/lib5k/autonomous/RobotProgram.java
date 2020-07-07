@@ -54,6 +54,9 @@ public abstract class RobotProgram extends TimedRobot {
         chooser = new SendableChooser<>();
         dashboard.add(chooser);
 
+        // Start logger
+        logger.start(0.02);
+
     }
 
     /**

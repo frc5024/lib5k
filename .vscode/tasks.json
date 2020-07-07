@@ -6,7 +6,7 @@
         {
             "label": "build",
             "type": "shell",
-            "command": "./gradlew build",
+            "command": "./gradlew build --scan",
             "problemMatcher": [
                 "$msCompile"
             ],

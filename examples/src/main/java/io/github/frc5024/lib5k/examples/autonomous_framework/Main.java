@@ -6,6 +6,10 @@ import io.github.frc5024.lib5k.autonomous.RobotProgram;
 import io.github.frc5024.lib5k.examples.autonomous_framework.autonomous.ActionA;
 import io.github.frc5024.lib5k.examples.autonomous_framework.autonomous.ActionB;
 
+/**
+ * This example showcases how to add autonomous sequences to the robot. All
+ * possible options will automatically be displayed inside ShuffleBoard
+ */
 public class Main extends RobotProgram {
     // NOTE: RobotProgram comes with it's own logger instance. We don't need to
     // create another.

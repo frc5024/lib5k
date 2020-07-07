@@ -40,7 +40,7 @@ dependencies {
     implementation project(":utils")
 
     // Logging
-    implementation project(":logging")
+    implementation project(":logging") 
 
 }
 

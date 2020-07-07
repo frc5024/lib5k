@@ -1,12 +1,11 @@
 package io.github.frc5024.lib5k.hardware.generic.gyroscopes;
 
-import edu.wpi.first.hal.SimDevice;
-import edu.wpi.first.hal.SimDouble;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
-import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.SPI;
 import io.github.frc5024.lib5k.hardware.common.drivebase.IDifferentialDrivebase;
 import io.github.frc5024.lib5k.hardware.common.sensors.interfaces.ISimGyro;
+import io.github.frc5024.lib5k.hardware.common.sensors.simulation.GyroSimUtil;
+import io.github.frc5024.lib5k.utils.annotations.FieldTested;
 
 /**
  * A wrapper around the Analog Devices ADXRS450.
@@ -14,22 +13,17 @@ import io.github.frc5024.lib5k.hardware.common.sensors.interfaces.ISimGyro;
  * This wrapper adds support for gyro simulation, and adds some lib5k-specific
  * methods
  */
+@FieldTested(year = 2020)
 public class ADGyro extends ADXRS450_Gyro implements ISimGyro {
 
     private static ADGyro m_instance = null;
 
+    // Trackers
     private boolean inverted = false;
+    private boolean calibrated = false;
 
-    /* Simulation */
-    private final double ROTATION_SPEED_GAIN = 40;
-    private final double SIMULATION_PERIOD = 0.02;
-    private IDifferentialDrivebase m_simDrivebase;
-    private double[] m_simSensorReadings = new double[2];
-    private Notifier m_simThread;
-
-    private SimDevice m_simDevice;
-    private SimDouble m_simAngle;
-    private SimDouble m_simRate;
+    // Simulation
+    private GyroSimUtil sim;
 
     public ADGyro() {
         super(SPI.Port.kOnboardCS0);
@@ -48,62 +42,27 @@ public class ADGyro extends ADXRS450_Gyro implements ISimGyro {
         return m_instance;
     }
 
-    @Override
-    public void initDrivebaseSimulation(IDifferentialDrivebase drivebase) {
-        m_simDevice = SimDevice.create("Simulated ADXRS450_Gyro", 0);
+    public void initDrivebaseSimulation(final IDifferentialDrivebase drivebase) {
 
-        if (m_simDevice != null) {
-            m_simAngle = m_simDevice.createDouble("Angle", true, 0.0);
-            m_simRate = m_simDevice.createDouble("Rate", true, 0.0);
-            m_simDrivebase = drivebase;
-
-            // Create and start a simulation thread
-            m_simThread = new Notifier(this::updateSimData);
-            m_simThread.startPeriodic(SIMULATION_PERIOD);
-
-        }
-    }
-
-    private void updateSimData() {
-
-        // Ensure sim is running
-        if (m_simDevice != null) {
-
-            // Get drivebase sensor readings
-            double leftReading = m_simDrivebase.getLeftMeters();
-            double rightReading = m_simDrivebase.getRightMeters();
-
-            // Determine change from last reading
-            double leftDiff = leftReading - m_simSensorReadings[0];
-            double rightDiff = rightReading - m_simSensorReadings[1];
-
-            // Calculate angle
-            double omega = ((leftDiff - rightDiff) / m_simDrivebase.getWidthMeters() * ROTATION_SPEED_GAIN);
-
-            // Set last readings
-            m_simSensorReadings[0] = leftReading;
-            m_simSensorReadings[1] = rightReading;
-
-            // Publish readings
-            m_simAngle.set(m_simAngle.get() + omega);
-            m_simRate.set(omega);
-        }
-
+        // Set up simulation
+        sim = new GyroSimUtil("NavX", SPI.Port.kOnboardCS0.value, drivebase, 0.02, 40.0);
+        sim.start();
     }
 
     @Override
     public void setInverted(boolean inverted) {
+        if (sim != null && sim.simReady()) {
+            sim.setInverted(inverted);
+        }
         this.inverted = inverted;
     }
 
     @Override
-    public double getAngle() {
-
-        if (m_simDevice != null) {
-            return m_simAngle.get();
+    public boolean getInverted() {
+        if (sim != null && sim.simReady()) {
+            return sim.getInverted();
         }
-
-        return super.getAngle();
+        return inverted;
     }
 
     @Override
@@ -112,12 +71,52 @@ public class ADGyro extends ADXRS450_Gyro implements ISimGyro {
     }
 
     @Override
-    public double getRate() {
+    public void calibrate() {
+        if (sim != null && sim.simReady()) {
+            sim.calibrate();
+        } else {
+            super.calibrate();
+        }
+        calibrated = true;
 
-        if (m_simAngle != null) {
-            return m_simRate.get() * (inverted ? -1.0 : 1.0);
+    }
+
+    @Override
+    public boolean getCalibrated() {
+        return calibrated;
+    }
+
+    @Override
+    public void reset() {
+        if (sim != null && sim.simReady()) {
+            sim.reset();
+        } else {
+            super.reset();
         }
 
-        return super.getRate() * (inverted ? -1.0 : 1.0);
+    }
+
+    @Override
+    public double getAngle() {
+        if (sim != null && sim.simReady()) {
+            return sim.getAngle();
+        }
+        return super.getAngle() * ((inverted) ? -1 : 1);
+    }
+
+    @Override
+    public double getRate() {
+        if (sim != null && sim.simReady()) {
+            return sim.getRate();
+        }
+        return super.getRate() * ((inverted) ? -1 : 1);
+    }
+
+    @Override
+    public void close() {
+        if (sim != null) {
+            sim.close();
+        }
+
     }
 }

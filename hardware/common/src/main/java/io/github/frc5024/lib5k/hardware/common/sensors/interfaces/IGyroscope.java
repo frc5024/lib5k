@@ -7,16 +7,30 @@ import edu.wpi.first.wpilibj.interfaces.Gyro;
  * Common interface for all gyroscopes
  */
 public interface IGyroscope extends Gyro {
-    
+
     /**
      * Set if angle readings should be flipped
+     * 
      * @param inverted Should flip?
      */
     public void setInverted(boolean inverted);
 
+    /**
+     * Get if the readings are inverted
+     * 
+     * @return Is inverted?
+     */
+    public boolean getInverted();
 
     /**
-     * Returns the current heading heading 
+     * Get if the sensor has been calibrated
+     * 
+     * @return Is calibrated?
+     */
+    public boolean getCalibrated();
+
+    /**
+     * Returns the current heading heading
      *
      * @return the heading in degrees, from 180 to 180
      */

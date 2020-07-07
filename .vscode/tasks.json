@@ -6,7 +6,7 @@
         {
             "label": "build",
             "type": "shell",
-            "command": "./gradlew build",
+            "command": "./gradlew build --scan",
             "problemMatcher": [
                 "$msCompile"
             ],
@@ -30,7 +30,15 @@
         {
             "label": "jar",
             "type": "shell",
-            "command": "./gradlew jar",
+            "command": "./gradlew build buildRelease",
+            "problemMatcher": [
+                "$msCompile"
+            ]
+        },
+        {
+            "label": "document",
+            "type": "shell",
+            "command": "./gradlew clean document",
             "problemMatcher": [
                 "$msCompile"
             ]

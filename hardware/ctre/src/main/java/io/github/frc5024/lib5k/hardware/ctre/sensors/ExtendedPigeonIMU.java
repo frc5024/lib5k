@@ -1,61 +1,34 @@
-package io.github.frc5024.lib5k.hardware.kauai.gyroscopes;
+package io.github.frc5024.lib5k.hardware.ctre.sensors;
 
-import com.kauailabs.navx.frc.AHRS;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.sensors.PigeonIMU;
 
-import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.SPI.Port;
 import io.github.frc5024.lib5k.hardware.common.drivebase.IDifferentialDrivebase;
 import io.github.frc5024.lib5k.hardware.common.sensors.interfaces.ISimGyro;
 import io.github.frc5024.lib5k.hardware.common.sensors.simulation.GyroSimUtil;
-import io.github.frc5024.lib5k.utils.annotations.FieldTested;
 
 /**
- * A wrapper for the {@see AHRS} / NavX gyroscope
+ * A wrapper for the CTRE PigeonIMU that brings it into the 5024 ecosystem.
  * 
- * This wrapper adds support for gyro simulation, and adds some lib5k-specific
- * methods
+ * http://www.ctr-electronics.com/gadgeteer-imu-module-pigeon.html#product_tabs_technical_resources
  */
-@FieldTested(year = 2020)
-public class NavX extends AHRS implements ISimGyro {
+public class ExtendedPigeonIMU extends PigeonIMU implements ISimGyro {
 
-    private static NavX m_instance = null;
-
-    // Trackers
+    // Inversion tracker
     private boolean inverted = false;
     private boolean calibrated = false;
 
-
     // Simulation
     private GyroSimUtil sim;
-    private SPI.Port port;
 
-    public NavX() {
-        this(Port.kMXP);
+    public ExtendedPigeonIMU(int canID) {
+        super(canID);
+        super.configFactoryDefault();
     }
 
-    public NavX(final SPI.Port port) {
-        super(port);
-        this.port = port;
-    }
-
-    /**
-     * Get the Default NavX instance
-     * 
-     * @return NavX instance
-     */
-    public static NavX getInstance() {
-        if (m_instance == null) {
-            m_instance = new NavX();
-        }
-
-        return m_instance;
-    }
-
-    public void initDrivebaseSimulation(final IDifferentialDrivebase drivebase) {
-
-       // Set up simulation
-       sim = new GyroSimUtil("NavX", port.value, drivebase, 0.02, 40.0);
-       sim.start();
+    public ExtendedPigeonIMU(TalonSRX talonSrx) {
+        super(talonSrx);
+        super.configFactoryDefault();
     }
 
     @Override
@@ -84,7 +57,8 @@ public class NavX extends AHRS implements ISimGyro {
         if (sim != null && sim.simReady()) {
             sim.calibrate();
         } else {
-            super.calibrate();
+            //* Note: The PigeonIMU is not designed to be calibrated on-robot
+            //* super.enterCalibrationMode(CalibrationMode.BootTareGyroAccel);
         }
         calibrated = true;
 
@@ -100,7 +74,8 @@ public class NavX extends AHRS implements ISimGyro {
         if (sim != null && sim.simReady()) {
             sim.reset();
         } else {
-            super.reset();
+            // CTRE doesn't really provide a reset for us to use
+            super.setCompassAngle(0.0);
         }
 
     }
@@ -110,7 +85,7 @@ public class NavX extends AHRS implements ISimGyro {
         if (sim != null && sim.simReady()) {
             return sim.getAngle();
         }
-        return super.getAngle() * ((inverted) ? -1 : 1);
+        return super.getCompassHeading() * ((inverted) ? -1 : 1);
     }
 
     @Override
@@ -118,14 +93,31 @@ public class NavX extends AHRS implements ISimGyro {
         if (sim != null && sim.simReady()) {
             return sim.getRate();
         }
-        return super.getRate() * ((inverted) ? -1 : 1);
+
+        // Build a data frame array
+        double[] data = new double[3];
+
+        // Read a data frame from sensor
+        super.getRawGyro(data);
+
+        // Return the Z axis in dps
+        return data[2] * ((inverted) ? -1 : 1);
     }
 
     @Override
-    public void close() {
+    public void close() throws Exception {
         if (sim != null) {
             sim.close();
         }
+
+    }
+
+    @Override
+    public void initDrivebaseSimulation(IDifferentialDrivebase drivebase) {
+
+        // Set up simulation
+        sim = new GyroSimUtil("ExtendedPigeonIMU", super.getDeviceID(), drivebase, 0.02, 40.0);
+        sim.start();
 
     }
 

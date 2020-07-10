@@ -27,7 +27,7 @@ apply plugin: 'nebula-aggregate-javadocs'
 apply plugin: "java-library"
 
 // LIB VERSION
-project.version = "1.1.0"
+project.version = "1.2.0"
 
 allprojects{
   apply plugin: "java"

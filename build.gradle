@@ -91,12 +91,18 @@ task mmJar(type: Jar, dependsOn: subprojects.jar) {
   }
 }
 
+task copyPyLogReader(type: Copy){
+  from "scripts/logreader.py"
+  into "_release/logreader.py"
+}
+
 task buildRelease(type: Jar){
   delete file("_release")
   delete file("$rootProject.buildDir/libs")
   dependsOn subprojects.fatJar
   dependsOn subprojects.jar
   dependsOn project(":bundle").buildBundle
+  dependsOn copyPyLogReader
   // doLast{
   //   subprojects.each { subproject ->
   //   from subproject.configurations.archives.artifacts.files.collect {

@@ -1,7 +1,10 @@
 package io.github.frc5024.lib5k.logging;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import edu.wpi.first.wpilibj.Notifier;
+import edu.wpi.first.wpilibj.RobotBase;
 
 /**
  * A threaded logger for use by all robot functions
@@ -12,6 +15,9 @@ public class RobotLogger {
     ArrayList<String> periodic_buffer = new ArrayList<String>();
     private USBLogger m_usbLogger;
     private double bootTime;
+
+    // Simulation logfile
+    private FileWriter simWriter;
 
     /**
      * Log level
@@ -34,6 +40,16 @@ public class RobotLogger {
 
         // set boot time
         this.bootTime = System.currentTimeMillis() / 1000L;
+
+        // Try to load sim logger
+        if (RobotBase.isSimulation()) {
+            try {
+                simWriter = new FileWriter("./FRC_UserProgram.log");
+            } catch (IOException e) {
+                System.out.println("Not writing to simulation logfile because of error");
+                e.printStackTrace();
+            }
+        }
 
     }
 
@@ -174,6 +190,15 @@ public class RobotLogger {
         } else {
             // Add log to buffer
             this.periodic_buffer.add(log);
+        }
+
+        // If simulation, write to sim file
+        if (RobotBase.isSimulation() && simWriter != null) {
+            try {
+                simWriter.append(log);
+            } catch (IOException e) {
+
+            }
         }
 
     }

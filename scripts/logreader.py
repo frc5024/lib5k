@@ -54,7 +54,12 @@ def filterLogLine(line: str, levels: list, classes: list, methods: list) -> str:
     """
 
     # Pass through regex
-    data = re.findall(r"(.*) at (.*)s: (.*)::(.*)\(\) -> (.*)", line, re.M)[0]
+    data = re.findall(r"(.*) at (.*)s: (.*)::(.*)\(\) -> (.*)", line, re.M)
+    if len(data) == 0:
+        return ""
+    else:
+        data = data[0]
+    
     level, timestamp, _class, method, message = data[0], data[1], data[2], data[3], data[4]
 
     # This will be modified, then used to determine if we log this line

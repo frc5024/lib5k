@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import io.github.frc5024.lib5k.logging.RobotLogger;
+import io.github.frc5024.lib5k.hardware.ni.roborio.FaultReporter;
 
 /**
  * RobotProgram is the base class for all robot programs.
@@ -17,6 +18,9 @@ import io.github.frc5024.lib5k.logging.RobotLogger;
 public abstract class RobotProgram extends TimedRobot {
     // Internal logger
     public RobotLogger logger = RobotLogger.getInstance();
+
+    // Fault reporter
+    private FaultReporter faultReporter = FaultReporter.getInstance();
 
     // Scheduler
     private CommandScheduler scheduler;
@@ -56,6 +60,8 @@ public abstract class RobotProgram extends TimedRobot {
 
         // Start logger
         logger.start(0.02);
+
+        // Start a fault reporter
 
     }
 

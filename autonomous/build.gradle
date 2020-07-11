@@ -42,6 +42,9 @@ dependencies {
     // Logging
     implementation project(":logging") 
 
+    // Hardware
+    implementation project(":hardware:ni")
+
 }
 
 sourceSets {

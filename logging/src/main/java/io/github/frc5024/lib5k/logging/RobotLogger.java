@@ -26,7 +26,7 @@ public class RobotLogger {
      * queued until the next notifier cycle
      */
     public enum Level {
-        kRobot(""), kInfo(""), kWarning("WARNING"), kDebug("DEBUG"), kLibrary("LIBRARY");
+        kRobot("INFO"), kInfo("INFO"), kWarning("WARNING"), kDebug("DEBUG"), kLibrary("INFO");
 
         public String name;
 
@@ -45,6 +45,7 @@ public class RobotLogger {
         if (RobotBase.isSimulation()) {
             try {
                 simWriter = new FileWriter("./FRC_UserProgram.log");
+                simWriter.write("");
             } catch (IOException e) {
                 System.out.println("Not writing to simulation logfile because of error");
                 e.printStackTrace();
@@ -195,9 +196,10 @@ public class RobotLogger {
         // If simulation, write to sim file
         if (RobotBase.isSimulation() && simWriter != null) {
             try {
-                simWriter.append(log);
+                simWriter.append(log + "\n");
+                simWriter.flush();
             } catch (IOException e) {
-
+                System.out.println("Failed to reflect sim log");
             }
         }
 

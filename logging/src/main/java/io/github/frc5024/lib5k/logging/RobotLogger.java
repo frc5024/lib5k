@@ -1,10 +1,7 @@
 package io.github.frc5024.lib5k.logging;
 
-import java.io.File;
 import java.util.ArrayList;
 import edu.wpi.first.wpilibj.Notifier;
-import io.github.frc5024.lib5k.logging.USBLogger;
-import io.github.frc5024.lib5k.utils.FileUtils;
 
 /**
  * A threaded logger for use by all robot functions
@@ -14,7 +11,7 @@ public class RobotLogger {
     private Notifier notifier;
     ArrayList<String> periodic_buffer = new ArrayList<String>();
     private USBLogger m_usbLogger;
-    private long bootTime;
+    private double bootTime;
 
     /**
      * Log level
@@ -23,7 +20,13 @@ public class RobotLogger {
      * queued until the next notifier cycle
      */
     public enum Level {
-        kRobot, kInfo, kWarning, kLibrary
+        kRobot(""), kInfo(""), kWarning("WARNING"), kDebug("DEBUG"), kLibrary("LIBRARY");
+
+        public String name;
+
+        private Level(String name) {
+            this.name = name;
+        }
     }
 
     private RobotLogger() {
@@ -32,11 +35,6 @@ public class RobotLogger {
         // set boot time
         this.bootTime = System.currentTimeMillis() / 1000L;
 
-        // Build local log path
-        File f = new File(FileUtils.getHome() + "rrlogs");
-        if (!f.exists()) {
-            f.mkdir();
-        }
     }
 
     /**
@@ -70,47 +68,113 @@ public class RobotLogger {
     }
 
     /**
-     * Log a message to netconsole with the INFO log level. This message will not be
-     * logged immediately, but instead through the notifier.
+     * Write a log message to the logfile and message buffer.
      * 
-     * @param msg The message to log
+     * @param msg  Log message (String.format style)
+     * @param args Format arguments
      */
-    public void log(String msg) {
-        this.log(msg, Level.kInfo);
-    }
+    public void log(String msg, Object... args) {
+        // Get stack trace
+        StackTraceElement lastMethod = Thread.currentThread().getStackTrace()[2];
 
-    public void log(String msg, Level log_level) {
-        log("", msg, log_level);
-    }
-
-    public void log(String component, String msg) {
-        log(component, msg, Level.kInfo);
+        // Log
+        log(lastMethod, Level.kInfo, msg, args);
     }
 
     /**
-     * Logs a message to netconsole with a custom log level. The kRobot level will
-     * immediately push to the console, everything else is queued until the next
-     * notifier cycle
+     * Write a log message to the logfile and message buffer.
      * 
-     * @param msg       The message to log
-     * @param log_level the Level to log the message at
+     * @param msg  Log message (String.format style)
+     * @param lvl  Log level
+     * @param args Format arguments
      */
-    public void log(String component, String msg, Level log_level) {
-        String display_string = toString(component, msg, log_level);
+    public void log(String msg, Level lvl, Object... args) {
+        // Get stack trace
+        StackTraceElement lastMethod = Thread.currentThread().getStackTrace()[2];
 
-        // If the log level is kRobot, just print to netconsole, then return
-        if (log_level == Level.kRobot) {
-            // Check if we should log to USB
+        // Log
+        log(lastMethod, lvl, msg, args);
+    }
+
+    /**
+     * Write a log message to the logfile and message buffer. This is deprecated,
+     * and acts as a binding for old programs.
+     * 
+     * @param component Calling component name
+     * @param msg       Log message
+     */
+    @Deprecated(since = "July 2020", forRemoval = false)
+    public void log(String component, String msg) {
+
+        // Get stack trace
+        StackTraceElement lastMethod = Thread.currentThread().getStackTrace()[2];
+
+        // Log
+        log(lastMethod, Level.kInfo, msg);
+    }
+
+    /**
+     * Write a log message to the logfile and message buffer. This is deprecated,
+     * and acts as a binding for old programs.
+     * 
+     * @param component Calling component name
+     * @param msg       Log message
+     * @param log_level Log level
+     */
+    @Deprecated(since = "July 2020", forRemoval = false)
+    public void log(String component, String msg, Level log_level) {
+
+        // Get stack trace
+        StackTraceElement lastMethod = Thread.currentThread().getStackTrace()[2];
+
+        // Log
+        log(lastMethod, log_level, msg);
+    }
+
+    /**
+     * Write a log message to the logfile and message buffer
+     * 
+     * @param lastMethod Stack trace to calling method
+     * @param lvl        Log level
+     * @param messageF   String.format style string / message
+     * @param args       Any format arguments
+     */
+    private void log(StackTraceElement lastMethod, Level lvl, String messageF, Object... args) {
+
+        // Build message
+        String message = String.format(messageF, args);
+
+        // Get stack trace
+        // StackTraceElement lastMethod = Thread.currentThread().getStackTrace()[2];
+
+        // Get method and class names
+        String className = lastMethod.getClassName();
+        String methodName = lastMethod.getMethodName();
+
+        // Get the current system time
+        double time = System.currentTimeMillis() / 1000L;
+
+        // Determine time-since-boot
+        double tsb = time - this.bootTime;
+
+        // Build log string
+        String log = String.format("%s at %.4fs: %s::%s() -> %s", lvl.name, tsb, className, methodName, message);
+
+        // If the log is robot level, push to console
+        if (lvl.equals(Level.kRobot)) {
+
+            // Write log NOW
+            System.out.println(log);
+
+            // Try to reflect to USB
             if (m_usbLogger != null) {
-                m_usbLogger.writeln(display_string);
+                m_usbLogger.writeln(log);
             }
 
-            System.out.println(display_string);
-            return;
+        } else {
+            // Add log to buffer
+            this.periodic_buffer.add(log);
         }
-
-        // Add log to the periodic_buffer
-        this.periodic_buffer.add(display_string);
 
     }
 
@@ -118,16 +182,14 @@ public class RobotLogger {
      * Push all queued messages to netconsole, the clear the buffer
      */
     private void pushLogs() {
-        double time = System.currentTimeMillis() / 1000L;
-
         try {
             for (String x : this.periodic_buffer) {
-                
+
                 System.out.println(x);
 
                 // Check if we should log to USB
                 if (m_usbLogger != null) {
-                    m_usbLogger.writeln(String.format("[%.2f] %s", time - this.bootTime, x));
+                    m_usbLogger.writeln(x);
                 }
             }
             periodic_buffer.clear();
@@ -135,40 +197,6 @@ public class RobotLogger {
             System.out.println("Tried to push concurrently");
         }
 
-    }
-
-    /**
-     * Convert a message and Level to a string
-     * 
-     * @param msg       The message
-     * @param log_level The Level to log at
-     * 
-     * @return The formatted output string
-     */
-    private String toString(String component, String msg, Level log_level) {
-        String level_str;
-
-        // Turn enum level into string
-        switch (log_level) {
-        case kInfo:
-            // level_str = "INFO: ";
-            level_str = "";
-            break;
-        case kWarning:
-            level_str = "WARNING: ";
-            break;
-        case kRobot:
-            level_str = "ROBOT: ";
-            break;
-        case kLibrary:
-            level_str = "LIBRARY: ";
-            break;
-        default:
-            level_str = "";
-            break;
-        }
-
-        return String.format("%s%s %s", level_str, (component.equals("")) ? component : "[" + component + "]", msg);
     }
 
 }

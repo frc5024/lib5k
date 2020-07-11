@@ -180,5 +180,28 @@ if __name__ == "__main__":
                 print(filterLogLine(line, levels, classes, methods), end="")
             exit(0)
 
+    # Remote robot
+    else:
+
+        # Open SSH connection
+        print(f"Connecting to lvuser@{ip} over SSH")
+        client = paramiko.SSHClient()
+        client.connect(ip, username='lvuser', password='')
+        print("Connected. Press CTRL+C to stop.")
+
+        # Run correct command
+        if args.follow:
+            stdin, stdout, stderr = client.exec_command(f"tail -f ~/{LOGFILE_NAME}")
+        else:
+            stdin, stdout, stderr = client.exec_command(f"cat ~/{LOGFILE_NAME}")
+            
+        # Parse file
+        try:
+            # Print all lines as they are written
+            for line in stdout:
+                print(filterLogLine(line, levels, classes, methods), end="")
+
+        except KeyboardInterrupt as e:
+            client.close()
 
         

@@ -36,7 +36,7 @@ bin
 
 *.prefs
 
-./_release
+_release
 
 docs
 

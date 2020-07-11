@@ -137,7 +137,7 @@ public class FaultReporter {
 
         // Report High CAN usage
         if (current_status.percentBusUtilization > canAcceptableUsage) {
-            logger.log("FaultReporter", "CAN bus utilization has passed %" + canAcceptableUsage, Level.kWarning);
+            logger.log("FaultReporter", "CAN bus utilization has passed " + canAcceptableUsage, Level.kWarning);
         }
 
         // Report CAN TX errors

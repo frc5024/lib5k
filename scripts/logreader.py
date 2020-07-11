@@ -186,6 +186,8 @@ if __name__ == "__main__":
         # Open SSH connection
         print(f"Connecting to lvuser@{ip} over SSH")
         client = paramiko.SSHClient()
+        # client.load_system_host_keys()
+        client.set_missing_host_key_policy(paramiko.WarningPolicy())
         client.connect(ip, username='lvuser', password='')
         print("Connected. Press CTRL+C to stop.")
 

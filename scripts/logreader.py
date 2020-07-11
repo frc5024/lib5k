@@ -70,7 +70,7 @@ def filterLogLine(line: str, levels: list, classes: list, methods: list) -> str:
         doLog = False
 
     # Check class
-    if classes != [''] and _class.upper() not in classes:
+    if classes != [''] and _class.split(".")[-1].upper() not in classes:
         doLog = False
     
 

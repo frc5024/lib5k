@@ -175,7 +175,7 @@ public class RobotLogger {
         double tsb = time - this.bootTime;
 
         // Build log string
-        String log = String.format("%s at %.4fs: %s::%s() -> %s", lvl.name, tsb, className, methodName, message);
+        String log = String.format("%s at %.2fs: %s::%s() -> %s", lvl.name, tsb, className, methodName, message);
 
         // If the log is robot level, push to console
         if (lvl.equals(Level.kRobot)) {

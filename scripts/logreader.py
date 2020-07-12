@@ -138,7 +138,7 @@ if __name__ == "__main__":
     if args.level_types:
         levels = [x.strip().upper() for x in args.level_types.split(",")]
     else:
-        levels = ["DEBUG","INFO","WARNING"]
+        levels = ["INFO","WARNING"]
 
     # Determine list of classes allowed
     args.classes = args.classes if args.classes else ""

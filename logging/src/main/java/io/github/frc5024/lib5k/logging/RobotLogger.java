@@ -5,10 +5,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotBase;
+import io.github.frc5024.lib5k.utils.annotations.FieldTested;
+import io.github.frc5024.lib5k.utils.annotations.Tested;
+import io.github.frc5024.lib5k.utils.annotations.TestedInSimulation;
 
 /**
  * A threaded logger for use by all robot functions
  */
+@FieldTested(year = 2019)
+@Tested
+@TestedInSimulation
 public class RobotLogger {
     private static RobotLogger instance = null;
     private Notifier notifier;

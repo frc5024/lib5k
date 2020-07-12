@@ -63,7 +63,7 @@ public class LazySolenoid extends Solenoid implements Loggable {
         String status = String.format("Value: %b", lastState);
 
         // Log status
-        logger.log(name, status);
+        logger.log(status);
 
     }
 

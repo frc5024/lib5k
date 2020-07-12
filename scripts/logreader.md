@@ -45,6 +45,8 @@ For example, If I want to connect to a simulation on my laptop, and only view wa
 python3 logreader.py 5024 -l -c Robot -t WARNING,DEBUG
 ```
 
+**NOTE: By default, logreader hides all DEBUG messages. They must be shown manually**
+
 If I want everything, I can use:
 ```sh
 python3 logreader.py 5024 -l

@@ -99,7 +99,7 @@ public abstract class RobotProgram extends TimedRobot {
      * @param sequence Default
      */
     public void setDefaultAutonomous(AutonomousSequence sequence) {
-        logger.log("RobotProgram", String.format("Default autonomous sequence set to: %s", sequence.getName()), RobotLogger.Level.kRobot);
+        logger.log("Default autonomous sequence set to: %s", RobotLogger.Level.kRobot, sequence.getName());
 
         // Add to shuffleboard
         chooser.setDefaultOption(sequence.getName(), sequence);
@@ -115,7 +115,7 @@ public abstract class RobotProgram extends TimedRobot {
      * @param sequence Sequence
      */
     public void addAutonomous(AutonomousSequence sequence) {
-        logger.log("RobotProgram", String.format("Added autonomous sequence: %s", sequence.getName()), RobotLogger.Level.kRobot);
+        logger.log("Added autonomous sequence: %s", RobotLogger.Level.kRobot, sequence.getName());
 
         // Add to shuffleboard
         chooser.addOption(sequence.getName(), sequence);
@@ -123,16 +123,17 @@ public abstract class RobotProgram extends TimedRobot {
 
     @Override
     public void autonomousInit() {
+        logger.log("Autonomous started");
 
         // Get sequence from chooser
         autonomous = chooser.getSelected();
 
         // Start the sequence
         if (autonomous != null) {
-            logger.log("RobotProgram", String.format("Starting autonomous sequence: %s", autonomous.getName()));
+            logger.log("Starting autonomous sequence: %s", (Object) autonomous.getName());
             autonomous.getCommand().schedule();
-        }else{
-            logger.log("RobotProgram", "No autonomous selected, or sequence was null", RobotLogger.Level.kWarning);
+        } else {
+            logger.log("No autonomous selected, or sequence was null", RobotLogger.Level.kWarning);
         }
 
         // Call autonomous
@@ -151,10 +152,13 @@ public abstract class RobotProgram extends TimedRobot {
 
     @Override
     public void teleopInit() {
+        logger.log("Teleop started");
 
         if (this.autonomous != null && this.stopAutonomousInTeleop) {
-            logger.log("RobotProgram", "Autonomous command has been canceled");
+            logger.log("Autonomous command has been canceled");
             this.autonomous.getCommand().cancel();
+        } else {
+            logger.log("There is no autonomous command to cancel, or stopAutonomousInTeleop is false");
         }
 
         // Call teleop
@@ -173,6 +177,7 @@ public abstract class RobotProgram extends TimedRobot {
 
     @Override
     public void disabledInit() {
+        logger.log("Robot disabled");
 
         // Call disabled
         disabled(true);
@@ -190,6 +195,14 @@ public abstract class RobotProgram extends TimedRobot {
 
     @Override
     public void testInit() {
+        logger.log("Robot is in test mode");
+
+        if (this.autonomous != null) {
+            logger.log("Autonomous command has been canceled for safety reasons");
+            this.autonomous.getCommand().cancel();
+        } else {
+            logger.log("There is no autonomous command to cancel");
+        }
 
         // Call test
         test(true);

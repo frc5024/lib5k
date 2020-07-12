@@ -62,6 +62,9 @@ def filterLogLine(line: str, levels: list, classes: list, methods: list) -> str:
     
     level, timestamp, _class, method, message = data[0], data[1], data[2], data[3], data[4]
 
+    # Parse package name
+    package = _class.split(".")
+
     # This will be modified, then used to determine if we log this line
     doLog = True
 
@@ -70,17 +73,27 @@ def filterLogLine(line: str, levels: list, classes: list, methods: list) -> str:
         doLog = False
 
     # Check class
-    if classes != [''] and _class.split(".")[-1].upper() not in classes:
+    if classes != [''] and package[-1].upper() not in classes:
         doLog = False
     
-
     # Check method
     if methods != [''] and method.upper() not in methods:
         doLog = False
+
+    # Shorten package name
+    # if len(package) >= 3:
+    #     package_short = f"{package[0]}...{package[-2]}.{package[-1]}"
+    # elif len(package) is 2:
+    #     package_short = f"{package[-2]}.{package[-1]}"
+    # else:
+    #     package_short = package[-1]
+
+    # TMP:
+    package_short = ".".join(package)
     
 
     if doLog:
-        return line.strip() + "\n"
+        return f"{level} at {timestamp}s: {package_short}::{method}() -> {message}\n"
     else:
         return ""
 

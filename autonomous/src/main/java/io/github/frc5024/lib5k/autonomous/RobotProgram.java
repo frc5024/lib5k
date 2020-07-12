@@ -1,6 +1,7 @@
 package io.github.frc5024.lib5k.autonomous;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -33,6 +34,18 @@ public abstract class RobotProgram extends TimedRobot {
     private ShuffleboardTab dashboard;
     private SendableChooser<AutonomousSequence> chooser;
     private AutonomousSequence autonomous = null;
+
+    /**
+     * Create a robot program
+     * 
+     * @param runSchedulerInTestMode Should the command scheduler be run when the
+     *                               robot is in test mode?
+     * @param stopAutonomousInTeleop Should the active autonomous command be killed
+     *                               as soon as teleop starts?
+     */
+    public RobotProgram(boolean runSchedulerInTestMode, boolean stopAutonomousInTeleop) {
+        this(runSchedulerInTestMode, stopAutonomousInTeleop, Shuffleboard.getTab("Main"));
+    }
 
     /**
      * Create a robot program

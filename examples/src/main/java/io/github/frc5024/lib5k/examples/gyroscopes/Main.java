@@ -55,8 +55,7 @@ public class Main extends RobotProgram {
     public void teleop(boolean init) {
 
         // Print out gyro data
-        logger.log("Robot", String.format("Angle: %.2f, Rate: %.2f, Heading: %.2f", gyro.getAngle(), gyro.getRate(),
-                gyro.getHeading()));
+        logger.log("Angle: %.2f, Rate: %.2f, Heading: %.2f", gyro.getAngle(), gyro.getRate(), gyro.getHeading());
 
     }
 
@@ -67,7 +66,7 @@ public class Main extends RobotProgram {
         // This process is quick, but must happen while the robot is sitting still.
         // We generally don't do this for most gyros
         if (init && !gyro.getCalibrated()) {
-            logger.log("Robot", "Gyroscope is calibrating. Don't interfere with the robot!", Level.kWarning);
+            logger.log("Gyroscope is calibrating. Don't interfere with the robot!", Level.kWarning);
             gyro.calibrate();
         }
 

@@ -1,6 +1,7 @@
 package io.github.frc5024.common_drive;
 
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import ca.retrylife.ewmath.MathUtils;
 import edu.wpi.first.wpilibj.Notifier;
@@ -32,7 +33,7 @@ import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.FPGAClock;
  */
 public abstract class DriveTrainBase extends SubsystemBase {
 
-    private BiConsumer<String, String> loggingHook = null;
+    private Consumer<String> loggingHook = null;
 
     // Configuration
     private DriveTrainConfig config;
@@ -646,14 +647,14 @@ public abstract class DriveTrainBase extends SubsystemBase {
      * 
      * @param hook Logging method
      */
-    public void setConsoleHook(BiConsumer<String, String> hook) {
+    public void setConsoleHook(Consumer<String> hook) {
         this.loggingHook = hook;
         this.stateMachine.setConsoleHook(hook);
     }
 
     private void log(String message) {
         if (loggingHook != null) {
-            loggingHook.accept("DriveTrainBase", message);
+            loggingHook.accept(message);
         }
     }
 

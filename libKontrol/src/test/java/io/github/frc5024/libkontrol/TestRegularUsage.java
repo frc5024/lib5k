@@ -19,15 +19,13 @@ public class TestRegularUsage {
     private StateMachine<SystemStates> sm;
 
     // Logging captures
-    private String logName;
     private String logOutput;
 
     public TestRegularUsage() {
 
         // Create a StateMachine for use during tests
         sm = new StateMachine<>("TestStateMachine");
-        sm.setConsoleHook((c, m) -> {
-            logName = c;
+        sm.setConsoleHook((m) -> {
             logOutput = m;
         });
 
@@ -45,7 +43,6 @@ public class TestRegularUsage {
 
         // Ensure this action was correctly logged
         assertEquals("StateSetLogName", "Added state: SCANNING", logOutput);
-        assertEquals("StateSetLogComponent", "TestStateMachine", logName);
 
         // Add the second state
         sm.addState(SystemStates.POINTING, (m) -> {

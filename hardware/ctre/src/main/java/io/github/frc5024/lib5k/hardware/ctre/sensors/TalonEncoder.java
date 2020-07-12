@@ -16,6 +16,7 @@ public class TalonEncoder implements CommonEncoder, EncoderSimulation {
     private BaseTalon talon;
     private boolean phase = false;
     private int cpr;
+    private double offset;
 
     /* Simulation vars */
     private SpeedController controller;
@@ -29,9 +30,12 @@ public class TalonEncoder implements CommonEncoder, EncoderSimulation {
     private static int s_instanceCount = 0;
     private SlewLimiter m_simSlew;
 
+    
+
     public TalonEncoder(BaseTalon talon, int cpr) {
         this.talon = talon;
         this.cpr = cpr;
+        offset = getPosition();
     }
 
 
@@ -49,7 +53,7 @@ public class TalonEncoder implements CommonEncoder, EncoderSimulation {
 
     @Override
     public double getPosition() {
-        return talon.getSelectedSensorPosition() / this.cpr;
+        return talon.getSelectedSensorPosition() / this.cpr - offset;
     }
 
     @Override

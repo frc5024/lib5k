@@ -8,7 +8,6 @@ package io.github.frc5024.lib5k.hardware.common.sensors.interfaces;
  */
 public interface CommonEncoder {
 
-
     /**
      * Set the phase of the encoder so that it is set to be in phase with the motor
      * itself. This only works for quadrature encoders and analog sensors.

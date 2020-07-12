@@ -16,12 +16,15 @@ import edu.wpi.first.wpilibj.SpeedController;
 public class SparkMaxEncoder extends CANEncoder implements CommonEncoder, EncoderSimulation {
 
     private int cpr;
+    private double offset;
+
 
     /* Simulation vars */
     private SpeedController controller;
     private double last_time;
     private double gearbox_ratio, max_rpm;
 
+    
     /* Simulation */
     private SimDevice m_simDevice;
     private SimDouble m_simTicks;
@@ -32,6 +35,7 @@ public class SparkMaxEncoder extends CANEncoder implements CommonEncoder, Encode
     public SparkMaxEncoder(CANSparkMax device, EncoderType sensorType, int counts_per_rev) {
         super(device, sensorType, counts_per_rev);
         this.cpr = counts_per_rev;
+        offset = getPosition();
     }
 
 
@@ -83,6 +87,11 @@ public class SparkMaxEncoder extends CANEncoder implements CommonEncoder, Encode
     @Override
     public void setPhaseInverted(boolean inverted) {
         this.setInverted(inverted);
+    }
+
+    @Override
+    public double getPosition() {
+        return super.getPosition() - offset;
     }
     
 }

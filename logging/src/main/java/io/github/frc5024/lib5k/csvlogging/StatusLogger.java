@@ -1,5 +1,7 @@
 package io.github.frc5024.lib5k.csvlogging;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import io.github.frc5024.lib5k.logging.RobotLogger;
@@ -20,11 +22,14 @@ public class StatusLogger {
     private double bootTime;
     private boolean hasInitFile = false;
 
+    // FIO
+    private FileWriter writer;
+
     private StatusLogger() {
         // Set up thread
         thread = new Notifier(this::update);
         bootTime = System.currentTimeMillis() / 1000;
-        thread.startPeriodic(0.02);
+        
 
     }
 
@@ -33,6 +38,24 @@ public class StatusLogger {
             instance = new StatusLogger();
         }
         return instance;
+    }
+
+    /**
+     * Start logging CSV data to a specific file
+     * @param filepath File to write to
+     */
+    public void startLogging(String filepath) {
+
+        // Create writer
+        try{
+            this.writer = new FileWriter(filepath, false);
+        } catch (IOException e) {
+            RobotLogger.getInstance().log("Failed to create FileWriter for %s", (Object) filepath);
+            return;
+        }
+
+        // Start thread
+        thread.startPeriodic(0.02);        
     }
 
     /**
@@ -47,9 +70,9 @@ public class StatusLogger {
         // Handle calls after the timeout
         if ((System.currentTimeMillis() / 1000) - bootTime > INIT_TIMEOUT_SECONDS) {
             RobotLogger.getInstance().log(
-                    "%s tried to create a logging object after %.2f seconds. This will not work. Worst case, try allowing a longer timeout in StatusLogger.java",
+                    "%s tried to create a logging object after %.2f seconds. It has been given a dummy object as not to cause an NPE.",
                     name, INIT_TIMEOUT_SECONDS);
-            return null;
+            return new LoggingObject(name, fields);
         }
 
         RobotLogger.getInstance().log("%s has been added to the StatusLogger with %d fields", name, fields.length);
@@ -76,7 +99,12 @@ public class StatusLogger {
             }
 
             // Write file header to file
-            // TODO: Write file
+            try{
+                writer.append(fileHeader + "\n");
+                writer.flush();
+            } catch (IOException e) {
+                RobotLogger.getInstance().log("Failed to write file header");
+            }
 
             // Set lock
             hasInitFile = true;
@@ -96,7 +124,12 @@ public class StatusLogger {
             }
 
             // Write row to file
-            // TODO: Write file
+            try{
+                writer.append(row + "\n");
+                writer.flush();
+            } catch (IOException e) {
+                
+            }
         }
 
     }

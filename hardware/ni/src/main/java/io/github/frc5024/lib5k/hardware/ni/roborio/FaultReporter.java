@@ -5,6 +5,9 @@ import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import io.github.frc5024.lib5k.logging.RobotLogger;
 import io.github.frc5024.lib5k.logging.RobotLogger.Level;
+import io.github.frc5024.lib5k.csvlogging.StatusLogger;
+import io.github.frc5024.lib5k.csvlogging.LoggingObject;
+import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.RR_HAL;
 
 /**
  * Utility for tracking and reporting RoboRIO FPGA faults.
@@ -24,6 +27,9 @@ public class FaultReporter {
     boolean last3v3Enabled, last5vEnabled, last6vEnabled = false;
     CANStatus lastCANStatus = new CANStatus();
 
+    // Telemetry
+    private LoggingObject csvLog;
+
     private FaultReporter() {
 
         // Print startup message
@@ -35,6 +41,11 @@ public class FaultReporter {
         thread = new Notifier(this::update);
         thread.setName("Lib5K FaultReporter");
         thread.startPeriodic(0.08);
+
+        // Configure csv logging
+        csvLog = StatusLogger.getInstance().createLoggingObject("FaultReporter", "robot_voltage", "can_usage",
+                "can_tx_errors", "can_rx_errors", "3v_faults", "5v_faults", "6v_faults", "3v_enabled", "5v_enabled",
+                "6v_enabled", "brownout");
     }
 
     public static FaultReporter getInstance() {
@@ -49,6 +60,7 @@ public class FaultReporter {
 
         // Track brownout states
         boolean brownout_state = RobotController.isBrownedOut();
+        csvLog.setValue("brownout", brownout_state);
 
         if (brownout_state != lastBrownoutState && brownout_state) {
             logger.log("Robot brownout detected!", Level.kWarning);
@@ -71,6 +83,10 @@ public class FaultReporter {
         // Report CAN bus status
         handleCANStatus();
 
+        // CSVLog voltage
+        double bus_voltage = RR_HAL.getSimSafeVoltage();
+        csvLog.setValue("bus_voltage", bus_voltage);
+
     }
 
     /**
@@ -84,6 +100,7 @@ public class FaultReporter {
         }
 
         last3v3Enabled = enabled3v3;
+        csvLog.setValue("3v_enabled", enabled3v3);
 
         // Check 3v3 faults
         int new3v3count = RobotController.getFaultCount3V3();
@@ -92,6 +109,7 @@ public class FaultReporter {
 
             count3v3 = new3v3count;
         }
+        csvLog.setValue("3v_faults", new3v3count);
 
         // Track 5v state
         boolean enabled5v = RobotController.getEnabled5V();
@@ -100,6 +118,7 @@ public class FaultReporter {
         }
 
         last5vEnabled = enabled5v;
+        csvLog.setValue("5v_enabled", enabled5v);
 
         // Check 5v faults
         int new5vcount = RobotController.getFaultCount5V();
@@ -108,6 +127,7 @@ public class FaultReporter {
 
             count5v = new5vcount;
         }
+        csvLog.setValue("5v_faults", new5vcount);
 
         // Track 6v state
         boolean enabled6v = RobotController.getEnabled6V();
@@ -116,6 +136,7 @@ public class FaultReporter {
         }
 
         last6vEnabled = enabled6v;
+        csvLog.setValue("6v_enabled", enabled6v);
 
         // Check 6v faults
         int new6vcount = RobotController.getFaultCount6V();
@@ -124,6 +145,7 @@ public class FaultReporter {
 
             count6v = new6vcount;
         }
+        csvLog.setValue("6v_faults", new6vcount);
     }
 
     /**
@@ -138,16 +160,19 @@ public class FaultReporter {
         if (current_status.percentBusUtilization > canAcceptableUsage) {
             logger.log("CAN bus utilization has passed %%%.2f", Level.kWarning, canAcceptableUsage);
         }
+        csvLog.setValue("can_usage", current_status.percentBusUtilization);
 
         // Report CAN TX errors
         if (current_status.transmitErrorCount != lastCANStatus.transmitErrorCount) {
             logger.log("CAN bus TX error", Level.kWarning);
         }
+        csvLog.setValue("can_tx_errors", current_status.transmitErrorCount);
 
         // Report CAN RX errors
         if (current_status.receiveErrorCount != lastCANStatus.receiveErrorCount) {
             logger.log("CAN bus RX error", Level.kWarning);
         }
+        csvLog.setValue("can_rx_errors", current_status.receiveErrorCount);
 
         // Update last statuses
         lastCANStatus.setStatus(current_status.percentBusUtilization, current_status.busOffCount,

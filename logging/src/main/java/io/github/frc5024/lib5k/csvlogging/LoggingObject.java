@@ -87,6 +87,8 @@ public class LoggingObject {
         StringBuilder sb = new StringBuilder();
 
         for (String key : internalMap.keySet()) {
+            sb.append(name);
+            sb.append(":");
             sb.append(key);
             sb.append(",");
         }

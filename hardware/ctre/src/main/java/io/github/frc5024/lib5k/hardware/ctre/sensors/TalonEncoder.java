@@ -13,10 +13,12 @@ public class TalonEncoder implements EncoderSimulation {
     private boolean phase = false;
     private int cpr;
     private EncoderSimUtil sim;
+    private double offset;
 
     public TalonEncoder(BaseTalon talon, int cpr) {
         this.talon = talon;
         this.cpr = cpr;
+        offset = getPosition();
     }
 
     @Override
@@ -46,9 +48,9 @@ public class TalonEncoder implements EncoderSimulation {
     public double getPosition() {
         // Handle simulation
         if (sim != null && sim.simReady()) {
-            return sim.getRotations();
+            return sim.getRotations() - offset;
         }
-        return talon.getSelectedSensorPosition() / this.cpr;
+        return (talon.getSelectedSensorPosition() / this.cpr) - offset;
     }
 
     @Override

@@ -27,7 +27,7 @@ public class ExtendedVictorSPX extends WPI_VictorSPX {
         this.config = config;
 
         // Set up csv logging
-        csvLog = StatusLogger.getInstance().createLoggingObject(String.format("ExtendedTalonSRX_%d", id), "voltage",
+        csvLog = StatusLogger.getInstance().createLoggingObject(String.format("ExtendedVictorSPX_%d", id), "voltage",
                 "inverted");
 
     }

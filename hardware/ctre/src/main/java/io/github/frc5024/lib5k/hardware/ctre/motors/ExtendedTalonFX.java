@@ -29,7 +29,7 @@ public class ExtendedTalonFX extends WPI_TalonFX {
         this.config = config;
 
         // Set up csv logging
-        csvLog = StatusLogger.getInstance().createLoggingObject(String.format("ExtendedTalonSRX_%d", id), "voltage",
+        csvLog = StatusLogger.getInstance().createLoggingObject(String.format("ExtendedTalonFX_%d", id), "voltage",
                 "inverted");
     }
 

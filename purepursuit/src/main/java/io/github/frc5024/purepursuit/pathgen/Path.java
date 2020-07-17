@@ -21,7 +21,7 @@ public class Path {
 
     // Path points
     protected ArrayList<Translation2d> points;
-    private Translation2d[] waypoints;
+    protected Translation2d[] waypoints;
 
     /**
      * Create a motion path from points
@@ -72,22 +72,24 @@ public class Path {
 
                 // Add the point to it's "base" point
                 innerPoint = innerPoint.plus(startTrans);
-                
 
                 // Add this vector to the list
                 this.points.add(innerPoint);
             }
         }
 
-        // Add the last point to the points list
-        this.points.add(waypoints[i]);
+        if (waypoints.length != 0) {
+            // Add the last point to the points list
+            this.points.add(waypoints[i]);
 
-        // Remove the first point, as it may cause bugs with followers
-        this.points.remove(0);
+            // Remove the first point, as it may cause bugs with followers
+            this.points.remove(0);
+        }
     }
 
     /**
      * Get a list of all poses along the path
+     * 
      * @return Poses
      */
     public Translation2d[] getPoses() {
@@ -100,7 +102,8 @@ public class Path {
     }
 
     /**
-     * Get a chart showing every generated path point in 2D space. Can be written to disk for debugging and demos.
+     * Get a chart showing every generated path point in 2D space. Can be written to
+     * disk for debugging and demos.
      * 
      * @return Path visualization
      */
@@ -131,8 +134,9 @@ public class Path {
         }
 
         // Build as a chart
-        // XYChart chart = QuickChart.getChart("Generated Path", "X (meters)", "Y (meters)", "path", xData, yData);
-        XYChart chart = new XYChartBuilder().width(800).height(600).build();
+        // XYChart chart = QuickChart.getChart("Generated Path", "X (meters)", "Y
+        // (meters)", "path", xData, yData);
+        XYChart chart = new XYChartBuilder().width(1000).height(600).build();
 
         // Add data
         chart.addSeries("Generated Path", xData, yData);
@@ -142,7 +146,7 @@ public class Path {
         chart.getStyler().setDefaultSeriesRenderStyle(XYSeriesRenderStyle.Scatter);
         chart.getStyler().setLegendPosition(LegendPosition.OutsideE);
         chart.getStyler().setMarkerSize(8);
-        
+
         return chart;
     }
 

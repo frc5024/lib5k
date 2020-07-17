@@ -1,0 +1,8 @@
+{
+  "lengthUnit": "Meter",
+  "maxVelocity": 4.0,
+  "maxAcceleration": 3.6,
+  "wheelBase": 0.8,
+  "gameName": "FIRST Power Up",
+  "outputDir": "../pw_outputs"
+}

@@ -1,0 +1,14 @@
+# Welcome to the Lib5K codeowners file.
+# This file should be used to list the primary developer(s) of each module so they are notified of pull-requests involving their code.
+
+# Global owners
+# These people should be team leads, and mentors
+* @wm-c @ewpratten @awpratten @johnlownie
+
+# Configuration owners
+# These people set up and manage the CI pipeline
+.github/workflows @ewpratten
+
+# These people manage the Gradle configs
+*.gradle @ewpratten
+

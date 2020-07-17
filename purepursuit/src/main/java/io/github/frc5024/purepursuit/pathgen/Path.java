@@ -6,6 +6,12 @@ import java.util.Arrays;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.util.Units;
 
+import org.knowm.xchart.XYChart;
+import org.knowm.xchart.XYChartBuilder;
+import org.knowm.xchart.QuickChart;
+import org.knowm.xchart.XYSeries.XYSeriesRenderStyle;
+import org.knowm.xchart.style.Styler.LegendPosition;
+
 /**
  * A "Path" is a list of closely spaces points in space for a robot to follow.
  * The default Path class will generate paths with any number of waypoints, and
@@ -15,6 +21,7 @@ public class Path {
 
     // Path points
     protected ArrayList<Translation2d> points;
+    private Translation2d[] waypoints;
 
     /**
      * Create a motion path from points
@@ -33,6 +40,7 @@ public class Path {
      */
     public Path(double spacing, Translation2d... waypoints) {
         this.points = new ArrayList<>();
+        this.waypoints = waypoints;
 
         // Fill in extra points
         int i = 0;
@@ -62,6 +70,10 @@ public class Path {
                 // Create a new vector for this magnitude
                 Translation2d innerPoint = new Translation2d(normal.getX() * magnitude, normal.getY() * magnitude);
 
+                // Add the point to it's "base" point
+                innerPoint = innerPoint.plus(startTrans);
+                
+
                 // Add this vector to the list
                 this.points.add(innerPoint);
             }
@@ -85,6 +97,53 @@ public class Path {
     @Override
     public String toString() {
         return String.format("<Path: %s>", Arrays.deepToString(getPoses()));
+    }
+
+    /**
+     * Get a chart showing every generated path point in 2D space. Can be written to disk for debugging and demos.
+     * 
+     * @return Path visualization
+     */
+    public XYChart getPathVisualization() {
+
+        // Create X and Y datasets for points
+        double[] xData = new double[this.points.size()];
+        double[] yData = new double[this.points.size()];
+
+        // Save each point as an X and a Y
+        int i = 0;
+        for (Translation2d point : this.points) {
+            xData[i] = point.getX();
+            yData[i] = point.getY();
+            i++;
+        }
+
+        // Create X and Y datasets for waypoints
+        double[] wxData = new double[this.waypoints.length];
+        double[] wyData = new double[this.waypoints.length];
+
+        // Save each point as an X and a Y
+        i = 0;
+        for (Translation2d point : this.waypoints) {
+            wxData[i] = point.getX();
+            wyData[i] = point.getY();
+            i++;
+        }
+
+        // Build as a chart
+        // XYChart chart = QuickChart.getChart("Generated Path", "X (meters)", "Y (meters)", "path", xData, yData);
+        XYChart chart = new XYChartBuilder().width(800).height(600).build();
+
+        // Add data
+        chart.addSeries("Generated Path", xData, yData);
+        chart.addSeries("Waypoints", wxData, wyData);
+
+        // Configure chart styling
+        chart.getStyler().setDefaultSeriesRenderStyle(XYSeriesRenderStyle.Scatter);
+        chart.getStyler().setLegendPosition(LegendPosition.OutsideE);
+        chart.getStyler().setMarkerSize(8);
+        
+        return chart;
     }
 
 }

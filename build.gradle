@@ -54,7 +54,7 @@ task document(type: Javadoc, description: 'Generate javadocs from all child proj
   options.setStylesheetFile(file("javadoc.css"))
   options.addBooleanOption('-no-module-directories', true)
 	options.author true
-	options.links 'http://docs.spring.io/spring/docs/4.3.x/javadoc-api/', 'http://docs.oracle.com/javase/8/docs/api/', 'http://docs.spring.io/spring-ws/docs/2.3.0.RELEASE/api/', 'http://docs.spring.io/spring-security/site/docs/4.0.4.RELEASE/apidocs/', 'https://first.wpi.edu/FRC/roborio/release/docs/java/', 'https://www.revrobotics.com/content/sw/max/sw-docs/java/', 'https://www.kauailabs.com/public_files/navx-mxp/apidocs/java/'
+	options.links 'http://docs.spring.io/spring/docs/4.3.x/javadoc-api/', 'http://docs.oracle.com/javase/8/docs/api/', 'http://docs.spring.io/spring-ws/docs/2.3.0.RELEASE/api/', 'http://docs.spring.io/spring-security/site/docs/4.0.4.RELEASE/apidocs/', 'https://first.wpi.edu/FRC/roborio/release/docs/java/', 'https://www.revrobotics.com/content/sw/max/sw-docs/java/', 'https://www.kauailabs.com/public_files/navx-mxp/apidocs/java/', 'https://knowm.org/javadocs/xchart/'
 	options.addStringOption 'Xdoclint:none', '-quiet'
     println "Building recursive JavaDoc"
 

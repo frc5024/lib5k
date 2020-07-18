@@ -12,7 +12,7 @@ public class CTREConfig {
     public boolean setSafety = false;
 
     // Should the motor be inverted
-    public boolean setInverted;
+    public boolean setInverted = false;
 
     // Should the brakes be set
     public boolean setBrake;
@@ -83,8 +83,7 @@ public class CTREConfig {
 
         // TODO: Remove this
         // this.setSafety = setSafety;
-
-        this.setInverted = setInverted;
+        // this.setInverted = setInverted;
 
         this.setBrake = setBrake;
 

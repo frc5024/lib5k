@@ -40,7 +40,9 @@ public class DriveTrain extends DriveTrainBase {
 
         // Set inversions on motors
         frontLeftMotor.setInverted(false);
+        rearLeftMotor.setInverted(false);
         frontRightMotor.setInverted(true);
+        rearRightMotor.setInverted(true);
 
         // Set the sensor phases
         frontLeftMotor.setSensorPhase(false);
@@ -51,8 +53,8 @@ public class DriveTrain extends DriveTrainBase {
         frontRightMotor.setSafetyEnabled(false);
 
         // Set up encoders
-        leftEncoder = frontLeftMotor.getCommonEncoder(RobotConfig.DRIVETRAIN_ENCODER_TPR);
-        rightEncoder = frontRightMotor.getCommonEncoder(RobotConfig.DRIVETRAIN_ENCODER_TPR);
+        leftEncoder = rearLeftMotor.getCommonEncoder(RobotConfig.DRIVETRAIN_ENCODER_TPR);
+        rightEncoder = rearRightMotor.getCommonEncoder(RobotConfig.DRIVETRAIN_ENCODER_TPR);
 
         // Set up gyroscope
         gyroscope = NavX.getInstance();

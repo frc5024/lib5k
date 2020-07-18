@@ -59,13 +59,12 @@ public class ExtendedTalonSRX extends WPI_TalonSRX {
         }
     }
 
-    public ExtendedTalonSRX makeSlave(int id){
-        ExtendedTalonSRX slave = CTREMotorFactory.createTalonSRX(id, this.config);
+    public ExtendedTalonSRX makeSlave(int id) {
+        ExtendedTalonSRX slave = CTREMotorFactory.createTalonSRX(id);
 
         slave.follow(this);
 
         return slave;
-
 
     }
 

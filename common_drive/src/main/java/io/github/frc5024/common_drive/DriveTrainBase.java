@@ -356,8 +356,6 @@ public abstract class DriveTrainBase extends SubsystemBase implements IDifferent
         // https://bitbucket.org/kaleb_dodd/simbot2019public/src/abc56f5220b5c94bca216f86e3b6b5757d0ffeff/src/main/java/frc/subsystems/Drive.java#lines-337
         double speedMul = ((-1 * Math.min(Math.abs(angularError.getDegrees()), 90.0) / 90.0) + 1);
 
-        logger.log("DX: %.2f, DT: %.2f", distanceError, dt);
-
         // Calculate needed throttle
         double throttleOutput = this.distanceController.calculate(distanceError, dt);
 
@@ -367,14 +365,13 @@ public abstract class DriveTrainBase extends SubsystemBase implements IDifferent
         // Calculate rotation PIF
         double turnOutput = this.turnController.calculate(angularError.getDegrees(), dt, false);
 
-        // logger.log("Throttle: %.2f, Turn: %.2f", Level.kDebug, throttleOutput, turnOutput);
-
         // Calculate motor outputs
         double left = throttleOutput + turnOutput;
         double right = throttleOutput - turnOutput;
 
         // Debug log outputs
         // logger.log("Output: <%.2f, %.2f>", Level.kDebug, left, right);
+        logger.log(getPose().getTranslation().toString(), Level.kDebug);
 
         // Write output frame
         this.writePercentOutputs(left, right);

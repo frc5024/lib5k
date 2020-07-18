@@ -6,7 +6,6 @@ plugins {
 apply from: "../gradle_utils/libversions.gradle"
 apply from: "../gradle_utils/simpleunittest.gradle"
 apply from: "../gradle_utils/mavenrepos.gradle"
-apply from: "../gradle_utils/projectjar.gradle"
 
 
 java {
@@ -55,3 +54,5 @@ sourceSets {
 //     classpath = files(subprojects.collect { project -> project.sourceSets.main.compileClasspath })
 //     destinationDir = file("docs/javadoc2")
 // }
+
+apply from: "../gradle_utils/projectjar.gradle"

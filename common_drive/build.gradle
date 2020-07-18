@@ -7,7 +7,7 @@ plugins {
 apply from: "../gradle_utils/libversions.gradle"
 apply from: "../gradle_utils/simpleunittest.gradle"
 apply from: "../gradle_utils/mavenrepos.gradle"
-apply from: "../gradle_utils/projectjar.gradle"
+
 
 dependencies {
     // This dependency is exported to consumers, that is to say found on their compile classpath.
@@ -64,5 +64,4 @@ javadoc{
     source = "src/main/java"
 }
 
-
-
+apply from: "../gradle_utils/projectjar.gradle"

@@ -6,7 +6,7 @@ plugins {
 apply from: "../gradle_utils/libversions.gradle"
 apply from: "../gradle_utils/simpleunittest.gradle"
 apply from: "../gradle_utils/mavenrepos.gradle"
-apply from: "../gradle_utils/projectjar.gradle"
+
 
 
 java {
@@ -52,3 +52,5 @@ sourceSets {
     }
   }
 }
+
+apply from: "../gradle_utils/projectjar.gradle"

@@ -8,7 +8,7 @@ plugins {
 apply from: "../gradle_utils/libversions.gradle"
 apply from: "../gradle_utils/simpleunittest.gradle"
 apply from: "../gradle_utils/mavenrepos.gradle"
-apply from: "../gradle_utils/projectjar.gradle"
+
 
 java {
     sourceCompatibility = JavaVersion.VERSION_11
@@ -52,3 +52,5 @@ javadoc{
     source = "src/main/java"
     // destinationDir = file("../docs/javadoc/asyncHAL")
 }
+
+apply from: "../gradle_utils/projectjar.gradle"

@@ -8,7 +8,7 @@ plugins {
 apply from: "../gradle_utils/libversions.gradle"
 apply from: "../gradle_utils/simpleunittest.gradle"
 apply from: "../gradle_utils/mavenrepos.gradle"
-apply from: "../gradle_utils/projectjar.gradle"
+
 
 java {
     sourceCompatibility = JavaVersion.VERSION_11
@@ -47,6 +47,7 @@ dependencies {
 
 }
 
+
 sourceSets {
   main {
     java {
@@ -65,3 +66,4 @@ sourceSets {
 javadoc{
     source = "src/main/java"
 }
+apply from: "../gradle_utils/projectjar.gradle"

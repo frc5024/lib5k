@@ -6,7 +6,7 @@ task fatJar(type: Jar) {
     // }
     // classifier = 'all'
     baseName = project.name + "-" + rootProject.version + '-module-all'
-    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+    from sourceSets.main.allSource, { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
     destinationDir = file("$rootDir/_release/modules")
 }

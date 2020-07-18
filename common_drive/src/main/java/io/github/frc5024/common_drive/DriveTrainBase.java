@@ -4,16 +4,20 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import ca.retrylife.ewmath.MathUtils;
+
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
+
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import io.github.frc5024.common_drive.calculation.DifferentialDriveCalculation;
+
 import io.github.frc5024.lib5k.utils.InputUtils;
 import io.github.frc5024.lib5k.utils.InputUtils.ScalingMode;
+
 import io.github.frc5024.common_drive.controller.PDFController;
 import io.github.frc5024.common_drive.controller.PIFController;
 import io.github.frc5024.common_drive.gearing.Gear;
@@ -23,15 +27,21 @@ import io.github.frc5024.common_drive.queue.WriteLock;
 import io.github.frc5024.common_drive.types.ChassisSide;
 import io.github.frc5024.common_drive.types.MotorMode;
 import io.github.frc5024.common_drive.types.ShifterType;
+import io.github.frc5024.common_drive.calculation.DifferentialDriveCalculation;
+import io.github.frc5024.common_drive.commands.PathFollowCommand;
 import io.github.frc5024.libkontrol.statemachines.StateMachine;
 import io.github.frc5024.libkontrol.statemachines.StateMetadata;
 
+import io.github.frc5024.purepursuit.pathgen.Path;
+
 import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.FPGAClock;
+
+import io.github.frc5024.lib5k.hardware.common.drivebase.IDifferentialDrivebase;
 
 /**
  * The base for all drivetrains
  */
-public abstract class DriveTrainBase extends SubsystemBase {
+public abstract class DriveTrainBase extends SubsystemBase implements IDifferentialDrivebase {
 
     private Consumer<String> loggingHook = null;
 
@@ -512,6 +522,18 @@ public abstract class DriveTrainBase extends SubsystemBase {
     }
 
     /**
+     * Create and configure a command that will follow a path using this drivetrain
+     * 
+     * @param path            Path to follow
+     * @param inReverse       Should the path be followed in reverse?
+     * @param lookaheadMeters How far to look ahead for new goal poses
+     * @param epsRadius       Radius around the final pose for trigger isFinished()
+     */
+    public CommandBase createPathingCommand(Path path, boolean inReverse, double lookaheadMeters, double epsRadius) {
+        return new PathFollowCommand(this, path, inReverse, lookaheadMeters, epsRadius);
+    }
+
+    /**
      * Write output percents, while respecting active side
      * 
      * @param left  Left side voltage
@@ -632,6 +654,11 @@ public abstract class DriveTrainBase extends SubsystemBase {
         return currentState == States.kOpenLoop || currentState == States.kLocked || currentState == States.kNeutral;
     }
 
+    /**
+     * Force-set the drivetrain's pose
+     * 
+     * @param pose New pose
+     */
     public void setPose(Pose2d pose) {
         log(String.format("Setting pose to: %s", pose));
         // Set pose
@@ -656,6 +683,11 @@ public abstract class DriveTrainBase extends SubsystemBase {
         if (loggingHook != null) {
             loggingHook.accept(message);
         }
+    }
+
+    @Override
+    public double getWidthMeters() {
+        return this.config.robotWidth;
     }
 
 }

@@ -26,6 +26,7 @@ public abstract class DriveTrainConfig {
     // Robot parameters
     public double robotRadius;
     public double wheelRadius;
+    public double robotWidth;
     // public double v; // Motor velocity constant
 
     // Gearing

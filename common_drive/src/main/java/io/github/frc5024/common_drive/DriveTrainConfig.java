@@ -19,9 +19,6 @@ public abstract class DriveTrainConfig {
     // State-space matrices
     // StateSpaceLoop<N4, N2, N2> drivetrainLoop;
 
-    // Control loop time step
-    public long dt_ms;
-
     // Robot parameters
     public double robotRadius;
     public double wheelRadius;

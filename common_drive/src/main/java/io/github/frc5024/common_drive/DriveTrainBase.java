@@ -62,10 +62,8 @@ public abstract class DriveTrainBase extends SubsystemBase implements IDifferent
 
     private StateMachine<States> stateMachine;
 
-    // Thread & timekeeping
-    private Notifier thread;
+    // Timekeeping
     private double lastTime;
-    private boolean isReady = false;
 
     // I/O statuses
     private DriveTrainSensors lastInput;
@@ -126,11 +124,6 @@ public abstract class DriveTrainBase extends SubsystemBase implements IDifferent
         this.inputOffset = new DriveTrainSensors();
         this.output = new DriveTrainOutput();
 
-        // Set up thread (DO THIS LAST)
-        this.thread = new Notifier(this::runIteration);
-        this.thread.setName("DriveTrainBase");
-        this.thread.startPeriodic((double) this.config.dt_ms * 0.001);
-
     }
 
     /**
@@ -158,11 +151,8 @@ public abstract class DriveTrainBase extends SubsystemBase implements IDifferent
     @Override
     public void periodic() {
         
-        // Handle setting isReady
-        // This is used to stop the thread from running before the scheduler is set up
-        if(!isReady){
-            isReady = true;
-        }
+        // Run an iteration of the control loops
+        runIteration();
 
         // Run custom periodic code
         customPeriodic();
@@ -174,12 +164,6 @@ public abstract class DriveTrainBase extends SubsystemBase implements IDifferent
      * Run a thread iteration
      */
     protected void runIteration() {
-
-        // Ensure the system is ready
-        if (!isReady) {
-            logger.log("DriveTrain.periodic() has not yet been run by the scheduler... waiting", Level.kDebug);
-            return;
-        }
 
         // Read sensors
         this.lastInput = getAdjustedInputs();

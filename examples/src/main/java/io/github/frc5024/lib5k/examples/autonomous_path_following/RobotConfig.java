@@ -15,9 +15,6 @@ public class RobotConfig {
             // Don't use a gear shifter
             this.shifterType = ShifterType.NO_SHIFTER;
 
-            // Run in a 20ms loop
-            this.dt_ms = 20;
-
             // Set robot physical parameters
             this.robotRadius = Units.inchesToMeters(18.38);
             this.wheelRadius = Units.inchesToMeters(6.0) / 2.0;

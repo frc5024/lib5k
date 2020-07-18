@@ -22,7 +22,7 @@ dependencies {
     implementation("edu.wpi.first.wpiutil:wpiutil-java:${project.WPI_VERSION}")
 
     // EJML
-    compile group: 'org.ejml', name: 'ejml-simple', version: '0.32'
+    compile group: 'org.ejml', name: 'ejml-simple', version: '0.39'
     compile group: 'org.ejml', name: 'ejml-all', version: '0.39'
 
 }

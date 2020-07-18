@@ -11,6 +11,7 @@ public class GenericEncoder extends Encoder implements EncoderSimulation {
     private int cpr;
     private boolean phase;
     private EncoderSimUtil sim;
+    private double offset;
 
     /**
      * Encoder constructor. Construct a Encoder given a and b channels.
@@ -29,6 +30,7 @@ public class GenericEncoder extends Encoder implements EncoderSimulation {
     public GenericEncoder(final int channelA, final int channelB, boolean reverseDirection, int cpr) {
         super(channelA, channelB, reverseDirection);
         setCPR(cpr);
+        offset = getPosition();
     }
 
     /**
@@ -43,6 +45,7 @@ public class GenericEncoder extends Encoder implements EncoderSimulation {
     public GenericEncoder(final int channelA, final int channelB, int cpr) {
         super(channelA, channelB);
         setCPR(cpr);
+        offset = getPosition();
     }
 
     /**
@@ -69,6 +72,7 @@ public class GenericEncoder extends Encoder implements EncoderSimulation {
             final EncodingType encodingType, int cpr) {
         super(channelA, channelB, reverseDirection, encodingType);
         setCPR(cpr);
+        offset = getPosition();
     }
 
     /**
@@ -89,6 +93,7 @@ public class GenericEncoder extends Encoder implements EncoderSimulation {
             int cpr) {
         super(channelA, channelB, indexChannel, reverseDirection);
         setCPR(cpr);
+        offset = getPosition();
     }
 
     /**
@@ -105,6 +110,7 @@ public class GenericEncoder extends Encoder implements EncoderSimulation {
     public GenericEncoder(final int channelA, final int channelB, final int indexChannel, int cpr) {
         super(channelA, channelB, indexChannel);
         setCPR(cpr);
+        offset = getPosition();
     }
 
     /**
@@ -125,6 +131,7 @@ public class GenericEncoder extends Encoder implements EncoderSimulation {
     public GenericEncoder(DigitalSource sourceA, DigitalSource sourceB, boolean reverseDirection, int cpr) {
         super(sourceA, sourceB, reverseDirection);
         setCPR(cpr);
+        offset = getPosition();
     }
 
     /**
@@ -142,6 +149,7 @@ public class GenericEncoder extends Encoder implements EncoderSimulation {
     public GenericEncoder(DigitalSource sourceA, DigitalSource sourceB, int cpr) {
         super(sourceA, sourceB);
         setCPR(cpr);
+        offset = getPosition();
     }
 
     /**
@@ -171,6 +179,7 @@ public class GenericEncoder extends Encoder implements EncoderSimulation {
             final EncodingType encodingType, int cpr) {
         super(sourceA, sourceB, reverseDirection, encodingType);
         setCPR(cpr);
+        offset = getPosition();
     }
 
     /**
@@ -193,6 +202,7 @@ public class GenericEncoder extends Encoder implements EncoderSimulation {
             boolean reverseDirection, int cpr) {
         super(sourceA, sourceB, indexSource, reverseDirection);
         setCPR(cpr);
+        offset = getPosition();
     }
 
     /**
@@ -211,6 +221,7 @@ public class GenericEncoder extends Encoder implements EncoderSimulation {
     public GenericEncoder(DigitalSource sourceA, DigitalSource sourceB, DigitalSource indexSource, int cpr) {
         super(sourceA, sourceB, indexSource);
         setCPR(cpr);
+        offset = getPosition();
     }
 
     private void setCPR(int cpr) {
@@ -261,9 +272,9 @@ public class GenericEncoder extends Encoder implements EncoderSimulation {
     public double getPosition() {
         // Handle simulation
         if (sim != null && sim.simReady()) {
-            return sim.getRotations();
+            return sim.getRotations() - offset;
         }
-        return super.get() / cpr;
+        return (super.get() / cpr) - offset;
     }
 
     @Override

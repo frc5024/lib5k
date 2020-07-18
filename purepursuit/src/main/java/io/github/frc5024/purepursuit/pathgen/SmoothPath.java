@@ -17,7 +17,7 @@ public class SmoothPath extends Path {
      * @param tolerance How much the path is allowed to change
      * @param waypoints Path waypoints to follow
      */
-    public SmoothPath(double weight, double smoothing, double tolerance, Translation2d waypoints) {
+    public SmoothPath(double weight, double smoothing, double tolerance, Translation2d... waypoints) {
         this(Units.inchesToMeters(6.0), weight, smoothing, tolerance, waypoints);
     }
 
@@ -30,7 +30,7 @@ public class SmoothPath extends Path {
      * @param tolerance How much the path is allowed to change
      * @param waypoints Path waypoints to follow
      */
-    public SmoothPath(double spacing, double weight, double smoothing, double tolerance, Translation2d waypoints) {
+    public SmoothPath(double spacing, double weight, double smoothing, double tolerance, Translation2d... waypoints) {
 
         // Generate a linear path
         super(spacing, waypoints);

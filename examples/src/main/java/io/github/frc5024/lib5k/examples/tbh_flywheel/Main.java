@@ -8,9 +8,9 @@ import io.github.frc5024.lib5k.logging.RobotLogger;
 import io.github.frc5024.lib5k.logging.USBLogger;
 
 /**
- * This example robot program contains a simple TBH flywheel controller and support
- * for user input to control it. This file is build on top of the "neo_flywheel"
- * example
+ * This example robot program contains a simple TBH flywheel controller and
+ * support for user input to control it. This file is build on top of the
+ * "neo_flywheel" example
  */
 public class Main extends TimedRobot {
 
@@ -37,7 +37,7 @@ public class Main extends TimedRobot {
 
     @Override
     public void teleopInit() {
-        logger.log("Robot", "Teleop started");
+        logger.log("Teleop started");
 
         // In actual robot code, we would set the flywheel goal from another subsystem,
         // or a command. For this example, we can just set it to spin up when we start
@@ -53,7 +53,7 @@ public class Main extends TimedRobot {
 
     @Override
     public void disabledInit() {
-        logger.log("Robot", "Robot disabled");
+        logger.log("Robot disabled");
 
         // Stop the flywheel
         Flywheel.getInstance().stop();

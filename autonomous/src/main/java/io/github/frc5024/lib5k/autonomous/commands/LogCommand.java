@@ -24,20 +24,23 @@ public class LogCommand extends InstantCommand {
     /**
      * A command that will simply log a pre-set message to the console when run
      * 
-     * @param component Component the log is coming from 
-     * @param msg Message to log
+     * @param component Component the log is coming from
+     * @param msg       Message to log
      */
     public LogCommand(String component, String msg) {
         this.msg = msg;
         this.component = component;
     }
 
-
-
     @Override
     public void execute() {
 
-        // Log the message
-        RobotLogger.getInstance().log(component, msg);
+        if (component.equals("")) {
+            // Log the message
+            RobotLogger.getInstance().log(msg);
+        } else {
+            RobotLogger.getInstance().log("[%s] %s", component, msg);
+
+        }
     }
 }

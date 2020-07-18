@@ -105,7 +105,7 @@ public class Flywheel extends SubsystemBase {
 
         // This is only TRUE once
         if (meta.isFirstRun()) {
-            logger.log("Flywheel", "Became idle");
+            logger.log("Became idle");
 
             // Set a 1 second motion profile time on the motor to reduce wear on parts
             motorController.setOpenLoopRampRate(1.0);
@@ -121,7 +121,7 @@ public class Flywheel extends SubsystemBase {
 
         // This is only TRUE once
         if (meta.isFirstRun()) {
-            logger.log("Flywheel", "Spinning up");
+            logger.log("Spinning up");
 
             // Set reference velocity
             pidController.setReference(goalVelocity, ControlType.kVelocity);
@@ -144,12 +144,12 @@ public class Flywheel extends SubsystemBase {
         if (meta.isFirstRun()) {
 
             // We can just log that we have made it
-            logger.log("Flywheel", "Made it to goal");
+            logger.log("Made it to goal");
 
         }
 
         // If the current velocity falls too low, spin back up
-        if(!isVelocityCorrect()){
+        if (!isVelocityCorrect()) {
             stateMachine.setState(FlywheelStates.kSpinup);
         }
 
@@ -161,10 +161,11 @@ public class Flywheel extends SubsystemBase {
      * @return At goal velocity?
      */
     private boolean isVelocityCorrect() {
-        // This will return true if the current velocity is with in (0.4 * Kv) of the goal.
+        // This will return true if the current velocity is with in (0.4 * Kv) of the
+        // goal.
         // Kv is shot for "RPM per volt"
-        return MathUtils.epsilonEquals(getCurrentVelocity(),
-                MathUtils.clamp(goalVelocity, 0, model.freeSpeedRPM), 0.4 * model.Kv);
+        return MathUtils.epsilonEquals(getCurrentVelocity(), MathUtils.clamp(goalVelocity, 0, model.freeSpeedRPM),
+                0.4 * model.Kv);
     }
 
     /**
@@ -173,7 +174,7 @@ public class Flywheel extends SubsystemBase {
      * @param goalRPM Goal velocity
      */
     public void setGoalVelocity(double goalRPM) {
-        logger.log("Flywheel", String.format("Setting goal velocity to %.2f", goalRPM));
+        logger.log("Setting goal velocity to %.2f", goalRPM);
 
         // Set goal
         goalVelocity = goalRPM;

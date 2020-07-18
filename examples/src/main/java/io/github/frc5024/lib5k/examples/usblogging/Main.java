@@ -31,7 +31,7 @@ public class Main extends TimedRobot {
 
         // In the constructor, if we need to log something, we must use a special flag.
         // This is just due to a quirk with the scheduler system.
-        logger.log("Robot", "Hello from the constructor", Level.kRobot);
+        logger.log("Hello from the constructor", Level.kRobot);
 
         // We need a USBLogger to work with.
         // We pass it a path relative to the root of the external USB stick
@@ -59,14 +59,14 @@ public class Main extends TimedRobot {
     @Override
     public void autonomousInit() {
         // Since we are no longer in the constructor, we can log normally
-        logger.log("Robot", "Autonomous has started");
+        logger.log("Autonomous has started");
 
     }
 
     @Override
     public void teleopInit() {
         // Here, we are going to log the timestamp when the robot enters teleop
-        logger.log("Robot", String.format("Teleop started %.2f seconds after robot boot", FPGAClock.getFPGASeconds()));
+        logger.log("Teleop started %.2f seconds after robot boot", FPGAClock.getFPGASeconds());
 
     }
 
@@ -74,6 +74,6 @@ public class Main extends TimedRobot {
     public void disabledInit() {
         // Here, we will log a warning. This message will both be written to the log,
         // and displayed in driverstation
-        logger.log("Robot", "Robot disabled", Level.kWarning);
+        logger.log("Robot disabled", Level.kWarning);
     }
 }

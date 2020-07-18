@@ -21,7 +21,7 @@ public class StateMachine<T> {
 
     // Telemetry data table
     private String name;
-    private BiConsumer<String, String> consoleHook;
+    private Consumer<String> consoleHook;
 
     public StateMachine(String name) {
 
@@ -29,9 +29,7 @@ public class StateMachine<T> {
         this.name = name;
 
         // Set default console output
-        setConsoleHook((c, m) -> {
-            System.out.println(String.format("[%s] %s", c, m));
-        });
+        setConsoleHook(System.out::println);
 
     }
 
@@ -41,7 +39,7 @@ public class StateMachine<T> {
      * 
      * @param hook Console logging function
      */
-    public void setConsoleHook(@Nullable BiConsumer<String, String> hook) {
+    public void setConsoleHook(@Nullable Consumer<String> hook) {
         this.consoleHook = hook;
     }
 
@@ -52,7 +50,7 @@ public class StateMachine<T> {
 
         // Call the console hook
         if (consoleHook != null) {
-            consoleHook.accept(name, message);
+            consoleHook.accept(message);
         }
     }
 
@@ -150,6 +148,7 @@ public class StateMachine<T> {
 
     /**
      * Get the system's current state
+     * 
      * @return current state
      */
     public @Nullable T getCurrentState() {

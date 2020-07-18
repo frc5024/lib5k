@@ -1,12 +1,14 @@
 package io.github.frc5024.lib5k.autonomous;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import io.github.frc5024.lib5k.logging.RobotLogger;
+import io.github.frc5024.lib5k.hardware.ni.roborio.FaultReporter;
 
 /**
  * RobotProgram is the base class for all robot programs.
@@ -17,6 +19,9 @@ import io.github.frc5024.lib5k.logging.RobotLogger;
 public abstract class RobotProgram extends TimedRobot {
     // Internal logger
     public RobotLogger logger = RobotLogger.getInstance();
+
+    // Fault reporter
+    private FaultReporter faultReporter = FaultReporter.getInstance();
 
     // Scheduler
     private CommandScheduler scheduler;
@@ -29,6 +34,18 @@ public abstract class RobotProgram extends TimedRobot {
     private ShuffleboardTab dashboard;
     private SendableChooser<AutonomousSequence> chooser;
     private AutonomousSequence autonomous = null;
+
+    /**
+     * Create a robot program
+     * 
+     * @param runSchedulerInTestMode Should the command scheduler be run when the
+     *                               robot is in test mode?
+     * @param stopAutonomousInTeleop Should the active autonomous command be killed
+     *                               as soon as teleop starts?
+     */
+    public RobotProgram(boolean runSchedulerInTestMode, boolean stopAutonomousInTeleop) {
+        this(runSchedulerInTestMode, stopAutonomousInTeleop, Shuffleboard.getTab("Main"));
+    }
 
     /**
      * Create a robot program
@@ -56,6 +73,8 @@ public abstract class RobotProgram extends TimedRobot {
 
         // Start logger
         logger.start(0.02);
+
+        // Start a fault reporter
 
     }
 
@@ -93,7 +112,7 @@ public abstract class RobotProgram extends TimedRobot {
      * @param sequence Default
      */
     public void setDefaultAutonomous(AutonomousSequence sequence) {
-        logger.log("RobotProgram", String.format("Default autonomous sequence set to: %s", sequence.getName()), RobotLogger.Level.kRobot);
+        logger.log("Default autonomous sequence set to: %s", RobotLogger.Level.kRobot, sequence.getName());
 
         // Add to shuffleboard
         chooser.setDefaultOption(sequence.getName(), sequence);
@@ -109,7 +128,7 @@ public abstract class RobotProgram extends TimedRobot {
      * @param sequence Sequence
      */
     public void addAutonomous(AutonomousSequence sequence) {
-        logger.log("RobotProgram", String.format("Added autonomous sequence: %s", sequence.getName()), RobotLogger.Level.kRobot);
+        logger.log("Added autonomous sequence: %s", RobotLogger.Level.kRobot, sequence.getName());
 
         // Add to shuffleboard
         chooser.addOption(sequence.getName(), sequence);
@@ -117,16 +136,17 @@ public abstract class RobotProgram extends TimedRobot {
 
     @Override
     public void autonomousInit() {
+        logger.log("Autonomous started");
 
         // Get sequence from chooser
         autonomous = chooser.getSelected();
 
         // Start the sequence
         if (autonomous != null) {
-            logger.log("RobotProgram", String.format("Starting autonomous sequence: %s", autonomous.getName()));
+            logger.log("Starting autonomous sequence: %s", (Object) autonomous.getName());
             autonomous.getCommand().schedule();
-        }else{
-            logger.log("RobotProgram", "No autonomous selected, or sequence was null", RobotLogger.Level.kWarning);
+        } else {
+            logger.log("No autonomous selected, or sequence was null", RobotLogger.Level.kWarning);
         }
 
         // Call autonomous
@@ -145,10 +165,13 @@ public abstract class RobotProgram extends TimedRobot {
 
     @Override
     public void teleopInit() {
+        logger.log("Teleop started");
 
         if (this.autonomous != null && this.stopAutonomousInTeleop) {
-            logger.log("RobotProgram", "Autonomous command has been canceled");
+            logger.log("Autonomous command has been canceled");
             this.autonomous.getCommand().cancel();
+        } else {
+            logger.log("There is no autonomous command to cancel, or stopAutonomousInTeleop is false");
         }
 
         // Call teleop
@@ -167,6 +190,7 @@ public abstract class RobotProgram extends TimedRobot {
 
     @Override
     public void disabledInit() {
+        logger.log("Robot disabled");
 
         // Call disabled
         disabled(true);
@@ -184,6 +208,14 @@ public abstract class RobotProgram extends TimedRobot {
 
     @Override
     public void testInit() {
+        logger.log("Robot is in test mode");
+
+        if (this.autonomous != null) {
+            logger.log("Autonomous command has been canceled for safety reasons");
+            this.autonomous.getCommand().cancel();
+        } else {
+            logger.log("There is no autonomous command to cancel");
+        }
 
         // Call test
         test(true);

@@ -36,6 +36,8 @@ bin
 
 *.prefs
 
-./_release
+_release
 
 docs
+
+FRC_UserProgram.log

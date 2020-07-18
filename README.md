@@ -35,6 +35,12 @@ This repository is split into modules. This allows us to only import what we nee
 | `:statespace`           | `statespace`           | State-space controllers for FRC                                                           |
 | `:auton_utils`          | `auton_utils`          | Wrappers for autonomous, and general robot program                                        |
 
+## Scripts and tools
+
+This repo contains some helpful python scripts for interacting with robot code and log data. They can be found in the `./scripts` folder, and are documented here:
+ - [logreader.py](scripts/logreader.md)
+ - [simulate.py](scripts/simulate.md)
+
 
 ## History
 

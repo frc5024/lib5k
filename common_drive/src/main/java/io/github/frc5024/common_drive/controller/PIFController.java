@@ -43,6 +43,11 @@ public class PIFController implements BaseController {
      */
     public double calculate(double error, double dt, boolean enableFF) {
 
+        // Handle div-by-zero errors
+        if (dt == 0.0) {
+            dt = 1e-12;
+        }
+
         // Calculate the integral
         this.i += error * dt;
 

@@ -9,7 +9,7 @@ public class CTREConfig {
     public boolean configFactoryDefault;
 
     // Should the motor safety be set
-    public boolean setSafety;
+    public boolean setSafety = false;
 
     // Should the motor be inverted
     public boolean setInverted;
@@ -60,7 +60,7 @@ public class CTREConfig {
      * @param enableCurrentLimit should the current limit be enabled
      */
     public CTREConfig(boolean setCurrentLimit, int peakAmps, int durationMS, int holdAmps, int timeoutMS, boolean enableCurrentLimit){
-        this(true, true, true, false, setCurrentLimit, peakAmps, durationMS, holdAmps, timeoutMS, enableCurrentLimit); 
+        this(true, false, true, false, setCurrentLimit, peakAmps, durationMS, holdAmps, timeoutMS, enableCurrentLimit); 
     }
 
     /**
@@ -81,7 +81,8 @@ public class CTREConfig {
 
         this.configFactoryDefault = configFactoryDefault;
 
-        this.setSafety = setSafety;
+        // TODO: Remove this
+        // this.setSafety = setSafety;
 
         this.setInverted = setInverted;
 

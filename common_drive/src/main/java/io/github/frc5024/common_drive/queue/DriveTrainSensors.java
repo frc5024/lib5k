@@ -12,7 +12,7 @@ public class DriveTrainSensors {
     public double timestamp_ms;
 
     // Gyroscope data
-    public Rotation2d rotation;
+    public Rotation2d rotation = new Rotation2d();
     public double angle;
     public double angularRate;
 

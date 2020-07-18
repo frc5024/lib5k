@@ -25,9 +25,6 @@ public class TestRegularUsage {
 
         // Create a StateMachine for use during tests
         sm = new StateMachine<>("TestStateMachine");
-        sm.setConsoleHook((m) -> {
-            logOutput = m;
-        });
 
     }
 
@@ -40,9 +37,6 @@ public class TestRegularUsage {
 
         // Perform a state addition
         sm.addState(SystemStates.SCANNING, this::runScan);
-
-        // Ensure this action was correctly logged
-        assertEquals("StateSetLogName", "Added state: SCANNING", logOutput);
 
         // Add the second state
         sm.addState(SystemStates.POINTING, (m) -> {

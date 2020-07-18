@@ -46,6 +46,10 @@ public class DriveTrain extends DriveTrainBase {
         frontLeftMotor.setSensorPhase(false);
         frontRightMotor.setSensorPhase(false);
 
+        // Disable safety
+        frontLeftMotor.setSafetyEnabled(false);
+        frontRightMotor.setSafetyEnabled(false);
+
         // Set up encoders
         leftEncoder = frontLeftMotor.getCommonEncoder(RobotConfig.DRIVETRAIN_ENCODER_TPR);
         rightEncoder = frontRightMotor.getCommonEncoder(RobotConfig.DRIVETRAIN_ENCODER_TPR);
@@ -120,6 +124,11 @@ public class DriveTrain extends DriveTrainBase {
     @Override
     public double getLeftMeters() {
         return leftEncoder.getPosition() * RobotConfig.DRIVETRAIN_CONFIG.getWheelCircumference();
+    }
+
+    @Override
+    public void customPeriodic() {
+
     }
 
 }

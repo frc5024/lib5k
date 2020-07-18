@@ -84,9 +84,8 @@ public class Flywheel extends SubsystemBase {
         // it's foal
         this.controller.setMinRestTime(500);
 
-        // Here, we configure the state machine and give it access to the robot logger
+        // Here, we configure the state machine
         stateMachine = new StateMachine<>("Flywheel");
-        stateMachine.setConsoleHook(logger::log);
 
         // Tell the statemachine about all the state handlers
         stateMachine.setDefaultState(FlywheelStates.kIdle, this::handleIdle);

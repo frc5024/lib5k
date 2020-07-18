@@ -685,6 +685,10 @@ public abstract class DriveTrainBase extends SubsystemBase implements IDifferent
         }
     }
 
+    public abstract double getLeftMeters();
+
+    public abstract double getRightMeters();
+
     @Override
     public double getWidthMeters() {
         return this.config.robotWidth;

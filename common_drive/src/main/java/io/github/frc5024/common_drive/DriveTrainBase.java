@@ -369,10 +369,6 @@ public abstract class DriveTrainBase extends SubsystemBase implements IDifferent
         double left = throttleOutput + turnOutput;
         double right = throttleOutput - turnOutput;
 
-        // Debug log outputs
-        // logger.log("Output: <%.2f, %.2f>", Level.kDebug, left, right);
-        logger.log(getPose().getTranslation().toString(), Level.kDebug);
-
         // Write output frame
         this.writePercentOutputs(left, right);
 

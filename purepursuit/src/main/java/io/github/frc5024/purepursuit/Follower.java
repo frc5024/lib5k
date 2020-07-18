@@ -15,7 +15,7 @@ import io.github.frc5024.purepursuit.pathgen.Path;
 public class Follower {
 
     // Path to follow
-    private Path m_path;
+    public Path m_path;
 
     // Lookahead settings
     private double m_lookaheadDist, m_lookaheadGain;

@@ -42,11 +42,7 @@ public class RevMotorFactory{
         // Motor Configuration
         if(config.restoreFactoryDefaults){
             sparkMax.restoreFactoryDefaults();  
-        }
-        
-
-        sparkMax.setInverted(config.isInverted);
-        
+        }        
 
         if(config.setCurrentLimit){
             sparkMax.setSmartCurrentLimit(config.freeLimit, config.stallLimit, config.rpmLimit);

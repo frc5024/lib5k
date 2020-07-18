@@ -19,9 +19,9 @@ public class RobotConfig {
             this.dt_ms = 20;
 
             // Set robot physical parameters
-            this.robotRadius = 0.0;
+            this.robotRadius = Units.inchesToMeters(18.38);
             this.wheelRadius = Units.inchesToMeters(6.0) / 2.0;
-            this.robotWidth = 0.0;
+            this.robotWidth = Units.inchesToMeters(26.0);
 
             // Set gearing 
             this.highGearRatio = 8.45 / 1;

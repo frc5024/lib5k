@@ -39,3 +39,6 @@ bin
 ./_release
 
 docs
+
+# Simulation stuff
+_simulation_sessions

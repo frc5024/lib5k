@@ -1,7 +1,11 @@
 package io.github.frc5024.lib5k.utils;
 
+import static org.junit.Assert.assertTrue;
+
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import org.junit.Test;
 
@@ -23,6 +27,10 @@ public class FileManagementTest {
         // Write a line
         writer.write("Hello from the unit test world!");
         writer.close();
+
+        // Ensure file exists
+        assertTrue("Generated file exists",
+                Files.exists(Paths.get(FileManagement.getSessionDirectoryPath() + "/" + "UnitTestWriter.txt")));
     }
 
 }

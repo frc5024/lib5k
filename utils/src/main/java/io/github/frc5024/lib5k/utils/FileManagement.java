@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import edu.wpi.first.wpilibj.Filesystem;
@@ -38,12 +39,14 @@ public class FileManagement {
             // Create the base path
             StringBuilder basePath = new StringBuilder();
 
+            // Add the USB base path
+            basePath.append(getUSBStickBasePath());
+
             // Determine if this is simulation or not
             if (RobotBase.isSimulation()) {
-                basePath.append(Filesystem.getOperatingDirectory().getAbsolutePath());
                 basePath.append("/_simulation_sessions");
             } else {
-                basePath.append("/media/sda1/sessions");
+                basePath.append("/sessions");
             }
 
             // Append the timestamp
@@ -95,5 +98,28 @@ public class FileManagement {
      */
     public static FileReader createFileReader(String filename) throws FileNotFoundException {
         return new FileReader(getSessionDirectoryPath() + "/" + filename);
+    }
+
+    /**
+     * Get the base path to the attached USB stick
+     * 
+     * @return USB base path
+     */
+    public static String getUSBStickBasePath() {
+        // Determine if this is simulation or not
+        if (RobotBase.isSimulation()) {
+            return Filesystem.getOperatingDirectory().getAbsolutePath();
+        } else {
+            return "/media/sda1";
+        }
+    }
+
+    /**
+     * Get if the USB stick is plugged in
+     * 
+     * @return Is USB stick plugged in?
+     */
+    public static boolean isUSBAttached() {
+        return Files.exists(Path.of(getUSBStickBasePath()));
     }
 }

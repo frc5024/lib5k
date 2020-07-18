@@ -42,7 +42,7 @@ public class ExtendedVictorSPX extends WPI_VictorSPX {
 
 
     public ExtendedVictorSPX makeSlave(int id){
-        ExtendedVictorSPX victor = CTREMotorFactory.createVictorSPX(id, this.config);
+        ExtendedVictorSPX victor = CTREMotorFactory.createVictorSPX(id);
     
         victor.follow(this);
 

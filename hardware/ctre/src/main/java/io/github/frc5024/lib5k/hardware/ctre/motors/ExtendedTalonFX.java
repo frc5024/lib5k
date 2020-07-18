@@ -51,7 +51,7 @@ public class ExtendedTalonFX extends WPI_TalonFX {
     }
 
     public ExtendedTalonFX makeSlave(int id){
-        ExtendedTalonFX talon = CTREMotorFactory.createTalonFX(id, this.config);
+        ExtendedTalonFX talon = CTREMotorFactory.createTalonFX(id);
     
         talon.follow(this);
 

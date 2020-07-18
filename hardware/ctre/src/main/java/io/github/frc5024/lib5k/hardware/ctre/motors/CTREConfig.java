@@ -8,12 +8,6 @@ public class CTREConfig {
     // Should the motor be set to Factory Default
     public boolean configFactoryDefault;
 
-    // Should the motor safety be set
-    public boolean setSafety = false;
-
-    // Should the motor be inverted
-    public boolean setInverted = false;
-
     // Should the brakes be set
     public boolean setBrake;
 
@@ -39,7 +33,7 @@ public class CTREConfig {
      * Default Config Constructor
      */
     public CTREConfig() {
-        this(true, true, true, false, true, 33, 15, 30, 0, true);    
+        this(true, 33, 15, 30, 0, true);    
     }
 
     /**
@@ -47,7 +41,7 @@ public class CTREConfig {
      * @param setInverted should the motor be inverted
      */
     public CTREConfig(boolean setInverted){
-        this(true, true, setInverted, false, true, 33, 15, 30, 0, true);       
+        this(true, 33, 15, 30, 0, true);       
     }
 
     /**
@@ -60,14 +54,12 @@ public class CTREConfig {
      * @param enableCurrentLimit should the current limit be enabled
      */
     public CTREConfig(boolean setCurrentLimit, int peakAmps, int durationMS, int holdAmps, int timeoutMS, boolean enableCurrentLimit){
-        this(true, false, true, false, setCurrentLimit, peakAmps, durationMS, holdAmps, timeoutMS, enableCurrentLimit); 
+        this(true, false, setCurrentLimit, peakAmps, durationMS, holdAmps, timeoutMS, enableCurrentLimit); 
     }
 
     /**
      * Creates a custom config
      * @param configFactoryDefault Should the motor be set to Factory Default
-     * @param setSafety Should the motor safety be set
-     * @param setInverted Should the motor be inverted
      * @param setBrake Should the brakes be set
      * @param setCurrentLimit Should the current limit be set
      * @param peakAmps Current limits peak amps
@@ -76,14 +68,10 @@ public class CTREConfig {
      * @param timeoutMS Current limit timeout in milliseconds
      * @param enableCurrentLimit should the current limit be enabled
      */
-    public CTREConfig(boolean configFactoryDefault, boolean setSafety, boolean setInverted, boolean setBrake,
+    public CTREConfig(boolean configFactoryDefault, boolean setBrake,
             boolean setCurrentLimit, int peakAmps, int durationMS, int holdAmps, int timeoutMS, boolean enableCurrentLimit) {
 
         this.configFactoryDefault = configFactoryDefault;
-
-        // TODO: Remove this
-        // this.setSafety = setSafety;
-        // this.setInverted = setInverted;
 
         this.setBrake = setBrake;
 

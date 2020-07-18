@@ -36,7 +36,10 @@ public class Main extends RobotProgram {
         // Unlike TimedRobot, RobotProgram uses an "init" variable to run once at the
         // start of a mode
         if (init) {
-            logger.log("Robot", "Autonomous started");
+
+            // RobotProgram will automatically log each state change, but we can add more
+            // messages during the init stage of each mode.
+            logger.log("Its autonomous time!");
         }
 
         // Running the scheduler is also handled in the background
@@ -49,7 +52,9 @@ public class Main extends RobotProgram {
         // Unlike TimedRobot, RobotProgram uses an "init" variable to run once at the
         // start of a mode
         if (init) {
-            logger.log("Robot", "Teleop started");
+            // RobotProgram will automatically log each state change, but we can add more
+            // messages during the init stage of each mode.
+            logger.log("Teleop started");
         }
 
         // Running the scheduler is also handled in the background
@@ -62,7 +67,9 @@ public class Main extends RobotProgram {
         // Unlike TimedRobot, RobotProgram uses an "init" variable to run once at the
         // start of a mode
         if (init) {
-            logger.log("Robot", "Robot disabled");
+            // RobotProgram will automatically log each state change, but we can add more
+            // messages during the init stage of each mode.
+            logger.log("Robot disabled");
         }
 
         // Running the scheduler is also handled in the background
@@ -75,7 +82,9 @@ public class Main extends RobotProgram {
         // Unlike TimedRobot, RobotProgram uses an "init" variable to run once at the
         // start of a mode
         if (init) {
-            logger.log("Robot", "In test mode");
+            // RobotProgram will automatically log each state change, but we can add more
+            // messages during the init stage of each mode.
+            logger.log("In test mode");
         }
 
         // Running the scheduler is also handled in the background

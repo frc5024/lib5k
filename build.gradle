@@ -27,7 +27,7 @@ apply plugin: 'nebula-aggregate-javadocs'
 apply plugin: "java-library"
 
 // LIB VERSION
-project.version = "1.2.0"
+project.version = "1.2.1"
 
 allprojects{
   apply plugin: "java"
@@ -91,12 +91,31 @@ task mmJar(type: Jar, dependsOn: subprojects.jar) {
   }
 }
 
+task copyPyLogReader(type: Copy){
+  from "scripts/logreader.py"
+  into "_release"
+}
+
+task copyPySim(type: Copy){
+  from "scripts/simulate.py"
+  into "_release"
+}
+
+task packModules(type: Zip){
+  archiveFileName = "modules.zip"
+  destinationDirectory = file("_release")
+  from "_release/modules"
+}
+
 task buildRelease(type: Jar){
   delete file("_release")
   delete file("$rootProject.buildDir/libs")
   dependsOn subprojects.fatJar
   dependsOn subprojects.jar
   dependsOn project(":bundle").buildBundle
+  dependsOn copyPyLogReader
+  dependsOn copyPySim
+  dependsOn packModules
   // doLast{
   //   subprojects.each { subproject ->
   //   from subproject.configurations.archives.artifacts.files.collect {

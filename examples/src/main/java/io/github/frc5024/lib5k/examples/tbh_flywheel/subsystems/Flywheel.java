@@ -80,7 +80,8 @@ public class Flywheel extends SubsystemBase {
         // Kv is shot for "RPM per volt"
         this.controller.setEpsilon(0.4 * model.Kv);
 
-        // We will tell the flywheel that it needs to be stable for 500ms after reaching it's foal
+        // We will tell the flywheel that it needs to be stable for 500ms after reaching
+        // it's foal
         this.controller.setMinRestTime(500);
 
         // Here, we configure the state machine and give it access to the robot logger
@@ -105,7 +106,7 @@ public class Flywheel extends SubsystemBase {
 
         // This is only TRUE once
         if (meta.isFirstRun()) {
-            logger.log("Flywheel", "Became idle");
+            logger.log("Became idle");
 
             // Set a 1 second motion profile time on the motor to reduce wear on parts
             motorController.setOpenLoopRampRate(1.0);
@@ -121,7 +122,7 @@ public class Flywheel extends SubsystemBase {
 
         // This is only TRUE once
         if (meta.isFirstRun()) {
-            logger.log("Flywheel", "Spinning up");
+            logger.log("Spinning up");
 
             // Set the controller goal
             controller.setGoal(goalVelocity);
@@ -147,7 +148,7 @@ public class Flywheel extends SubsystemBase {
         if (meta.isFirstRun()) {
 
             // We can just log that we have made it
-            logger.log("Flywheel", "Made it to goal");
+            logger.log("Made it to goal");
 
         }
 
@@ -167,7 +168,7 @@ public class Flywheel extends SubsystemBase {
      * @param goalRPM Goal velocity
      */
     public void setGoalVelocity(double goalRPM) {
-        logger.log("Flywheel", String.format("Setting goal velocity to %.2f", goalRPM));
+        logger.log("Setting goal velocity to %.2f", goalRPM);
 
         // Set goal
         goalVelocity = goalRPM;

@@ -36,9 +36,10 @@ bin
 
 *.prefs
 
-./_release
+_release
 
 docs
 
 # Simulation stuff
 _simulation_sessions
+FRC_UserProgram.log

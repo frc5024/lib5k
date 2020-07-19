@@ -26,7 +26,7 @@ public class Main extends TimedRobot {
     public Main() {
 
         // Set up logging
-        usbLogger = new USBLogger("RobotLogs-2020/live");
+        usbLogger = new USBLogger();
         logger.enableUSBLogging(usbLogger);
         logger.start(0.02);
 

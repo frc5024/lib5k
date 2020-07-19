@@ -34,14 +34,8 @@ public class Main extends TimedRobot {
         logger.log("Hello from the constructor", Level.kRobot);
 
         // We need a USBLogger to work with.
-        // We pass it a path relative to the root of the external USB stick
-        // (/media/sda1).
-        //
-        // For info on how unix filepaths work, see:
-        // https://www.geeksforgeeks.org/absolute-relative-pathnames-unix/
-        //
-        // For this example, the 2020 filepath format will be used
-        usbLogger = new USBLogger("RobotLogs-2020/live");
+        // The log file will be saved on the robot's USB stick in a timestamped folder
+        usbLogger = new USBLogger();
 
         // When reflecting to a USB, we need to tell the logger where to reflect
         logger.enableUSBLogging(usbLogger);

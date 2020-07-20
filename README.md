@@ -1,7 +1,8 @@
 # lib5k 
 The software libraries that power all Raider Robotics projects.
 
-*Javadoc can be found [here](https://frc5024.github.io/lib5k)*
+*Javadoc can be found [here](https://frc5024.github.io/lib5k)*<br>
+*Wiki can be found [here](https://github.com/frc5024/lib5k/wiki)*
 
 ## Using
 

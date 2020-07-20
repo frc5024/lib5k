@@ -22,7 +22,7 @@ public class FPGAClock {
      * @return Milliseconds since timer start
      */
     public static double getFPGAMilliseconds() {
-        return getFPGASeconds() * 100;
+        return getFPGASeconds() * 1000.0;
     }
 
     /**

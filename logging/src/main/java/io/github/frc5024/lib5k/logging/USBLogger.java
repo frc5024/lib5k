@@ -3,6 +3,7 @@ package io.github.frc5024.lib5k.logging;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
@@ -71,10 +72,13 @@ public class USBLogger implements AutoCloseable {
             if (m_file != null) {
                 for (String line : m_messageBuffer) {
                     m_file.append(String.format("%s%n", line));
+                    m_file.flush();
                 }
             }
         } catch (IOException e) {
             DriverStation.reportError("Failed to write message buffer to USB", true);
+        } catch (ConcurrentModificationException e) {
+            RobotLogger.getInstance().log("A CMOD occured");
         }
 
         // Clear the message buffer

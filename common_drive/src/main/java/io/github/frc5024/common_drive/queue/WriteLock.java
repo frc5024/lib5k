@@ -32,8 +32,23 @@ public class WriteLock<T> {
         this.value = this.defaultValue;
     }
 
+    /**
+     * Write a value and enable reading
+     * 
+     * @param value Value
+     */
     public void write(T value) {
         this.write = true;
         this.value = value;
+    }
+
+    /**
+     * Get the value, and set write to false
+     * 
+     * @return Value
+     */
+    public T consume() {
+        this.write = false;
+        return this.value;
     }
 }

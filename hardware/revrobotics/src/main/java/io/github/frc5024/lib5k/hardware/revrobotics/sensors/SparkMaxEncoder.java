@@ -14,11 +14,13 @@ public class SparkMaxEncoder extends CANEncoder implements EncoderSimulation {
     private CANSparkMax device;
     private int cpr;
     private EncoderSimUtil sim;
+    private double offset;
 
     public SparkMaxEncoder(CANSparkMax device, EncoderType sensorType, int counts_per_rev) {
         super(device, sensorType, counts_per_rev);
         this.device = device;
         this.cpr = counts_per_rev;
+        offset = getPosition();
     }
 
     @Override
@@ -57,9 +59,9 @@ public class SparkMaxEncoder extends CANEncoder implements EncoderSimulation {
     public double getPosition() {
         // Handle simulation
         if (sim != null && sim.simReady()) {
-            return sim.getRotations();
+            return sim.getRotations() - offset;
         }
-        return super.getPosition();
+        return super.getPosition() - offset;
     }
 
     @Override

@@ -39,9 +39,7 @@ public class CTREMotorFactory {
             talon.configFactoryDefault();
         }
 
-        talon.setSafetyEnabled(config.setSafety);
-
-        talon.setInverted(config.setInverted);
+        talon.setSafetyEnabled(false);
 
         talon.setNeutralMode(config.setBrake ? NeutralMode.Brake : NeutralMode.Coast);
 
@@ -84,9 +82,7 @@ public class CTREMotorFactory {
             talon.configFactoryDefault();
         }
 
-        talon.setSafetyEnabled(config.setSafety);
-
-        talon.setInverted(config.setInverted);
+        talon.setSafetyEnabled(false);
 
         talon.setNeutralMode(config.setBrake ? NeutralMode.Brake : NeutralMode.Coast);
 
@@ -122,9 +118,7 @@ public class CTREMotorFactory {
             victor.configFactoryDefault();
         }
 
-        victor.setSafetyEnabled(config.setSafety);
-
-        victor.setInverted(config.setInverted);
+        victor.setSafetyEnabled(false);
 
         victor.setNeutralMode(config.setBrake ? NeutralMode.Brake : NeutralMode.Coast);
 

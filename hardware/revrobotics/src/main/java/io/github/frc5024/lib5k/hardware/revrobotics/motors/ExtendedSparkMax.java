@@ -125,7 +125,7 @@ public class ExtendedSparkMax extends CANSparkMax implements Sendable {
     }
 
     public ExtendedSparkMax makeSlave(int id, boolean invert){
-        ExtendedSparkMax slave = RevMotorFactory.createSparkMax(id, config);
+        ExtendedSparkMax slave = RevMotorFactory.createSparkMax(id, config.motorType);
 
         slave.follow(this, invert);
 

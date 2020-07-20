@@ -45,7 +45,7 @@ public class RobotLogger {
         this.notifier = new Notifier(this::pushLogs);
 
         // set boot time
-        this.bootTime = System.currentTimeMillis() / 1000L;
+        this.bootTime = (double)System.currentTimeMillis() / 1000.0;
 
         // Try to load sim logger
         if (RobotBase.isSimulation()) {
@@ -175,7 +175,7 @@ public class RobotLogger {
         String methodName = lastMethod.getMethodName();
 
         // Get the current system time
-        double time = System.currentTimeMillis() / 1000L;
+        double time = (double)System.currentTimeMillis() / 1000.0;
 
         // Determine time-since-boot
         double tsb = time - this.bootTime;

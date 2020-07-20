@@ -4,16 +4,20 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import ca.retrylife.ewmath.MathUtils;
+
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
+
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import io.github.frc5024.common_drive.calculation.DifferentialDriveCalculation;
+
 import io.github.frc5024.lib5k.utils.InputUtils;
 import io.github.frc5024.lib5k.utils.InputUtils.ScalingMode;
+
 import io.github.frc5024.common_drive.controller.PDFController;
 import io.github.frc5024.common_drive.controller.PIFController;
 import io.github.frc5024.common_drive.gearing.Gear;
@@ -23,17 +27,23 @@ import io.github.frc5024.common_drive.queue.WriteLock;
 import io.github.frc5024.common_drive.types.ChassisSide;
 import io.github.frc5024.common_drive.types.MotorMode;
 import io.github.frc5024.common_drive.types.ShifterType;
+import io.github.frc5024.common_drive.calculation.DifferentialDriveCalculation;
+import io.github.frc5024.common_drive.commands.PathFollowCommand;
 import io.github.frc5024.libkontrol.statemachines.StateMachine;
 import io.github.frc5024.libkontrol.statemachines.StateMetadata;
 
+import io.github.frc5024.purepursuit.pathgen.Path;
+
 import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.FPGAClock;
+import io.github.frc5024.lib5k.logging.RobotLogger;
+import io.github.frc5024.lib5k.logging.RobotLogger.Level;
+import io.github.frc5024.lib5k.hardware.common.drivebase.IDifferentialDrivebase;
 
 /**
  * The base for all drivetrains
  */
-public abstract class DriveTrainBase extends SubsystemBase {
-
-    private Consumer<String> loggingHook = null;
+public abstract class DriveTrainBase extends SubsystemBase implements IDifferentialDrivebase {
+    private RobotLogger logger = RobotLogger.getInstance();
 
     // Configuration
     private DriveTrainConfig config;
@@ -52,8 +62,7 @@ public abstract class DriveTrainBase extends SubsystemBase {
 
     private StateMachine<States> stateMachine;
 
-    // Thread & timekeeping
-    private Notifier thread;
+    // Timekeeping
     private double lastTime;
 
     // I/O statuses
@@ -94,6 +103,7 @@ public abstract class DriveTrainBase extends SubsystemBase {
         this.gearGoal = new WriteLock<>(this.defaultGear);
 
         // Configure state machine
+        logger.log("Adding states to statemachine");
         this.stateMachine = new StateMachine<>("DriveTrainBase States");
         this.stateMachine.setDefaultState(States.kOpenLoop, this::handleOpenLoopControl);
         this.stateMachine.addState(States.kPivoting, this::handlePivotControl);
@@ -114,19 +124,15 @@ public abstract class DriveTrainBase extends SubsystemBase {
         this.inputOffset = new DriveTrainSensors();
         this.output = new DriveTrainOutput();
 
-        // Set up thread (DO THIS LAST)
-        this.thread = new Notifier(this::runIteration);
-        this.thread.startPeriodic((double) this.config.dt_ms * 0.001);
-
     }
 
     /**
      * Zero all sensor readings (no-destructive to other subsystems)
      */
     public void zero() {
-        log("Setting sensor offsets");
+        logger.log("Setting sensor offsets");
         this.inputOffset = input.copy();
-        log("Resetting localization to [0,0,0]");
+        logger.log("Resetting localization to [0,0,0]");
         this.localizer.resetPosition(new Pose2d(), getAdjustedInputs().rotation);
         this.turnController.reset();
         this.distanceController.reset();
@@ -136,11 +142,23 @@ public abstract class DriveTrainBase extends SubsystemBase {
      * Stop everything
      */
     public void stop() {
-        log("Stopped DriveTrain");
+        logger.log("Stopped DriveTrain");
         drive(0.0, 0.0, ScalingMode.LINEAR);
         this.turnController.reset();
         this.distanceController.reset();
     }
+
+    @Override
+    public void periodic() {
+        
+        // Run an iteration of the control loops
+        runIteration();
+
+        // Run custom periodic code
+        customPeriodic();
+    }
+
+    public abstract void customPeriodic();
 
     /**
      * Run a thread iteration
@@ -202,7 +220,7 @@ public abstract class DriveTrainBase extends SubsystemBase {
      */
     private void handleOpenLoopControl(StateMetadata<States> meta) {
         if (meta.isFirstRun()) {
-            log("Switched to open-loop control");
+            logger.log("Switched to open-loop control");
 
             // Send motor mode command
             this.output.motorMode.write(MotorMode.kDefault);
@@ -236,14 +254,14 @@ public abstract class DriveTrainBase extends SubsystemBase {
      */
     private void handlePivotControl(StateMetadata<States> meta) {
         if (meta.isFirstRun()) {
-            log("Switched to pivot control");
-            log(String.format("Pivot goal is: %s", this.pivotGoal));
+            logger.log("Switched to pivot control");
+            logger.log(String.format("Pivot goal is: %s", this.pivotGoal));
 
             // Reset PIF
             this.turnController.reset();
 
             // Pivot requires the default gear to be selected
-            log("Switching to default gear");
+            logger.log("Switching to default gear");
             this.writeGearShift(this.defaultGear);
 
             // Send motor mode command
@@ -261,7 +279,7 @@ public abstract class DriveTrainBase extends SubsystemBase {
 
         // Check if we have reached the goal
         if (MathUtils.epsilonEquals(error, 0.0, this.epsilon)) {
-            log("Finished pivoting");
+            logger.log("Finished pivoting");
             this.stateMachine.setState(this.stateMachine.defaultStateKey);
             return;
         }
@@ -283,15 +301,15 @@ public abstract class DriveTrainBase extends SubsystemBase {
      */
     private void handleRabbitChase(StateMetadata<States> meta) {
         if (meta.isFirstRun()) {
-            log("Switched to 'rabbit chase' mode");
-            log(String.format("Position goal is: %s", this.absPositionGoal));
+            logger.log("Switched to 'rabbit chase' mode");
+            logger.log(String.format("Position goal is: %s", this.absPositionGoal));
 
             // Reset PIF
             this.turnController.reset();
             this.distanceController.reset();
 
             // Rabbit Chase requires the default gear to be selected
-            log("Switching to default gear");
+            logger.log("Switching to default gear");
             this.writeGearShift(this.defaultGear);
 
             // Send motor mode command
@@ -348,13 +366,13 @@ public abstract class DriveTrainBase extends SubsystemBase {
     private void handleLocked(StateMetadata<States> meta) {
 
         if (meta.isFirstRun()) {
-            log("Locked. Holding position");
+            logger.log("Locked. Holding position");
 
             // Reset PIF
             this.turnController.reset();
 
             // Pivot requires the default gear to be selected
-            log("Switching to default gear");
+            logger.log("Switching to default gear");
             this.writeGearShift(this.defaultGear);
 
             // Send motor mode command
@@ -365,9 +383,9 @@ public abstract class DriveTrainBase extends SubsystemBase {
 
             // Read the current angle as the goal angle
             this.pivotGoal = this.localizer.getPoseMeters().getRotation();
-            log(String.format("Locking on angle: %s", this.pivotGoal));
+            logger.log(String.format("Locking on angle: %s", this.pivotGoal));
 
-            log("Will remain locked until a new state is set");
+            logger.log("Will remain locked until a new state is set");
         }
 
         // Determine current angle
@@ -394,7 +412,7 @@ public abstract class DriveTrainBase extends SubsystemBase {
      */
     private void handleNeutral(StateMetadata<States> meta) {
         if (meta.isFirstRun()) {
-            log("Switched to neutral mode");
+            logger.log("Switched to neutral mode");
 
             // Send motor mode command
             this.output.motorMode.write(MotorMode.kCoast);
@@ -402,7 +420,7 @@ public abstract class DriveTrainBase extends SubsystemBase {
             // Set ramp rate
             this.output.motorRamp.write(0.0);
 
-            log("Will now be idle until a new state is set");
+            logger.log("Will now be idle until a new state is set");
         }
 
         // Write gearing data if needed
@@ -506,9 +524,21 @@ public abstract class DriveTrainBase extends SubsystemBase {
      * @param gear Desired gearing
      */
     public void setGear(Gear gear) {
-        log(String.format("Setting wanted gearing to: %s", gear));
+        logger.log(String.format("Setting wanted gearing to: %s", gear));
 
         this.gearGoal.write(gear);
+    }
+
+    /**
+     * Create and configure a command that will follow a path using this drivetrain
+     * 
+     * @param path            Path to follow
+     * @param inReverse       Should the path be followed in reverse?
+     * @param lookaheadMeters How far to look ahead for new goal poses
+     * @param epsRadius       Radius around the final pose for trigger isFinished()
+     */
+    public CommandBase createPathingCommand(Path path, boolean inReverse, double lookaheadMeters, double epsRadius) {
+        return new PathFollowCommand(this, path, inReverse, lookaheadMeters, epsRadius);
     }
 
     /**
@@ -579,6 +609,7 @@ public abstract class DriveTrainBase extends SubsystemBase {
         DriveTrainSensors adj = new DriveTrainSensors();
 
         // Adjust sensor readings
+        adj.timestamp_ms = this.input.timestamp_ms;
         adj.rotation = this.input.rotation.minus(this.inputOffset.rotation);
         adj.angle = this.input.angle - this.inputOffset.angle;
         adj.angularRate = this.input.angularRate - this.inputOffset.angularRate;
@@ -594,7 +625,7 @@ public abstract class DriveTrainBase extends SubsystemBase {
      * @param side Side to choose as active
      */
     public void setActiveSide(ChassisSide side) {
-        log(String.format("Set active side to: %s", side.toString()));
+        logger.log(String.format("Set active side to: %s", side.toString()));
 
         this.activeSide = side;
 
@@ -632,8 +663,13 @@ public abstract class DriveTrainBase extends SubsystemBase {
         return currentState == States.kOpenLoop || currentState == States.kLocked || currentState == States.kNeutral;
     }
 
+    /**
+     * Force-set the drivetrain's pose
+     * 
+     * @param pose New pose
+     */
     public void setPose(Pose2d pose) {
-        log(String.format("Setting pose to: %s", pose));
+        logger.log(String.format("Setting pose to: %s", pose));
         // Set pose
         this.localizer.resetPosition(pose, getAdjustedInputs().rotation);
 
@@ -642,20 +678,13 @@ public abstract class DriveTrainBase extends SubsystemBase {
         this.inputOffset.rightEncoderMetres = this.input.rightEncoderMetres;
     }
 
-    /**
-     * Set a method for this class to use for logging
-     * 
-     * @param hook Logging method
-     */
-    public void setConsoleHook(Consumer<String> hook) {
-        this.loggingHook = hook;
-        this.stateMachine.setConsoleHook(hook);
-    }
+    public abstract double getLeftMeters();
 
-    private void log(String message) {
-        if (loggingHook != null) {
-            loggingHook.accept(message);
-        }
+    public abstract double getRightMeters();
+
+    @Override
+    public double getWidthMeters() {
+        return this.config.robotWidth;
     }
 
 }

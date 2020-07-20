@@ -6,7 +6,10 @@ import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
 
+import io.github.frc5024.lib5k.logging.RobotLogger;
+
 public class StateMachine<T> {
+    private RobotLogger logger = RobotLogger.getInstance();
 
     // The state to be run in the event of an error with state handling. Should be
     // an idle state
@@ -21,7 +24,6 @@ public class StateMachine<T> {
 
     // Telemetry data table
     private String name;
-    private Consumer<String> consoleHook;
 
     public StateMachine(String name) {
 
@@ -33,26 +35,11 @@ public class StateMachine<T> {
 
     }
 
-    /**
-     * Override the default console output function for this object. Setting to null
-     * will silence all logs from this object.
-     * 
-     * @param hook Console logging function
-     */
+    
+    @Deprecated(since="July 2020", forRemoval = true)
     public void setConsoleHook(@Nullable Consumer<String> hook) {
-        this.consoleHook = hook;
     }
 
-    /**
-     * Log a console message
-     */
-    private void log(String message) {
-
-        // Call the console hook
-        if (consoleHook != null) {
-            consoleHook.accept(message);
-        }
-    }
 
     /**
      * Add a state to the StateMachine
@@ -67,7 +54,7 @@ public class StateMachine<T> {
 
         // Add to mapping
         allStates.put(key, handler);
-        log(String.format("Added state: %s", key.toString()));
+        logger.log(String.format("Added state: %s", key.toString()));
 
     }
 
@@ -85,7 +72,7 @@ public class StateMachine<T> {
 
         // Set the default
         defaultStateKey = key;
-        log(String.format("Set state %s as default", key.toString()));
+        logger.log(String.format("Set state %s as default", key.toString()));
 
         // Make this the current state
         setState(key);
@@ -107,7 +94,7 @@ public class StateMachine<T> {
             defaultStateKey = null;
         }
 
-        log(String.format("Removed state: %s", key.toString()));
+        logger.log(String.format("Removed state: %s", key.toString()));
 
     }
 

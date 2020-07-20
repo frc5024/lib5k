@@ -16,16 +16,13 @@ public abstract class DriveTrainConfig {
     // Shifting method to use
     public ShifterType shifterType;
 
-
     // State-space matrices
     // StateSpaceLoop<N4, N2, N2> drivetrainLoop;
-
-    // Control loop time step
-    public long dt_ms;
 
     // Robot parameters
     public double robotRadius;
     public double wheelRadius;
+    public double robotWidth;
     // public double v; // Motor velocity constant
 
     // Gearing
@@ -87,7 +84,7 @@ public abstract class DriveTrainConfig {
      * Converts the linear and angular position, velocity to the top 4 states of the
      * robot state.
      * 
-     * @param linear Linear position
+     * @param linear  Linear position
      * @param angular Angular position
      * @return Robot states
      */
@@ -106,6 +103,15 @@ public abstract class DriveTrainConfig {
         state.set(3, 0, linear.get(1, 0) + scaledAngle.get(1, 0));
 
         return state;
+    }
+
+    /**
+     * Get the wheel circumference
+     * 
+     * @return Circumference
+     */
+    public double getWheelCircumference() {
+        return 2 * Math.PI * wheelRadius;
     }
 
 }

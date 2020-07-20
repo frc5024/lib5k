@@ -12,6 +12,7 @@ import io.github.frc5024.lib5k.hardware.common.sensors.interfaces.EncoderSimulat
 public class ExtendedCANCoder extends CANCoder implements EncoderSimulation {
 
     private int cpr;
+    private double offset;
 
     // Simulation
     private EncoderSimUtil sim;
@@ -25,6 +26,7 @@ public class ExtendedCANCoder extends CANCoder implements EncoderSimulation {
     public ExtendedCANCoder(int deviceNumber, int cpr) {
         super(deviceNumber);
         this.cpr = cpr;
+        offset = getPosition();
     }
 
     @Override
@@ -67,9 +69,9 @@ public class ExtendedCANCoder extends CANCoder implements EncoderSimulation {
     public double getPosition() {
         // Handle simulation
         if (sim != null && sim.simReady()) {
-            return sim.getRotations();
+            return sim.getRotations() - offset;
         }
-        return super.getPosition() / 360.0;
+        return (super.getPosition() / 360.0) - offset;
     }
 
     @Override

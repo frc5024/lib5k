@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.RobotBase;
 import io.github.frc5024.lib5k.hardware.common.sensors.interfaces.CommonEncoder;
 import io.github.frc5024.lib5k.hardware.ctre.sensors.TalonEncoder;
 import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.RR_HAL;
+import io.github.frc5024.lib5k.logging.RobotLogger;
 
 /**
  * The ExtendedTalonSRX contains two extra features from WPI_TalonSRX:
@@ -24,6 +25,12 @@ public class ExtendedTalonSRX extends WPI_TalonSRX {
         super(id);
         this.config = config;
         
+    }
+
+    @Override
+    public void setSafetyEnabled(boolean enabled) {
+        RobotLogger.getInstance().log("Safety enabled: %b", enabled);
+        super.setSafetyEnabled(enabled);
     }
 
     /**
@@ -52,13 +59,12 @@ public class ExtendedTalonSRX extends WPI_TalonSRX {
         }
     }
 
-    public ExtendedTalonSRX makeSlave(int id){
-        ExtendedTalonSRX slave = CTREMotorFactory.createTalonSRX(id, this.config);
+    public ExtendedTalonSRX makeSlave(int id) {
+        ExtendedTalonSRX slave = CTREMotorFactory.createTalonSRX(id);
 
         slave.follow(this);
 
         return slave;
-
 
     }
 

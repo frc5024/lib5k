@@ -93,7 +93,7 @@ dependencies {
     simulation wpi.deps.sim.gui(wpi.platforms.desktop, false)
 
     // Xchart
-    compile group: 'org.knowm.xchart', name: 'xchart', version: '3.2.2'
+    compile group: 'org.knowm.xchart', name: 'xchart', version: '3.6.4'
 }
 
 sourceSets {

@@ -1,8 +1,6 @@
-package io.github.frc5024.lib5k.hardware.generic.ledstrips;
+package io.github.frc5024.lib5k.hardware.revrobotics.leddriver;
 
-import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.Spark;
-import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
 import io.github.frc5024.lib5k.utils.annotations.FieldTested;
 
 /**
@@ -10,7 +8,7 @@ import io.github.frc5024.lib5k.utils.annotations.FieldTested;
  * http://www.revrobotics.com/rev-11-1105/
  */
 @FieldTested(year = 2019)
-public class BlinkinDriver implements Sendable {
+public class BlinkinDriver{
 
     public enum LEDSetting {
         RAINBOW(-0.99), RAINBOW_PARTY(-0.97), RAINBOW_OCEAN(-0.95), RAINBOW_LAVA(-0.93), RAINBOW_FOREST(-0.91),
@@ -66,12 +64,5 @@ public class BlinkinDriver implements Sendable {
         m_controller.set(setting.get());
     }
 
-    /**
-     * This method handles interaction with some internal WPIlib services
-     */
-    @Override
-    public void initSendable(SendableBuilder builder) {
-
-    }
 
 }

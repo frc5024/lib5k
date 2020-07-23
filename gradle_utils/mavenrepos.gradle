@@ -1,4 +1,4 @@
-
+// This file contains the maven configurations used by everything
 
 apply plugin: "edu.wpi.first.GradleRIO"
 

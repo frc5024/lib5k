@@ -10,9 +10,6 @@
 rootProject.name = 'lib5k'
 
 
-// Bundle build script
-include ":bundle"
-
 // Examples
 include ":examples"
 

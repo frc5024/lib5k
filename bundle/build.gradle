@@ -17,10 +17,10 @@ dependencies{
 }
 
 task buildBundle(type: Jar) {
-    baseName = "lib5k-bundle-" + rootProject.version + '-monolithic'
+    baseName = "lib5k-" + rootProject.version
     from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
-    destinationDir = file("$rootDir/_release")
+    destinationDir = file("$rootDir/_release/jar")
 }
 
 // This is just to remove build errors in root script

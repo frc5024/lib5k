@@ -87,7 +87,7 @@ dependencies {
     implementation 'com.github.ewpratten:ewmath:master-SNAPSHOT'
 
     // All of lib5k
-    implementation project(":bundle")
+    implementation project(":")
 
     // HALSIM
     simulation wpi.deps.sim.gui(wpi.platforms.desktop, false)
@@ -118,7 +118,7 @@ task fatJar{
 
 jar {
     // Require other libraries
-    dependsOn ":bundle:jar"
+    dependsOn ":_buildAllClassesJar"
 
     // Bundle the JAR
     from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }

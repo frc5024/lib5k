@@ -6,7 +6,7 @@ The software libraries that power all Raider Robotics projects.
 
 ## Using
 
-The simplest way to use lib5k is to import the entire library (warning: this is quite big). This can be done by grabbing the latest `lib5k-bundle-<version>-monolithic.jar` file from the [releases page](https://github.com/frc5024/lib5k/releases/latest), and adding it to your project (here is a [tutorial](https://medium.com/@petehouston/compile-local-jar-files-with-gradle-a078e5c7a520)).
+The simplest way to use lib5k is to import the entire library (warning: this is quite big). This can be done by grabbing the latest `lib5k-<version>-all.jar` file from the [releases page](https://github.com/frc5024/lib5k/releases/latest), and adding it to your project (here is a [tutorial](https://medium.com/@petehouston/compile-local-jar-files-with-gradle-a078e5c7a520)).
 
 If you would like to pick and choose which components you want, reference the chart below, and only add the jars you want.
 
@@ -67,7 +67,7 @@ Any folder containing a `build.gradle` file can be a module. Make sure to add th
 
 To build a new release, first update the version number at the top of `build.gradle`.
 
-Next, run `./gradlew clean build buildRelease`. This will build all modules individually, then also build a packaged jar with everything in it. All files will be exported to the `_release` folder. Team members with permission to publish releases can then create a new GitHub release [here](https://github.com/frc5024/lib5k/releases/new).
+Next, run `./gradlew clean buildRelease`. This will build all modules individually, then also build a packaged jar with everything in it. All files will be exported to the `_release` folder. Team members with permission to publish releases can then create a new GitHub release [here](https://github.com/frc5024/lib5k/releases/new).
 
 Otherwise, you can just use these files, and follow [the instructions above](#using).
 

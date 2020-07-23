@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import io.github.frc5024.lib5k.logging.RobotLogger;
 import io.github.frc5024.lib5k.hardware.ni.roborio.FaultReporter;
+import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.RR_HAL;
 
 /**
  * RobotProgram is the base class for all robot programs.
@@ -74,7 +75,8 @@ public abstract class RobotProgram extends TimedRobot {
         // Start logger
         logger.start(0.02);
 
-        // Start a fault reporter
+        // Report language
+        RR_HAL.reportFRCVersion("Java", RR_HAL.getLibraryVersion());
 
     }
 

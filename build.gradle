@@ -41,7 +41,6 @@ gradleEnterprise {
 
 // This will automatically pull in everything that isnt the "examples" project
 dependencies{
-  println "Fetching dependancies for bundle"
   rootProject.subprojects.each{
     if ( it.name != "examples"){
       api it
@@ -49,8 +48,8 @@ dependencies{
   }
 }
 
-// This gets run by our CI pipeline to generate https://frc5024.github.io/lib5k
-task document(type: Javadoc, description: 'Generate javadocs from all child projects as if it was a single project', group: 'Documentation') {
+// This task takes every subproject's Javadoc, and merges it into one
+task combineJavadoc(type: Javadoc, description: 'Generate javadocs from all child projects as if it was a single project', group: 'Documentation') {
 
   // Set the jars to be generated into the build directory
 	destinationDir = file("$buildDir/docs/javadoc")
@@ -92,39 +91,27 @@ task document(type: Javadoc, description: 'Generate javadocs from all child proj
 
 	}
 
-  doLast {
-    // Clear out the docs folder, and move the JavaDoc into it
-    delete "docs"
-    file("$rootProject.buildDir/docs/javadoc").renameTo(file("docs"))
-  }
+} 
+
+// This task is used to make the "clean" task clean out the docs directory
+task _cleanDocs(type: Delete){
+  delete "docs"
 }
+tasks.clean.dependsOn(tasks._cleanDocs)
 
 // This is just a compatibility thing
 subprojects.each { subproject ->
   evaluationDependsOn(subproject.path)
 }
 
-
-
-// task packModules(type: Zip){
-//   archiveFileName = "modules.zip"
-//   destinationDirectory = file("_release")
-//   from "_release/modules"
-// }
-
-// task buildRelease(type: Jar){
-//   delete file("_release")
-//   delete file("$rootProject.buildDir/libs")
-//   dependsOn subprojects.fatJar
-//   dependsOn subprojects.jar
-//   dependsOn project(":bundle").buildBundle
-//   dependsOn copyPy
-//   dependsOn packModules
-// }
-
-// artifacts{
-//   archives project(":bundle").buildBundle
-// }
+// This gets run by our CI pipeline to generate https://frc5024.github.io/lib5k
+task document(dependsOn: combineJavadoc){
+  // Clear out the docs folder, and move the JavaDoc into it
+  dependsOn _cleanDocs
+  doLast{
+    file("$rootProject.buildDir/docs/javadoc").renameTo(file("docs"))
+  }
+}
 
 /* Build all the required JARs */
 

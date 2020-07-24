@@ -150,6 +150,7 @@ task _buildAllJar(type: Jar){
 
   // Needs to build the project
   dependsOn build
+  dependsOn document
 
   // Load all files for the bug JAR
   from file("docs"), allprojects.collect { it.sourceSets.main.allSource }, { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
@@ -183,8 +184,17 @@ task _cleanRelease(type: Delete){
 }
 tasks.clean.dependsOn(tasks._cleanRelease)
 
+// This will build everything needed for release
 task buildRelease {
   dependsOn _copyPy
   dependsOn _copyJar
 }
 
+// This will build only a JAR file to be used for beta testing
+task buildBeta(type: Copy) {
+  dependsOn _buildAllJar
+
+  from "build/libs"
+  into "_release/jar"
+  include project.name + "-" + project.version +"-all.jar"
+}

@@ -1,5 +1,6 @@
 package io.github.frc5024.lib5k.autonomous;
 
+import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -68,9 +69,8 @@ public abstract class RobotProgram extends TimedRobot {
         this.stopAutonomousInTeleop = stopAutonomousInTeleop;
         this.dashboard = primaryDashboard;
 
-        // Send chooser to dashboard
+        // Create a chooser
         chooser = new SendableChooser<>();
-        dashboard.add(chooser);
 
         // Start logger
         logger.start(0.02);
@@ -79,6 +79,22 @@ public abstract class RobotProgram extends TimedRobot {
         RR_HAL.reportFRCVersion("Java", RR_HAL.getLibraryVersion());
 
     }
+
+    /**
+     * For publishing the chooser (this can be overridden for custom dashboards)
+     * 
+     * @param component Chooser component
+     */
+    public void publishChooser(Sendable component) {
+        dashboard.add(component);
+    }
+
+    /**
+     * This is run all the time
+     * 
+     * @param init Did the robot just start?
+     */
+    public abstract void periodic(boolean init);
 
     /**
      * This is run during autonomous
@@ -108,6 +124,24 @@ public abstract class RobotProgram extends TimedRobot {
      */
     public abstract void test(boolean init);
 
+    @Override
+    public void robotInit() {
+
+        // Publish the chooser
+        publishChooser(chooser);
+
+        // Call robot
+        periodic(true);
+
+    }
+
+    @Override
+    public void robotPeriodic() {
+
+        // Call robot
+        periodic(false);
+    }
+
     /**
      * Set the default autonomous sequence
      * 
@@ -134,6 +168,16 @@ public abstract class RobotProgram extends TimedRobot {
 
         // Add to shuffleboard
         chooser.addOption(sequence.getName(), sequence);
+    }
+
+    /**
+     * Get the selected autonomous. If this is not called in autonomous(), it will
+     * return the default
+     * 
+     * @return Selected autonomous sequence
+     */
+    public AutonomousSequence getSelectedAutonomous() {
+        return autonomous;
     }
 
     @Override

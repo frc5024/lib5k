@@ -24,7 +24,7 @@ public class Main extends RobotProgram {
 
     public Main() {
         super(false, true);
-        
+
         // Creates the pdp object
         pdp = new PowerDistributionPanel(1);
 
@@ -32,14 +32,14 @@ public class Main extends RobotProgram {
         motorSubsystem = new MotorSubsystem();
         motorSubsystem.register();
 
-
         // This creates a new Current Limit Manager
         currentLimitManager = new CurrentLimitManager(pdp);
 
     }
+    
 
     @Override
-    public void robotPeriodic() {
+    public void periodic(boolean init) {
         // This runs the Current Limit and should be called after the motors are
         currentLimitManager.performCurrentLimits(); 
     }

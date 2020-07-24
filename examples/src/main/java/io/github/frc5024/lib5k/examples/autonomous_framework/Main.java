@@ -31,6 +31,11 @@ public class Main extends RobotProgram {
     }
 
     @Override
+    public void periodic(boolean init) {
+        
+    }
+
+    @Override
     public void autonomous(boolean init) {
 
         // Unlike TimedRobot, RobotProgram uses an "init" variable to run once at the

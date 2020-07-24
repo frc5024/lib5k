@@ -27,6 +27,12 @@ public class Main extends RobotProgram {
         DriveTrain.getInstance().register();
     }
 
+
+    @Override
+    public void periodic(boolean init) {
+        
+    }
+
     @Override
     public void autonomous(boolean init) {
 

@@ -18,6 +18,7 @@ public class Limelight {
     private boolean tv;
     private double tx, ty, ta, ts, tl, tshort, tlong, thor, tvert;
     private double[] camTran, cornx, corny;
+    private boolean portraitMode;
 
     public Limelight() {
 
@@ -96,6 +97,13 @@ public class Limelight {
     }
 
     /**
+     * Enable or disable portraitMode
+     */
+    public void setPortrait(boolean portraitMode) {
+        this.portraitMode = portraitMode;
+    }
+
+    /**
      * Check if the Limelight has a target in view
      * 
      * @return Can see target?
@@ -124,8 +132,12 @@ public class Limelight {
         if (!hasTarget()) {
             return null;
         }
-
-        return new Target(tx, ty, ta, ts, tshort, tlong, thor, tvert);
+        
+        if (portraitMode) {
+            return new Target(ty, tx, ta, ts, tshort, tlong, thor, tvert);
+        } else {
+            return new Target(tx, ty, ta, ts, tshort, tlong, thor, tvert);
+        }
     }
 
     /**

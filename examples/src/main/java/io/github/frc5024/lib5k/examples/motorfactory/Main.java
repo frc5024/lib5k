@@ -21,7 +21,7 @@ public class Main extends RobotProgram {
 
 
     
-    public Main(){
+    public Main() {
         super(false, true);
         // Initializes the subsystems
         ctreMotorSubsystem = new CTREMotorSubsystem();
@@ -31,7 +31,10 @@ public class Main extends RobotProgram {
         ctreMotorSubsystem.register();
         revMotorSubsystem.register();
 
-
+    }
+    
+    @Override
+    public void periodic(boolean init) {
     }
 
     @Override

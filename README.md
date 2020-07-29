@@ -42,14 +42,6 @@ This repo contains some helpful python scripts for interacting with robot code a
  - [logreader.py](scripts/logreader.md)
  - [simulate.py](scripts/simulate.md)
 
-
-## History
-
-Lib5K has been in development since May 2019, has undergone a few major revisions, and has been used to help team 5024 win a couple *innovation in control* awards. This library was originally a summer project of [@ewpratten](https://github.com/ewpratten), but has since become the backbone of team 5024's software development workflow. Lib5K has, and will always be open source, so if you see one of our robots do something cool, you can come and take a look at the code that powers it (and even use it for yourself).
-
-If you or your team has made use of this library, or needs some help using it, contact a member of 5024, and we will gladly help out.
-
-
 ## Development
 
 ### Upgrading third-party library versions
@@ -58,18 +50,6 @@ Many modules rely on third-party libraries. To upgrade the versions, edit the ap
 ### Adding a new module
 Any folder containing a `build.gradle` file can be a module. Make sure to add the new folder to `settings.gradle`. Otherwise, it will not be built
 
-### Updating javadoc
-
- 1. Run `./gradlew clean document`
- 2. Push to git
-
-### Building a new release
-
-To build a new release, first update the version number at the top of `build.gradle`.
-
-Next, run `./gradlew clean buildRelease`. This will build all modules individually, then also build a packaged jar with everything in it. All files will be exported to the `_release` folder. Team members with permission to publish releases can then create a new GitHub release [here](https://github.com/frc5024/lib5k/releases/new).
-
-Otherwise, you can just use these files, and follow [the instructions above](#using).
 
 ## Troubleshooting
 

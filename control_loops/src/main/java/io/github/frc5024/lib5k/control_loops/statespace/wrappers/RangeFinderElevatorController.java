@@ -7,7 +7,7 @@
  * Matt Morley <matthew.morley.ca@gmail.com> and Tyler Veness <calcmogul@gmail.com> 
  * upstream at WPILib to allow teams to write statespace code in Java via JNI.
  * 
- * The underlying WPILib code is built on top of an advanced robotics software 
+ * The underlying code is built on top of an advanced robotics software 
  * library from MIT called DRAKE (https://drake.mit.edu)
  * 
  * If you are interested in learning how this code works, I recommend you take a 

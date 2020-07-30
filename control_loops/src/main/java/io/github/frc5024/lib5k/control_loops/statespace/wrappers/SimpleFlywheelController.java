@@ -49,7 +49,8 @@ public class SimpleFlywheelController {
      *                          be measured via an encoder or tacheometer.
      * @param gearing           reduction between motors and encoder, as output over
      *                          input. If the flywheel spins slower than the motors,
-     *                          this number should be greater than one.
+     *                          this number should be greater than one. IGNORE THIS
+     *                          IF THE ENCODER IS ATTACHED TO THE MOTOR
      * @param maxVoltageOutput  The maximum voltage to output. This is generally
      *                          12.0
      * @param epsilonRPM        Epsilon in RPM. A good starting point is probably
@@ -79,7 +80,8 @@ public class SimpleFlywheelController {
      *                          be measured via an encoder or tacheometer.
      * @param gearing           reduction between motors and encoder, as output over
      *                          input. If the flywheel spins slower than the motors,
-     *                          this number should be greater than one.
+     *                          this number should be greater than one. IGNORE THIS
+     *                          IF THE ENCODER IS ATTACHED TO THE MOTOR
      * @param maxVoltageOutput  The maximum voltage to output. This is generally
      *                          12.0
      * @param epsilonRPM        Epsilon in RPM. A good starting point is probably
@@ -89,7 +91,8 @@ public class SimpleFlywheelController {
             double flywheelMassKg, double flywheelDiameterM, double maxVelocityRPM, double gearing,
             double maxVoltageOutput, double epsilonRPM) {
         this(motorType, launcherMassKg, launcherDiameterM, flywheelMassKg, flywheelDiameterM, maxVelocityRPM, gearing,
-                3.0, 0.01, 0.02, maxVoltageOutput, epsilonRPM);
+                Units.radiansPerSecondToRotationsPerMinute(3.0), Units.radiansPerSecondToRotationsPerMinute(0.01), 0.02,
+                maxVoltageOutput, epsilonRPM);
     }
 
     /**
@@ -115,9 +118,10 @@ public class SimpleFlywheelController {
      * @param gearing                 reduction between motors and encoder, as
      *                                output over input. If the flywheel spins
      *                                slower than the motors, this number should be
-     *                                greater than one.
-     * @param modelAccuracy           How accurate we think the model is
-     * @param encoderAccuracy         How accurate we think the encoder is
+     *                                greater than one. IGNORE THIS IF THE ENCODER
+     *                                IS ATTACHED TO THE MOTOR
+     * @param modelAccuracy           How accurate we think the model is in RPM
+     * @param encoderAccuracy         How accurate we think the encoder is in RPM
      * @param expectedLoopTimeSeconds The loop period of the caller in seconds. This
      *                                is generally 0.02 (20ms)
      * @param maxVoltageOutput        The maximum voltage to output. This is
@@ -137,8 +141,9 @@ public class SimpleFlywheelController {
         plant = LinearSystemId.createFlywheelSystem(motorType, J, gearing);
 
         // Build an observer
-        observer = new KalmanFilter<>(Nat.N1(), Nat.N1(), plant, VecBuilder.fill(modelAccuracy),
-                VecBuilder.fill(encoderAccuracy), expectedLoopTimeSeconds);
+        observer = new KalmanFilter<>(Nat.N1(), Nat.N1(), plant,
+                VecBuilder.fill(Units.rotationsPerMinuteToRadiansPerSecond(modelAccuracy)),
+                VecBuilder.fill(Units.rotationsPerMinuteToRadiansPerSecond(encoderAccuracy)), expectedLoopTimeSeconds);
 
         // Convert eps to RAD/s
         double epsilonRADS = Units.rotationsPerMinuteToRadiansPerSecond(epsilonRPM);
@@ -190,7 +195,7 @@ public class SimpleFlywheelController {
      * @return Output voltage
      */
     public double computeNextVoltage(double currentRPM) {
-        
+
         // Calculate DT
         double currentTimeSeconds = FPGAClock.getFPGASeconds();
         double dt = currentTimeSeconds - lastTimeSeconds;
@@ -199,10 +204,12 @@ public class SimpleFlywheelController {
         // Convert current velocity to RAD/s
         double currentRADS = Units.rotationsPerMinuteToRadiansPerSecond(currentRPM);
 
-        // Correct the Kalman filter to estimate a more accurate state based on encoder data
+        // Correct the Kalman filter to estimate a more accurate state based on encoder
+        // data
         loop.correct(VecBuilder.fill(currentRADS));
 
-        // Predict the next state using the Kalman filter, and generate a new voltage with LQR
+        // Predict the next state using the Kalman filter, and generate a new voltage
+        // with LQR
         loop.predict(dt);
 
         // Return the new voltage

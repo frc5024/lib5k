@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.controller.LinearQuadraticRegulator;
 import edu.wpi.first.wpilibj.estimator.KalmanFilter;
 import edu.wpi.first.wpilibj.system.LinearSystem;
 import edu.wpi.first.wpilibj.system.LinearSystemLoop;
+import edu.wpi.first.wpilibj.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpiutil.math.Nat;
 import edu.wpi.first.wpiutil.math.VecBuilder;
@@ -144,6 +145,26 @@ public class EncoderElevatorController {
             double modelPositionAccuracyM, double modalVelocityAccuracyMPS, double encoderAccuracy,
             double expectedLoopTimeSeconds, double positionEpsilonM, double velocityEpsilonMPS,
             double maxVoltageOutput) {
+
+        // Set up motion profile constraints
+        motionConstraints = new TrapezoidProfile.Constraints(carriageMaxVelocityMPS, carriageMaxAccelerationMPSSquared);
+
+        // Create a plant
+        plant = LinearSystemId.createElevatorSystem(motorType, carriageMassKg, drumRadiusM, gearRatio);
+
+        // Create an observer
+        observer = new KalmanFilter<>(Nat.N2(), Nat.N1(), plant,
+                VecBuilder.fill(modelPositionAccuracyM, modalVelocityAccuracyMPS), VecBuilder.fill(encoderAccuracy),
+                expectedLoopTimeSeconds);
+
+        // Create LQR
+        double rho = 1.0; // I don't think anyone will ever need to change rho
+        controller = new LinearQuadraticRegulator<>(m_elevatorPlant,
+                VecBuilder.fill(positionEpsilonM, velocityEpsilonMPS), rho, VecBuilder.fill(maxVoltageOutput),
+                expectedLoopTimeSeconds);
+
+        // Create a loop
+        loop = new LinearSystemLoop<>(plant, observer, controller, maxVoltageOutput, expectedLoopTimeSeconds);
 
     }
 

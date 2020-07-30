@@ -10,7 +10,8 @@ repositories {
 
     // FRC repos
     maven { setUrl("https://jitpack.io")}
-    maven { setUrl("https://frcmaven.wpi.edu/artifactory/release/")}
+    // maven { setUrl("https://frcmaven.wpi.edu/artifactory/release/")}
+    maven { setUrl("https://frcmaven.wpi.edu/artifactory/development/")}
     maven { setUrl("https://repo1.maven.org/maven2/")}
     maven { setUrl("http://devsite.ctr-electronics.com/maven/release/")}
     maven { setUrl("http://www.revrobotics.com/content/sw/color-sensor-v3/sdk/maven/")}

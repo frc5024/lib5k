@@ -37,6 +37,9 @@ dependencies {
 
     // FPGA timing
     implementation project(":hardware:ni")
+
+    // Load thirdparty jars
+    compile fileTree(dir: 'thirdparty', include: '*.jar')
 }
 
 sourceSets {

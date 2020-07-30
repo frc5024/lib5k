@@ -16,25 +16,24 @@ This repository is split into modules. This allows us to only import what we nee
 
 | Gradle Name             | JitPack Name           | Description                                                                               |
 |-------------------------|------------------------|-------------------------------------------------------------------------------------------|
-| `:purepursuit`          | `purepursuit`          | This library contains everything needed for autonomous path planning                      |
-| `:libKontrol`           | `libKontrol`           | This library contains tools for building state machines                                   |
 | `:asyncHAL`             | `asyncHAL`             | An asynchronous extension to the RoboRIO HAL                                              |
-| `:waterfall`            | `waterfall`            | A library for serializing and storing the large amounts of data that come off our robots  |
-| `:hardware`             | `hardware`             | Classes and tools for interfacing with robot hardware (Imports all hardware sub-projects) |
-| `:hardware:common`      | `hardware.common`      | Common types and interfaces used by all hardware libs                                     |
-| `:hardware:kauai`       | `hardware.kauai`       | For interfacing with [Kauai Labs](https://www.kauailabs.com/) products                    |
-| `:hardware:ctre`        | `hardware.ctre`        | For interfacing with [CTRE](https://ctr-electronics.com/) products                        |
-| `:hardware:revrobotics` | `hardware.revrobotics` | For interfacing with [REV Robotics](https://revrobotics.com/) products                    |
-| `:hardware:generic`     | `hardware.generic`     | For interfacing with KOP and custom hardware                                              |
-| `:hardware:ni`          | `hardware.ni`          | For interfacing with [NI](https://www.ni.com) products                                    |
-| `:hardware:limelight`   | `hardware.limelight`   | For interfacing with [Limelight](https://limelightvision.io/) products                    |
-| `:control_loops`        | `control_loops`        | Classes and tools related to control theory                                               |
-| `:utils`                | `utils`                | Common utils and constants used by many modules                                           |
-| `:logging`              | `logging`              | Common logging classes                                                                    |
-| `:telemetry`            | `telemetry`            | Tools for network-based system telemetry                                                  |
-| `:common_drive`         | `common_drive`         | Robot-agnostic drivetrain code                                                            |
-| `:statespace`           | `statespace`           | State-space controllers for FRC                                                           |
 | `:auton_utils`          | `auton_utils`          | Wrappers for autonomous, and general robot program                                        |
+| `:common_drive`         | `common_drive`         | Robot-agnostic drivetrain code                                                            |
+| `:control_loops`        | `control_loops`        | Classes and tools related to control theory                                               |
+| `:hardware:common`      | `hardware.common`      | Common types and interfaces used by all hardware libs                                     |
+| `:hardware:ctre`        | `hardware.ctre`        | For interfacing with [CTRE](https://ctr-electronics.com/) products                        |
+| `:hardware:generic`     | `hardware.generic`     | For interfacing with KOP and custom hardware                                              |
+| `:hardware:kauai`       | `hardware.kauai`       | For interfacing with [Kauai Labs](https://www.kauailabs.com/) products                    |
+| `:hardware:limelight`   | `hardware.limelight`   | For interfacing with [Limelight](https://limelightvision.io/) products                    |
+| `:hardware:ni`          | `hardware.ni`          | For interfacing with [NI](https://www.ni.com) products                                    |
+| `:hardware:revrobotics` | `hardware.revrobotics` | For interfacing with [REV Robotics](https://revrobotics.com/) products                    |
+| `:hardware`             | `hardware`             | Classes and tools for interfacing with robot hardware (Imports all hardware sub-projects) |
+| `:libKontrol`           | `libKontrol`           | This library contains tools for building state machines                                   |
+| `:logging`              | `logging`              | Common logging classes                                                                    |
+| `:purepursuit`          | `purepursuit`          | This library contains everything needed for autonomous path planning                      |
+| `:telemetry`            | `telemetry`            | Tools for network-based system telemetry                                                  |
+| `:utils`                | `utils`                | Common utils and constants used by many modules                                           |
+| `:waterfall`            | `waterfall`            | A library for serializing and storing the large amounts of data that come off our robots  |
 
 ## Scripts and tools
 

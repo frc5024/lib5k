@@ -1,3 +1,12 @@
+/**
+ * This file part of an effort by Evan Pratten <ewpratten@gmail.com> to build a 
+ * system that allows new programmers make use of advanced control theory without 
+ * needing to learn the underlying math.
+ * 
+ * The contents of this file come from an old Python script I built to automate 
+ * LQR system building for an offseason project.
+ */
+
 package io.github.frc5024.lib5k.control_loops.statespace.util.easylqr;
 
 /**

@@ -40,6 +40,8 @@ dependencies {
 
     // Load thirdparty jars
     compile fileTree(dir: 'thirdparty', include: '*.jar')
+
+    implementation project(":temp_wpilib_clone")
 }
 
 sourceSets {

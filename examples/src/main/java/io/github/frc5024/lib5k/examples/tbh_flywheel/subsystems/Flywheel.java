@@ -66,7 +66,7 @@ public class Flywheel extends SubsystemBase {
 
         // We need to set the model to represent the characteristics of the motor being
         // used. This saves us some work when configuring the system later.
-        model = DCBrushedMotor.NEO;
+        model = (DCBrushedMotor)DCBrushedMotor.getNEO(1);
 
         // We will set up the motor controller, then get a reference to it's encoder
         // Here, we will assume the SparkMax has been assigned CAN id #15

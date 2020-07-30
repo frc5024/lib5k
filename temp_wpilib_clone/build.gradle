@@ -8,6 +8,7 @@ apply from: "../gradle_utils/simpleunittest.gradle"
 apply from: "../gradle_utils/mavenrepos.gradle"
 apply from: "../gradle_utils/projectjar.gradle"
 
+
 java {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
@@ -23,14 +24,10 @@ dependencies {
     // Use JUnit test framework
     testImplementation 'junit:junit:4.13'
 
-    // Logging
-    implementation project(":logging")
-
     // WPILib
     implementation("edu.wpi.first.wpilibj:wpilibj-java:${project.WPI_VERSION}")
     implementation("edu.wpi.first.hal:hal-java:${project.WPI_VERSION}")
     implementation("edu.wpi.first.wpiutil:wpiutil-java:${project.WPI_VERSION}")
-
 }
 
 sourceSets {
@@ -45,10 +42,4 @@ sourceSets {
       srcDir 'src/test/java'
     }
   }
-}
-
-// Generate a javadoc
-javadoc{
-    source = "src/main/java"
-    // destinationDir = file("../docs/javadoc/libKontrol")
 }

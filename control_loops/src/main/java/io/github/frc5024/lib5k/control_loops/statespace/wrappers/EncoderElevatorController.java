@@ -18,8 +18,16 @@
 package io.github.frc5024.lib5k.control_loops.statespace.wrappers;
 
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.controller.LinearQuadraticRegulator;
+import edu.wpi.first.wpilibj.estimator.KalmanFilter;
+import edu.wpi.first.wpilibj.system.LinearSystem;
+import edu.wpi.first.wpilibj.system.LinearSystemLoop;
 import edu.wpi.first.wpilibj.util.Units;
+import edu.wpi.first.wpiutil.math.Nat;
+import edu.wpi.first.wpiutil.math.VecBuilder;
+import edu.wpi.first.wpiutil.math.numbers.N1;
 import io.github.frc5024.lib5k.control_loops.models.DCBrushedMotor;
+import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.FPGAClock;
 
 /**
  * This is a wrapper around a state space plant, observer, motion profiling, and
@@ -37,12 +45,16 @@ public class EncoderElevatorController {
     // Motion profiler
     private TrapezoidProfile.Constraints motionConstraints;
     private TrapezoidProfile.State lastProfiledReference = new TrapezoidProfile.State();
+    private TrapezoidProfile.State goal;
 
     // plant, observer, and LQR
     private LinearSystem<N2, N1, N1> plant;
     private KalmanFilter<N2, N1, N1> observer;
     private LinearQuadraticRegulator<N2, N1, N1> lqr;
     private LinearSystemLoop<N2, N1, N1> loop;
+
+    // Timekeeping
+    private double lastTimeSeconds = 0.0;
 
     /**
      * Create an EncoderElevatorController
@@ -107,7 +119,9 @@ public class EncoderElevatorController {
      *                                          the elevator spins slower than the
      *                                          motors, this number should be
      *                                          greater than one.
-     * @param carriageMaxVelocityMPS            The maximum upward velocity of the
+     * @param carriageMaxVelocityMPS            The maximum upward velocity= new
+     *                                          TrapezoidProfile.State();= new
+     *                                          TrapezoidProfile.State();of the
      *                                          carriage at max voltage
      * @param carriageMaxAccelerationMPSSquared The maximum upward acceleration of
      *                                          the carriage at max voltage as m/s^2
@@ -135,8 +149,16 @@ public class EncoderElevatorController {
 
     /**
      * Reset the controller
+     * 
+     * @param encoderDistanceM Current encoder distance reading
      */
-    public void reset() {
+    public void reset(double encoderDistanceM) {
+
+        // Reset statespace loop
+        loop.reset(VecBuilder.fill(encoderDistanceM, 0.0));
+
+        // Reset the last profile state
+        lastProfiledReference = new TrapezoidProfile.State(encoderDistanceM, 0.0);
 
     }
 
@@ -147,6 +169,8 @@ public class EncoderElevatorController {
      */
     public void setDesiredHeight(double meters) {
 
+        // Set a position goal with no velocity
+        goal = new TrapezoidProfile.State(meters, 0.0);
     }
 
     /**
@@ -156,7 +180,38 @@ public class EncoderElevatorController {
      * @return Voltage output
      */
     public double computeVoltage(double encoderDistanceM) {
-        return 0.0;
+
+        // Skip if no goal is set
+        if (goal == null) {
+            return 0.0;
+        }
+
+        // Calculate DT
+        double dt;
+        if (lastTimeSeconds != 0) {
+            double currentTimeSeconds = FPGAClock.getFPGASeconds();
+            dt = currentTimeSeconds - lastTimeSeconds;
+            lastTimeSeconds = currentTimeSeconds;
+        } else {
+
+            // Unlike other controllers, things can go wrong if we don't do this
+            dt = 0.02;
+        }
+
+        // Get the next motion profile step
+        lastProfiledReference = (new TrapezoidProfile(motionConstraints, goal, lastProfiledReference)).calculate(dt);
+
+        // Set the reference
+        loop.setNextR(lastProfiledReference.position, lastProfiledReference.velocity);
+
+        // Correct the Kalman filter's state vector estimate
+        loop.correct(VecBuilder.fill(encoderDistanceM));
+
+        // Update LQR to predict next state
+        loop.predict(dt);
+
+        // Return the calculated voltage
+        return loop.getU(0);
     }
 
 }

@@ -89,6 +89,17 @@ public class RangeFinderElevatorController extends EncoderElevatorController {
     }
 
     /**
+     * Reset the controller
+     * 
+     * @param rangefinderDistance Current rangefinder distance reading
+     */
+    @Override
+    public void reset(double rangefinderDistance) {
+        // For now, this just renames the variable, and adds a new JavaDoc
+        super.reset(rangefinderDistance);
+    }
+
+    /**
      * Calculate the controller output
      * 
      * @param encoderDistanceM Distance reading from rangefinder

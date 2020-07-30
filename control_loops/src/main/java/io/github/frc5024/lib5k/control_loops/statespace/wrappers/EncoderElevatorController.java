@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpiutil.math.Nat;
 import edu.wpi.first.wpiutil.math.VecBuilder;
 import edu.wpi.first.wpiutil.math.numbers.N1;
+import edu.wpi.first.wpiutil.math.numbers.N2;
 import io.github.frc5024.lib5k.control_loops.models.DCBrushedMotor;
 import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.FPGAClock;
 
@@ -162,12 +163,12 @@ public class EncoderElevatorController {
 
         // Create LQR
         double rho = 1.0; // I don't think anyone will ever need to change rho
-        controller = new LinearQuadraticRegulator<>(m_elevatorPlant,
+        lqr = new LinearQuadraticRegulator<>(plant,
                 VecBuilder.fill(positionEpsilonM, velocityEpsilonMPS), rho, VecBuilder.fill(maxVoltageOutput),
                 expectedLoopTimeSeconds);
 
         // Create a loop
-        loop = new LinearSystemLoop<>(plant, observer, controller, maxVoltageOutput, expectedLoopTimeSeconds);
+        loop = new LinearSystemLoop<>(plant, lqr, observer, maxVoltageOutput, expectedLoopTimeSeconds);
 
     }
 

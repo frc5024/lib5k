@@ -25,6 +25,8 @@ import edu.wpi.first.wpilibj.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpiutil.math.Nat;
+import edu.wpi.first.wpiutil.math.numbers.N1;
+import edu.wpi.first.wpiutil.math.numbers.N2;
 import edu.wpi.first.wpiutil.math.VecBuilder;
 import io.github.frc5024.lib5k.control_loops.models.DCBrushedMotor;
 import io.github.frc5024.lib5k.control_loops.statespace.util.easylqr.ArmMath;
@@ -147,13 +149,13 @@ public class SingleJointedArmController {
 
         // Design LQR
         double rho = 1.0; // I don't think anyone will ever need to change rho
-        controller = new LinearQuadraticRegulator<>(plant,
+        lqr = new LinearQuadraticRegulator<>(plant,
                 VecBuilder.fill(Units.degreesToRadians(positionEpsilonDegrees),
                         Units.rotationsPerMinuteToRadiansPerSecond(velocityEpsilonRPM)),
                 rho, VecBuilder.fill(maxOutputVoltage), expectedLoopTimeSeconds);
 
         // Build a loop
-        loop = new LinearSystemLoop<>(plant, controller, observer, maxOutputVoltage, expectedLoopTimeSeconds);
+        loop = new LinearSystemLoop<>(plant, lqr, observer, maxOutputVoltage, expectedLoopTimeSeconds);
 
     }
 

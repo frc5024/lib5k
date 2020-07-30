@@ -68,7 +68,8 @@ public class EncoderElevatorController {
      *                                          encoder, as output over input. If
      *                                          the elevator spins slower than the
      *                                          motors, this number should be
-     *                                          greater than one.
+     *                                          greater than one. IGNORE THIS IF THE
+     *                                          ENCODER IS ATTACHED TO THE MOTOR
      * @param carriageMaxVelocityMPS            The maximum upward velocity of the
      *                                          carriage at max voltage
      * @param carriageMaxAccelerationMPSSquared The maximum upward acceleration of
@@ -93,7 +94,8 @@ public class EncoderElevatorController {
      *                                          encoder, as output over input. If
      *                                          the elevator spins slower than the
      *                                          motors, this number should be
-     *                                          greater than one.
+     *                                          greater than one. IGNORE THIS IF THE
+     *                                          ENCODER IS ATTACHED TO THE MOTOR
      * @param carriageMaxVelocityMPS            The maximum upward velocity of the
      *                                          carriage at max voltage
      * @param carriageMaxAccelerationMPSSquared The maximum upward acceleration of
@@ -112,14 +114,15 @@ public class EncoderElevatorController {
      * Create an EncoderElevatorController
      * 
      * @param motorType                         The type of motor(s) used to drive
-     *                                          the flywheel
+     *                                          the elevator
      * @param carriageMassKg                    The mass of the carriage in Kg
      * @param drumRadiusM                       The radius of the elevator drum in M
      * @param gearRatio                         reduction between motors and
      *                                          encoder, as output over input. If
      *                                          the elevator spins slower than the
      *                                          motors, this number should be
-     *                                          greater than one.
+     *                                          greater than one. IGNORE THIS IF THE
+     *                                          ENCODER IS ATTACHED TO THE MOTOR
      * @param carriageMaxVelocityMPS            The maximum upward velocity= new
      *                                          TrapezoidProfile.State();= new
      *                                          TrapezoidProfile.State();of the

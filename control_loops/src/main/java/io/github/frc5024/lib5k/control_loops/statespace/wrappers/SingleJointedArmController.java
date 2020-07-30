@@ -30,11 +30,45 @@ import io.github.frc5024.lib5k.control_loops.models.DCBrushedMotor;
  */
 public class SingleJointedArmController {
 
+    /**
+     * Create a SingleJointedArmController
+     * 
+     * @param motorType                             The type of motor(s) used to
+     *                                              drive the arm
+     * @param armMassKg                             The mass of the arm in Kg
+     * @param armLengthM                            The length of the arm in M
+     * @param gearRatio                             reduction between motors and
+     *                                              encoder, as output over input.
+     *                                              If the elevator spins slower
+     *                                              than the motors, this number
+     *                                              should be greater than one.
+     *                                              IGNORE THIS IF THE ENCODER IS
+     *                                              ATTACHED TO THE MOTOR
+     * @param maxVelocityMPS                        The maximum velocity of the arm
+     *                                              at the max voltage in
+     *                                              meters/second
+     * @param maxAccelerationMPSSquared             The maximum acceleration of the
+     *                                              arm at the max voltage in
+     *                                              meters/second^2
+     * @param modelPositionAccuracyDegrees          The position accuracy of the
+     *                                              model in degrees
+     * @param modelVelocityAccuracyDegreesPerSecond The velocity accuracy of the
+     *                                              model in degrees/second
+     * @param encoderAccuracyDegrees                The position accuracy of the
+     *                                              encoder in degrees
+     * @param expectedLoopTimeSeconds               The loop period of the caller in
+     *                                              seconds. This is generally 0.02
+     *                                              (20ms)
+     * @param positionEpsilonDegrees                Position epsilon in degrees
+     * @param velocityEpsilonDegreesPerSecond       Velocity epsilon in
+     *                                              degrees/second
+     * @param maxOutputVoltage                      The maximum output voltage.
+     *                                              Should generally be 12.0v
+     */
     public SingleJointedArmController(DCBrushedMotor motorType, double armMassKg, double armLengthM, double gearRatio,
             double maxVelocityMPS, double maxAccelerationMPSSquared, double modelPositionAccuracyDegrees,
             double modelVelocityAccuracyDegreesPerSecond, double encoderAccuracyDegrees, double expectedLoopTimeSeconds,
             double positionEpsilonDegrees, double velocityEpsilonDegreesPerSecond, double maxOutputVoltage) {
-        
 
     }
 }

@@ -15,7 +15,7 @@ buildscript {
 
 // All plugins used by the buildscript
 plugins {
-  id "com.gradle.build-scan" version "3.3.4"
+  id "com.gradle.build-scan" version "3.4"
   id "java-library"
 }
 

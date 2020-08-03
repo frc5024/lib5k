@@ -26,8 +26,9 @@ public class Smoothing {
         double aux1;
         double aux2;
 
+        int countdown = 10000;
         
-        while(change >= tolerance){
+        while(change >= tolerance && countdown > 0){
             change = 0.0;
 
             for(int i=1; i<positions.size()-1; i++){
@@ -41,6 +42,8 @@ public class Smoothing {
 
                 change += Math.abs(aux1 - newPositions.get(i).getX()) + Math.abs(aux2 - newPositions.get(i).getY()) ;
             }
+
+            countdown -= 1;
 
         }
 

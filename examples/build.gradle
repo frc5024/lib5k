@@ -9,7 +9,7 @@ apply from: "../gradle_utils/simpleunittest.gradle"
 apply from: "../gradle_utils/mavenrepos.gradle"
 
 // Change this to match the main class of any example you want to deploy
-def ROBOT_MAIN_CLASS = "io.github.frc5024.lib5k.examples.autonomous_path_following.Main"
+def ROBOT_MAIN_CLASS = "io.github.frc5024.lib5k.examples.drivebase_simulation.Main"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_11

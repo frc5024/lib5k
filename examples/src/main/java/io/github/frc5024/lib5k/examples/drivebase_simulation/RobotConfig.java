@@ -1,4 +1,4 @@
-package io.github.frc5024.lib5k.examples.autonomous_path_following;
+package io.github.frc5024.lib5k.examples.drivebase_simulation;
 
 import edu.wpi.first.wpilibj.util.Units;
 import io.github.frc5024.common_drive.DriveTrainConfig;

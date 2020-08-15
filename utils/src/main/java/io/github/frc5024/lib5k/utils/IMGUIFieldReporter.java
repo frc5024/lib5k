@@ -18,9 +18,6 @@ public class IMGUIFieldReporter {
     private SimDouble m_y;
     private SimDouble m_theta;
 
-    /**
-     * Init the field reporter
-     */
     private IMGUIFieldReporter() {
 
         // Build a SimDevice
@@ -35,11 +32,6 @@ public class IMGUIFieldReporter {
 
     }
 
-    /**
-     * Get reporter instance
-     * 
-     * @return Reporter instance
-     */
     public static IMGUIFieldReporter getInstance() {
         if (s_instance == null) {
             s_instance = new IMGUIFieldReporter();

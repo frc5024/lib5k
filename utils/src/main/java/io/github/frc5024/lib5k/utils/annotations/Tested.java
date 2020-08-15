@@ -10,16 +10,12 @@ public @interface Tested {
 
     /**
      * The team that tested this component
-     * 
-     * @return Team that tested this
      */
     int team() default 5024;
 
     /**
      * A note about testing
-     * 
-     * @return any testing notes
      */
     String note() default "";
-
+    
 }

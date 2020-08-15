@@ -1,9 +1,11 @@
 package io.github.frc5024.lib5k.utils;
 
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
 
@@ -16,7 +18,6 @@ public class FileUtils {
      * 
      * @param path File path
      * @return File contents
-     * @throws IOException Thrown if the file does not exist
      */
     public static String readFile(String path) throws IOException {
         byte[] encoded = Files.readAllBytes(Paths.get(path));
@@ -42,12 +43,6 @@ public class FileUtils {
         return getDeployPath() + filename;
     }
 
-    /**
-     * Get the robot home directory, or simulation directory
-     * 
-     * @return Robot home directory
-     */
-    @Deprecated(since = "Aug 2020")
     public static String getHome() {
 
         // Check if the robot is real

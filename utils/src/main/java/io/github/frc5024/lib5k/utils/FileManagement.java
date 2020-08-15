@@ -83,7 +83,7 @@ public class FileManagement {
      * 
      * @param filename File name
      * @return Session FileWriter
-     * @throws IOException Thrown when the specified file cannot be opened
+     * @throws IOException
      */
     public static FileWriter createFileWriter(String filename) throws IOException {
         return new FileWriter(getSessionDirectoryPath() + "/" + filename);
@@ -94,7 +94,7 @@ public class FileManagement {
      * 
      * @param filename File name
      * @return Session FileReader
-     * @throws FileNotFoundException Thrown if the file does not exist
+     * @throws FileNotFoundException
      */
     public static FileReader createFileReader(String filename) throws FileNotFoundException {
         return new FileReader(getSessionDirectoryPath() + "/" + filename);

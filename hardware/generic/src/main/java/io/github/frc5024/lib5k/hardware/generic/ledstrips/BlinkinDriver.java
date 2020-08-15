@@ -36,10 +36,20 @@ public class BlinkinDriver implements Sendable {
 
         private double m_pwmVal;
 
+        /**
+         * Create an LEDSetting
+         * 
+         * @param pwm_val PWM value for mode
+         */
         LEDSetting(double pwm_val) {
             m_pwmVal = pwm_val;
         }
 
+        /**
+         * Get the PWM value
+         * 
+         * @return PWM value
+         */
         public double get() {
             return m_pwmVal;
         }

@@ -21,14 +21,28 @@ public class AutoCamera {
     UsbCamera m_UsbCamera;
     MjpegServer m_cameraServer;
 
+    /**
+     * Create a dynamic auto camera
+     */
     public AutoCamera() {
         this("Unnamed (Automatic) Camera", 0);
     }
 
+    /**
+     * Connect to a camera in a specific USB slot
+     * 
+     * @param usb_slot USB device number (/dev/video<number>)
+     */
     public AutoCamera(int usb_slot) {
         this("Unnamed Camera", usb_slot);
     }
 
+    /**
+     * Connect to a camera in a specific USB slot
+     * 
+     * @param name     Camera name
+     * @param usb_slot USB device number (/dev/video<number>)
+     */
     public AutoCamera(String name, int usb_slot) {
         // Create a USBCamera
         m_UsbCamera = CameraServer.getInstance().startAutomaticCapture(name, usb_slot);
@@ -38,7 +52,7 @@ public class AutoCamera {
     /**
      * Set camera visible
      * 
-     * @param show
+     * @param show Should the video feed be visible?
      */
     public void showCamera(boolean show) {
         if (RobotBase.isReal()) {

@@ -26,6 +26,7 @@ public class GenericEncoder extends Encoder implements EncoderSimulation {
      * @param reverseDirection represents the orientation of the encoder and inverts
      *                         the output values if necessary so forward represents
      *                         positive values.
+     * @param cpr              Encoder counts per rotation
      */
     public GenericEncoder(final int channelA, final int channelB, boolean reverseDirection, int cpr) {
         super(channelA, channelB, reverseDirection);
@@ -41,6 +42,7 @@ public class GenericEncoder extends Encoder implements EncoderSimulation {
      *
      * @param channelA The a channel digital input channel.
      * @param channelB The b channel digital input channel.
+     * @param cpr      Encoder counts per rotation
      */
     public GenericEncoder(final int channelA, final int channelB, int cpr) {
         super(channelA, channelB);
@@ -67,6 +69,7 @@ public class GenericEncoder extends Encoder implements EncoderSimulation {
      *                         m_counter object will be used and the returned value
      *                         will either exactly match the spec'd count or be
      *                         double (2x) the spec'd count.
+     * @param cpr              Encoder counts per rotation
      */
     public GenericEncoder(final int channelA, final int channelB, boolean reverseDirection,
             final EncodingType encodingType, int cpr) {
@@ -88,6 +91,7 @@ public class GenericEncoder extends Encoder implements EncoderSimulation {
      * @param reverseDirection represents the orientation of the encoder and inverts
      *                         the output values if necessary so forward represents
      *                         positive values.
+     * @param cpr              Encoder counts per rotation
      */
     public GenericEncoder(final int channelA, final int channelB, final int indexChannel, boolean reverseDirection,
             int cpr) {
@@ -106,6 +110,7 @@ public class GenericEncoder extends Encoder implements EncoderSimulation {
      * @param channelA     The a channel digital input channel.
      * @param channelB     The b channel digital input channel.
      * @param indexChannel The index channel digital input channel.
+     * @param cpr          Encoder counts per rotation
      */
     public GenericEncoder(final int channelA, final int channelB, final int indexChannel, int cpr) {
         super(channelA, channelB, indexChannel);
@@ -127,6 +132,7 @@ public class GenericEncoder extends Encoder implements EncoderSimulation {
      * @param reverseDirection represents the orientation of the encoder and inverts
      *                         the output values if necessary so forward represents
      *                         positive values.
+     * @param cpr              Encoder counts per rotation
      */
     public GenericEncoder(DigitalSource sourceA, DigitalSource sourceB, boolean reverseDirection, int cpr) {
         super(sourceA, sourceB, reverseDirection);
@@ -145,6 +151,7 @@ public class GenericEncoder extends Encoder implements EncoderSimulation {
      *
      * @param sourceA The source that should be used for the a channel.
      * @param sourceB the source that should be used for the b channel.
+     * @param cpr     Encoder counts per rotation
      */
     public GenericEncoder(DigitalSource sourceA, DigitalSource sourceB, int cpr) {
         super(sourceA, sourceB);
@@ -174,6 +181,7 @@ public class GenericEncoder extends Encoder implements EncoderSimulation {
      *                         m_counter object will be used and the returned value
      *                         will either exactly match the spec'd count or be
      *                         double (2x) the spec'd count.
+     * @param cpr              Encoder counts per rotation
      */
     public GenericEncoder(DigitalSource sourceA, DigitalSource sourceB, boolean reverseDirection,
             final EncodingType encodingType, int cpr) {
@@ -197,6 +205,7 @@ public class GenericEncoder extends Encoder implements EncoderSimulation {
      * @param reverseDirection represents the orientation of the encoder and inverts
      *                         the output values if necessary so forward represents
      *                         positive values.
+     * @param cpr              Encoder counts per rotation
      */
     public GenericEncoder(DigitalSource sourceA, DigitalSource sourceB, DigitalSource indexSource,
             boolean reverseDirection, int cpr) {
@@ -217,6 +226,7 @@ public class GenericEncoder extends Encoder implements EncoderSimulation {
      * @param sourceA     The source that should be used for the a channel.
      * @param sourceB     the source that should be used for the b channel.
      * @param indexSource the source that should be used for the index channel.
+     * @param cpr         Encoder counts per rotation
      */
     public GenericEncoder(DigitalSource sourceA, DigitalSource sourceB, DigitalSource indexSource, int cpr) {
         super(sourceA, sourceB, indexSource);
@@ -224,6 +234,11 @@ public class GenericEncoder extends Encoder implements EncoderSimulation {
         offset = getPosition();
     }
 
+    /**
+     * Set the encoder counter per rotation
+     * 
+     * @param cpr CPR
+     */
     private void setCPR(int cpr) {
 
         // Set CPR

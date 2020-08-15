@@ -15,10 +15,25 @@ public class USBVisionCamera extends AutoCamera {
     private Notifier m_thread;
     private final double blink_ms = 25;
 
+    /**
+     * Create a USBVisionCamera
+     * 
+     * @param name     Camera name
+     * @param usb_slot USB slot of camera
+     * @param pcm_port PCM port for camera LED ring power source
+     */
     public USBVisionCamera(String name, int usb_slot, int pcm_port) {
         this(name, usb_slot, 0, pcm_port);
     }
 
+    /**
+     * Create a USBVisionCamera
+     * 
+     * @param name     Camera name
+     * @param usb_slot USB slot of camera
+     * @param pcm_id   PCM CAN ID
+     * @param pcm_port PCM port for camera LED ring power source
+     */
     public USBVisionCamera(String name, int usb_slot, int pcm_id, int pcm_port) {
         super(name, usb_slot);
 
@@ -54,22 +69,25 @@ public class USBVisionCamera extends AutoCamera {
         m_desiredMode = mode;
     }
 
+    /**
+     * Update the LEDs
+     */
     private void update() {
 
         // Handle the LEDMode
         switch (m_desiredMode) {
-        case ON:
-            m_relay.set(true);
-            break;
-        case OFF:
-            m_relay.set(false);
-            break;
-        case BLINK:
-            boolean should_enable = FPGAClock.getMillisecondCycle(blink_ms);
-            m_relay.set(should_enable);
-            break;
-        default:
-            m_relay.set(false);
+            case ON:
+                m_relay.set(true);
+                break;
+            case OFF:
+                m_relay.set(false);
+                break;
+            case BLINK:
+                boolean should_enable = FPGAClock.getMillisecondCycle(blink_ms);
+                m_relay.set(should_enable);
+                break;
+            default:
+                m_relay.set(false);
 
         }
     }

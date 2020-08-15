@@ -22,6 +22,7 @@ public class DriveTrainSensors {
 
     /**
      * Create a copy of this object
+     * 
      * @return Copy
      */
     public DriveTrainSensors copy() {

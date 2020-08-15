@@ -25,11 +25,6 @@ public class StateMachine<T> {
     // Telemetry data table
     private String name;
 
-    /**
-     * Create a StateMachine
-     * 
-     * @param name Name of the machine (for logging)
-     */
     public StateMachine(String name) {
 
         // Configure telemetry
@@ -40,13 +35,11 @@ public class StateMachine<T> {
 
     }
 
-    /**
-     * Deprecated Method
-     * @param hook hook
-     */
-    @Deprecated(since = "July 2020", forRemoval = true)
+    
+    @Deprecated(since="July 2020", forRemoval = true)
     public void setConsoleHook(@Nullable Consumer<String> hook) {
     }
+
 
     /**
      * Add a state to the StateMachine
@@ -105,9 +98,6 @@ public class StateMachine<T> {
 
     }
 
-    /**
-     * Update the machine. This MUST be called periodically
-     */
     public void update() {
 
         // If the desired state key is null, and the default is null, we can't do

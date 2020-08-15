@@ -1,5 +1,4 @@
 // This file contains the common tasks for building the indevidual JAR files for each subproject
-apply plugin: "checkstyle"
 
 // This will build a JAR file that contains the subproject's class files, and the class files for all required dependancies / libraries
 // This way, everything is technically standalone
@@ -8,4 +7,9 @@ task _buildProjectFatJar(type: Jar) {
     baseName = project.name + "-" + rootProject.version
     from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
+<<<<<<< HEAD
 }
+=======
+}
+
+>>>>>>> parent of dae1b96... Set up checkstyle

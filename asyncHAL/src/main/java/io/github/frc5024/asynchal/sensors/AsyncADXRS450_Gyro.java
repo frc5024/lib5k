@@ -9,9 +9,6 @@ import io.github.frc5024.asynchal.Poller;
 
 public class AsyncADXRS450_Gyro extends ADXRS450_Gyro implements Pollable {
 
-    /**
-     * Default-construct an AsyncADXRS450_Gyro connected to the onboard SPI port
-     */
     public AsyncADXRS450_Gyro() {
         super();
 

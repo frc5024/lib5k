@@ -4,6 +4,5 @@
 <module name="Checker">
     <module name="TreeWalker">
         <module name="JavadocType"/>
-        <module name="JavadocMethod"/>
     </module>
 </module>

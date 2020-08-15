@@ -8,6 +8,9 @@ import io.github.frc5024.lib5k.hardware.ctre.util.TalonHelper;
  */
 public class CTREMotorFactory {
 
+    /**
+     * Private
+     */
     private CTREMotorFactory() {
     }
 

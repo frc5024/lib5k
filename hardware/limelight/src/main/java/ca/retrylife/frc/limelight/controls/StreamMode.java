@@ -9,10 +9,15 @@ public enum StreamMode {
     PIP_MAIN(1), // The secondary camera stream is placed in the lower-right corner of the
                  // primary camera stream
     PIP_SECONDARY(2); // The primary camera stream is placed in the lower-right corner of the
-                     // secondary camera stream
+                      // secondary camera stream
 
     private int val;
 
+    /**
+     * Create a StreamMode
+     * 
+     * @param val Limelight control byte
+     */
     StreamMode(int val) {
         this.val = val;
     }

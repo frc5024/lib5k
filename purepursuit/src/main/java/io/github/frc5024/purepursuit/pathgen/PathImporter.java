@@ -22,8 +22,8 @@ public class PathImporter {
      * 
      * @param jsonFile JSON file
      * @return Loaded Path object
-     * @throws IOException           Thrown if something goes wrong parsing the file
-     * @throws FileNotFoundException Thrown if the file does not exist
+     * @throws IOException
+     * @throws FileNotFoundException
      */
     public static RawPath jsonToPath(File jsonFile) throws IOException, FileNotFoundException {
 
@@ -46,9 +46,8 @@ public class PathImporter {
 
             // Get the generated position
             Translation2d genPose = point.getTranslation();
-
-            // Modify the point to match the 5024 coordinate system (0.0 is centre of the
-            // field width)
+        
+            // Modify the point to match the 5024 coordinate system (0.0 is centre of the field width)
             points[i] = new Translation2d(genPose.getX(), genPose.getY() + (8.23 / 2.0));
             i++;
         }

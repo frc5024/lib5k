@@ -2,8 +2,6 @@ package io.github.frc5024.common_drive.queue;
 
 /**
  * A dataclass for storing a value, and if it should be written out or not
- * 
- * @param <T> Datatype
  */
 public class WriteLock<T> {
 

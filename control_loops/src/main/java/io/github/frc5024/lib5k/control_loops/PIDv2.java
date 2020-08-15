@@ -85,7 +85,7 @@ public class PIDv2 implements Sendable {
     /**
      * Set the PID controller's setpoint (goal position)
      * 
-     * @param setpoint
+     * @param setpoint Controller setpoint
      */
     public void setSetpoint(double setpoint) {
         this.setpoint = setpoint;
@@ -121,14 +121,25 @@ public class PIDv2 implements Sendable {
         this.restPeriod = num;
     }
 
+    /**
+     * Reset the error accumulator
+     */
     public void resetErrorSum() {
         this.errorSum = 0.0;
     }
 
+    /**
+     * Get the controller setpoint
+     * @return Set point
+     */
     public double getSetpoint() {
         return this.setpoint;
     }
 
+    /**
+     * Get the integrator range
+     * @param iRange Range
+     */
     public void setIRange(double iRange) {
         this.iRange = iRange;
     }

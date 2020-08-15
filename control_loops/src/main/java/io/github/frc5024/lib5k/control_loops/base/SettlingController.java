@@ -13,9 +13,6 @@ public abstract class SettlingController extends ControllerBase {
     private double restMS = 0.0;
     private Timer timer;
 
-    /**
-     * Create a Settling Controller
-     */
     public SettlingController() {
 
         // Set up timer

@@ -24,22 +24,15 @@ public class NavX extends AHRS implements ISimGyro {
     private boolean inverted = false;
     private boolean calibrated = false;
 
+
     // Simulation
     private GyroSimUtil sim;
     private SPI.Port port;
 
-    /**
-     * Connect to a NavX on the MXP port
-     */
     public NavX() {
         this(Port.kMXP);
     }
 
-    /**
-     * Connect to a NavX
-     * 
-     * @param port Connected port
-     */
     public NavX(final SPI.Port port) {
         super(port);
         this.port = port;
@@ -58,16 +51,11 @@ public class NavX extends AHRS implements ISimGyro {
         return m_instance;
     }
 
-    /**
-     * Init gyroscope simulation from fusing encoder readings
-     * 
-     * @param drivebase Robot drivetrain
-     */
     public void initDrivebaseSimulation(final IDifferentialDrivebase drivebase) {
 
-        // Set up simulation
-        sim = new GyroSimUtil("NavX", port.value, drivebase, 0.02, 40.0);
-        sim.start();
+       // Set up simulation
+       sim = new GyroSimUtil("NavX", port.value, drivebase, 0.02, 40.0);
+       sim.start();
     }
 
     @Override

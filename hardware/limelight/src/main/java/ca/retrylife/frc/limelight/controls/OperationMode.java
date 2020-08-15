@@ -9,12 +9,7 @@ public enum OperationMode {
     DRIVER(1); // Driver Camera (Increases exposure, disables vision processing)
 
     private int val;
-
-    /**
-     * Create an OperationMode
-     * 
-     * @param val Limelight control byte
-     */
+ 
     OperationMode(int val) {
         this.val = val;
     }

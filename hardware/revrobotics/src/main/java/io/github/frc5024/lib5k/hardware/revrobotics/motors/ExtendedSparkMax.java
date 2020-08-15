@@ -26,17 +26,27 @@ public class ExtendedSparkMax extends CANSparkMax implements Sendable {
     private SimDevice m_simDevice;
     private SimDouble m_simSpeed;
 
-
-    public ExtendedSparkMax(int deviceID, MotorType motorType){
+    /**
+     * Create an extended spark max
+     * 
+     * @param deviceID  Device CAN id
+     * @param motorType Device motor type
+     */
+    public ExtendedSparkMax(int deviceID, MotorType motorType) {
         super(deviceID, motorType);
         this.config = new RevConfig(motorType);
 
     }
 
+    /**
+     * Create an extended spark max
+     * 
+     * @param deviceID  Device CAN id
+     * @param config device config
+     */
     public ExtendedSparkMax(int deviceID, RevConfig config) {
         super(deviceID, config.motorType);
         this.config = config;
-
 
         SendableRegistry.addLW(this, "ExtendedSparkMax", deviceID);
 
@@ -118,19 +128,29 @@ public class ExtendedSparkMax extends CANSparkMax implements Sendable {
 
     }
 
-
-
-    public ExtendedSparkMax makeSlave(int id){
+    /**
+     * Make a slave of this motor
+     * 
+     * @param id Slave CAN id
+     * @return Slave
+     */
+    public ExtendedSparkMax makeSlave(int id) {
         return makeSlave(id, false);
     }
 
-    public ExtendedSparkMax makeSlave(int id, boolean invert){
+    /**
+     * Make a slave of this motor
+     * 
+     * @param id       Slave CAN id
+     * @param invert Is Slave inverted?
+     * @return Slave
+     */
+    public ExtendedSparkMax makeSlave(int id, boolean invert) {
         ExtendedSparkMax slave = RevMotorFactory.createSparkMax(id, config.motorType);
 
         slave.follow(this, invert);
 
         return slave;
-
 
     }
 

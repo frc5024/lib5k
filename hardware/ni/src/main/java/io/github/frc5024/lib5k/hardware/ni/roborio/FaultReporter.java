@@ -24,9 +24,6 @@ public class FaultReporter {
     boolean last3v3Enabled, last5vEnabled, last6vEnabled = false;
     CANStatus lastCANStatus = new CANStatus();
 
-    /**
-     * Init FaultReporter
-     */
     private FaultReporter() {
 
         // Print startup message
@@ -40,11 +37,6 @@ public class FaultReporter {
         thread.startPeriodic(0.08);
     }
 
-    /**
-     * Get the FaultReporter instance
-     * 
-     * @return Instance
-     */
     public static FaultReporter getInstance() {
         if (instance == null) {
             instance = new FaultReporter();
@@ -53,9 +45,6 @@ public class FaultReporter {
         return instance;
     }
 
-    /**
-     * Update all checks
-     */
     private void update() {
 
         // Track brownout states

@@ -41,7 +41,7 @@ public class CurrentLimitManager {
         currentLimits.remove(currentLimit);
     }
 
-    /**
+    /*
      * Runs the current limit for all active current limit
      */
     public void performCurrentLimits() {

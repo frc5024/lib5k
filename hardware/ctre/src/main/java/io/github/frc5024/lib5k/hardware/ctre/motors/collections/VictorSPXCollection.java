@@ -22,8 +22,7 @@ import io.github.frc5024.lib5k.logging.RobotLogger.Level;
 import io.github.frc5024.lib5k.telemetry.ComponentTelemetry;
 
 @Deprecated(since="July 2020", forRemoval=false)
-@FieldTested(year = 2020)
-@SuppressWarnings("checkstyle:javadocmethod")
+@FieldTested(year=2020)
 public class VictorSPXCollection extends SpeedControllerGroup implements IMotorCollection, 
         IMotorGroupSafety, IVoltageOutputController, IRampRateController, Loggable {
     RobotLogger logger = RobotLogger.getInstance();

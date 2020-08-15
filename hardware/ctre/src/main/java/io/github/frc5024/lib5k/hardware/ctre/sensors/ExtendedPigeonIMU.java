@@ -21,21 +21,11 @@ public class ExtendedPigeonIMU extends PigeonIMU implements ISimGyro {
     // Simulation
     private GyroSimUtil sim;
 
-    /**
-     * Connect to a Pigeon IMU
-     * 
-     * @param canID Device CAN ID
-     */
     public ExtendedPigeonIMU(int canID) {
         super(canID);
         super.configFactoryDefault();
     }
 
-    /**
-     * Connect to a Pigeon IMU
-     * 
-     * @param talonSrx Attached talonSRX object
-     */
     public ExtendedPigeonIMU(TalonSRX talonSrx) {
         super(talonSrx);
         super.configFactoryDefault();
@@ -67,8 +57,8 @@ public class ExtendedPigeonIMU extends PigeonIMU implements ISimGyro {
         if (sim != null && sim.simReady()) {
             sim.calibrate();
         } else {
-            // * Note: The PigeonIMU is not designed to be calibrated on-robot
-            // * super.enterCalibrationMode(CalibrationMode.BootTareGyroAccel);
+            //* Note: The PigeonIMU is not designed to be calibrated on-robot
+            //* super.enterCalibrationMode(CalibrationMode.BootTareGyroAccel);
         }
         calibrated = true;
 

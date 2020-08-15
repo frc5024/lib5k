@@ -24,11 +24,6 @@ public class USBLogger implements AutoCloseable {
     private ArrayList<String> m_messageBuffer = new ArrayList<>();
     private FileWriter m_file;
 
-    /**
-     * Deprecated
-     * 
-     * @param unused Unused value
-     */
     @Deprecated(since = "July 2020", forRemoval = true)
     public USBLogger(String unused) {
         this();
@@ -61,9 +56,6 @@ public class USBLogger implements AutoCloseable {
         m_messageBuffer.add(line);
     }
 
-    /**
-     * Update the USB logs
-     */
     private void update() {
 
         // Check if a USB storage device is connected to the RoboRIO

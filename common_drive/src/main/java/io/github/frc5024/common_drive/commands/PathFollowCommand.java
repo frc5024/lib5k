@@ -70,7 +70,7 @@ public class PathFollowCommand extends CommandBase {
     /**
      * Configure reverse path following
      * 
-     * @param inReverse Should the path be followed in reverse?
+     * @param reverse Should the path be followed in reverse?
      * @return This Object
      */
     public PathFollowCommand inReverse(boolean reverse) {

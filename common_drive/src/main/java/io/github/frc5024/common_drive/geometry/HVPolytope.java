@@ -21,9 +21,9 @@ public class HVPolytope<Dimensions extends Num, Constraints extends Num, Vertici
     /**
      * Constructs a polytope given the H and k matrices
      * 
-     * @param H
-     * @param k
-     * @param verticies
+     * @param H         H
+     * @param k         K
+     * @param verticies Number of verts
      */
     public HVPolytope(Matrix<Constraints, Dimensions> H, Matrix<Constraints, N1> k,
             Matrix<Dimensions, Verticies> verticies) {

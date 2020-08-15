@@ -95,6 +95,11 @@ public abstract class DriveTrainBase extends SubsystemBase implements IDifferent
     // Speed cap
     private double speedCap = 1.0;
 
+    /**
+     * Create a DriveTrainBase
+     * 
+     * @param config Configuration info
+     */
     public DriveTrainBase(DriveTrainConfig config) {
 
         // Set config
@@ -160,6 +165,9 @@ public abstract class DriveTrainBase extends SubsystemBase implements IDifferent
         customPeriodic();
     }
 
+    /**
+     * Override this with your custom periodic code
+     */
     public abstract void customPeriodic();
 
     /**
@@ -538,6 +546,7 @@ public abstract class DriveTrainBase extends SubsystemBase implements IDifferent
      * @param inReverse       Should the path be followed in reverse?
      * @param lookaheadMeters How far to look ahead for new goal poses
      * @param epsRadius       Radius around the final pose for trigger isFinished()
+     * @return Path following command
      */
     @Deprecated(since = "August 2020", forRemoval = false)
     public PathFollowCommand createPathingCommand(Path path, boolean inReverse, double lookaheadMeters,
@@ -550,8 +559,9 @@ public abstract class DriveTrainBase extends SubsystemBase implements IDifferent
      * This returns a builder-style object, where you can chain extra methods to
      * configure the command
      * 
-     * @param path            Path to follow
-     * @param epsRadius       Radius around the final pose for trigger isFinished()
+     * @param path      Path to follow
+     * @param epsRadius Radius around the final pose for trigger isFinished()
+     * @return Path following command
      */
     public PathFollowCommand createPathingCommand(Path path, double epsRadius) {
         return new PathFollowCommand(this, path, epsRadius);
@@ -699,8 +709,18 @@ public abstract class DriveTrainBase extends SubsystemBase implements IDifferent
         this.inputOffset.rightEncoderMetres = this.input.rightEncoderMetres;
     }
 
+    /**
+     * Get the scalar distance traveled by the left side of the drivetrain
+     * 
+     * @return left meters
+     */
     public abstract double getLeftMeters();
 
+    /**
+     * Get the scalar distance traveled by the right side of the drivetrain
+     * 
+     * @return right meters
+     */
     public abstract double getRightMeters();
 
     @Override

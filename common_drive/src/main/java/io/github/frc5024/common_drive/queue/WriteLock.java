@@ -11,6 +11,9 @@ public class WriteLock<T> {
     private T defaultValue;
     public T value;
 
+    /**
+     * Create a WriteLock
+     */
     public WriteLock() {
         this(null);
     }

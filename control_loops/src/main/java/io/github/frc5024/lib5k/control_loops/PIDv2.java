@@ -144,6 +144,10 @@ public class PIDv2 implements Sendable {
         this.iRange = iRange;
     }
 
+    /**
+     * Get the integrator range
+     * @return Range
+     */
     public double getIRange() {
         return this.iRange;
     }

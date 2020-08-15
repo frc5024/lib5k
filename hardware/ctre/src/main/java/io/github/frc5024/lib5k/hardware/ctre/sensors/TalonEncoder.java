@@ -15,6 +15,12 @@ public class TalonEncoder implements EncoderSimulation {
     private EncoderSimUtil sim;
     private double offset;
 
+    /**
+     * Create a Talon Encoder
+     * 
+     * @param talon Master talon
+     * @param cpr   Counts per rotation of the encoder
+     */
     public TalonEncoder(BaseTalon talon, int cpr) {
         this.talon = talon;
         this.cpr = cpr;

@@ -25,14 +25,16 @@ import io.github.frc5024.lib5k.utils.annotations.FieldTested;
 import io.github.frc5024.lib5k.logging.RobotLogger;
 import io.github.frc5024.lib5k.logging.RobotLogger.Level;
 import io.github.frc5024.lib5k.telemetry.ComponentTelemetry;
+
 /**
  * Collection of multiple WPI_TalonSRX controllers that wraps a
  * SpeedControllerGroup
  */
-@Deprecated(since="July 2020", forRemoval=false)
-@FieldTested(year=2020)
+@Deprecated(since = "July 2020", forRemoval = false)
+@FieldTested(year = 2020)
+@SuppressWarnings("checkstyle:javadocmethod") 
 public class TalonSRXCollection extends SpeedControllerGroup implements IMotorCollection, ICurrentController,
-         IMotorGroupSafety, IVoltageOutputController, IRampRateController, Loggable {
+        IMotorGroupSafety, IVoltageOutputController, IRampRateController, Loggable {
     RobotLogger logger = RobotLogger.getInstance();
 
     /* Talon SRX Objects */
@@ -138,7 +140,6 @@ public class TalonSRXCollection extends SpeedControllerGroup implements IMotorCo
     public void setVoltage(double volts) {
 
         double busVoltage = getControllerVoltage();
-
 
         // Just stop the motor if the bus is at 0V
         // Many things would go wrong otherwise (do you really want a div-by-zero error
@@ -281,8 +282,6 @@ public class TalonSRXCollection extends SpeedControllerGroup implements IMotorCo
             consumer.accept(talon);
         }
     }
-
-   
 
     public void setNeutralMode(NeutralMode mode) {
 

@@ -19,6 +19,7 @@ This repository is split into modules. This allows us to only import what we nee
 | `:purepursuit`          | `purepursuit`          | This library contains everything needed for autonomous path planning                      |
 | `:libKontrol`           | `libKontrol`           | This library contains tools for building state machines                                   |
 | `:asyncHAL`             | `asyncHAL`             | An asynchronous extension to the RoboRIO HAL                                              |
+| `:waterfall`            | `waterfall`            | A library for serializing and storing the large amounts of data that come off our robots  |
 | `:hardware`             | `hardware`             | Classes and tools for interfacing with robot hardware (Imports all hardware sub-projects) |
 | `:hardware:common`      | `hardware.common`      | Common types and interfaces used by all hardware libs                                     |
 | `:hardware:kauai`       | `hardware.kauai`       | For interfacing with [Kauai Labs](https://www.kauailabs.com/) products                    |

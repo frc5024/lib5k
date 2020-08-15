@@ -9,17 +9,9 @@ public class ComponentTelemetry {
     private String baseTable = "Lib5K-Telemetry";
     private String componentsTable = "Components";
 
-    /**
-     * Telem setup
-     */
     private ComponentTelemetry() {
     }
 
-    /**
-     * Get the ComponentTelemetry instance
-     * 
-     * @return Instance
-     */
     public static ComponentTelemetry getInstance() {
         if (m_instance == null) {
             m_instance = new ComponentTelemetry();

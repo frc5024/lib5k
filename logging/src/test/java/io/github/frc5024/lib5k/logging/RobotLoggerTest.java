@@ -6,6 +6,9 @@ import org.junit.Test;
 
 public class RobotLoggerTest {
 
+    /**
+     * Test that the logger correctly truncates class names
+     */
     @Test
     public void testPackageNameConstruction() {
 
@@ -16,7 +19,8 @@ public class RobotLoggerTest {
         String friendlyPackageName = RobotLogger.getPackageName(thisMethod);
 
         // Check if correct
-        assertEquals("Package name", "io...logging.RobotLoggerTest::testPackageNameConstruction()", friendlyPackageName);
+        assertEquals("Package name", "io...logging.RobotLoggerTest::testPackageNameConstruction()",
+                friendlyPackageName);
 
     }
 

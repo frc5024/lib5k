@@ -15,6 +15,14 @@ if(!(project.name in ["examples", "statespace"])){
     checkstyle {
         toolVersion '8.20'
         configFile project(':').file("checkstyle.xml")
+        sourceSets = []
+    }
+
+    checkstyleTest{
+        source = project.sourceSets.test.java
+    }
+    checkstyleMain{
+        source = project.sourceSets.main.java
     }
 
     tasks.withType(Checkstyle) {
@@ -22,5 +30,11 @@ if(!(project.name in ["examples", "statespace"])){
         xml.enabled false
         html.enabled true
     }
+    }
+    // tasks.withType(check).dependsOn.remove("checkstyleTest")
+    // tasks.withType(check).dependsOn.remove("checkstyleMain")
+    task checkstyle{
+        dependsOn "checkstyleMain"
+        dependsOn "checkstyleTest"
     }
 }

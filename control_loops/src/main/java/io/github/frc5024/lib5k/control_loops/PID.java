@@ -153,31 +153,40 @@ public class PID implements Sendable {
         return output;
     }
 
+    /**
+     * Get the last recorded error
+     * 
+     * @return Last error
+     */
     public double getError() {
         return previous_error;
     }
 
     /**
-     * Checks if the error is within a reasonable range, then waits a bit before returning completion
+     * Checks if the error is within a reasonable range, then waits a bit before
+     * returning completion
      * 
      * @param epsilon Accepted error
      * @return Has the loop finished?
      */
     public boolean isFinished(double epsilon) {
-		double error = Math.abs(previous_error);
+        double error = Math.abs(previous_error);
 
-		// close enough to target
-		if (error <= epsilon) {
-			pause_duration++;
-		}
-		// not close enough to target
-		else {
-			pause_duration = 0;
-		}
+        // close enough to target
+        if (error <= epsilon) {
+            pause_duration++;
+        }
+        // not close enough to target
+        else {
+            pause_duration = 0;
+        }
 
-		return pause_duration > 5; // Make sure this value has settled
-	}
+        return pause_duration > 5; // Make sure this value has settled
+    }
 
+    /**
+     * Reset the controller
+     */
     public void reset() {
         has_constraints = false;
         integral = 0.0;

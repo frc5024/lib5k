@@ -7,9 +7,4 @@ task _buildProjectFatJar(type: Jar) {
     baseName = project.name + "-" + rootProject.version
     from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
-<<<<<<< HEAD
 }
-=======
-}
-
->>>>>>> parent of dae1b96... Set up checkstyle

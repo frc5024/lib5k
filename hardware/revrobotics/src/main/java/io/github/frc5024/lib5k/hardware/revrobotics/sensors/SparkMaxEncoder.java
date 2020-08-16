@@ -16,6 +16,13 @@ public class SparkMaxEncoder extends CANEncoder implements EncoderSimulation {
     private EncoderSimUtil sim;
     private double offset;
 
+    /**
+     * Create a SparkMaxEncoder
+     * 
+     * @param device         Master motor controller
+     * @param sensorType     Type of sensor
+     * @param counts_per_rev Counts per rotation of the encoder
+     */
     public SparkMaxEncoder(CANSparkMax device, EncoderType sensorType, int counts_per_rev) {
         super(device, sensorType, counts_per_rev);
         this.device = device;

@@ -9,7 +9,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
  */
 public class RevMotorFactory{
 
-
+    @SuppressWarnings("checkstyle:javadocmethod")
     private RevMotorFactory(){}
 
 

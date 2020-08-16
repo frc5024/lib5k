@@ -12,7 +12,8 @@ import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.FPGAClock;
 /**
  * Base for encoders
  */
-@Deprecated(since="July 2020", forRemoval = true)
+@Deprecated(since = "July 2020", forRemoval = true)
+@SuppressWarnings("checkstyle:javadocmethod")
 public abstract class EncoderBase implements PeriodicComponent {
     int encoder_offset;
     private int speed = 0;
@@ -33,7 +34,8 @@ public abstract class EncoderBase implements PeriodicComponent {
     private static int s_instanceCount = 0;
     private SlewLimiter m_simSlew;
 
-    public void initSimulationDevice(SpeedController controller, int tpr, double gearbox_ratio, double max_rpm, double ramp_time) {
+    public void initSimulationDevice(SpeedController controller, int tpr, double gearbox_ratio, double max_rpm,
+            double ramp_time) {
         // Set locals
         this.controller = controller;
         this.tpr = tpr;

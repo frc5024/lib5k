@@ -15,7 +15,17 @@ public interface ICurrentController {
      */
     public void setCurrentLimit(int threshold, int duration, int hold, int timeout);
 
+    /**
+     * Set if voltage compensation should be enabled
+     * 
+     * @param on Enable compensation
+     */
     public void setCompensation(boolean on);
 
+    /**
+     * Enable current limiting
+     * 
+     * @param on Enable
+     */
     public void enableCurrentLimit(boolean on);
 }

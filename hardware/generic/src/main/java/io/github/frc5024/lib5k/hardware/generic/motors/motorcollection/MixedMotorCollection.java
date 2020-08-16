@@ -22,8 +22,9 @@ import io.github.frc5024.lib5k.telemetry.ComponentTelemetry;
  * Collection of multiple motor controllers of mixed types that wraps a
  * SpeedControllerGroup
  */
-@Deprecated(since="July 2020", forRemoval=false)
-@FieldTested(year=2020)
+@Deprecated(since = "July 2020", forRemoval = false)
+@FieldTested(year = 2020)
+@SuppressWarnings("checkstyle:javadocmethod")
 public class MixedMotorCollection extends SpeedControllerGroup
         implements IMotorCollection, IVoltageOutputController, IRampRateController, Loggable {
     RobotLogger logger = RobotLogger.getInstance();

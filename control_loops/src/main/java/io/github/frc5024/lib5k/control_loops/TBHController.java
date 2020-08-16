@@ -46,7 +46,7 @@ public class TBHController extends SettlingController {
     /**
      * Set the controller gain
      * 
-     * @param gainController gain (should be between 0.0 and 1.0)
+     * @param gain gain (should be between 0.0 and 1.0)
      */
     public void setGain(double gain) {
         this.gain = gain;

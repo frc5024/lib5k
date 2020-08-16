@@ -16,6 +16,9 @@ public class Poller {
 
     private ArrayList<Pollable> pollables = new ArrayList<>();
 
+    /**
+     * Poller constructor
+     */
     private Poller() {
 
         // Start up the polling thread
@@ -23,6 +26,11 @@ public class Poller {
         this.thread.startPeriodic(0.01);
     }
 
+    /**
+     * Get a poller instance
+     * 
+     * @return Instance
+     */
     public static Poller getInstance() {
         if (instance == null) {
             instance = new Poller();
@@ -32,6 +40,7 @@ public class Poller {
 
     /**
      * Register a pollable component
+     * 
      * @param p Pollable
      */
     public void register(Pollable p) {
@@ -40,12 +49,16 @@ public class Poller {
 
     /**
      * de-Register a pollable component
+     * 
      * @param p Pollable
      */
     public void deregister(Pollable p) {
         pollables.remove(p);
     }
 
+    /**
+     * Update the thread
+     */
     private void update() {
         for (Pollable p : pollables) {
             p.checkForUpdates();

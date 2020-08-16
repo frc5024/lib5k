@@ -19,6 +19,11 @@ public class SmartServo extends Servo {
     private SimDouble m_angle;
     private SimDouble m_output;
 
+    /**
+     * Create a SmartServo
+     * 
+     * @param channel PWM channel
+     */
     public SmartServo(int channel) {
         super(channel);
 
@@ -58,6 +63,9 @@ public class SmartServo extends Servo {
         super.setAngle(degrees);
     }
 
+    /**
+     * Stop the servo
+     */
     public void stop() {
         stopMotor();
     }

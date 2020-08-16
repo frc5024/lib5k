@@ -20,6 +20,12 @@ public class LazySolenoid extends Solenoid implements Loggable {
     private String name;
     private NetworkTable telemetryTable;
 
+    /**
+     * Create a LazySolenoid
+     * 
+     * @param moduleNumber PCM module number (CAN ID)
+     * @param channel      PCM channel
+     */
     public LazySolenoid(int moduleNumber, int channel) {
         super(moduleNumber, channel);
 

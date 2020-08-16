@@ -38,11 +38,19 @@ public class RobotLogger {
 
         public String name;
 
+        /**
+         * Create a log level
+         * 
+         * @param name String name
+         */
         private Level(String name) {
             this.name = name;
         }
     }
 
+    /**
+     * Create the RobotLogger instance
+     */
     private RobotLogger() {
         this.notifier = new Notifier(this::pushLogs);
 

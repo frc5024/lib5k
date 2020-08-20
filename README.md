@@ -21,14 +21,7 @@ In an effort to keep our documentation centeralized and clean, everything you sh
 Development of Lib5K is funded by our amazing sponsors. If you are interested in sponsoring this project and our team, [contact us](mailto:bealrobotics@gmail.com).
 
 <!-- Sponsor banners -->
-![TR Electronic](assets/tr-electronic.png)
-![Enbridge](assets/enbridge.png)
-![Byron Optometry](assets/byronopt.png)
-![Best Western Plus](assets/bestwestern.png)
-![West Five](assets/west5.png)
-![Sifton Properties](assets/sifton.png)
-![H.B. Beal SS](assets/hbbeal.jpg)
-![Thames Valley District School Board](assets/tvdsb.png)
+![Sponsors](assets/sponsor-sheet.png)
 
 
 We would also like to thank every mentor who has been involved in software development at Raider Robotics:

@@ -28,6 +28,7 @@ public class SensorlessArmTest {
 
         // Create a SensorlessArm
         SensorlessArm arm = new SensorlessArm(motor, lowerLimit, upperLimit, speed, FF);
+        RobotLogger.getInstance().flush();
 
         // Tell the arm to go down
         arm.setDesiredPosition(SensorlessArm.SystemState.kLowered);
@@ -57,7 +58,7 @@ public class SensorlessArmTest {
         // Make sure the arm is stopped, and the position is correct
         assertEquals("Arm speed", 0.0, motor.get(), MathUtils.kVerySmallNumber);
         assertEquals("Arm position", SensorlessArm.SystemState.kStopped, arm.getLastKnownPosition());
-        
+
     }
 
     @Test
@@ -70,6 +71,7 @@ public class SensorlessArmTest {
 
         // Create a SensorlessArm
         SensorlessArm arm = new SensorlessArm(motor, lowerLimit, upperLimit, speed, FF);
+        RobotLogger.getInstance().flush();
 
         // Tell the arm to go up
         arm.setDesiredPosition(SensorlessArm.SystemState.kRaised);
@@ -105,11 +107,79 @@ public class SensorlessArmTest {
     @Test
     public void testDriftingDownFromStop() {
 
+        // Reset all I/O
+        motor.set(0.0);
+        lowerLimit.set(false);
+        upperLimit.set(false);
+
+        // Create a SensorlessArm
+        SensorlessArm arm = new SensorlessArm(motor, lowerLimit, upperLimit, speed, FF);
+        RobotLogger.getInstance().flush();
+
+        // Tell the arm to go up
+        arm.setDesiredPosition(SensorlessArm.SystemState.kRaised);
+
+        // Set the top sensor
+        upperLimit.set(true);
+
+        // Let the state machine get to the stopped & holding up state
+        arm.periodic();
+        RobotLogger.getInstance().flush();
+        arm.periodic();
+        RobotLogger.getInstance().flush();
+
+        // Make sure the arm is stopped, and the position is correct
+        assertEquals("Arm speed", 0.0, motor.get(), MathUtils.kVerySmallNumber);
+        assertEquals("Arm position", SensorlessArm.SystemState.kStopped, arm.getLastKnownPosition());
+
+        // Turn off the top sensor
+        upperLimit.set(false);
+        arm.periodic();
+        RobotLogger.getInstance().flush();
+        arm.periodic();
+        RobotLogger.getInstance().flush();
+
+        // Check that the arm is trying to get back to the top again
+        assertEquals("Arm speed", speed + FF, motor.get(), MathUtils.kVerySmallNumber);
+
     }
 
     @Test
     public void testDriftingUpFromStop() {
+        // Reset all I/O
+        motor.set(0.0);
+        lowerLimit.set(false);
+        upperLimit.set(false);
 
+        // Create a SensorlessArm
+        SensorlessArm arm = new SensorlessArm(motor, lowerLimit, upperLimit, speed, FF);
+        RobotLogger.getInstance().flush();
+
+        // Tell the arm to go down
+        arm.setDesiredPosition(SensorlessArm.SystemState.kLowered);
+
+        // Set the bottom sensor
+        lowerLimit.set(true);
+
+        // Let the state machine get to the stopped & holding up state
+        arm.periodic();
+        RobotLogger.getInstance().flush();
+        arm.periodic();
+        RobotLogger.getInstance().flush();
+
+        // Make sure the arm is stopped, and the position is correct
+        assertEquals("Arm speed", 0.0, motor.get(), MathUtils.kVerySmallNumber);
+        assertEquals("Arm position", SensorlessArm.SystemState.kStopped, arm.getLastKnownPosition());
+
+        // Turn off the bottom sensor
+        lowerLimit.set(false);
+        arm.periodic();
+        RobotLogger.getInstance().flush();
+        arm.periodic();
+        RobotLogger.getInstance().flush();
+
+        // Check that the arm is trying to get back to the bottom again
+        assertEquals("Arm speed", speed * -1, motor.get(), MathUtils.kVerySmallNumber);
     }
 
 }

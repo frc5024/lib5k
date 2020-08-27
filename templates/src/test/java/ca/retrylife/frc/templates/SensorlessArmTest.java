@@ -21,6 +21,11 @@ public class SensorlessArmTest {
     @Test
     public void testDownwardMovement() {
 
+        // Reset all I/O
+        motor.set(0.0);
+        lowerLimit.set(false);
+        upperLimit.set(false);
+
         // Create a SensorlessArm
         SensorlessArm arm = new SensorlessArm(motor, lowerLimit, upperLimit, speed, FF);
 
@@ -42,8 +47,8 @@ public class SensorlessArmTest {
 
         // Trigger the bottom sensor
         lowerLimit.set(true);
-        arm.periodic();
-        RobotLogger.getInstance().flush();
+
+        // It takes 40ms for one state to call another
         arm.periodic();
         RobotLogger.getInstance().flush();
         arm.periodic();
@@ -57,6 +62,43 @@ public class SensorlessArmTest {
 
     @Test
     public void testUpwardMovement() {
+
+        // Reset all I/O
+        motor.set(0.0);
+        lowerLimit.set(false);
+        upperLimit.set(false);
+
+        // Create a SensorlessArm
+        SensorlessArm arm = new SensorlessArm(motor, lowerLimit, upperLimit, speed, FF);
+
+        // Tell the arm to go up
+        arm.setDesiredPosition(SensorlessArm.SystemState.kRaised);
+        arm.periodic();
+        RobotLogger.getInstance().flush();
+
+        // Check that the motor is moving up at the correct speed
+        assertEquals("Arm speed", speed + FF, motor.get(), MathUtils.kVerySmallNumber);
+
+        // Trigger the bottom sensor
+        lowerLimit.set(true);
+        arm.periodic();
+        RobotLogger.getInstance().flush();
+
+        // Make sure nothing changed (sensor has no affect)
+        assertEquals("Arm speed", speed + FF, motor.get(), MathUtils.kVerySmallNumber);
+
+        // Trigger the upper sensor
+        upperLimit.set(true);
+
+        // It takes 40ms for one state to call another
+        arm.periodic();
+        RobotLogger.getInstance().flush();
+        arm.periodic();
+        RobotLogger.getInstance().flush();
+
+        // Make sure the arm is stopped, and the position is correct
+        assertEquals("Arm speed", 0.0, motor.get(), MathUtils.kVerySmallNumber);
+        assertEquals("Arm position", SensorlessArm.SystemState.kStopped, arm.getLastKnownPosition());
 
     }
 

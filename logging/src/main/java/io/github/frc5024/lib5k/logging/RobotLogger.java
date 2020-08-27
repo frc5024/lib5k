@@ -264,6 +264,13 @@ public class RobotLogger {
     }
 
     /**
+     * Manually flush the logs (only use this in unit tests)
+     */
+    public void flush(){
+        pushLogs();
+    }
+
+    /**
      * Push all queued messages to netconsole, the clear the buffer
      */
     private void pushLogs() {

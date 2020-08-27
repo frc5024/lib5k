@@ -136,7 +136,8 @@ public class SensorlessArm extends SubsystemBase {
         }
 
         // Check if arm has hit the upper sensor
-        if(raisedLimitSensor.get()){
+        if (raisedLimitSensor.get()) {
+            logger.log("Upper sensor triggered", Level.kDebug);
             stateMachine.setState(SystemState.kStopped);
         }
     }
@@ -156,6 +157,7 @@ public class SensorlessArm extends SubsystemBase {
 
         // Check if arm has hit the lower sensor
         if (loweredLimitSensor.get()) {
+            logger.log("Lower sensor triggered", Level.kDebug);
             stateMachine.setState(SystemState.kStopped);
         }
     }

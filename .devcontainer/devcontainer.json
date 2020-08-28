@@ -1,0 +1,20 @@
+{
+    "name":"Codespaces",
+    "build":{
+        "dockerfile": "Dockerfile",
+        "args": {
+            "INSTALL_DOCKER": "true"
+        }
+    },
+    "settings": {
+
+    },
+    "remoteUser": "user5k",
+    "overrideCommand": false,
+    "workspaceMount": "source=${localWorkspaceFolder},target=/home/user5k/workspace,type=bind,consistency=cached",
+    "workspaceFolder": "/home/user5k/workspace",
+    "mounts": [ "source=/var/run/docker.sock,target=/var/run/docker-host.sock,type=bind" ],
+    "runArgs": [ "--cap-add=SYS_PTRACE", "--security-opt", "seccomp=unconfined" ],
+    "extensions": [],
+    "forwardPorts": []
+}

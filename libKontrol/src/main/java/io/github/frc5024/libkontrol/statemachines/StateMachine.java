@@ -7,6 +7,7 @@ import java.util.function.Consumer;
 import javax.annotation.Nullable;
 
 import io.github.frc5024.lib5k.logging.RobotLogger;
+import io.github.frc5024.lib5k.logging.RobotLogger.Level;
 
 public class StateMachine<T> {
     private RobotLogger logger = RobotLogger.getInstance();
@@ -42,6 +43,7 @@ public class StateMachine<T> {
 
     /**
      * Deprecated Method
+     * 
      * @param hook hook
      */
     @Deprecated(since = "July 2020", forRemoval = true)
@@ -117,21 +119,24 @@ public class StateMachine<T> {
         }
 
         // If the desired state key is null, overwrite it with the default key.
+        boolean defaultStateWasOverridden = false;
         if (desiredStateKey == null) {
             desiredStateKey = defaultStateKey;
+            defaultStateWasOverridden = true;
         }
 
         // If the current, and last state keys differ, this is the first run of the
         // state
-        boolean isNew = lastStateKey == null || desiredStateKey == null || !lastStateKey.equals(desiredStateKey);
+        boolean isNew = lastStateKey == null || desiredStateKey == null || defaultStateWasOverridden
+                || !lastStateKey.equals(desiredStateKey);
+
+        // Set the last state key
+        // This must be placed above state.call()
+        lastStateKey = desiredStateKey;
 
         // Handle the state
         StateHandler<T> state = allStates.get(desiredStateKey);
         state.call(isNew, lastStateKey);
-
-        // Set the last state key
-        lastStateKey = desiredStateKey;
-
     }
 
     /**
@@ -140,6 +145,7 @@ public class StateMachine<T> {
      * @param key State key
      */
     public void setState(T key) {
+        logger.log("Switching to state: %s", Level.kDebug, key);
         desiredStateKey = key;
     }
 

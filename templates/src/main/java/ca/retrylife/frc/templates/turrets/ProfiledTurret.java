@@ -82,6 +82,9 @@ public class ProfiledTurret extends TurretBase {
         // Set up state machine
         String name = String.format("ProfiledTurret[%d]", objCounter.getNewID());
         this.stateMachine = new StateMachine<>(name);
+        this.stateMachine.setDefaultState(SystemState.kIdle, this::handleIdle);
+        this.stateMachine.addState(SystemState.kFacingAngle, this::handleFacingAngle);
+        this.stateMachine.addState(SystemState.kHoldingAngle, this::handleHoldingAngle);
 
     }
 
@@ -133,7 +136,8 @@ public class ProfiledTurret extends TurretBase {
         }
 
         // Get the PID output
-        double output = pidController.calculate(distToGoal);
+        // Input is flipped because of some WPILib issues
+        double output = pidController.calculate(distToGoal * -1);
 
         // NOTE: If you were to be building a system that uses limit switches at the
         // deadzone, that code should go right here.
@@ -170,7 +174,9 @@ public class ProfiledTurret extends TurretBase {
 
     @Override
     public void lookAt(Rotation2d angle) {
+        logger.log("Now looking at: %s", angle);
         this.goal = angle;
+        this.stateMachine.setState(SystemState.kFacingAngle);
     }
 
     @Override

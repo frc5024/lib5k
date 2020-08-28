@@ -156,6 +156,7 @@ public class ProfiledTurret extends TurretBase {
 
         if (meta.isFirstRun()) {
             logger.log("Holding setpoint angle");
+            motor.set(0.0);
         }
 
         // Get the current angle

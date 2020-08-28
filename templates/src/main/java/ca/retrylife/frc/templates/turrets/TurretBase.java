@@ -43,7 +43,8 @@ public abstract class TurretBase extends SubsystemBase {
     public abstract void lookAt(Rotation2d angle);
 
     /**
-     * Tell the turret to look at a robot-relative point in space, where (1,1) is 45 degrees
+     * Tell the turret to look at a robot-relative point in space, where (1,1) is 45
+     * degrees
      * 
      * @param point Robot-relative point in space
      */
@@ -64,23 +65,25 @@ public abstract class TurretBase extends SubsystemBase {
     public abstract void stop();
 
     /**
-     * Adjust any given angle to a new numbering system that makes PID calculation
-     * easier
+     * Find the fastest and safest way to get from A to B. Treat this function as
+     * "if I am at A, and I want to go to B, I must turn X degrees to the right"
      * 
-     * @param angle Angle
-     * @return New angle in adjusted degrees
+     * @param a Current position
+     * @param b Goal position
+     * @return Best offset to use
      */
-    protected double adjustAngleToDegrees(Rotation2d angle) {
+    protected double findDistanceFromAToB(Rotation2d a, Rotation2d b) {
 
-        // Shift the angle so that -180 is now 0 and +180 is now 360
-        double shiftedAngle = angle.getDegrees() + 180;
+        // Remap both A and B from [-180 to 180] to [0 to 360]
+        double remappedA = a.getDegrees() + 180;
+        double remappedB = b.getDegrees() + 180;
 
-        // Get the min and max of the deadzone and shift them too
-        double deadMin = deadzone[0].getDegrees() + 180;
-        double deadMax = deadzone[1].getDegrees() + 180;
+        // Remap both the min and max deadzone from [-180 to 180] to [0 to 360]
+        double remappedMinDeadzone = deadzone[0].getDegrees() + 180;
+        double remappedMaxDeadzone = deadzone[1].getDegrees() + 180;
 
         // Get the abs distance between both sides of the deadzone
-        double deadzoneSize = Math.abs(deadMax - deadMin);
+        double deadzoneSize = Math.abs(remappedMaxDeadzone - remappedMinDeadzone);
 
         // The angle between the sides of the deadzone must not be 180 degrees
         if (MathUtils.epsilonEquals(deadzoneSize, 180, MathUtils.kVerySmallNumber)) {
@@ -90,21 +93,39 @@ public abstract class TurretBase extends SubsystemBase {
                     "The angle between the min and max of a turret's deadzone must not be exactly 180 degrees!");
         }
 
-        // Determine the base angle
-        // This is the angle that is furthest clockwise if you were to place the range
-        // 0-360 in a circle
-        double baseAngle = (deadzoneSize > 180) ? deadMin : deadMax;
-        double limit = (deadzoneSize < 180) ? deadMin : deadMax;
+        // Determine if the deadzone crosses the 0/360 degree border
+        boolean deadzoneCrossesBoundary = deadzoneSize > 180;
 
-        // Subtract the base angle from the desired angle to make the base equal to 0
-        shiftedAngle = shiftedAngle - baseAngle;
+        // If the deadzone crosses the boundray
+        if (deadzoneCrossesBoundary) {
 
-        // Do not allow the setpoint to enter the deadzone
-        if (shiftedAngle > 360 - limit) {
-            shiftedAngle = limit;
+            // Check if B is not in the zone between min and max
+            if (remappedB > remappedMinDeadzone && remappedB < remappedMaxDeadzone) {
+                // Return the distance to get to B
+                return remappedB - remappedA;
+            } else {
+                // B is not a valid goal position (it lands inside the deadzone)
+                // Return the deadzone boundary closest to b
+                return ((Math.abs(remappedB - remappedMinDeadzone) >= Math.abs(remappedB - remappedMaxDeadzone))
+                        ? remappedMaxDeadzone
+                        : remappedMinDeadzone) - remappedA;
+            }
+        } else {
+            // Check if B is in the zone between min and max
+            if (remappedB > remappedMinDeadzone && remappedB < remappedMaxDeadzone) {
+                // B is not a valid goal position (it lands inside the deadzone)
+                // Return the deadzone boundary closest to b
+                return MathUtils.getWrappedError(remappedA,
+                        (Math.abs(remappedB - remappedMinDeadzone) >= Math.abs(remappedB - remappedMaxDeadzone))
+                                ? remappedMaxDeadzone
+                                : remappedMinDeadzone)
+                        * -1;
+            } else {
+                // Return the sum of distances between A, B, and the 0/360 boundary
+                return MathUtils.getWrappedError(remappedA, remappedB);
+            }
         }
 
-        return shiftedAngle;
     }
 
 }

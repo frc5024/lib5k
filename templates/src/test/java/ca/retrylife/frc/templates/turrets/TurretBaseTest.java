@@ -60,41 +60,31 @@ public class TurretBaseTest {
     
     @Test
     public void testWrappedDeadzoneOrdering() {
-        
+
         // Create a mock turret
-        MockTurret mock = new MockTurret(Rotation2d.fromDegrees(10), Rotation2d.fromDegrees(300));
+        MockTurret mock = new MockTurret(Rotation2d.fromDegrees(-10), Rotation2d.fromDegrees(100));
 
         // Check that the deadzones are ordered correctly
-        assertArrayEquals("Deadzone ordering", new Rotation2d[]{Rotation2d.fromDegrees(10), Rotation2d.fromDegrees(300)}, mock.deadzone);
+        assertArrayEquals("Deadzone ordering",
+                new Rotation2d[] { Rotation2d.fromDegrees(-10), Rotation2d.fromDegrees(100) }, mock.deadzone);
     }
     
     @Test
-    public void testEasyAngleAdjustment() {
-
+    public void testAtoBCalculationCrossingBoundary() {
         // Create a mock turret
-        MockTurret mock = new MockTurret(Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(10));
+        MockTurret mock = new MockTurret(Rotation2d.fromDegrees(-100), Rotation2d.fromDegrees(120));
 
-        // Check that the correct side is chosen, and shifted correctly
-        assertEquals(Rotation2d.fromDegrees(0).getDegrees(), mock.adjustAngleToDegrees(Rotation2d.fromDegrees(10)), MathUtils.kVerySmallNumber);
+        assertEquals("B outside boundary", 70, mock.findDistanceFromAToB(Rotation2d.fromDegrees(-50), Rotation2d.fromDegrees(20)), MathUtils.kVerySmallNumber);        
+        assertEquals("B inside boundary", 170, mock.findDistanceFromAToB(Rotation2d.fromDegrees(-50), Rotation2d.fromDegrees(130)), MathUtils.kVerySmallNumber);        
     }
 
     @Test
-    public void testEasyWrappedAngleAdjustment() {
-
+    public void testAtoBCalculationNotCrossingBoundary() {
         // Create a mock turret
-        MockTurret mock = new MockTurret(Rotation2d.fromDegrees(-170), Rotation2d.fromDegrees(350));
+        MockTurret mock = new MockTurret(Rotation2d.fromDegrees(-50), Rotation2d.fromDegrees(50));
 
-        // Check that the correct side is chosen, and shifted correctly
-        assertEquals(Rotation2d.fromDegrees(10).getDegrees(), mock.adjustAngleToDegrees(Rotation2d.fromDegrees(-160)), MathUtils.kVerySmallNumber);
+        assertEquals("B outside boundary", 180, mock.findDistanceFromAToB(Rotation2d.fromDegrees(-80), Rotation2d.fromDegrees(100)), MathUtils.kVerySmallNumber);        
+        assertEquals("B inside boundary", -50, mock.findDistanceFromAToB(Rotation2d.fromDegrees(100), Rotation2d.fromDegrees(0)), MathUtils.kVerySmallNumber);        
     }
-
-    @Test
-    public void testInvalidAngleAdjustment() {
-
-        // Create a mock turret
-        MockTurret mock = new MockTurret(Rotation2d.fromDegrees(10), Rotation2d.fromDegrees(20));
-
-        // Check that the correct side is chosen, and shifted correctly
-        assertEquals(Rotation2d.fromDegrees(150).getDegrees(), mock.adjustAngleToDegrees(Rotation2d.fromDegrees(15)), MathUtils.kVerySmallNumber);
-    }
+    
 }

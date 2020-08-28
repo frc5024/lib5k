@@ -51,7 +51,7 @@ public class ProfiledTurret extends TurretBase {
     private ProfiledPIDController pidController;
 
     // System goal
-    private Rotation2d goal = new Rotation2d();
+    private double goal = 0.0;
 
     /**
      * Create a ProfiledTurret
@@ -98,6 +98,11 @@ public class ProfiledTurret extends TurretBase {
      */
     private void handleIdle(StateMetadata<SystemState> meta) {
 
+        if (meta.isFirstRun()) {
+            logger.log("Became idle");
+            motor.set(0.0);
+        }
+
     }
 
     /**
@@ -106,6 +111,37 @@ public class ProfiledTurret extends TurretBase {
      * @param meta State metadata
      */
     private void handleFacingAngle(StateMetadata<SystemState> meta) {
+
+        if (meta.isFirstRun()) {
+            logger.log("Starting to face set angle");
+
+            // Set the PID goal
+            pidController.setGoal(new TrapezoidProfile.State(goal, 0.0));
+
+        }
+        
+        // Get the current angle, and adjust
+        double adjCurrentAngle = super.adjustAngleToDegrees(turretAngleSupplier.get());
+
+        // Check if we are at our goal
+        if (MathUtils.epsilonEquals(adjCurrentAngle, goal, Math.abs(epsilon.getDegrees()))) {
+            stateMachine.setState(SystemState.kHoldingAngle);
+            return;
+        }
+
+        // Get the PID output
+        double output = pidController.calculate(adjCurrentAngle);
+
+        // Do not allow the motor to move if it crosses a deadzone boundry
+        if (adjCurrentAngle <= 0 && output < 0) {
+            output = 0.0;
+        }
+        if (adjCurrentAngle >= super.adjustAngleToDegrees(super.deadzone[1]) && output > 0) {
+            output = 0.0;
+        }
+
+        // Set the motor output
+        motor.set(output);
 
     }
 
@@ -116,11 +152,24 @@ public class ProfiledTurret extends TurretBase {
      */
     private void handleHoldingAngle(StateMetadata<SystemState> meta) {
 
+        if (meta.isFirstRun()) {
+            logger.log("Holding setpoint angle");
+        }
+        
+        // Get the current angle, and adjust
+        double adjCurrentAngle = super.adjustAngleToDegrees(turretAngleSupplier.get());
+
+        // Check if we are not at our goal
+        if (!MathUtils.epsilonEquals(adjCurrentAngle, goal, Math.abs(epsilon.getDegrees()))) {
+            stateMachine.setState(SystemState.kFacingAngle);
+            return;
+        }
+
     }
 
     @Override
     public void lookAt(Rotation2d angle) {
-        this.goal = angle;
+        this.goal = super.adjustAngleToDegrees(angle);
     }
 
     @Override

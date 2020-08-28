@@ -87,4 +87,14 @@ public class TurretBaseTest {
         // Check that the correct side is chosen, and shifted correctly
         assertEquals(Rotation2d.fromDegrees(10).getDegrees(), mock.adjustAngleToDegrees(Rotation2d.fromDegrees(-160)), MathUtils.kVerySmallNumber);
     }
+
+    @Test
+    public void testInvalidAngleAdjustment() {
+
+        // Create a mock turret
+        MockTurret mock = new MockTurret(Rotation2d.fromDegrees(10), Rotation2d.fromDegrees(20));
+
+        // Check that the correct side is chosen, and shifted correctly
+        assertEquals(Rotation2d.fromDegrees(150).getDegrees(), mock.adjustAngleToDegrees(Rotation2d.fromDegrees(15)), MathUtils.kVerySmallNumber);
+    }
 }

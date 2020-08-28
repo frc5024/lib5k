@@ -94,9 +94,15 @@ public abstract class TurretBase extends SubsystemBase {
         // This is the angle that is furthest clockwise if you were to place the range
         // 0-360 in a circle
         double baseAngle = (deadzoneSize > 180) ? deadMin : deadMax;
+        double limit = (deadzoneSize < 180) ? deadMin : deadMax;
 
         // Subtract the base angle from the desired angle to make the base equal to 0
         shiftedAngle = shiftedAngle - baseAngle;
+
+        // Do not allow the setpoint to enter the deadzone
+        if (shiftedAngle > 360 - limit) {
+            shiftedAngle = limit;
+        }
 
         return shiftedAngle;
     }

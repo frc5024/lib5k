@@ -1,4 +1,4 @@
-package ca.retrylife.frc.templates;
+package ca.retrylife.frc.templates.arms;
 
 import static org.junit.Assert.assertEquals;
 

@@ -1,4 +1,4 @@
-package ca.retrylife.frc.templates;
+package ca.retrylife.frc.templates.arms;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -12,12 +12,14 @@ import io.github.frc5024.libkontrol.statemachines.StateMetadata;
 
 /**
  * The SensorlessArm class is designed to control any type of arm that does not
- * have a rotational sensor (like an encoder or potentiometer). At 5024, we have
- * used these in 2019 (climber) and 2020 (intake). The physical system must
- * consist of an arm that can be in one of two positions, and a limit switch (or
- * other digital input) at each stopping point. Since there is no good sensor
- * for this system, a strong motor must be used, otherwise the arm will not hold
- * its position at all. If the arm needs to hold position, add an encoder.
+ * have a rotational sensor (like an encoder or potentiometer).
+ * 
+ * At 5024, we have used these in 2019 (climber) and 2020 (intake). The physical
+ * system must consist of an arm that can be in one of two positions, and a
+ * limit switch (or other digital input) at each stopping point. Since there is
+ * no good sensor for this system, a strong motor must be used, otherwise the
+ * arm will not hold its position at all. If the arm needs to hold position, add
+ * an encoder.
  */
 public class SensorlessArm extends SubsystemBase {
     private RobotLogger logger = RobotLogger.getInstance();
@@ -66,9 +68,10 @@ public class SensorlessArm extends SubsystemBase {
         // Publish all components over the network
         // TODO: This is a 2021 thing
         // LiveWindow.getInstance().addActuator(name, "motor", motor);
-        // LiveWindow.getInstance().addSensor(name, "loweredLimitSensor", loweredLimitSensor);
-        // LiveWindow.getInstance().addSensor(name, "raisedLimitSensor", raisedLimitSensor);
-
+        // LiveWindow.getInstance().addSensor(name, "loweredLimitSensor",
+        // loweredLimitSensor);
+        // LiveWindow.getInstance().addSensor(name, "raisedLimitSensor",
+        // raisedLimitSensor);
 
     }
 
@@ -122,13 +125,14 @@ public class SensorlessArm extends SubsystemBase {
 
     }
 
-    /**  
+    /**
      * Handle raising the arm
+     * 
      * @param meta State metadata
      */
-    private void handleRaising(StateMetadata<SystemState> meta){
+    private void handleRaising(StateMetadata<SystemState> meta) {
 
-        if(meta.isFirstRun()){
+        if (meta.isFirstRun()) {
             logger.log("Raising arm");
 
             // Set motor speed
@@ -142,8 +146,9 @@ public class SensorlessArm extends SubsystemBase {
         }
     }
 
-    /**  
+    /**
      * Handle lowering the arm
+     * 
      * @param meta State metadata
      */
     private void handleLowering(StateMetadata<SystemState> meta) {
@@ -162,8 +167,9 @@ public class SensorlessArm extends SubsystemBase {
         }
     }
 
-    /** 
+    /**
      * Set the desired position for the arm
+     * 
      * @param position Desired position
      */
     public void setDesiredPosition(SystemState position) {
@@ -172,18 +178,19 @@ public class SensorlessArm extends SubsystemBase {
         userDesiredState = position;
     }
 
-    /** 
+    /**
      * Get the last known position of the arm
+     * 
      * @return Last position
      */
     public SystemState getLastKnownPosition() {
         return stateMachine.getCurrentState();
     }
 
-    /** 
+    /**
      * Stop the arm
      */
-    public void stop(){
+    public void stop() {
         setDesiredPosition(SystemState.kStopped);
     }
 

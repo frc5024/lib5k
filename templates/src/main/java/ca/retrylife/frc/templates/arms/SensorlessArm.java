@@ -48,6 +48,19 @@ public class SensorlessArm extends SubsystemBase {
     // ID counter
     private static ObjectCounter counter = new ObjectCounter();
 
+    /**
+     * Create a SensorlessArm
+     * 
+     * @param motor              Arm motor
+     * @param loweredLimitSensor Limit sensor at the bottom of the arm's range of
+     *                           motion
+     * @param raisedLimitSensor  Limit sensor at the top of the arm's range of
+     *                           motion
+     * @param speed              How fast the arm should move downwards as a
+     *                           percentage output
+     * @param feedForward        How much faster the arm should move going up than
+     *                           it should going down
+     */
     public SensorlessArm(SpeedController motor, DigitalInput loweredLimitSensor, DigitalInput raisedLimitSensor,
             double speed, double feedForward) {
 

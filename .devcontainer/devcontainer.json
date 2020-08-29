@@ -1,10 +1,11 @@
 {
     "name":"Codespaces",
-    "build":{
-        "dockerfile": "Dockerfile",
-        "args": {
-        }
-    },
+    // "build":{
+    //     "dockerfile": "Dockerfile",
+    //     "args": {
+    //     }
+    // },
+    "image":"ewpratten/frc_devcontainer:2020.3.2",
     "settings": {
         "terminal.integrated.shell.linux":"/bin/bash"
     },

@@ -1,0 +1,26 @@
+{
+    "name":"General Java Development",
+    "image":"ewpratten/frc_devcontainer:2020.3.2",
+    "settings": {
+        "terminal.integrated.shell.linux":"/bin/bash"
+    },
+    "workspaceMount": "source=${localWorkspaceFolder},target=/root/workspace,type=bind,consistency=cached",
+    "workspaceFolder": "/root/workspace",
+    "mounts": [ "source=/var/run/docker.sock,target=/var/run/docker-host.sock,type=bind" ],
+    // "runArgs": [ "--cap-add=SYS_PTRACE", "--security-opt", "seccomp=unconfined" , "--user $(id -u):$(id -g)"],
+    "forwardPorts": [],
+    "extensions": [
+        "coenraads.bracket-pair-colorizer-2",
+        "eamodio.gitlens",
+        "github.vscode-pull-request-github",
+        "ms-azuretools.vscode-docker",
+        "ms-vsliveshare.vsliveshare",
+        "vscode-icons-team.vscode-icons",
+        "visualstudioexptteam.vscodeintellicode",
+        "wpilibsuite.vscode-wpilib",
+        "redhat.java",
+        "ms-vscode.cpptools",
+        "ms-python.python",
+        "vscjava.vscode-java-pack"
+    ]
+}

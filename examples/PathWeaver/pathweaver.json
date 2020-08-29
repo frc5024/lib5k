@@ -1,8 +1,9 @@
 {
   "lengthUnit": "Meter",
+  "exportUnit": "Same as Project",
   "maxVelocity": 4.0,
   "maxAcceleration": 3.6,
   "wheelBase": 0.8,
-  "gameName": "FIRST Power Up",
+  "gameName": "Infinite Recharge",
   "outputDir": "../pw_outputs"
 }

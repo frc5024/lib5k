@@ -30,7 +30,7 @@ public class Follower {
      * 
      * @param path              Path to follow
      * @param lookaheadDistance Lookahead distance
-     * @param lookaheadGain     Lookahead gain
+     * @param lookaheadGain     The minimum distance required to fetch a new pose
      * @param drivebaseWidth    Drivebase width
      */
     public Follower(Path path, double lookaheadDistance, double lookaheadGain, double drivebaseWidth) {
@@ -144,6 +144,11 @@ public class Follower {
             // TODO: make this a FOR loop starting at m_lastLookaheadIndex
             while (true) {
 
+                // Keep using the current goal if we have not reached it
+                if (thisDist > m_lookaheadGain) {
+                    break;
+                }
+
                 // Attempt to incr our search index
                 nextIndex = ((nextIndex + 1) < m_path.getPoses().length) ? nextIndex + 1 : nextIndex;
 
@@ -182,7 +187,7 @@ public class Follower {
 
         // Set a Lookahead
         double L = 0.0;
-        double LF = m_lookaheadGain * v * m_lookaheadDist;
+        double LF = v * m_lookaheadDist;
 
         // Look for target
         int ind = m_lastLookaheadIndex;

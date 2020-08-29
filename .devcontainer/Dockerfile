@@ -1,28 +1,34 @@
-FROM mcr.microsoft.com/vscode/devcontainers/universal:linux
+FROM mcr.microsoft.com/vscode/devcontainers/base:ubuntu
 
-# [Optional] Install Docker
-USER root
-ARG INSTALL_DOCKER="false"
-COPY library-scripts/docker-debian.sh /tmp/library-scripts/
-RUN if [ "${INSTALL_DOCKER}" = "true" ]; then \
-        bash /tmp/library-scripts/docker-debian.sh "true" "/var/run/docker-host.sock" "/var/run/docker.sock" "codespace"; \
-    else \
-        echo '#!/bin/bash\nexec "$@"' > /usr/local/share/docker-init.sh && chmod +x /usr/local/share/docker-init.sh; \
-    fi \
-    && rm -rf /var/lib/apt/lists/* /tmp/library-scripts/
+RUN adduser --shell /bin/bash --disabled-password --home /home/user5k user5k
+RUN passwd -d user5k
+RUN apt update -y
+RUN apt install sudo -y
+RUN usermod -aG sudo user5k
 
 # Set the user
-USER user5k
+# USER user5k
 
 # Update apt
 RUN sudo apt update -y 
 
 # Install needed packages
 RUN sudo apt install -y python3 python3-pip
+RUN sudo apt install -y curl wget
+RUN sudo apt install -y zip unzip
 
 # Install sdkman
 RUN curl -s "https://get.sdkman.io?rcupdate=true" | bash
-RUN source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+# Install java
+RUN bash -c "source /root/.sdkman/bin/sdkman-init.sh && sdk install java 11.0.8-open"
 
 # Install gradle
-RUN sdk install gradle
+RUN bash -c "source /root/.sdkman/bin/sdkman-init.sh && sdk install gradle"
+
+RUN echo "source /root/.sdkman/bin/sdkman-init.sh" >> /root/.bashrc
+
+# Install WPILib
+RUN wget https://github.com/wpilibsuite/allwpilib/releases/download/v2020.3.2/WPILib_Linux-2020.3.2.tar.gz -O wpilib.tar.gz
+RUN mkdir -p /root/wpilib/2020
+RUN tar -zxvf wpilib.tar.gz -C /root/wpilib/2020

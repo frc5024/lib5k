@@ -1,10 +1,5 @@
 {
-    "name":"Codespaces",
-    // "build":{
-    //     "dockerfile": "Dockerfile",
-    //     "args": {
-    //     }
-    // },
+    "name":"General Java Development",
     "image":"ewpratten/frc_devcontainer:2020.3.2",
     "settings": {
         "terminal.integrated.shell.linux":"/bin/bash"
@@ -25,6 +20,7 @@
         "wpilibsuite.vscode-wpilib",
         "redhat.java",
         "ms-vscode.cpptools",
-        "ms-python.python"
+        "ms-python.python",
+        "vscjava.vscode-java-pack"
     ]
 }

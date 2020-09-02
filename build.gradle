@@ -214,8 +214,13 @@ publishing {
     }
     publications {
         gpr(MavenPublication) {
-            dependsOn buildRelease
-            from "_release/"+project.name + "-" + project.version +"-all.jar"
+            groupId = 'io.github.frc5024'
+            artifactId = 'lib5k'
+            version = project.version
+
+            from components.java
+
+            // from file("docs"), allprojects.collect { it.sourceSets.main.allSource }, { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
         }
     }
 }

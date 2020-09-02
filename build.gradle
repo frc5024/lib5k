@@ -17,6 +17,7 @@ buildscript {
 plugins {
   id "com.gradle.build-scan" version "3.4"
   id "java-library"
+  id "maven-publish"
 }
 
 // Load project dependancy configurations
@@ -197,4 +198,24 @@ task buildBeta(type: Copy) {
   from "build/libs"
   into "_release/jar"
   include project.name + "-" + project.version +"-all.jar"
+}
+
+// GitHub Packages config
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/frc5024/lib5k")
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("GHP_USERNAME")
+                password = project.findProperty("gpr.key") ?: System.getenv("GHP_TOKEN")
+            }
+        }
+    }
+    publications {
+        gpr(MavenPublication) {
+            dependsOn buildRelease
+            from "_release/"+project.name + "-" + project.version +"-all.jar"
+        }
+    }
 }

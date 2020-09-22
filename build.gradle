@@ -35,29 +35,17 @@ project.version = "1.4.0"
 // Enable Java support for all projects
 subprojects{
   apply plugin: "java"
+  apply plugin: "java-library"
   apply from: rootProject.file("gradle_utils/libversions.gradle")
   apply from: rootProject.file("gradle_utils/mavenrepos.gradle")
   apply from: rootProject.file("gradle_utils/simpleunittest.gradle")
+  apply from: rootProject.file("gradle_utils/projectjar.gradle")
 
-  // dependencies{
-
-  //   /* This is some magic that intercepts version info from GradleRIO and replaces it with custom versions */
-  //   // WPILib
-  //   wpi.deps.wpilib().each{
-  //     implementation it.replaceAll(wpi.wpilibVersion, project.WPI_VERSION)
-  //   }
-  //   nativeZip "edu.wpi.first.thirdparty.frc2020.opencv:opencv-cpp:3.4.7-2:linuxathena@zip"
-  //   def athenaJNI = []
-  //   wpi.deps.wpilibJni(wpi.platforms.roborio).each{
-  //      athenaJNI += it.replaceAll(wpi.wpilibVersion, project.WPI_VERSION)
-  //   }
-  //   println wpi.deps.wpilibJni(wpi.platforms.roborio)
-  //   println athenaJNI
-  //   nativeZip athenaJNI
-  //   wpi.deps.wpilibJni(wpi.platforms.desktop).each{
-  //     nativeDesktopZip it.replaceAll(wpi.wpilibVersion, project.WPI_VERSION)
-  //   }
-  // }
+  // Set the java version
+  java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+  }
 } 
 
 // This enables some fancy gradle enterprise features for us

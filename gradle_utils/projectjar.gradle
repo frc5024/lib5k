@@ -2,12 +2,12 @@
 
 // This will build a JAR file that contains the subproject's class files, and the class files for all required dependancies / libraries
 // This way, everything is technically standalone
-task _buildProjectFatJar(type: Jar) {
-    classifier = "classes"
-    baseName = project.name + "-" + rootProject.version
-    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
-    with jar
-}
+// task _buildProjectFatJar(type: Jar) {
+//     classifier = "classes"
+//     baseName = project.name + "-" + rootProject.version
+//     from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+//     with jar
+// }
 
 // Configure style checking
 if(!(project.name in ["examples", "statespace"])){

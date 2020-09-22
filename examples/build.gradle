@@ -1,20 +1,10 @@
-
-
 plugins {
     id "java"
 }
 
-apply from: "../gradle_utils/libversions.gradle"
-apply from: "../gradle_utils/simpleunittest.gradle"
-apply from: "../gradle_utils/mavenrepos.gradle"
-
 // Change this to match the main class of any example you want to deploy
 def ROBOT_MAIN_CLASS = "io.github.frc5024.lib5k.examples.drivebase_simulation.Main"
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
-}
 
 // Define my targets (RoboRIO) and artifacts (deployable files)
 // This is added by GradleRIO's backing project EmbeddedTools.
@@ -46,33 +36,6 @@ deploy {
 }
 
 dependencies {
-
-    // This dependency is used internally, and not exposed to consumers on their own compile classpath.
-    implementation 'com.google.guava:guava:29.0-jre'
-
-    // Use JUnit test framework
-    testImplementation 'junit:junit:4.13'
-
-    // Load Binaries for all native libs
-    nativeZip wpi.deps.wpilibJni(wpi.platforms.roborio)
-    nativeDesktopZip wpi.deps.wpilibJni(wpi.platforms.desktop)
-    nativeZip wpi.deps.vendor.jni(wpi.platforms.roborio)
-    nativeDesktopZip wpi.deps.vendor.jni(wpi.platforms.desktop)
-
-    // WPILib
-    implementation("edu.wpi.first.wpilibj:wpilibj-java:${project.WPI_VERSION}")
-    implementation("edu.wpi.first.hal:hal-java:${project.WPI_VERSION}")
-    implementation("edu.wpi.first.wpiutil:wpiutil-java:${project.WPI_VERSION}")
-    implementation("edu.wpi.first.wpimath:wpimath-java:${project.WPI_VERSION}")
-
-    // WPILib Extras
-    implementation("edu.wpi.first.ntcore:ntcore-java:${project.WPI_VERSION}")
-    implementation("edu.wpi.first.cscore:cscore-java:${project.WPI_VERSION}")
-    implementation("edu.wpi.first.cameraserver:cameraserver-java:${project.WPI_VERSION}")
-
-    // WPILib command framework
-    implementation("edu.wpi.first.wpilibNewCommands:wpilibNewCommands-java:${project.WPI_VERSION}")
-
     // NavX
     implementation("com.kauailabs.navx.frc:navx-java:${project.NAVX_VERSION}")
 
@@ -83,9 +46,6 @@ dependencies {
     // REV Robotics
     implementation("com.revrobotics.frc:ColorSensorV3-java:${project.REV_COLOR_VERSION}")
     implementation("com.revrobotics.frc:SparkMax-java:${project.REV_SPARK_VERSION}")
-    
-    // Math utils
-    implementation 'com.github.ewpratten:ewmath:master-SNAPSHOT'
 
     // All of lib5k
     implementation project(":")

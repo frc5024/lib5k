@@ -44,7 +44,7 @@ public class SimpleFlywheelController {
     // Plant, observer, and LQR
     private LinearSystem<N1, N1, N1> plant;
     private KalmanFilter<N1, N1, N1> observer;
-    private LinearQuadraticRegulator<N1, N1, N1> controller;
+    private LinearQuadraticRegulator<N1, N1, N1> lqr;
 
     // State space loop
     private LinearSystemLoop<N1, N1, N1> loop;
@@ -167,11 +167,11 @@ public class SimpleFlywheelController {
 
         // Build LQR
         double rho = 1.0; // I don't think anyone will ever need to change rho
-        controller = new LinearQuadraticRegulator<>(plant, VecBuilder.fill(epsilonRADS), rho,
+        lqr = new LinearQuadraticRegulator<N1, N1, N1>(plant, VecBuilder.fill(epsilonRADS), rho,
                 VecBuilder.fill(maxVoltageOutput), 0.020);
 
         // Build loop
-        loop = new LinearSystemLoop<>(plant, controller, observer, maxVoltageOutput, expectedLoopTimeSeconds);
+        loop = new LinearSystemLoop<>(plant, lqr, observer, maxVoltageOutput, expectedLoopTimeSeconds);
     }
 
     /**

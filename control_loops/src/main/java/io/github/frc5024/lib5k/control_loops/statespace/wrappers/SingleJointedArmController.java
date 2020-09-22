@@ -149,7 +149,7 @@ public class SingleJointedArmController {
 
         // Design LQR
         double rho = 1.0; // I don't think anyone will ever need to change rho
-        lqr = new LinearQuadraticRegulator<>(plant,
+        lqr = new LinearQuadraticRegulator<N2, N1, N1>(plant,
                 VecBuilder.fill(Units.degreesToRadians(positionEpsilonDegrees),
                         Units.rotationsPerMinuteToRadiansPerSecond(velocityEpsilonRPM)),
                 rho, VecBuilder.fill(maxOutputVoltage), expectedLoopTimeSeconds);

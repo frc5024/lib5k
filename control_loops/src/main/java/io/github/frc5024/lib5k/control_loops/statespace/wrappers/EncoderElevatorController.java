@@ -162,9 +162,8 @@ public class EncoderElevatorController {
                 expectedLoopTimeSeconds);
 
         // Create LQR
-        double rho = 1.0; // I don't think anyone will ever need to change rho
         lqr = new LinearQuadraticRegulator<N2, N1, N1>(plant,
-                VecBuilder.fill(positionEpsilonM, velocityEpsilonMPS), rho, VecBuilder.fill(maxVoltageOutput),
+                VecBuilder.fill(positionEpsilonM, velocityEpsilonMPS), VecBuilder.fill(maxVoltageOutput),
                 expectedLoopTimeSeconds);
 
         // Create a loop

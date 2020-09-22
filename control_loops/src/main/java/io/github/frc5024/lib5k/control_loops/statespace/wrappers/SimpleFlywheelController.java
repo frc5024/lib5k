@@ -166,8 +166,7 @@ public class SimpleFlywheelController {
         double epsilonRADS = Units.rotationsPerMinuteToRadiansPerSecond(epsilonRPM);
 
         // Build LQR
-        double rho = 1.0; // I don't think anyone will ever need to change rho
-        lqr = new LinearQuadraticRegulator<N1, N1, N1>(plant, VecBuilder.fill(epsilonRADS), rho,
+        lqr = new LinearQuadraticRegulator<N1, N1, N1>(plant, VecBuilder.fill(epsilonRADS),
                 VecBuilder.fill(maxVoltageOutput), 0.020);
 
         // Build loop

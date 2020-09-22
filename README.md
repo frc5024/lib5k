@@ -1,56 +1,33 @@
-# lib5k
-The software libraries that power all Raider Robotics projects.
+![Lib5K Logo](./assets/lib5k.png)
 
-*Javadoc can be found [here](https://frc5024.github.io/lib5k)*<br>
-*Wiki can be found [here](https://github.com/frc5024/lib5k/wiki)*
+<!-- Badges go here -->
+![Build Library](https://github.com/frc5024/lib5k/workflows/Build%20Library/badge.svg)
+![Dependencies: Latest](https://img.shields.io/badge/dependencies-up--to--date-g)
+[![Documentation](https://img.shields.io/badge/API-1.3.0-orange)](https://frc5024.github.io/lib5k)
+[![Documentation](https://img.shields.io/badge/-documentation-blue)](https://github.com/frc5024/lib5k/wiki)
 
-## Using
+Lib5K is a robotics software library built and maintained by [Raider Robotics](https://github.com/frc5024), and is used by FRC teams world-wide. This library has two primary goals:
+ - Support our fast-paced design and development workflow
+ - Allow anyone from inexperienced programmers to mentors to experiment with advanced robotics control theory and tooling
 
-The simplest way to use lib5k is to import the entire library (warning: this is quite big). This can be done by grabbing the latest `lib5k-<version>-all.jar` file from the [releases page](https://github.com/frc5024/lib5k/releases/latest), and adding it to your project (here is a [tutorial](https://medium.com/@petehouston/compile-local-jar-files-with-gradle-a078e5c7a520)).
+Raider Robotics is committed to keeping this library open source, supported, and free to use. This way, if you see one of our robots do something cool, you can come and take a look at the code that powers it (and even use it for yourself). Being built on top of the [WPILib](https://github.com/wpilibsuite/allwpilib/) project, Lib5K is one of the largest Java robotics libraries available for the FIRST Robotics Competition. 
 
-If you would like to pick and choose which components you want, reference the chart below, and only add the jars you want.
+## More information
 
-## Modules
+In an effort to keep our documentation centeralized and clean, everything you should need to know is stored in [the project's wiki](https://github.com/frc5024/lib5k/wiki). If you have any questions, or encounter any bugs, [open an issue](https://github.com/frc5024/lib5k/issues/new/choose) via our issue tracker.
 
-This repository is split into modules. This allows us to only import what we need per project instead of loading unnecessary libs (for example, parts management does not need access to CTRE libs). The following table lists all avalible modules, and their uses.
+## Sponsorships
 
-| Gradle Name             | JitPack Name           | Description                                                                               |
-|-------------------------|------------------------|-------------------------------------------------------------------------------------------|
-| `:asyncHAL`             | `asyncHAL`             | An asynchronous extension to the RoboRIO HAL                                              |
-| `:auton_utils`          | `auton_utils`          | Wrappers for autonomous, and general robot program                                        |
-| `:common_drive`         | `common_drive`         | Robot-agnostic drivetrain code                                                            |
-| `:control_loops`        | `control_loops`        | Classes and tools related to control theory                                               |
-| `:hardware:common`      | `hardware.common`      | Common types and interfaces used by all hardware libs                                     |
-| `:hardware:ctre`        | `hardware.ctre`        | For interfacing with [CTRE](https://ctr-electronics.com/) products                        |
-| `:hardware:generic`     | `hardware.generic`     | For interfacing with KOP and custom hardware                                              |
-| `:hardware:kauai`       | `hardware.kauai`       | For interfacing with [Kauai Labs](https://www.kauailabs.com/) products                    |
-| `:hardware:limelight`   | `hardware.limelight`   | For interfacing with [Limelight](https://limelightvision.io/) products                    |
-| `:hardware:ni`          | `hardware.ni`          | For interfacing with [NI](https://www.ni.com) products                                    |
-| `:hardware:revrobotics` | `hardware.revrobotics` | For interfacing with [REV Robotics](https://revrobotics.com/) products                    |
-| `:hardware`             | `hardware`             | Classes and tools for interfacing with robot hardware (Imports all hardware sub-projects) |
-| `:libKontrol`           | `libKontrol`           | This library contains tools for building state machines                                   |
-| `:logging`              | `logging`              | Common logging classes                                                                    |
-| `:purepursuit`          | `purepursuit`          | This library contains everything needed for autonomous path planning                      |
-| `:telemetry`            | `telemetry`            | Tools for network-based system telemetry                                                  |
-| `:utils`                | `utils`                | Common utils and constants used by many modules                                           |
-| `:waterfall`            | `waterfall`            | A library for serializing and storing the large amounts of data that come off our robots  |
+Development of Lib5K is funded by our amazing sponsors. If you are interested in sponsoring this project and our team, [contact us](mailto:bealrobotics@gmail.com).
 
-## Scripts and tools
-
-This repo contains some helpful python scripts for interacting with robot code and log data. They can be found in the `./scripts` folder, and are documented here:
- - [logreader.py](scripts/logreader.md)
- - [simulate.py](scripts/simulate.md)
-
-## Development
-
-### Upgrading third-party library versions
-Many modules rely on third-party libraries. To upgrade the versions, edit the appropriate variable in `gradle_utils/libversions.gradle`
-
-### Adding a new module
-Any folder containing a `build.gradle` file can be a module. Make sure to add the new folder to `settings.gradle`. Otherwise, it will not be built
+<!-- Sponsor banners -->
+![Sponsors](assets/sponsor-sheet.png)
 
 
-## Troubleshooting
+We would also like to thank every mentor who has been involved in software development at Raider Robotics:
 
-### My robot program is throwing JNI or HAL errors at runtime
-While Lib5K uses and imports third-party libraries, only the java bindings are actually used. This means that any [JNI](https://en.wikipedia.org/wiki/Java_Native_Interface)-based library (CTRE, NavX, RevRobotics ...) will require a [WPILib Vendordep](https://docs.wpilib.org/en/stable/docs/software/wpilib-overview/3rd-party-libraries.html?highlight=vendor) to be installed in the application as well.
+ - [John Lownie](https://github.com/johnlownie)
+ - [Matt Sterner](https://github.com/Mattster092)
+ - [Michael Feeney](https://github.com/LordMichaelmort)
+ - [Michael Harwood](https://github.com/salamander2)
+ - [Warren Pratten](https://github.com/awpratten)

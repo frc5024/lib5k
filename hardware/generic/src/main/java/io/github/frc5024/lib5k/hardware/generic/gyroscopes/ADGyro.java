@@ -25,6 +25,9 @@ public class ADGyro extends ADXRS450_Gyro implements ISimGyro {
     // Simulation
     private GyroSimUtil sim;
 
+    /**
+     * Connect to a gyro on the onboard SPI port
+     */
     public ADGyro() {
         super(SPI.Port.kOnboardCS0);
     }
@@ -42,6 +45,11 @@ public class ADGyro extends ADXRS450_Gyro implements ISimGyro {
         return m_instance;
     }
 
+    /**
+     * Init gyroscope simulation from fusing encoder readings
+     * 
+     * @param drivebase Robot drivetrain
+     */
     public void initDrivebaseSimulation(final IDifferentialDrivebase drivebase) {
 
         // Set up simulation

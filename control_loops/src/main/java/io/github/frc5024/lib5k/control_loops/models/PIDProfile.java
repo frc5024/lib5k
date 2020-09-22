@@ -1,20 +1,37 @@
 package io.github.frc5024.lib5k.control_loops.models;
 
-
 /**
  * Used to store PID control data
  */
 public class PIDProfile {
     public double kp, ki, kd;
 
+    /**
+     * Create a P profile
+     * 
+     * @param kp P gain
+     */
     public PIDProfile(double kp) {
         this(kp, 0.0);
     }
 
+    /**
+     * Create a PI profile
+     * 
+     * @param kp P gain
+     * @param ki I gain
+     */
     public PIDProfile(double kp, double ki) {
         this(kp, ki, 0.0);
     }
 
+    /**
+     * Create a PID profile
+     * 
+     * @param kp P gain
+     * @param ki I gain
+     * @param kd D gain
+     */
     public PIDProfile(double kp, double ki, double kd) {
         this.kp = kp;
         this.ki = ki;

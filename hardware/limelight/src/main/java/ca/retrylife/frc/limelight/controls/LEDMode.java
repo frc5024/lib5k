@@ -12,6 +12,11 @@ public enum LEDMode {
 
     private int val;
 
+    /**
+     * Create an LED mode
+     * 
+     * @param val Limelight control byte
+     */
     LEDMode(int val) {
         this.val = val;
     }

@@ -20,6 +20,9 @@ public class Limelight {
     private double[] camTran, cornx, corny;
     private boolean portraitMode;
 
+    /**
+     * Create a limelight connection (only works if one limelight is on the network)
+     */
     public Limelight() {
 
         // Get the Limelight NetworkTable
@@ -98,6 +101,8 @@ public class Limelight {
 
     /**
      * Enable or disable portraitMode
+     * 
+     * @param portraitMode Enable portrait mode
      */
     public void setPortrait(boolean portraitMode) {
         this.portraitMode = portraitMode;
@@ -132,7 +137,7 @@ public class Limelight {
         if (!hasTarget()) {
             return null;
         }
-        
+
         if (portraitMode) {
             return new Target(ty, tx, ta, ts, tshort, tlong, thor, tvert);
         } else {

@@ -74,7 +74,7 @@ public class EncoderSimUtil implements PeriodicComponent {
             last_time = current_time;
 
             // Calc encoder position
-            double rpm = ((simSlew.feed(controller.get()) * max_rpm) / gearbox_ratio) * ((simInverted.get()) ? -1 : 1);
+            double rpm = ((simSlew.feed(controller.get() * ((controller.getInverted()) ? -1 : 1)) * max_rpm) / gearbox_ratio) * ((simInverted.get()) ? -1 : 1);
             double revs = (rpm / 60.0) * dt; // RPM -> RPS -> Multiply by seconds to find rotations since last update
             simTicks.set((int) (simTicks.get() + (revs * cpr)));
             simRotations.set((simRotations.get() + revs));

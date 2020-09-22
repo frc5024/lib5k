@@ -1,11 +1,7 @@
 package io.github.frc5024.common_drive;
 
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-
 import ca.retrylife.ewmath.MathUtils;
 
-import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
@@ -36,11 +32,14 @@ import io.github.frc5024.purepursuit.pathgen.Path;
 
 import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.FPGAClock;
 import io.github.frc5024.lib5k.logging.RobotLogger;
-import io.github.frc5024.lib5k.logging.RobotLogger.Level;
 import io.github.frc5024.lib5k.hardware.common.drivebase.IDifferentialDrivebase;
 
 /**
- * The base for all drivetrains
+ * The base for all drivetrains.
+ * 
+ * This class is designed to reduce the amount of time spent actually making the
+ * robot move, and allowing anyone to easily write autonomous code by calling a
+ * single function.
  */
 public abstract class DriveTrainBase extends SubsystemBase implements IDifferentialDrivebase {
     private RobotLogger logger = RobotLogger.getInstance();
@@ -93,6 +92,14 @@ public abstract class DriveTrainBase extends SubsystemBase implements IDifferent
     // Defaults
     private Gear defaultGear;
 
+    // Speed cap
+    private double speedCap = 1.0;
+
+    /**
+     * Create a DriveTrainBase
+     * 
+     * @param config Configuration info
+     */
     public DriveTrainBase(DriveTrainConfig config) {
 
         // Set config
@@ -150,7 +157,7 @@ public abstract class DriveTrainBase extends SubsystemBase implements IDifferent
 
     @Override
     public void periodic() {
-        
+
         // Run an iteration of the control loops
         runIteration();
 
@@ -158,6 +165,9 @@ public abstract class DriveTrainBase extends SubsystemBase implements IDifferent
         customPeriodic();
     }
 
+    /**
+     * Override this with your custom periodic code
+     */
     public abstract void customPeriodic();
 
     /**
@@ -536,9 +546,25 @@ public abstract class DriveTrainBase extends SubsystemBase implements IDifferent
      * @param inReverse       Should the path be followed in reverse?
      * @param lookaheadMeters How far to look ahead for new goal poses
      * @param epsRadius       Radius around the final pose for trigger isFinished()
+     * @return Path following command
      */
-    public CommandBase createPathingCommand(Path path, boolean inReverse, double lookaheadMeters, double epsRadius) {
-        return new PathFollowCommand(this, path, inReverse, lookaheadMeters, epsRadius);
+    @Deprecated(since = "August 2020", forRemoval = false)
+    public PathFollowCommand createPathingCommand(Path path, boolean inReverse, double lookaheadMeters,
+            double epsRadius) {
+        return new PathFollowCommand(this, path, epsRadius).withLookahead(lookaheadMeters).inReverse(inReverse);
+    }
+
+    /**
+     * Create and configure a command that will follow a path using this drivetrain.
+     * This returns a builder-style object, where you can chain extra methods to
+     * configure the command
+     * 
+     * @param path      Path to follow
+     * @param epsRadius Radius around the final pose for trigger isFinished()
+     * @return Path following command
+     */
+    public PathFollowCommand createPathingCommand(Path path, double epsRadius) {
+        return new PathFollowCommand(this, path, epsRadius);
     }
 
     /**
@@ -548,6 +574,11 @@ public abstract class DriveTrainBase extends SubsystemBase implements IDifferent
      * @param right Right side voltage
      */
     private void writePercentOutputs(double left, double right) {
+
+        // Handle speed capping
+        left = (left < 0 && left < -speedCap) ? -speedCap : (left > speedCap) ? speedCap : left;
+        right = (right < 0 && right < -speedCap) ? -speedCap : (right > speedCap) ? speedCap : right;
+
         this.writeVoltages(left * 12.0, right * 12.0);
     }
 
@@ -678,13 +709,47 @@ public abstract class DriveTrainBase extends SubsystemBase implements IDifferent
         this.inputOffset.rightEncoderMetres = this.input.rightEncoderMetres;
     }
 
+    /**
+     * Get the scalar distance traveled by the left side of the drivetrain
+     * 
+     * @return left meters
+     */
     public abstract double getLeftMeters();
 
+    /**
+     * Get the scalar distance traveled by the right side of the drivetrain
+     * 
+     * @return right meters
+     */
     public abstract double getRightMeters();
 
     @Override
     public double getWidthMeters() {
         return this.config.robotWidth;
+    }
+
+    /**
+     * This puts the drivetrain in "neutral mode". Allowing the robot to be pushed
+     * around, and no voltage is sent to the motors.
+     */
+    public void becomeNeutral() {
+        stateMachine.setState(States.kNeutral);
+    }
+
+    /**
+     * This locks the drivetrain, and tells it to hold its position
+     */
+    public void holdPosition() {
+        stateMachine.setState(States.kLocked);
+    }
+
+    /**
+     * Set a cap on the output speed by percentage
+     * 
+     * @param maxOutputPercent Maximum percentage power output
+     */
+    public void setSpeedCap(double maxOutputPercent) {
+        speedCap = maxOutputPercent;
     }
 
 }

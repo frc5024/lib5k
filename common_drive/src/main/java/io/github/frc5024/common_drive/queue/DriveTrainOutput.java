@@ -21,6 +21,9 @@ public class DriveTrainOutput {
     public WriteLock<Gear> gear = new WriteLock<>(Gear.HIGH);
     public WriteLock<Double> motorRamp = new WriteLock<>(0.0);
 
+    /**
+     * Reset this object's contents
+     */
     public void zero() {
         this.timestamp_ms = 0.0;
         this.leftVoltage = 0.0;

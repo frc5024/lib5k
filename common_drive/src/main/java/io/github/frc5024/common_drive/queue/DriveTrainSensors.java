@@ -20,6 +20,11 @@ public class DriveTrainSensors {
     public double leftEncoderMetres;
     public double rightEncoderMetres;
 
+    /**
+     * Create a copy of this object
+     * 
+     * @return Copy
+     */
     public DriveTrainSensors copy() {
         // Build an output
         DriveTrainSensors out = new DriveTrainSensors();

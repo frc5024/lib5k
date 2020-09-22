@@ -45,11 +45,11 @@ public class LinearActuator implements Sendable {
 
         // Send data
         switch (state) {
-        case kDEPLOYED:
-            m_trigger.set(true);
-            break;
-        default:
-            m_trigger.set(false);
+            case kDEPLOYED:
+                m_trigger.set(true);
+                break;
+            default:
+                m_trigger.set(false);
         }
     }
 
@@ -73,6 +73,9 @@ public class LinearActuator implements Sendable {
 
     }
 
+    /**
+     * Clear all PCM faults for the attached PCM
+     */
     public void clearAllFaults() {
         m_trigger.clearAllPCMStickyFaults();
     }

@@ -9,19 +9,13 @@ import edu.wpi.first.wpilibj.geometry.Translation2d;
 
 import ca.retrylife.ewmath.MathUtils;
 
-
 /**
- * RobotMath is an extension of MathUtils, with some overloads for robot-specific datatypes (the ewmath library is designed for general use, so excludes these functions)
+ * RobotMath is an extension of MathUtils, with some overloads for
+ * robot-specific datatypes (the ewmath library is designed for general use, so
+ * excludes these functions)
  */
-@FieldTested(year=2019)
-public class RobotMath extends MathUtils{
-
-    public static void main(String[] args) {
-        System.out.println(getWrappedError(270, 0.0));
-        System.out.println(getWrappedError(0.0, 270.0));
-        System.out.println(wpiAngleTo5k(-90));
-        System.out.println(wpiAngleTo5k(90));
-    }
+@FieldTested(year = 2019)
+public class RobotMath extends MathUtils {
 
     /**
      * Convert from the [-180-180] angles used by WPILib to the [0-360] angles used
@@ -39,6 +33,14 @@ public class RobotMath extends MathUtils{
 
     }
 
+    /**
+     * Check if two poses are equal within epsilon
+     * 
+     * @param a       Pose A
+     * @param b       Pose B
+     * @param epsilon Epsilon
+     * @return Are they equal?
+     */
     public static boolean epsilonEquals(Pose2d a, Pose2d b, Pose2d epsilon) {
         return (epsilonEquals(a.getTranslation().getX(), b.getTranslation().getX(), epsilon.getTranslation().getX()))
                 && (epsilonEquals(a.getTranslation().getY(), b.getTranslation().getY(),
@@ -47,11 +49,26 @@ public class RobotMath extends MathUtils{
                         epsilon.getRotation().getDegrees()));
     }
 
+    /**
+     * Check if two translations are equal within epsilon
+     * 
+     * @param a       Pose A
+     * @param b       Pose B
+     * @param epsilon Epsilon
+     * @return Are they equal?
+     */
     public static boolean epsilonEquals(Translation2d a, Translation2d b, Translation2d epsilon) {
         return (epsilonEquals(a.getX(), b.getX(), epsilon.getX()))
                 && (epsilonEquals(a.getY(), b.getY(), epsilon.getY()));
     }
 
+    /**
+     * Get the mode of a buffer
+     * 
+     * @param array Buffer
+     * @param size  Buffer size
+     * @return Mode value
+     */
     public static int mode(CircularBuffer array, int size) {
         HashMap<Integer, Integer> hm = new HashMap<Integer, Integer>();
         int max = 1;

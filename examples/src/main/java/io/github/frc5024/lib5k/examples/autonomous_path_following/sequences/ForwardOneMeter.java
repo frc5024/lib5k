@@ -20,15 +20,17 @@ public class ForwardOneMeter implements AutonomousSequence {
     @Override
     public CommandBase getCommand() {
         SequentialCommandGroup output = new SequentialCommandGroup();
-    
+
         // Pose set command
         output.addCommands(new InstantCommand(() -> {
             DriveTrain.getInstance().setPose(getStartingPose());
         }));
 
         // Path follow command
-        output.addCommands(DriveTrain.getInstance().createPathingCommand(new Path(getStartingPose().getTranslation(),
-                getStartingPose().getTranslation().plus(new Translation2d(1.0, 0.0))), false, 0.2, 0.1));
+        output.addCommands(DriveTrain.getInstance()
+                .createPathingCommand(new Path(getStartingPose().getTranslation(),
+                        getStartingPose().getTranslation().plus(new Translation2d(1.0, 0.0))), 0.1)
+                .withMaxSpeed(0.8).withLookahead(0.2).inReverse(false));
 
         return output;
     }

@@ -3,6 +3,8 @@ package io.github.frc5024.lib5k.logging;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotBase;
 import io.github.frc5024.lib5k.utils.annotations.FieldTested;
@@ -36,16 +38,24 @@ public class RobotLogger {
 
         public String name;
 
+        /**
+         * Create a log level
+         * 
+         * @param name String name
+         */
         private Level(String name) {
             this.name = name;
         }
     }
 
+    /**
+     * Create the RobotLogger instance
+     */
     private RobotLogger() {
         this.notifier = new Notifier(this::pushLogs);
 
         // set boot time
-        this.bootTime = (double)System.currentTimeMillis() / 1000.0;
+        this.bootTime = (double) System.currentTimeMillis() / 1000.0;
 
         // Try to load sim logger
         if (RobotBase.isSimulation()) {
@@ -167,21 +177,17 @@ public class RobotLogger {
         // Build message
         String message = String.format(messageF, args);
 
-        // Get stack trace
-        // StackTraceElement lastMethod = Thread.currentThread().getStackTrace()[2];
-
-        // Get method and class names
-        String className = lastMethod.getClassName();
-        String methodName = lastMethod.getMethodName();
+        // Get the caller's package name
+        String packageName = getPackageName(lastMethod);
 
         // Get the current system time
-        double time = (double)System.currentTimeMillis() / 1000.0;
+        double time = (double) System.currentTimeMillis() / 1000.0;
 
         // Determine time-since-boot
         double tsb = time - this.bootTime;
 
         // Build log string
-        String log = String.format("%s at %.2fs: %s::%s() -> %s", lvl.name, tsb, className, methodName, message);
+        String log = String.format("%s at %.2fs: %s -> %s", lvl.name, tsb, packageName, message);
 
         // If the log is robot level, push to console
         if (lvl.equals(Level.kRobot)) {
@@ -209,6 +215,59 @@ public class RobotLogger {
             }
         }
 
+    }
+
+    /**
+     * Gets a friendly package name for a StackTraceElement
+     * 
+     * @param element Element to get name for
+     * @return Friendly Name
+     */
+    protected static String getPackageName(StackTraceElement element) {
+
+        // Build the package and method string
+        String fullPackageName = element.getClassName();
+        String[] packageSegments = fullPackageName.split("[.]");
+        StringBuilder packageNameBuilder = new StringBuilder();
+
+        // Handle the package name being too short
+        if (packageSegments.length <= 3) {
+
+            // Just build the full package name
+            packageNameBuilder.append(fullPackageName);
+
+        } else {
+            // The idea here is to turn a package name that might look like:
+            // io.github.frc5024.y2020.darthraider.commands.autonomous.actions.cells.SetShooterOutput
+            // Into one that looks like:
+            // io...cells.SetShooterOutput
+
+            // Append the root package
+            packageNameBuilder.append(packageSegments[0]);
+
+            // Append the seperator
+            packageNameBuilder.append("...");
+
+            // Append the class's parent package
+            packageNameBuilder.append(packageSegments[packageSegments.length - 2]);
+            packageNameBuilder.append(".");
+
+            // Append the class name
+            packageNameBuilder.append(packageSegments[packageSegments.length - 1]);
+        }
+
+        // Get the method name
+        String methodName = element.getMethodName();
+
+        return String.format("%s::%s()", packageNameBuilder.toString(), methodName.toString());
+
+    }
+
+    /**
+     * Manually flush the logs (only use this in unit tests)
+     */
+    public void flush(){
+        pushLogs();
     }
 
     /**

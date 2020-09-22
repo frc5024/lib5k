@@ -15,10 +15,16 @@ public class Position {
     public Gear leftShifter;
     public Gear rightShifter;
 
+    /**
+     * Create a position of 0
+     */
     public Position() {
         this.zero();
     }
 
+    /**
+     * Reset this position to 0
+     */
     public void zero() {
         this.leftEncoder = 0.0;
         this.rightEncoder = 0.0;

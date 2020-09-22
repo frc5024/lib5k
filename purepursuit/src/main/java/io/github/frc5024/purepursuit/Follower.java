@@ -30,7 +30,7 @@ public class Follower {
      * 
      * @param path              Path to follow
      * @param lookaheadDistance Lookahead distance
-     * @param lookaheadGain     Lookahead gain
+     * @param lookaheadGain     The minimum distance required to fetch a new pose
      * @param drivebaseWidth    Drivebase width
      */
     public Follower(Path path, double lookaheadDistance, double lookaheadGain, double drivebaseWidth) {
@@ -41,22 +41,48 @@ public class Follower {
 
     }
 
+    /**
+     * Set the lookahead distance
+     * 
+     * @param distance Distance to look ahead for a new goal pose
+     */
     public void setLookaheadDistance(double distance) {
         this.m_lookaheadDist = distance;
     }
 
+    /**
+     * Get the current lookahead distance
+     * 
+     * @return Distance to goal pose look radius
+     */
     public double getLookaheadDistance() {
         return m_lookaheadDist;
     }
 
+    /**
+     * Set the max area around the lookahead to accept pose deviation. Generally
+     * leave this as 0.1
+     * 
+     * @param gain Check area
+     */
     public void setLookaheadGain(double gain) {
         this.m_lookaheadGain = gain;
     }
 
+    /**
+     * Get the lookahead gain
+     * 
+     * @return Gain
+     */
     public double getLookaheadGain() {
         return m_lookaheadGain;
     }
 
+    /**
+     * Get the width of the drivebase
+     * 
+     * @return Drivebase width
+     */
     public double getDrivebaseWidth() {
         return m_drivebaseWidth;
     }
@@ -69,6 +95,12 @@ public class Follower {
         m_lastPose = null;
     }
 
+    /**
+     * Get the next goal pose
+     * 
+     * @param robotPose Robot's current pose
+     * @return Next goal in path
+     */
     public Translation2d getNextPoint(Pose2d robotPose) {
 
         // Cast the pose up to a drivebase state
@@ -112,6 +144,11 @@ public class Follower {
             // TODO: make this a FOR loop starting at m_lastLookaheadIndex
             while (true) {
 
+                // Keep using the current goal if we have not reached it
+                if (thisDist > m_lookaheadGain) {
+                    break;
+                }
+
                 // Attempt to incr our search index
                 nextIndex = ((nextIndex + 1) < m_path.getPoses().length) ? nextIndex + 1 : nextIndex;
 
@@ -150,7 +187,7 @@ public class Follower {
 
         // Set a Lookahead
         double L = 0.0;
-        double LF = m_lookaheadGain * v * m_lookaheadDist;
+        double LF = v * m_lookaheadDist;
 
         // Look for target
         int ind = m_lastLookaheadIndex;
@@ -175,6 +212,10 @@ public class Follower {
 
     }
 
+    /**
+     * Get the final pose of the path
+     * @return Final pose
+     */
     public Translation2d getFinalPose() {
         return m_path.getPoses()[m_path.getPoses().length - 1];
     }

@@ -9,3 +9,28 @@ task _buildProjectFatJar(type: Jar) {
     with jar
 }
 
+// Configure style checking
+if(!(project.name in ["examples", "statespace"])){
+    apply plugin: "checkstyle"
+    checkstyle {
+        toolVersion '8.20'
+        configFile project(':').file("checkstyle.xml")
+        sourceSets = []
+    }
+
+    checkstyleMain{
+        source = project.sourceSets.main.java
+    }
+
+    tasks.withType(Checkstyle) {
+    reports {
+        xml.enabled false
+        html.enabled true
+    }
+    }
+    // tasks.withType(check).dependsOn.remove("checkstyleTest")
+    // tasks.withType(check).dependsOn.remove("checkstyleMain")
+    task checkstyle{
+        dependsOn "checkstyleMain"
+    }
+}

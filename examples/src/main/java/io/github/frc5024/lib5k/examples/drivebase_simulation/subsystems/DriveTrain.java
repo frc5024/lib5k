@@ -71,9 +71,11 @@ public class DriveTrain extends DriveTrainBase {
 
         // Set up encoder simulation
         leftEncoder.initSimulationDevice(frontLeftMotor, RobotConfig.DRIVETRAIN_CONFIG.lowGearRatio,
-                DCBrushedMotor.CIM.freeSpeedRPM, RobotConfig.DRIVETRAIN_CONFIG.defaultRampSeconds);
+                ((DCBrushedMotor) DCBrushedMotor.getCIM(1)).getFreeSpeedRPM(),
+                RobotConfig.DRIVETRAIN_CONFIG.defaultRampSeconds);
         rightEncoder.initSimulationDevice(frontRightMotor, RobotConfig.DRIVETRAIN_CONFIG.lowGearRatio,
-                DCBrushedMotor.CIM.freeSpeedRPM, RobotConfig.DRIVETRAIN_CONFIG.defaultRampSeconds);
+                ((DCBrushedMotor) DCBrushedMotor.getCIM(1)).getFreeSpeedRPM(),
+                RobotConfig.DRIVETRAIN_CONFIG.defaultRampSeconds);
 
         // Set up gyroscope
         gyroscope = NavX.getInstance();

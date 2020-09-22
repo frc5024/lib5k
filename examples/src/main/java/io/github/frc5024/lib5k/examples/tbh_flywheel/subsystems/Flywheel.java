@@ -78,7 +78,7 @@ public class Flywheel extends SubsystemBase {
 
         // This will set the acceptable error to (0.4 * Kv) of the velocity goal.
         // Kv is shot for "RPM per volt"
-        this.controller.setEpsilon(0.4 * model.Kv);
+        this.controller.setEpsilon(0.4 * model.getKv());
 
         // We will tell the flywheel that it needs to be stable for 500ms after reaching
         // it's foal

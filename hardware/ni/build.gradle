@@ -31,6 +31,7 @@ dependencies {
     implementation("edu.wpi.first.wpilibj:wpilibj-java:${project.WPI_VERSION}")
     implementation("edu.wpi.first.hal:hal-java:${project.WPI_VERSION}")
     implementation("edu.wpi.first.wpiutil:wpiutil-java:${project.WPI_VERSION}")
+    implementation("edu.wpi.first.wpimath:wpimath-java:${project.WPI_VERSION}")
 
     // Logging
     implementation project(":logging")

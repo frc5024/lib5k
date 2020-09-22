@@ -32,6 +32,7 @@ dependencies {
     implementation("edu.wpi.first.wpilibj:wpilibj-java:${project.WPI_VERSION}")
     implementation("edu.wpi.first.hal:hal-java:${project.WPI_VERSION}")
     implementation("edu.wpi.first.wpiutil:wpiutil-java:${project.WPI_VERSION}")
+    implementation("edu.wpi.first.wpimath:wpimath-java:${project.WPI_VERSION}")
 
     // Cameraserver
     implementation("edu.wpi.first.cscore:cscore-java:${project.WPI_VERSION}")

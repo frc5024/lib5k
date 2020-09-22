@@ -10,23 +10,44 @@ repositories {
 
     // FRC repos
     maven { setUrl("https://jitpack.io")}
-    // maven { setUrl("https://frcmaven.wpi.edu/artifactory/release/")}
-    maven { setUrl("https://frcmaven.wpi.edu/artifactory/development/")}
     maven { setUrl("https://repo1.maven.org/maven2/")}
     maven { setUrl("http://devsite.ctr-electronics.com/maven/release/")}
     maven { setUrl("http://www.revrobotics.com/content/sw/color-sensor-v3/sdk/maven/")}
     maven { setUrl("https://www.revrobotics.com/content/sw/max/sdk/maven/")}
+
+    // Switching these will switch between release and development versions of WPILib.
+    // It is generally recommended to stay on release, but I use development to test new features
+    // MAKE SURE TO look at the comment below for further instructions
+    // maven { setUrl("https://frcmaven.wpi.edu/artifactory/release/")}
+    maven { setUrl("https://frcmaven.wpi.edu/artifactory/development/")}
 }
 
-dependencies{
-    implementation wpi.deps.wpilib()
-    nativeZip wpi.deps.wpilibJni(wpi.platforms.roborio)
-    nativeDesktopZip wpi.deps.wpilibJni(wpi.platforms.desktop)
+// !!IMPORTANT!!
+// Uncomment the following line only when using the development version of WPILib
+// Do not set it to false to disable it
+def useDevelopmentProperty = true
 
-    implementation wpi.deps.vendor.java()
-    nativeZip wpi.deps.vendor.jni(wpi.platforms.roborio)
-    nativeDesktopZip wpi.deps.vendor.jni(wpi.platforms.desktop)
+dependencies{
+  // implementation wpi.deps.wpilib()
+  // nativeZip wpi.deps.wpilibJni(wpi.platforms.roborio)
+  // nativeDesktopZip wpi.deps.wpilibJni(wpi.platforms.desktop)
+
+  wpi.deps.wpilib().each{
+    implementation it.replaceAll(wpi.wpilibVersion, project.WPI_VERSION)
   }
+
+  wpi.deps.wpilibJni(wpi.platforms.roborio).each{
+    nativeZip it.replaceAll(wpi.wpilibVersion, project.WPI_VERSION)
+  }
+
+  wpi.deps.wpilibJni(wpi.platforms.desktop).each{
+    nativeDesktopZip it.replaceAll(wpi.wpilibVersion, project.WPI_VERSION)
+  }
+
+  implementation wpi.deps.vendor.java()
+  nativeZip wpi.deps.vendor.jni(wpi.platforms.roborio)
+  nativeDesktopZip wpi.deps.vendor.jni(wpi.platforms.desktop)
+}
 
 // dependencies {
 

@@ -183,6 +183,11 @@ public class SingleJointedArmController {
 		goal = new TrapezoidProfile.State(Units.degreesToRadians(degrees), 0.0);
 	}
 
+	/**
+	 * Compute the next output voltage
+	 * @param encoderPositionDegrees Arm encoder position in degrees
+	 * @return Output voltage
+	 */
 	public double computeVoltage(double encoderPositionDegrees) {
 
 		// Skip if no goal is set

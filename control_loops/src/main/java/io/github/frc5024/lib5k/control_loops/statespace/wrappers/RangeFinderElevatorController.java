@@ -102,7 +102,7 @@ public class RangeFinderElevatorController extends EncoderElevatorController {
     /**
      * Calculate the controller output
      * 
-     * @param encoderDistanceM Distance reading from rangefinder
+     * @param rangefinderDistance Distance reading from rangefinder
      * @return Voltage output
      */
     @Override

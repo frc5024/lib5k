@@ -25,6 +25,7 @@ dependencies {
 
     // WPILib
     implementation("edu.wpi.first.wpilibj:wpilibj-java:${WPI_VERSION}")
+    implementation("edu.wpi.first.wpimath:wpimath-java:${project.WPI_VERSION}")
 
     // Math utils
     implementation 'com.github.ewpratten:ewmath:master-SNAPSHOT'

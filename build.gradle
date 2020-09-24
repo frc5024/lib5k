@@ -47,6 +47,7 @@ dependencies{
       api it
     }
   }
+  api 'com.google.code.gson:gson:2.8.6'
 }
 
 // This task takes every subproject's Javadoc, and merges it into one

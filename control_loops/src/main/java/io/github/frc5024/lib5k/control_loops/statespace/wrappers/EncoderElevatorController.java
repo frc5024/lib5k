@@ -74,6 +74,7 @@ public class EncoderElevatorController {
      * @param carriageMaxVelocityMPS            The maximum upward velocity of the
      *                                          carriage at max voltage
      * @param carriageMaxAccelerationMPSSquared The maximum upward acceleration of
+     *                                          the carriage at max voltage
      * @param positionEpsilonM                  Position epsilon in meters
      */
     public EncoderElevatorController(DCBrushedMotor motorType, double carriageMassKg, double drumRadiusM,
@@ -99,7 +100,8 @@ public class EncoderElevatorController {
      *                                          ENCODER IS ATTACHED TO THE MOTOR
      * @param carriageMaxVelocityMPS            The maximum upward velocity of the
      *                                          carriage at max voltage
-     * @param carriageMaxAccelerationMPSSquared The maximum upward acceleration of
+     * @param carriageMaxAccelerationMPSSquared The maximum upward acceleration of the
+     *                                          carriage at max voltage
      * @param positionEpsilonM                  Position epsilon in meters
      * @param velocityEpsilonMPS                Velocity epsilon in meters/second
      */
@@ -124,9 +126,7 @@ public class EncoderElevatorController {
      *                                          motors, this number should be
      *                                          greater than one. IGNORE THIS IF THE
      *                                          ENCODER IS ATTACHED TO THE MOTOR
-     * @param carriageMaxVelocityMPS            The maximum upward velocity= new
-     *                                          TrapezoidProfile.State();= new
-     *                                          TrapezoidProfile.State();of the
+     * @param carriageMaxVelocityMPS            The maximum upward velocity of the
      *                                          carriage at max voltage
      * @param carriageMaxAccelerationMPSSquared The maximum upward acceleration of
      *                                          the carriage at max voltage as m/s^2
@@ -162,9 +162,8 @@ public class EncoderElevatorController {
                 expectedLoopTimeSeconds);
 
         // Create LQR
-        lqr = new LinearQuadraticRegulator<N2, N1, N1>(plant,
-                VecBuilder.fill(positionEpsilonM, velocityEpsilonMPS), VecBuilder.fill(maxVoltageOutput),
-                expectedLoopTimeSeconds);
+        lqr = new LinearQuadraticRegulator<N2, N1, N1>(plant, VecBuilder.fill(positionEpsilonM, velocityEpsilonMPS),
+                VecBuilder.fill(maxVoltageOutput), expectedLoopTimeSeconds);
 
         // Create a loop
         loop = new LinearSystemLoop<>(plant, lqr, observer, maxVoltageOutput, expectedLoopTimeSeconds);

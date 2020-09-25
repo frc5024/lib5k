@@ -1,0 +1,55 @@
+plugins {
+    // Apply the java-library plugin to add support for Java Library
+    id 'java-library'
+}
+
+apply from: "../gradle_utils/libversions.gradle"
+apply from: "../gradle_utils/simpleunittest.gradle"
+apply from: "../gradle_utils/mavenrepos.gradle"
+apply from: "../gradle_utils/projectjar.gradle"
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+dependencies {
+    // This dependency is exported to consumers, that is to say found on their compile classpath.
+    api 'org.apache.commons:commons-math3:3.6.1'
+
+    // This dependency is used internally, and not exposed to consumers on their own compile classpath.
+    implementation 'com.google.guava:guava:29.0-jre'
+
+    // Use JUnit test framework
+    testImplementation 'junit:junit:4.13'
+
+    // Logging
+    implementation project(":logging")
+
+    // Utils
+    implementation project(":utils")
+
+    // Gson
+    implementation 'com.google.code.gson:gson:2.8.6'
+
+}
+
+sourceSets {
+  main {
+    java {
+      srcDir 'src/main/java'
+    }
+  }
+
+  test {
+    java {
+      srcDir 'src/test/java'
+    }
+  }
+}
+
+// Generate a javadoc
+javadoc{
+    source = "src/main/java"
+    // destinationDir = file("../docs/javadoc/libKontrol")
+}

@@ -66,7 +66,7 @@ public class Flywheel extends SubsystemBase {
 
         // We need to set the model to represent the characteristics of the motor being
         // used. This saves us some work when configuring the system later.
-        model = DCBrushedMotor.NEO;
+        model = (DCBrushedMotor)DCBrushedMotor.getNEO(1);
 
         // We will set up the motor controller, then get a reference to it's encoder
         // Here, we will assume the SparkMax has been assigned CAN id #15
@@ -78,7 +78,7 @@ public class Flywheel extends SubsystemBase {
 
         // This will set the acceptable error to (0.4 * Kv) of the velocity goal.
         // Kv is shot for "RPM per volt"
-        this.controller.setEpsilon(0.4 * model.Kv);
+        this.controller.setEpsilon(0.4 * model.getKv());
 
         // We will tell the flywheel that it needs to be stable for 500ms after reaching
         // it's foal

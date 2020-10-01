@@ -9,6 +9,7 @@ buildscript {
 
     dependencies {
       // Update this version number to update GradleRIO
+      // Also update the number below
       classpath "edu.wpi.first:GradleRIO:2020.+"
     }
 }
@@ -16,8 +17,12 @@ buildscript {
 // All plugins used by the buildscript
 plugins {
   id "com.gradle.build-scan" version "3.4.1"
+
+  // Update this when updating GradleRIO
+  // id "edu.wpi.first.GradleRIO" version "2020.3.2"
   id "java-library"
   id "maven-publish"
+  id "java"
 }
 
 // Load project dependancy configurations
@@ -28,8 +33,19 @@ apply from: "gradle_utils/mavenrepos.gradle"
 project.version = "1.4.0"
 
 // Enable Java support for all projects
-allprojects{
+subprojects{
   apply plugin: "java"
+  apply plugin: "java-library"
+  apply from: rootProject.file("gradle_utils/libversions.gradle")
+  apply from: rootProject.file("gradle_utils/mavenrepos.gradle")
+  apply from: rootProject.file("gradle_utils/simpleunittest.gradle")
+  apply from: rootProject.file("gradle_utils/projectjar.gradle")
+
+  // Set the java version
+  java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+  }
 } 
 
 // This enables some fancy gradle enterprise features for us

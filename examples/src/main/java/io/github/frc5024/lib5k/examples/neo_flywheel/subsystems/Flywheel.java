@@ -65,7 +65,7 @@ public class Flywheel extends SubsystemBase {
 
         // We need to set the model to represent the characteristics of the motor being
         // used. This saves us some work when configuring the system later.
-        model = DCBrushedMotor.NEO;
+        model = (DCBrushedMotor)DCBrushedMotor.getNEO(1);
 
         // We will set up the motor controller, then get references to it's encoder and
         // PID controller.
@@ -163,8 +163,8 @@ public class Flywheel extends SubsystemBase {
         // This will return true if the current velocity is with in (0.4 * Kv) of the
         // goal.
         // Kv is shot for "RPM per volt"
-        return MathUtils.epsilonEquals(getCurrentVelocity(), MathUtils.clamp(goalVelocity, 0, model.freeSpeedRPM),
-                0.4 * model.Kv);
+        return MathUtils.epsilonEquals(getCurrentVelocity(), MathUtils.clamp(goalVelocity, 0, model.getFreeSpeedRPM()),
+                0.4 * model.getKv());
     }
 
     /**

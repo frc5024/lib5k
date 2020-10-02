@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.Solenoid;
 import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.FPGAClock;
 
+
 public class USBVisionCamera extends AutoCamera {
 
     public enum LEDMode {
@@ -18,6 +19,8 @@ public class USBVisionCamera extends AutoCamera {
     /**
      * Create a USBVisionCamera
      * 
+	 * To run the camera, you must call the update method in a periodic loop.
+	 * 
      * @param name     Camera name
      * @param usb_slot USB slot of camera
      * @param pcm_port PCM port for camera LED ring power source
@@ -28,6 +31,8 @@ public class USBVisionCamera extends AutoCamera {
 
     /**
      * Create a USBVisionCamera
+	 * 
+	 * To run the camera, you must call the update method in a periodic loop.
      * 
      * @param name     Camera name
      * @param usb_slot USB slot of camera
@@ -42,11 +47,6 @@ public class USBVisionCamera extends AutoCamera {
 
         // Set the desired mode
         m_desiredMode = LEDMode.OFF;
-
-        // Set the thread
-        m_thread = new Notifier(this::update);
-        m_thread.startPeriodic(0.04);
-
     }
 
     /**
@@ -71,8 +71,10 @@ public class USBVisionCamera extends AutoCamera {
 
     /**
      * Update the LEDs
+	 * 
+	 * Must be called in a periodic loop
      */
-    private void update() {
+    public void update() {
 
         // Handle the LEDMode
         switch (m_desiredMode) {

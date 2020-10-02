@@ -17,6 +17,11 @@ public class SafeNotifier extends Notifier {
     // Logger
     // This must be static so we can access it from the wrapper
     private static RobotLogger logger = RobotLogger.getInstance();
+    private String name;
+
+    public SafeNotifier(String name, Runnable action) {
+        this(name, 0.20, action);
+    }
 
     public SafeNotifier(String name, double periodSeconds, Runnable action) {
 
@@ -28,9 +33,17 @@ public class SafeNotifier extends Notifier {
 
         // Name the notifier
         setName(name);
+        this.name = name;
 
         // Set the period
         this.period = periodSeconds;
+    }
+
+    protected Thread getUnderlyingThread() {
+        for (Thread t : Thread.getAllStackTraces().keySet()) {
+            if (t.getName().equals(this.name)) return t;
+        }
+        return null;
     }
 
     /**

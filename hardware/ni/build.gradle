@@ -1,6 +1,13 @@
 dependencies {
     // Logging
     implementation project(":logging")
+
+    // Utils
+    implementation project(":utils")
+
+    // Apache commons Lang
+    implementation "org.apache.commons:commons-lang3:3.11"
+
 }
 
 sourceSets {

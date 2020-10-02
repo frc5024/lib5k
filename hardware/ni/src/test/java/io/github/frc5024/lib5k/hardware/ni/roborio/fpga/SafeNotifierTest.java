@@ -1,8 +1,12 @@
 package io.github.frc5024.lib5k.hardware.ni.roborio.fpga;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
+
+import io.github.frc5024.lib5k.logging.RobotLogger;
 
 public class SafeNotifierTest {
 
@@ -10,21 +14,17 @@ public class SafeNotifierTest {
     public void testNotifierRethrowsException() {
         // Build a safe notifier
         SafeNotifier n = new SafeNotifier("RethrowTestNotifier", () -> {
+            RobotLogger.getInstance().log("Running test task");
+            RobotLogger.getInstance().flush();
             throw new RuntimeException("Test");
         });
 
-        // Do some low-level work to get the underlying thread of the notifier
-        Thread underlyingThread = n.getUnderlyingThread();
-
-        // Write a custom error handler
-        underlyingThread.setUncaughtExceptionHandler((thread, error) -> {
-            assertTrue(error instanceof RuntimeException);
-        });
-
         // Run the thread (This should throw an error)
-        n.startSingle(0.0);
-
+        Exception ex = assertThrows(RuntimeException.class, () -> n.getUnderlyingRunnable().run());
+        RobotLogger.getInstance().flush();
+        assertEquals("Test", ex.getMessage());
         
+
     }
 
 }

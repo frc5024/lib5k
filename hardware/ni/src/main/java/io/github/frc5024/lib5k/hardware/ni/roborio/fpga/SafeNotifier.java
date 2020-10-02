@@ -5,10 +5,17 @@ import java.io.IOException;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
+
 import io.github.frc5024.lib5k.logging.RobotLogger;
 import io.github.frc5024.lib5k.logging.RobotLogger.Level;
 import io.github.frc5024.lib5k.utils.FileManagement;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
+
+/**
+ * SafeNotifier is a wrapper around the system Notifier with some extra error
+ * handling built in.
+ */
 public class SafeNotifier extends Notifier {
 
     // Custom period
@@ -17,12 +24,28 @@ public class SafeNotifier extends Notifier {
     // Logger
     // This must be static so we can access it from the wrapper
     private static RobotLogger logger = RobotLogger.getInstance();
-    private String name;
 
+    // For backend access
+    private String name;
+    private Runnable underlyingRunnable;
+
+    /**
+     * Create a SafeNotifier with a period of 20ms
+     * 
+     * @param name   Thread name
+     * @param action Action to be run
+     */
     public SafeNotifier(String name, Runnable action) {
         this(name, 0.20, action);
     }
 
+    /**
+     * /** Create a SafeNotifier with a custom period
+     * 
+     * @param name          Thread name
+     * @param periodSeconds Period time in seconds
+     * @param action        Action to be run
+     */
     public SafeNotifier(String name, double periodSeconds, Runnable action) {
 
         // Set up the notifier to run the action
@@ -30,6 +53,9 @@ public class SafeNotifier extends Notifier {
             // Run the action with a wrapper around it
             SafeNotifier.safetyWrapper(name, action);
         });
+        this.underlyingRunnable = () -> {
+            SafeNotifier.safetyWrapper(name, action);
+        };
 
         // Name the notifier
         setName(name);
@@ -39,11 +65,27 @@ public class SafeNotifier extends Notifier {
         this.period = periodSeconds;
     }
 
+    /**
+     * ADVANCED USE ONLY. Get the underlying thread used by the notifier. This can
+     * undermine the alarm system if needed.
+     * 
+     * @return Underlying thread
+     */
     protected Thread getUnderlyingThread() {
         for (Thread t : Thread.getAllStackTraces().keySet()) {
-            if (t.getName().equals(this.name)) return t;
+            if (t.getName().equals(this.name))
+                return t;
         }
         return null;
+    }
+
+    /**
+     * ADVANCED USE ONLY. Get the underlying Runnable
+     * 
+     * @return Underlying runnable
+     */
+    protected Runnable getUnderlyingRunnable() {
+        return underlyingRunnable;
     }
 
     /**
@@ -62,6 +104,12 @@ public class SafeNotifier extends Notifier {
         super.startPeriodic(period);
     }
 
+    /**
+     * Wrapper that gets called and delegates tasks
+     * 
+     * @param name   Thread name
+     * @param action Action to run
+     */
     private static void safetyWrapper(String name, Runnable action) {
         // Wrap the runnable with an error handler
         try {
@@ -86,9 +134,10 @@ public class SafeNotifier extends Notifier {
                 stackTraceWriter.append(String.format("Stack trace:%n"));
                 stackTraceWriter.append(t.getMessage() + "\n");
                 stackTraceWriter.append(t.getLocalizedMessage() + "\n");
-                stackTraceWriter.append(t.getStackTrace().toString());
+                stackTraceWriter.append(ExceptionUtils.getStackTrace(t));
 
                 // Inform the user what happened
+                stackTraceWriter.close();
                 logger.log(String.format("Saved stack trace in the current session folder as: %s", fileName));
 
             } catch (IOException e) {

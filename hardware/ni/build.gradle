@@ -1,6 +1,10 @@
 dependencies {
     // Logging
     implementation project(":logging")
+
+    // Utils
+    implementation project(":utils")
+
 }
 
 sourceSets {

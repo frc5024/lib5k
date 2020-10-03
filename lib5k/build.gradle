@@ -1,4 +1,10 @@
 
+dependencies {
+    implementation("com.ctre.phoenix:api-java:${project.CTRE_VERSION}")
+    implementation("com.ctre.phoenix:wpiapi-java:${project.CTRE_VERSION}")
+
+    
+}
 
 sourceSets {
   main {

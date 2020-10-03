@@ -26,8 +26,9 @@ plugins {
 }
 
 // Load project dependancy configurations
-apply from: "gradle_utils/libversions.gradle"
-apply from: "gradle_utils/mavenrepos.gradle"
+// apply from: "gradle_utils/libversions.gradle"
+// apply from: "gradle_utils/mavenrepos.gradle"
+apply from: "gradle/dependencies.gradle"
 
 // LIB VERSION
 project.version = "1.4.0"
@@ -36,8 +37,8 @@ project.version = "1.4.0"
 subprojects{
   apply plugin: "java"
   apply plugin: "java-library"
-  apply from: rootProject.file("gradle_utils/libversions.gradle")
-  apply from: rootProject.file("gradle_utils/mavenrepos.gradle")
+  // apply from: rootProject.file("gradle_utils/libversions.gradle")
+  // apply from: rootProject.file("gradle_utils/mavenrepos.gradle")
   apply from: rootProject.file("gradle_utils/simpleunittest.gradle")
   apply from: rootProject.file("gradle_utils/projectjar.gradle")
 
@@ -45,6 +46,42 @@ subprojects{
   java {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
+  }
+
+  // Define the allowed maven repositories
+  repositories {
+
+    // Load the default repositories
+    jcenter()
+    mavenCentral()
+    mavenLocal()
+
+    // Load every repo defined in gradle/dependencies.gradle
+    repos.each { k, v ->
+      maven { 
+        name = k
+        url = v
+      }
+    }
+  }
+
+  // Set up project configuration
+  configurations.all {
+    resolutionStrategy {
+      resolutionStrategy {
+            // fail eagerly on version conflict (includes transitive dependencies)
+            // e.g. multiple different versions of the same dependency (group and name are equal)
+            failOnVersionConflict()
+
+            // Auto force all of our explicit dependencies.
+            libs.each { k, v -> force(v) }
+
+            // cache dynamic versions for 10 minutes
+            cacheDynamicVersionsFor 10*60, 'seconds'
+            // don't cache changing modules at all
+            cacheChangingModulesFor 0, 'seconds'
+        }
+    }
   }
 } 
 

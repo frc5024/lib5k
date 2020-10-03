@@ -1,0 +1,77 @@
+apply plugin: "edu.wpi.first.GradleRIO"
+
+ext {
+    // Versions of every library used
+    versions = [
+
+        // WPILib versions
+        wpilib = [
+            // WPILib version
+            // See: https://github.com/wpilibsuite/allwpilib/releases
+            version: "2020.3.+",
+
+            // WPILib release stream
+            // "development" is cutting-edge, and "release" is stable
+            // Use "release" during the FRC season
+            stream: "development",
+
+            // Enable WPI debugging
+            // This flag will load the debug symbols for all WPILib libraries
+            // Only use this if something goes bad
+            // To enable, just set this to "debug". Otherwise, leave it blank
+            debug: "",
+        ],
+
+        // CTRE Hardware API
+        // See: http://devsite.ctr-electronics.com/maven/release/com/ctre/phoenix/wpiapi-java/
+        ctre_phoenix_api: "5.18.3",
+
+        // NavX Hardware API
+        // See: https://www.kauailabs.com/dist/frc/2020/navx_frc.json
+        navx_api: "3.1.+",
+
+        // Rev Robotics Color Sensor API
+        // See: https://github.com/REVrobotics/Color-Sensor-v3/releases
+        rev_color_sensor_api: "1.2.0",
+
+        // Main Rev Robotics API (contains SparkMax)
+        // See: http://www.revrobotics.com/content/sw/max/sdk/REVRobotics.json
+        rev_api: "1.5.2",
+
+        // Other libraries
+        commons_math: "3.6.1",
+        guava: "29.0-jre",
+        junit: "4.13",
+        ewmath: "master-SNAPSHOT",
+        xchart: "3.6.5"
+
+    ]
+
+    // Maven artifacts
+    libs = [
+        commons_math:               "org.apache.commons:commons-math3:$versions.commons_math",
+        guava:                      "com.google.guava:guava:$versions.guava",
+        junit:                      "junit:junit:$versions.junit",
+        ewmath:                     "com.github.ewpratten:ewmath:$versions.ewmath",
+        wpimath_java:               "edu.wpi.first.wpimath:wpimath-java:$verisons.wpilib.version",
+        wpimath_cpp:                "edu.wpi.first.wpimath:wpimath-cpp:$verisons.wpilib.version:$wpi.platforms.roborio$versions.wpilib.debug@zip",
+        wpimath_cpp_desktop:        "edu.wpi.first.wpimath:wpimath-cpp:$verisons.wpilib.version:$wpi.platforms.desktop$versions.wpilib.debug@zip",
+        wpilib_new_commands:        "edu.wpi.first.wpilibNewCommands:wpilibNewCommands-java:$verisons.wpilib.version",
+        navx:                       "com.kauailabs.navx.frc:navx-java:$versions.navx_api",
+        ctre_phoenix:               "com.ctre.phoenix:api-java:$versions.ctre_phoenix_api",
+        ctre_phoenix_interface:     "com.ctre.phoenix:wpiapi-java:$versions.ctre_phoenix_api",
+        revrobotics:                "com.revrobotics.frc:ColorSensorV3-java:$versions.rev_api",
+        revrobotics_color_sensor:   "com.kauailabs.navx.frc:navx-java:$versions.rev_color_sensor_api",
+        xchart:                     "org.knowm.xchart:xchart:$versions.xchart"
+    ]
+
+    // Maven servers
+    repos = [
+        jitpack:                    "https://jitpack.io",
+        maven_org:                  "https://repo1.maven.org/maven2/",
+        ctre_maven:                 "http://devsite.ctr-electronics.com/maven/release/",
+        revrobotics_colorsensor:    "http://www.revrobotics.com/content/sw/color-sensor-v3/sdk/maven/",
+        revrobotics:                "https://www.revrobotics.com/content/sw/max/sdk/maven/",
+        wpilib:                     "https://frcmaven.wpi.edu/artifactory/$versions.wpilib_stream/"
+    ]
+}

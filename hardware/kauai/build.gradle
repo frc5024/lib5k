@@ -6,7 +6,7 @@ dependencies {
     api project(":hardware:common")
 
     // NavX
-    implementation("com.kauailabs.navx.frc:navx-java:${project.NAVX_VERSION}")
+    
 }
 
 sourceSets {

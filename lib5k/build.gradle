@@ -4,6 +4,10 @@ dependencies {
     implementation("com.ctre.phoenix:wpiapi-java:${project.CTRE_VERSION}")
 
     implementation("com.kauailabs.navx.frc:navx-java:${project.NAVX_VERSION}")
+
+    implementation "org.apache.commons:commons-lang3:3.11"
+
+    implementation("com.revrobotics.frc:SparkMax-java:${project.REV_SPARK_VERSION}")
 }
 
 sourceSets {

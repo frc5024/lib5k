@@ -6,7 +6,7 @@ import edu.wpi.first.wpiutil.math.numbers.N1;
 
 /**
  * An N-dimensional polytope This represents the region consisting of all points
- * X such that H * X <= k
+ * X such that H * X leq k
  * 
  * @param <Dimensions>  Number of dimensions
  * @param <Constraints> Number of constraints

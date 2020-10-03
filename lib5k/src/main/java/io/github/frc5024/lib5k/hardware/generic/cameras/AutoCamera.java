@@ -31,7 +31,7 @@ public class AutoCamera {
     /**
      * Connect to a camera in a specific USB slot
      * 
-     * @param usb_slot USB device number (/dev/video<number>)
+     * @param usb_slot USB device number (/dev/video[number])
      */
     public AutoCamera(int usb_slot) {
         this("Unnamed Camera", usb_slot);
@@ -41,7 +41,7 @@ public class AutoCamera {
      * Connect to a camera in a specific USB slot
      * 
      * @param name     Camera name
-     * @param usb_slot USB device number (/dev/video<number>)
+     * @param usb_slot USB device number (/dev/video[number])
      */
     public AutoCamera(String name, int usb_slot) {
         // Create a USBCamera

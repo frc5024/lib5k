@@ -625,7 +625,7 @@ public abstract class DriveTrainBase extends SubsystemBase implements IDifferent
      * Handle all outputs <br>
      * User must override this.
      * 
-     * @param output Motor & config outputs
+     * @param output Motor and config outputs
      */
     public abstract void consumeOutputs(DriveTrainOutput output);
 

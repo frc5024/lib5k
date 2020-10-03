@@ -10,7 +10,7 @@ import io.github.frc5024.lib5k.hardware.common.sensors.simulation.GyroSimUtil;
 import io.github.frc5024.lib5k.utils.annotations.FieldTested;
 
 /**
- * A wrapper for the {@see AHRS} / NavX gyroscope
+ * A wrapper for the AHRS / NavX gyroscope
  * 
  * This wrapper adds support for gyro simulation, and adds some lib5k-specific
  * methods

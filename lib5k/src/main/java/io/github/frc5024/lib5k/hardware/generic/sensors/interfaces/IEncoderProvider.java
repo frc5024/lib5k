@@ -21,6 +21,7 @@ public interface IEncoderProvider {
      * getDefaultEncoder()
      * 
      * @param id Encoder ID
+     * @param phase True if flipped phase
      * @return Encoder
      */
     public EncoderBase getEncoder(int id, boolean phase);

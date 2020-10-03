@@ -28,5 +28,7 @@ include ":hardware:limelight"
 include ":control_loops"
 include ":logging"
 include ":utils"
-include ":telemetry"
-include ":common_drive", ":autonomous", ":templates"
+include ":telemetry", ":common_drive", ":autonomous", ":templates"
+
+
+include ":lib5k"

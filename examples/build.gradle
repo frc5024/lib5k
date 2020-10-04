@@ -48,7 +48,7 @@ dependencies {
     implementation("com.revrobotics.frc:SparkMax-java:${project.REV_SPARK_VERSION}")
 
     // All of lib5k
-    implementation project(":")
+    implementation project(":lib5k")
 
     // HALSIM
     simulation wpi.deps.sim.gui(wpi.platforms.desktop, false)
@@ -79,7 +79,7 @@ task fatJar{
 
 jar {
     // Require other libraries
-    dependsOn ":_buildAllClassesJar"
+    dependsOn ":lib5k:assemble"
 
     // Bundle the JAR
     from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }

@@ -1,6 +1,8 @@
 // This file contains the maven configurations used by everything
 
 apply plugin: "edu.wpi.first.GradleRIO"
+apply plugin: "java"
+apply plugin: "java-library"
 
 repositories {
     // Main repos

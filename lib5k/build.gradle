@@ -6,8 +6,9 @@ plugins {
     // Style checks
     id "checkstyle"
 
-    // Metadata plugin
+    // Metadata plugins
     id 'net.nemerosa.versioning' version '2.6.1'
+    id "com.github.nwillc.buildinfo" version "0.1.4"
 }
 
 dependencies {
@@ -104,4 +105,24 @@ tasks.withType(Checkstyle) {
 }
 task checkstyle{
     dependsOn "checkstyleMain"
+}
+
+// Vendordep generation
+buildinfo {
+    output = "src/main/resources/lib5k_dependencies.json"
+
+    // Set up the file metadata
+    custom["fileName"] = "lib5k_dependencies.json"
+    custom["name"] = "lib5k_dependencies"
+    custom["uid"] = "cb311d09-36e9-4143-ae92-55bb2ac5843b"
+
+    // Maven repos
+
+    // URL to the generated file
+
+    // Java artifacts
+
+    // JNI artifacts
+
+    // CPP artifacts
 }

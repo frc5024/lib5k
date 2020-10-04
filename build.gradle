@@ -29,7 +29,7 @@ plugins {
 project.version = "1.4.0"
 
 // Enable Java support for all projects
-subprojects {s
+subprojects {
   apply from: rootProject.file("gradle_utils/libversions.gradle")
   apply from: rootProject.file("gradle_utils/mavenrepos.gradle")
   apply from: rootProject.file("gradle_utils/simpleunittest.gradle")

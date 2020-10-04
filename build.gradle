@@ -21,18 +21,13 @@ plugins {
   id "idea"
 }
 
-// Load project dependancy configurations
-// apply from: "gradle_utils/libversions.gradle"
-// apply from: "gradle_utils/mavenrepos.gradle"
-
 // LIB VERSION
 project.version = "1.4.0"
 
 // Enable Java support for all projects
 subprojects {
-  apply from: rootProject.file("gradle_utils/libversions.gradle")
-  apply from: rootProject.file("gradle_utils/mavenrepos.gradle")
-  apply from: rootProject.file("gradle_utils/simpleunittest.gradle")
+  apply from: rootProject.file("gradle/mavenrepos.gradle")
+  apply from: rootProject.file("gradle/simpleunittest.gradle")
 
   
 } 

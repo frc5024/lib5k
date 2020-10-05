@@ -2,9 +2,6 @@ package frc.lib5k.simulation;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
-import frc.robot.autonomous.Chooser;
 
 /**
  * A collection of tools for hooking into robot simulation endpoints
@@ -76,5 +73,6 @@ public class Hooks {
 
         }
     }
+
 
 }

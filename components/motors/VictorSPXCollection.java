@@ -13,7 +13,7 @@ import frc.lib5k.components.motors.interfaces.IRampRateController;
 import frc.lib5k.components.motors.interfaces.IVoltageOutputController;
 import frc.lib5k.components.motors.motorsensors.VictorEncoder;
 import frc.lib5k.components.sensors.EncoderBase;
-import frc.lib5k.components.sensors.IEncoderProvider;
+import frc.lib5k.components.sensors.interfaces.IEncoderProvider;
 import frc.lib5k.interfaces.Loggable;
 import frc.lib5k.utils.Mathutils;
 import frc.lib5k.utils.RobotLogger;
@@ -173,17 +173,19 @@ public class VictorSPXCollection extends SpeedControllerGroup implements IMotorC
     }
 
     @Override
-    public EncoderBase getEncoder(int id) {
+    public EncoderBase getEncoder(int id, boolean phase) {
         // Clamp the ID to the number of slaved + 1 (the master)
         id = (int) Mathutils.clamp(id, 0, slaves.length);
 
         // Check if the ID is for the master
         if (id == 0) {
+            master.setSensorPhase(phase);
             return new VictorEncoder(master);
         }
 
         // Otherwise, get the encoder from the list of slaves
-        return new VictorEncoder(slaves[id]);
+        slaves[id - 1].setSensorPhase(phase);
+        return new VictorEncoder(slaves[id - 1]);
     }
 
     /**

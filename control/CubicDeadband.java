@@ -1,4 +1,4 @@
-package frc.common.control;
+package frc.lib5k.control;
 
 /**
  * This Scaling method was inspired by this blog post:

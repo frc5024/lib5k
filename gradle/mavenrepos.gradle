@@ -1,14 +1,26 @@
 // This file contains the maven configurations used by everything
 
 apply plugin: "edu.wpi.first.GradleRIO"
+apply plugin: "io.github.mosadie.vendorJSON"
 apply plugin: "java"
 apply plugin: "java-library"
 
+// All dep version info
 project.ext.WPI_VERSION = "2020.+" // https://github.com/wpilibsuite/allwpilib/releases
 project.ext.CTRE_VERSION = "5.+" // http://devsite.ctr-electronics.com/maven/release/com/ctre/phoenix/wpiapi-java/
 project.ext.NAVX_VERSION = "3.+" // https://www.kauailabs.com/dist/frc/2020/navx_frc.json (Check ["javaDependencies"][0]["version"])
 project.ext.REV_COLOR_VERSION = "1.+" // https://github.com/REVrobotics/Color-Sensor-v3/releases
 project.ext.REV_SPARK_VERSION = "1.+" // http://www.revrobotics.com/content/sw/max/sdk/REVRobotics.json (Check ["javaDependencies"][0]["version"])
+
+// List of maven URLs to use
+project.ext.maven_urls = [
+    "https://jitpack.io",
+    "https://repo1.maven.org/maven2/",
+    "http://devsite.ctr-electronics.com/maven/release/",
+    "http://www.revrobotics.com/content/sw/color-sensor-v3/sdk/maven/",
+    "https://www.revrobotics.com/content/sw/max/sdk/maven/",
+    "https://frcmaven.wpi.edu/artifactory/development/"
+]
 
 repositories {
     // Main repos
@@ -16,18 +28,12 @@ repositories {
     mavenCentral()
     mavenLocal()
 
-    // FRC repos
-    maven { setUrl("https://jitpack.io")}
-    maven { setUrl("https://repo1.maven.org/maven2/")}
-    maven { setUrl("http://devsite.ctr-electronics.com/maven/release/")}
-    maven { setUrl("http://www.revrobotics.com/content/sw/color-sensor-v3/sdk/maven/")}
-    maven { setUrl("https://www.revrobotics.com/content/sw/max/sdk/maven/")}
-
-    // Switching these will switch between release and development versions of WPILib.
-    // It is generally recommended to stay on release, but I use development to test new features
-    // MAKE SURE TO look at the comment below for further instructions
-    // maven { setUrl("https://frcmaven.wpi.edu/artifactory/release/")}
-    maven { setUrl("https://frcmaven.wpi.edu/artifactory/development/")}
+    // Load repos from array
+    project.maven_urls.each{
+        maven {
+        url = it
+        }
+    }
 }
 
 // !!IMPORTANT!!
@@ -40,45 +46,78 @@ def debug = false
 
 // These are applied to all subprojects.
 dependencies{
-  // This dependency is exported to consumers, that is to say found on their compile classpath.
-  api 'org.apache.commons:commons-math3:3.6.1'
+    // This dependency is exported to consumers, that is to say found on their compile classpath.
+    api 'org.apache.commons:commons-math3:3.6.1'
 
-  // This dependency is used internally, and not exposed to consumers on their own compile classpath.
-  implementation 'com.google.guava:guava:29.0-jre'
+    // This dependency is used internally, and not exposed to consumers on their own compile classpath.
+    implementation 'com.google.guava:guava:29.0-jre'
 
-  // Use JUnit test framework
-  testImplementation 'junit:junit:4.13'
+    // Use JUnit test framework
+    testImplementation 'junit:junit:4.13'
 
-  // @ewpratten's MathUtils library
-  implementation 'com.github.ewpratten:ewmath:master-SNAPSHOT'
+    // @ewpratten's MathUtils library
+    implementation 'com.github.ewpratten:ewmath:master-SNAPSHOT'
 
-  wpi.deps.wpilib().each{
-    implementation it.replaceAll(wpi.wpilibVersion, project.WPI_VERSION)
-  }
+    wpi.deps.wpilib().each{
+        implementation it.replaceAll(wpi.wpilibVersion, project.WPI_VERSION)
+    }
 
-  // This is usually wpilibJni, but I am manually calling the internal function instead to get access to debug symbols if needed
-  wpi.deps.wpilibJniInternal(debug, wpi.platforms.roborio).each{
-    nativeZip it.replaceAll(wpi.wpilibVersion, project.WPI_VERSION)
-  }
+    // This is usually wpilibJni, but I am manually calling the internal function instead to get access to debug symbols if needed
+    wpi.deps.wpilibJniInternal(debug, wpi.platforms.roborio).each{
+        nativeZip it.replaceAll(wpi.wpilibVersion, project.WPI_VERSION)
+    }
 
-  // This is usually wpilibJni, but I am manually calling the internal function instead to get access to debug symbols if needed
-  wpi.deps.wpilibJniInternal(debug, wpi.platforms.desktop).each{
-    nativeDesktopZip it.replaceAll(wpi.wpilibVersion, project.WPI_VERSION)
-  }
+    // This is usually wpilibJni, but I am manually calling the internal function instead to get access to debug symbols if needed
+    wpi.deps.wpilibJniInternal(debug, wpi.platforms.desktop).each{
+        nativeDesktopZip it.replaceAll(wpi.wpilibVersion, project.WPI_VERSION)
+    }
 
-  // These are only needed during the 2020 -> 2021 offseason
-  // I am just manually adding beta files to the build step here
-  // See: https://github.com/wpilibsuite/GradleRIO/blob/08b47b835661e3b97dc599c242c6eda53cdbc738/src/main/groovy/edu/wpi/first/gradlerio/wpi/dependencies/WPIDepsExtension.groovy#L78-L96
-  def debugString = debug ? "debug" : ""
-  implementation "edu.wpi.first.wpimath:wpimath-java:${project.WPI_VERSION}"
-  nativeZip "edu.wpi.first.wpimath:wpimath-cpp:${project.WPI_VERSION}:${wpi.platforms.roborio}${debugString}@zip"
-  nativeDesktopZip "edu.wpi.first.wpimath:wpimath-cpp:${project.WPI_VERSION}:${wpi.platforms.desktop}${debugString}@zip"
+    // These are only needed during the 2020 -> 2021 offseason
+    // I am just manually adding beta files to the build step here
+    // See: https://github.com/wpilibsuite/GradleRIO/blob/08b47b835661e3b97dc599c242c6eda53cdbc738/src/main/groovy/edu/wpi/first/gradlerio/wpi/dependencies/WPIDepsExtension.groovy#L78-L96
+    def debugString = debug ? "debug" : ""
+    implementation "edu.wpi.first.wpimath:wpimath-java:${project.WPI_VERSION}"
+    nativeZip "edu.wpi.first.wpimath:wpimath-cpp:${project.WPI_VERSION}:${wpi.platforms.roborio}${debugString}@zip"
+    nativeDesktopZip "edu.wpi.first.wpimath:wpimath-cpp:${project.WPI_VERSION}:${wpi.platforms.desktop}${debugString}@zip"
 
-  // Handlers for vendordeps
-  implementation wpi.deps.vendor.java()
-  nativeZip wpi.deps.vendor.jni(wpi.platforms.roborio)
-  nativeDesktopZip wpi.deps.vendor.jni(wpi.platforms.desktop)
+    // Handlers for vendordeps
+    implementation wpi.deps.vendor.java()
+    nativeZip wpi.deps.vendor.jni(wpi.platforms.roborio)
+    nativeDesktopZip wpi.deps.vendor.jni(wpi.platforms.desktop)
 
-  // WPILib command framework
-  implementation("edu.wpi.first.wpilibNewCommands:wpilibNewCommands-java:${project.WPI_VERSION}")
+    // WPILib command framework
+    implementation("edu.wpi.first.wpilibNewCommands:wpilibNewCommands-java:${project.WPI_VERSION}")
+
+    // CTRE libraries
+    api "com.ctre.phoenix:api-java:${project.CTRE_VERSION}"
+    api "com.ctre.phoenix:wpiapi-java:${project.CTRE_VERSION}"
+
+    // NavX
+    api "com.kauailabs.navx.frc:navx-java:${project.NAVX_VERSION}"
+
+    // Language extensions
+    implementation "org.apache.commons:commons-lang3:3.11"
+
+    // Spark max
+    api "com.revrobotics.frc:SparkMax-java:${project.REV_SPARK_VERSION}"
+
+    // Xchart
+    compile group: 'org.knowm.xchart', name: 'xchart', version: '3.6.5'
+
+    // Google JSON support
+    implementation 'com.google.code.gson:gson:2.8.6'
 }
+
+vendorJSON{
+
+    // Metadata
+    fileName = "lib5k_depsonly.json"
+    version = lib5k_version
+    uuid = "d00da21b-3b50-4af5-bf48-a61c1675533"
+
+    // Add all maven URLs
+    project.maven_urls.each{
+        addMavenUrl(it)
+    }
+}
+

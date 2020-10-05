@@ -11,6 +11,9 @@ buildscript {
       // Update this version number to update GradleRIO
       // Also update the number below
       classpath "edu.wpi.first:GradleRIO:2020.+"
+
+      // VendorDep plugin
+      classpath "gradle.plugin.io.github.mosadie:GradleVendorJSON:1.0"
     }
 }
 
@@ -21,8 +24,7 @@ plugins {
   id "idea"
 }
 
-// LIB VERSION
-project.version = "1.4.0"
+// If you are here to change the lib5k version, see gradle.properties instead
 
 // Enable Java support for all projects
 subprojects {

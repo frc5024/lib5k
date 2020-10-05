@@ -8,24 +8,16 @@ plugins {
 
     // Metadata plugins
     id 'net.nemerosa.versioning' version '2.6.1'
-    id "com.github.nwillc.buildinfo" version "0.1.4"
+
+    // Vendor file generator
+    id "io.github.mosadie.vendorJSON" 
 }
 
+// Load versioning info from settings file
+project.version = lib5k_version
+
 dependencies {
-    api "com.ctre.phoenix:api-java:${project.CTRE_VERSION}"
-    api "com.ctre.phoenix:wpiapi-java:${project.CTRE_VERSION}"
-
-    api "com.kauailabs.navx.frc:navx-java:${project.NAVX_VERSION}"
-
-    implementation "org.apache.commons:commons-lang3:3.11"
-
-    api "com.revrobotics.frc:SparkMax-java:${project.REV_SPARK_VERSION}"
-
-    // Xchart
-    compile group: 'org.knowm.xchart', name: 'xchart', version: '3.6.5'
-
-    // Google JSON support
-    implementation 'com.google.code.gson:gson:2.8.6'
+    
 }
 
 task customJavadoc(type: Javadoc) {
@@ -105,24 +97,4 @@ tasks.withType(Checkstyle) {
 }
 task checkstyle{
     dependsOn "checkstyleMain"
-}
-
-// Vendordep generation
-buildinfo {
-    output = "src/main/resources/lib5k_dependencies.json"
-
-    // Set up the file metadata
-    custom["fileName"] = "lib5k_dependencies.json"
-    custom["name"] = "lib5k_dependencies"
-    custom["uid"] = "cb311d09-36e9-4143-ae92-55bb2ac5843b"
-
-    // Maven repos
-
-    // URL to the generated file
-
-    // Java artifacts
-
-    // JNI artifacts
-
-    // CPP artifacts
 }

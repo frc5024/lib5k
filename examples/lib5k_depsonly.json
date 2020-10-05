@@ -1,0 +1,50 @@
+{
+  "name": "examples",
+  "version": "1.4.0",
+  "uuid": "d00da21b-3b50-4af5-bf48-a61c1675533",
+  "mavenUrls": [
+    "https://jitpack.io",
+    "https://repo1.maven.org/maven2/",
+    "http://devsite.ctr-electronics.com/maven/release/",
+    "http://www.revrobotics.com/content/sw/color-sensor-v3/sdk/maven/",
+    "https://www.revrobotics.com/content/sw/max/sdk/maven/",
+    "https://frcmaven.wpi.edu/artifactory/development/"
+  ],
+  "jsonUrl": "http://example.com/lib5k_depsonly.json",
+  "fileName": "lib5k_depsonly.json",
+  "javaDependencies": [
+    {
+      "groupId": "com.example",
+      "artifactId": "exampleJavaLibrary",
+      "version": "v0.0.0"
+    }
+  ],
+  "jniDependencies": [
+    {
+      "groupId": "com.example",
+      "artifactId": "exampleJNILibrary",
+      "version": "v0.0.0",
+      "isJar": false,
+      "validPlatforms": [
+        "examplePlatform"
+      ],
+      "skipInvalidPlatforms": true
+    }
+  ],
+  "cppDependencies": [
+    {
+      "groupId": "com.example",
+      "artifactId": "exampleCppLibrary",
+      "version": "v0.0.0",
+      "libName": "Example Cpp Library",
+      "configuration": "exampleConfig",
+      "headerClassifier": "headers",
+      "sourcesClassifier": "sources",
+      "binaryPlatforms": [
+        "examplePlatform"
+      ],
+      "skipInvalidPlatforms": true,
+      "sharedLibrary": false
+    }
+  ]
+}

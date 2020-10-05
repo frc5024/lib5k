@@ -1,0 +1,126 @@
+{
+  "name": "Lib5K",
+  "version": "1.4.0",
+  "uuid": "d00da21b-3b50-4af5-bf48-a61c1675533",
+  "mavenUrls": [
+    "https://jitpack.io",
+    "https://repo1.maven.org/maven2/",
+    "http://devsite.ctr-electronics.com/maven/release/",
+    "http://www.revrobotics.com/content/sw/color-sensor-v3/sdk/maven/",
+    "https://www.revrobotics.com/content/sw/max/sdk/maven/",
+    "https://frcmaven.wpi.edu/artifactory/development/"
+  ],
+  "jsonUrl": "https://raw.githubusercontent.com/frc5024/lib5k/master/lib5k/lib5k.json",
+  "fileName": "lib5k.json",
+  "javaDependencies": [
+    {
+      "groupId": "edu.wpi.first.wpilibj",
+      "artifactId": "wpilibj-java",
+      "version": "2020.+"
+    },
+    {
+      "groupId": "edu.wpi.first.ntcore",
+      "artifactId": "ntcore-java",
+      "version": "2020.+"
+    },
+    {
+      "groupId": "edu.wpi.first.wpiutil",
+      "artifactId": "wpiutil-java",
+      "version": "2020.+"
+    },
+    {
+      "groupId": "edu.wpi.first.thirdparty.frc2020.opencv",
+      "artifactId": "opencv-java",
+      "version": "3.4.7-2"
+    },
+    {
+      "groupId": "edu.wpi.first.cscore",
+      "artifactId": "cscore-java",
+      "version": "2020.+"
+    },
+    {
+      "groupId": "edu.wpi.first.cameraserver",
+      "artifactId": "cameraserver-java",
+      "version": "2020.+"
+    },
+    {
+      "groupId": "edu.wpi.first.hal",
+      "artifactId": "hal-java",
+      "version": "2020.+"
+    },
+    {
+      "groupId": "org.ejml",
+      "artifactId": "ejml-simple",
+      "version": "0.38"
+    },
+    {
+      "groupId": "com.fasterxml.jackson.core",
+      "artifactId": "jackson-annotations",
+      "version": "2.10.0"
+    },
+    {
+      "groupId": "com.fasterxml.jackson.core",
+      "artifactId": "jackson-core",
+      "version": "2.10.0"
+    },
+    {
+      "groupId": "com.fasterxml.jackson.core",
+      "artifactId": "jackson-databind",
+      "version": "2.10.0"
+    },
+    {
+      "groupId": "org.knowm.xchart",
+      "artifactId": "xchart",
+      "version": "3.6.5"
+    },
+    {
+      "groupId": "com.google.code.gson",
+      "artifactId": "gson",
+      "version": "2.8.6"
+    },
+    {
+      "groupId": "edu.wpi.first.wpilibNewCommands",
+      "artifactId": "wpilibNewCommands-java",
+      "version": "2020.+"
+    },
+    {
+      "groupId": "edu.wpi.first.wpimath",
+      "artifactId": "wpimath-java",
+      "version": "2020.+"
+    }
+  ],
+  "jniDependencies": [
+    {
+      "groupId": "edu.wpi.first.wpimath",
+      "artifactId": "wpimath-cpp",
+      "version": "2020.+",
+      "isJar": false,
+      "validPlatforms": [
+        "windowsx86-64",
+        "windowsx86",
+        "linuxaarch64bionic",
+        "linuxx86-64",
+        "linuxathena",
+        "linuxraspbian",
+        "osxx86-64"
+      ],
+      "skipInvalidPlatforms": true
+    }
+  ],
+  "cppDependencies": [
+    {
+      "groupId": "com.example",
+      "artifactId": "exampleCppLibrary",
+      "version": "v0.0.0",
+      "libName": "Example Cpp Library",
+      "configuration": "exampleConfig",
+      "headerClassifier": "headers",
+      "sourcesClassifier": "sources",
+      "binaryPlatforms": [
+        "examplePlatform"
+      ],
+      "skipInvalidPlatforms": true,
+      "sharedLibrary": false
+    }
+  ]
+}

@@ -111,13 +111,37 @@ dependencies{
 vendorJSON{
 
     // Metadata
-    fileName = "lib5k_depsonly.json"
+    name = "Lib5K"
+    fileName = "lib5k.json"
     version = lib5k_version
     uuid = "d00da21b-3b50-4af5-bf48-a61c1675533"
+    jsonUrl = "https://raw.githubusercontent.com/frc5024/lib5k/master/lib5k/lib5k.json"
 
     // Add all maven URLs
     project.maven_urls.each{
         addMavenUrl(it)
     }
+
+    // Add all java artifacts
+    wpi.deps.wpilib().each{
+        def resourceComponents = it.replaceAll(wpi.wpilibVersion, project.WPI_VERSION).split(":")
+        addJavaArtifact(resourceComponents[0],resourceComponents[1],resourceComponents[2] )
+    }
+
+    // Add other deps
+    addJavaArtifact("org.knowm.xchart", "xchart", "3.6.5")
+    addJavaArtifact("com.google.code.gson", "gson", "2.8.6")
+    addJavaArtifact("edu.wpi.first.wpilibNewCommands", "wpilibNewCommands-java", project.WPI_VERSION)
+
+    // Manually add missing WPILib deps
+    addJavaArtifact("edu.wpi.first.wpimath", "wpimath-java", project.WPI_VERSION)
+    addJniArtifact("edu.wpi.first.wpimath", "wpimath-cpp", project.WPI_VERSION, false, stringArray("windowsx86-64",
+                "windowsx86",
+                "linuxaarch64bionic",
+                "linuxx86-64",
+                "linuxathena",
+                "linuxraspbian",
+                "osxx86-64"), true)
+
 }
 

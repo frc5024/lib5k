@@ -15,7 +15,7 @@ jobs:
         java-version: 11
     - uses: eskatos/gradle-command-action@v1
       with:
-        arguments: :lib5k:bootstrap
+        arguments: bootstrap
     - uses: eskatos/gradle-command-action@v1
       with:
         arguments: :lib5k:build --scan
@@ -33,7 +33,7 @@ jobs:
         java-version: 11
     - uses: eskatos/gradle-command-action@v1
       with:
-        arguments: :examples:bootstrap
+        arguments: bootstrap
     - uses: eskatos/gradle-command-action@v1
       with:
         arguments: :examples:build --scan

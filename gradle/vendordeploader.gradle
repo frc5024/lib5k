@@ -11,3 +11,14 @@ compileJava.dependsOn getCopyOfDeps
 gradle.taskGraph.whenReady {
     getCopyOfDeps
 }
+
+// This task adds vendordeps to the releases
+task exportDeps(type: Zip) {
+    from project.file("vendordeps")
+    include "*.json"
+    archiveName "vendordeps.zip"
+    destinationDir project.file("$buildDir/libs/")
+}
+
+// Make vendordeps get exported along with the jar files
+assemble.dependsOn exportDeps

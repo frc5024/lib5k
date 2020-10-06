@@ -39,7 +39,7 @@ task customJavadoc(type: Javadoc) {
 
 task allJar(type: Jar) {
     classifier = "all"
-    from customJavadoc
+    from javadoc
     from sourceSets.main.allJava
     from jar.source
 }

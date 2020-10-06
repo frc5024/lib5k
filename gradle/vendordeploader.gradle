@@ -1,0 +1,13 @@
+apply plugin: "java"
+
+// This task copies the common vendordeps locally
+task getCopyOfDeps(type: Copy){
+    from rootProject.file("vendordeps")
+    into project.file("vendordeps")
+}
+
+// Make the compiler wait for deps to be fetched
+compileJava.dependsOn getCopyOfDeps
+gradle.taskGraph.whenReady {
+    getCopyOfDeps
+}

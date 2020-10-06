@@ -10,23 +10,6 @@ plugins {
     id 'net.nemerosa.versioning' version '2.6.1'
 }
 
-dependencies {
-    api "com.ctre.phoenix:api-java:${project.CTRE_VERSION}"
-    api "com.ctre.phoenix:wpiapi-java:${project.CTRE_VERSION}"
-
-    api "com.kauailabs.navx.frc:navx-java:${project.NAVX_VERSION}"
-
-    implementation "org.apache.commons:commons-lang3:3.11"
-
-    api "com.revrobotics.frc:SparkMax-java:${project.REV_SPARK_VERSION}"
-
-    // Xchart
-    compile group: 'org.knowm.xchart', name: 'xchart', version: '3.6.5'
-
-    // Google JSON support
-    implementation 'com.google.code.gson:gson:2.8.6'
-}
-
 task customJavadoc(type: Javadoc) {
     // Set the JavaDoc webpage title
     title = "$project.name $version API"

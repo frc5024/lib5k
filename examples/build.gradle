@@ -36,25 +36,12 @@ deploy {
 }
 
 dependencies {
-    // NavX
-    implementation("com.kauailabs.navx.frc:navx-java:${project.NAVX_VERSION}")
-
-    // CTRE
-    implementation("com.ctre.phoenix:api-java:${project.CTRE_VERSION}")
-    implementation("com.ctre.phoenix:wpiapi-java:${project.CTRE_VERSION}")
-
-    // REV Robotics
-    implementation("com.revrobotics.frc:ColorSensorV3-java:${project.REV_COLOR_VERSION}")
-    implementation("com.revrobotics.frc:SparkMax-java:${project.REV_SPARK_VERSION}")
 
     // All of lib5k
     implementation project(":lib5k")
 
     // HALSIM
     simulation wpi.deps.sim.gui(wpi.platforms.desktop, false)
-
-    // Xchart
-    compile group: 'org.knowm.xchart', name: 'xchart', version: '3.6.5'
 }
 
 sourceSets {

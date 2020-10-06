@@ -1,0 +1,18 @@
+title: Lib5K Documentation
+lang: en
+description: The software libraries that power all Raider Robotics projects 
+
+## remote method ##
+remote_theme: rundocs/jekyll-rtd-theme
+
+readme_index:
+  with_frontmatter: true
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+
+plugins:
+  - jemoji
+  - jekyll-avatar
+  - jekyll-mentions

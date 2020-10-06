@@ -1,3 +1,0 @@
-# Simulate.py documentation
-
-`simulate.py` is a python wrapper to HALSIM. It lets you simulate robot code, and view program output without running VSCode. To use it, just put the script in the root of any FRC project, and run it. The script will automatically bootstrap the project, parse out the internal configuration files, and start the JVM with the correct arguments. This script can be used for unit tests if you know what you are doing.

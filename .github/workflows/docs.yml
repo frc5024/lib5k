@@ -22,7 +22,7 @@ jobs:
 
       - uses: eskatos/gradle-command-action@v1
         with:
-          arguments: clean customJavadoc --scan
+          arguments: :lib5k:build :lib5k:customJavadoc --scan
 
       - name: Copy javadoc into Jekyll
         run: |

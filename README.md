@@ -3,7 +3,7 @@
 <!-- Badges go here -->
 ![Build Library](https://github.com/frc5024/lib5k/workflows/Build%20Library/badge.svg)
 ![Dependencies: Latest](https://img.shields.io/badge/dependencies-up--to--date-g)
-[![Documentation](https://img.shields.io/badge/API-1.3.0-orange)](https://frc5024.github.io/lib5k/javadoc)
+[![Documentation](https://img.shields.io/badge/API-2.0.0-orange)](https://frc5024.github.io/lib5k/javadoc)
 [![Documentation](https://img.shields.io/badge/-documentation-blue)](https://frc5024.github.io/lib5k)
 
 Lib5K is a robotics software library built and maintained by [Raider Robotics](https://github.com/frc5024), and is used by FRC teams world-wide. This library has two primary goals:

@@ -23,15 +23,21 @@ Now that a repo is created, clone it, and use the WPILib VSCode extension to [cr
 
 ## Downloading and configuring Lib5K as a Java library
 
-*If you are needing to use a custom version of Lib5K, or use some un-released features, follow the [compiling Lib5K from source]() guide, and use the files in the `_release` folder instead of downloading from GitHub*
+*If you are needing to use a custom version of Lib5K, or use some un-released features, follow the [compiling Lib5K from source](/lib5k/installation/Compiling-Lib5K-From-Source) guide, and use the files in the `lib5k/build/libs` directory instead of downloading from GitHub*
 
 You will need to got to the [latest release](https://github.com/frc5024/lib5k/releases/latest) of Lib5K, and download the following files:
- - `lib5k-<version>-all.jar`
+ - `lib5k-all.jar`
+ - `gradle5k.gradle`
+ - `vendordeps.zip`
  - Any file ending in `.py`
 
-Create two folders in the root of the robot project repo named `libs` and `scripts`. Put the `.jar` file in `libs` and the `.py` files in `scripts`.
+### Lib5K-All
 
-Once that is done, open up `build.gradle` and add the following lines inside the `dependencies` section:
+This file contains everything needed to develop code, and deploy with Lib5K. The JAR comes with both the needed `.class` files for the Java compiler, and some extra files that provide VSCode with information about all the code inside (these files are what allow you to press `F12` to get a definition).
+
+Create a new folder at the root of your project called `libs`, and put the JAR file inside.
+
+Now, you just need to tell Gradle that this file exists. Open up `build.gradle` and add the following lines inside the `dependencies` section:
 ```groovy
 dependencies {
 
@@ -43,16 +49,46 @@ dependencies {
 
 Open up `.gitignore` file, and if there is a line that says `*.jar`, remove it.
 
-## Download all vendor configuration files
+### Python scripts
 
-Create a folder (if not already created) in the repo root called `vendordeps`. 
+The `.py` files should all be placed into a folder at the root of your project called `scripts`
 
- - Go to the [Kauai Labs website](https://pdocs.kauailabs.com/navx-mxp/software/roborio-libraries/java/), find the "Online Installation Method" section, and follow the instructions.
- - Download [this file](http://devsite.ctr-electronics.com/maven/release/com/ctre/phoenix/Phoenix-latest.json), and place it in the `vendordeps` folder.
- - Download [this file](https://www.revrobotics.com/content/sw/max/sdk/REVRobotics.json), and place it in the `vendordeps` folder.
- - Download [this file](https://raw.githubusercontent.com/wpilibsuite/allwpilib/master/wpilibNewCommands/WPILibNewCommands.json), and place it in the `vendordeps` folder.
+### Gradle5K
 
-Depending on the hardware the team decides to use during the season, other JSON files may be needed. They are usually listed [here](https://docs.wpilib.org/en/stable/docs/software/wpilib-overview/3rd-party-libraries.html).
+Gradle5K is a script we provide that contains everything needed to set up your project. Place it in the root of your project. To load the script, you will need to make a few changes to your `build.gradle` file. First, at the very top of the file, add the following (be sure to set the [latest](https://plugins.gradle.org/plugin/edu.wpi.first.GradleRIO) version number):
+
+```groovy
+buildscript {
+  repositories {
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+  dependencies {
+    classpath "edu.wpi.first:GradleRIO:2020.3.2"
+  }
+}
+```
+
+Next, after the pre-existing `plugins` block, add this line:
+
+```groovy
+apply from: "./gradle5k.gradle"
+```
+
+Finally, in the `dependencies` block, **remove** the following lines:
+
+```groovy
+implementation wpi.deps.wpilib()
+nativeZip wpi.deps.wpilibJni(wpi.platforms.roborio)
+nativeDesktopZip wpi.deps.wpilibJni(wpi.platforms.desktop)
+```
+
+Make sure not to remove the second set of lines that looks similar. The first set loads WPILib (which we do for you in our script), and the second set loads third party code (which we do not do for you).
+
+### Vendordeps
+
+Your project will likely come with a folder called `vendordeps`. This is used by WPILib to load third party code into your project. If you do not have the folder, create it in the root of your project. Unzip the `vendordeps.zip` file we provide, and move all the files into your `vendordeps` folder. This will make sure you have the correct versions of everything we need.
 
 ## Setting up GitHub CI
 
@@ -76,47 +112,6 @@ jobs:
       with:
         arguments: build
 ```
-
-If the team wants to use JavaDoc (this is recommended), make another file called `docs.yml`:
-
-```yml
-name: Deploy docs
-
-on:
-  push:
-    branches:
-      - master
-
-jobs:  
-  publish:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-
-      - uses: actions/setup-java@v1
-        with:
-          java-version: 11
-
-      - uses: eskatos/gradle-command-action@v1
-        with:
-          arguments: clean javadoc
-
-      - name: Check GitHub Pages status
-        uses: crazy-max/ghaction-github-status@v1
-        with:
-          pages_threshold: major_outage
-
-      - name: Deploy to GitHub Pages
-        if: success()
-        uses: crazy-max/ghaction-github-pages@v2
-        with:
-          target_branch: gh-pages
-          build_dir: docs
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-```
-
-The documentation will automatically be published to `frc5024.github.io/<reponame>`
 
 ## Configuring the correct Java package
 
@@ -166,7 +161,7 @@ Now, just run
 ./gradlew build
 
 # Windows:
-.\gradlew.bat buil
+.\gradlew.bat build
 ```
 
-and make sure everything builds correctly. Then, push to Git, and the robot project is ready to go!
+and make sure everything builds correctly. Then, push to Git, and the robot project is ready to go! If anything goes wrong in this step, see the [troubleshooting](/lib5k/technical/Troubleshooting) page for solutions.

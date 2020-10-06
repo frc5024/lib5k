@@ -20,6 +20,10 @@ jobs:
         with:
           arguments: clean customJavadoc --scan
 
+      - name: Copy javadoc into Jekyll
+        run: |
+          mv lib5k/build/docs/javadoc docs/
+
       - name: Check GitHub Pages status
         uses: crazy-max/ghaction-github-status@v1
         with:
@@ -30,6 +34,6 @@ jobs:
         uses: crazy-max/ghaction-github-pages@v2
         with:
           target_branch: gh-pages
-          build_dir: lib5k/build/docs/javadoc
+          build_dir: docs
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

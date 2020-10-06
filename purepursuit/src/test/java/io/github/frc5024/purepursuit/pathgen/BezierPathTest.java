@@ -1,6 +1,7 @@
 package io.github.frc5024.purepursuit.pathgen;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.junit.Test;
 import org.knowm.xchart.BitmapEncoder;
@@ -13,9 +14,11 @@ public class BezierPathTest {
 
 	// Default waypoints
 	Translation2d[] wayPoints = { new Translation2d(0, 0), new Translation2d(15, 15), new Translation2d(30, 5) };
+	Translation2d[] wayPoints6 = { new Translation2d(50, 170), new Translation2d(150, 370), new Translation2d(250, 35),
+		new Translation2d(400, 320), new Translation2d(600, 170), new Translation2d(50, 50)};
 
 	@Test
-	public void testQuadraticBezierPath() throws IOException {
+	public void testBezierPathGeneration() throws IOException {
 
 		// Creates a bezier path
 		BezierPath path = new BezierPath(wayPoints);
@@ -46,6 +49,23 @@ public class BezierPathTest {
 
 
 
+	}
+
+	@Test
+	public void testLookUpList() throws IOException {
+		
+		// Creates a bezier path
+		BezierPath path = new BezierPath(wayPoints6);
+
+		// Makes a chart and saves it
+		XYChart chart = path.getPathVisualization();
+
+		BitmapEncoder.saveBitmap(chart, "./build/tmp/PurePursuit_UnitTest_LookupTableTest",
+                BitmapFormat.PNG);
+        System.out.println(
+                "Test result PNG generated to ./build/tmp/PurePursuit_UnitTest_QuadraticBezierCurve.png");
+		
+		
 	}
 
 }

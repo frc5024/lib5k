@@ -2,7 +2,7 @@
 
 Welcome to the lib5k wiki!
 
-**If you are looking the the Lib5K JavaDoc, go [here](/javadoc)**
+**If you are looking the the Lib5K JavaDoc, go [here](./javadoc)**
 
 ## The history of Lib5K
 

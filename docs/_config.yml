@@ -1,6 +1,7 @@
 title: Lib5K Documentation
 lang: en
 description: The software libraries that power all Raider Robotics projects 
+baseurl: "/lib5k"
 
 ## remote method ##
 remote_theme: rundocs/jekyll-rtd-theme

@@ -3,12 +3,13 @@
 The process for creating a robot project that uses Lib5K is a little different from the normal process for setting up a WPILib project. This document is specifically written for 5024 members.
 
 ## The steps
- 1) Creating a base project
- 2) Downloading and configuring Lib5K as a Java library
- 3) Download all vendor configuration files
- 4) Setting up GitHub CI
- 5) Configuring the correct Java package
- 6) Ensuring everything works
+
+ 1. Creating a base project
+ 2. Downloading and configuring Lib5K as a Java library
+ 3. Download all vendor configuration files
+ 4. Setting up GitHub CI
+ 5. Configuring the correct Java package
+ 6. Ensuring everything works
 
 ## Creating a base project
 

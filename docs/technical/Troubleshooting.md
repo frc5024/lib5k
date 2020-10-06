@@ -6,7 +6,7 @@ While Lib5K uses and imports third-party libraries, only the java bindings are a
 
 ## When building Lib5K, I get a ton of errors about NavX, TalonSRX, and SparkMax
 
-These are caused by the way gradle is currently set up. We are waiting on an unpdate from WPILib, but for now, just run this command once:
+These are caused by the way gradle is currently set up. We are waiting on an update from WPILib, but for now, just run this command once:
 
 ```sh
 ./gradlew bootstrap

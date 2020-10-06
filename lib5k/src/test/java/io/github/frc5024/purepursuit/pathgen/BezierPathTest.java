@@ -14,8 +14,8 @@ public class BezierPathTest {
 
 	// Default waypoints
 	Translation2d[] wayPoints = { new Translation2d(0, 0), new Translation2d(15, 15), new Translation2d(30, 5) };
-	Translation2d[] wayPoints6 = { new Translation2d(50, 170), new Translation2d(150, 370), new Translation2d(250, 35),
-		new Translation2d(400, 320), new Translation2d(600, 170), new Translation2d(50, 50)};
+	Translation2d[] wayPoints6 = { new Translation2d(10, 10), new Translation2d(15, 37), new Translation2d(25, 35),
+		new Translation2d(40, 32), new Translation2d(60, 17), new Translation2d(5, 5)};
 
 	@Test
 	public void testBezierPathGeneration() throws IOException {
@@ -30,24 +30,6 @@ public class BezierPathTest {
                 BitmapFormat.PNG);
         System.out.println(
                 "Test result PNG generated to ./build/tmp/PurePursuit_UnitTest_QuadraticBezierCurve.png");
-
-	}
-
-	@Test
-	public void testQuadraticBezierPathAdjustability() throws IOException {
-
-		// Creates a more customized bezier path
-		BezierPath path = new BezierPath(wayPoints, new double[]{1, 1.75, 1}, .01);
-
-		// Makes a chart of the path and saves it
-		XYChart chart = path.getPathVisualization();
-
-		BitmapEncoder.saveBitmap(chart, "./build/tmp/PurePursuit_UnitTest_QuadraticBezierCurveAdjustability",
-                BitmapFormat.PNG);
-        System.out.println(
-                "Test result PNG generated to ./build/tmp/PurePursuit_UnitTest_QuadraticBezierCurveAdjustability.png");
-
-
 
 	}
 

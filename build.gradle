@@ -26,7 +26,8 @@ project.version = "1.4.0"
 
 // Enable Java support for all projects
 subprojects {
-  apply from: rootProject.file("gradle/mavenrepos.gradle")
+  apply from: rootProject.file("gradle/vendordeploader.gradle")
+  apply from: rootProject.file("gradle5k/gradle5k.gradle")
   apply from: rootProject.file("gradle/simpleunittest.gradle")
 
   

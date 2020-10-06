@@ -96,7 +96,7 @@ public class NavX extends AHRS implements ISimGyro {
         if (sim != null && sim.simReady()) {
             sim.calibrate();
         } else {
-            super.calibrate();
+            // super.calibrate();
         }
         calibrated = true;
 

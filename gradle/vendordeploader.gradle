@@ -1,0 +1,28 @@
+apply plugin: "java"
+
+// This task copies the common vendordeps locally
+task getCopyOfDeps(type: Copy){
+    from rootProject.file("vendordeps")
+    into project.file("vendordeps")
+}
+
+// Make the compiler wait for deps to be fetched
+compileJava.dependsOn getCopyOfDeps
+gradle.taskGraph.whenReady {
+    getCopyOfDeps
+}
+
+task bootstrap {
+    dependsOn getCopyOfDeps
+}
+
+// This task adds vendordeps to the releases
+task exportDeps(type: Zip) {
+    from project.file("vendordeps")
+    include "*.json"
+    archiveName "vendordeps.zip"
+    destinationDir project.file("$buildDir/libs/")
+}
+
+// Make vendordeps get exported along with the jar files
+assemble.dependsOn exportDeps

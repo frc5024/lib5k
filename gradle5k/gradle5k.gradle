@@ -1,0 +1,100 @@
+/**
+ * Gradle5K is a small gradle script that should be distrobuted with every release of Lib5K.
+ * 
+ * The goal of this script is to automatically handle dependency management for any client 
+ * library without the need for large config files
+ */
+
+apply plugin: "java"
+apply plugin: "edu.wpi.first.GradleRIO"
+
+/* --- Lib5K Maintainers: Set version info here --- */
+def versions = [
+
+    // Core FRC libraries
+    wpilib:     "2020.3.+" // See: https://github.com/wpilibsuite/allwpilib/releases
+    // ctre       "5.+" // See: http://devsite.ctr-electronics.com/maven/release/com/ctre/phoenix/wpiapi-java/
+    // navx       "3.+" // See: https://www.kauailabs.com/dist/frc/2020/navx_frc.json (Check ["javaDependencies"][0]["version"])
+    // rev_color  "1.+" // See: https://github.com/REVrobotics/Color-Sensor-v3/releases
+    // rev_spark  "1.+" // See: http://www.revrobotics.com/content/sw/max/sdk/REVRobotics.json (Check ["javaDependencies"][0]["version"])
+
+]
+
+/* --- Lib5K Maintainers: Set maven repos here --- */
+def maven_repos = [
+    jitpack:     "https://jitpack.io",
+    maven_org:   "https://repo1.maven.org/maven2/",
+    ctre:        "http://devsite.ctr-electronics.com/maven/release/",
+    rev_color:   "http://www.revrobotics.com/content/sw/color-sensor-v3/sdk/maven/",
+    rev:         "https://www.revrobotics.com/content/sw/max/sdk/maven/",
+    wpi:         "https://frcmaven.wpi.edu/artifactory/development/",
+]
+
+/* --- These are all publicly exposed --- */
+
+repositories {
+    // Provided by Gradle
+    mavenCentral()
+    mavenLocal()
+    jcenter()
+
+    // Provided by us
+    maven_repos.each { k,v ->
+        maven {
+            name k
+            url v
+        }
+    }
+}
+
+dependencies{
+    // Math tools
+    implementation 'org.apache.commons:commons-math3:3.6.1'
+
+    // This dependency is used internally, and not exposed to consumers on their own compile classpath.
+    implementation 'com.google.guava:guava:29.0-jre'
+
+    // Use JUnit test framework
+    testImplementation 'junit:junit:4.13'
+
+    // @ewpratten's MathUtils library
+    implementation 'com.github.ewpratten:ewmath:master-SNAPSHOT'
+
+    // Java language extensions
+    implementation "org.apache.commons:commons-lang3:3.11"
+
+    // Xchart
+    compile group: 'org.knowm.xchart', name: 'xchart', version: '3.6.5'
+
+    // Google JSON support
+    implementation 'com.google.code.gson:gson:2.8.6'
+
+    wpi.deps.wpilib().each{
+        implementation it.replaceAll(wpi.wpilibVersion, versions.wpilib)
+    }
+
+    // This is usually wpilibJni, but I am manually calling the internal function instead to get access to debug symbols if needed
+    wpi.deps.wpilibJniInternal(false, wpi.platforms.roborio).each{
+        nativeZip it.replaceAll(wpi.wpilibVersion, versions.wpilib)
+    }
+
+    // This is usually wpilibJni, but I am manually calling the internal function instead to get access to debug symbols if needed
+    wpi.deps.wpilibJniInternal(false, wpi.platforms.desktop).each{
+        nativeDesktopZip it.replaceAll(wpi.wpilibVersion, versions.wpilib)
+    }
+
+    // These are only needed during the 2020 -> 2021 offseason
+    // I am just manually adding beta files to the build step here
+    // See: https://github.com/wpilibsuite/GradleRIO/blob/08b47b835661e3b97dc599c242c6eda53cdbc738/src/main/groovy/edu/wpi/first/gradlerio/wpi/dependencies/WPIDepsExtension.groovy#L78-L96
+    implementation "edu.wpi.first.wpimath:wpimath-java:${versions.wpilib}"
+    nativeZip "edu.wpi.first.wpimath:wpimath-cpp:${versions.wpilib}:${wpi.platforms.roborio}@zip"
+    nativeDesktopZip "edu.wpi.first.wpimath:wpimath-cpp:${versions.wpilib}:${wpi.platforms.desktop}@zip"
+
+    // Handlers for vendordeps
+    implementation wpi.deps.vendor.java()
+    nativeZip wpi.deps.vendor.jni(wpi.platforms.roborio)
+    nativeDesktopZip wpi.deps.vendor.jni(wpi.platforms.desktop)
+
+    // WPILib command framework
+    implementation("edu.wpi.first.wpilibNewCommands:wpilibNewCommands-java:${versions.wpilib}")
+}

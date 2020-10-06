@@ -18,6 +18,10 @@ jobs:
 
       - uses: eskatos/gradle-command-action@v1
         with:
+          arguments: bootstrap
+
+      - uses: eskatos/gradle-command-action@v1
+        with:
           arguments: clean customJavadoc --scan
 
       - name: Copy javadoc into Jekyll

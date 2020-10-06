@@ -50,6 +50,11 @@ task copyGradle5K(type: Copy) {
     into project.file("$buildDir/libs")
 }
 
+task copyPythonScripts(type: Copy) {
+    from rootProject.file("scripts")
+    into project.file("$buildDir/libs")
+}
+
 
 jar {
     manifest {
@@ -76,6 +81,7 @@ java {
 
 assemble.dependsOn allJar
 assemble.dependsOn copyGradle5K
+assemble.dependsOn copyPythonScripts
 
 // Style checking
 checkstyle {

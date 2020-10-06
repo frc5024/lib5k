@@ -48,5 +48,5 @@ FRC_UserProgram.log
 imgui.ini
 
 # Copies of vendordep files
-examples/vendordeps
+# examples/vendordeps
 lib5k/vendordeps

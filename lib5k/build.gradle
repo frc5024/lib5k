@@ -44,6 +44,12 @@ task allJar(type: Jar) {
     from jar.source
 }
 
+// Copy the loader script to the output directory
+task copyGradle5K(type: Copy) {
+    from rootProject.file("gradle5k/gradle5k.gradle")
+    into project.file("$buildDir/libs")
+}
+
 
 jar {
     manifest {
@@ -69,6 +75,7 @@ java {
 }
 
 assemble.dependsOn allJar
+assemble.dependsOn copyGradle5K
 
 // Style checking
 checkstyle {

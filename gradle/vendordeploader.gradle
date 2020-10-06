@@ -12,6 +12,10 @@ gradle.taskGraph.whenReady {
     getCopyOfDeps
 }
 
+task bootstrap {
+    dependsOn getCopyOfDeps
+}
+
 // This task adds vendordeps to the releases
 task exportDeps(type: Zip) {
     from project.file("vendordeps")

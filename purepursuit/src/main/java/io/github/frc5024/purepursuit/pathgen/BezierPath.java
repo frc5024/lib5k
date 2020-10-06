@@ -6,8 +6,8 @@ import ca.retrylife.ewmath.MathUtils;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 
 /**
- * This class is used to generate points along a bezier curve currently only quadratic bezier curves can be made.
- * I will update it as I learn more
+ * This class is used to generate points along a bezier curve
+ * TODO Add consist point distance, Allow controlling the path with weights and ratios
  */
 public class BezierPath extends Path{
 	

@@ -38,11 +38,18 @@ bin
 
 _release
 
-docs 
-
 # Simulation stuff
 _simulation_sessions
 FRC_UserProgram.log
 
 .settings/org.eclipse.buildship.core.prefs
 imgui.ini
+
+_site/
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata
+
+# Copies of vendordep files
+examples/vendordeps
+lib5k/vendordeps

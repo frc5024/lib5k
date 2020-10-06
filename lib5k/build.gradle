@@ -1,0 +1,103 @@
+plugins {
+    // Java
+    id "java"
+    id "java-library"
+
+    // Style checks
+    id "checkstyle"
+
+    // Metadata plugin
+    id 'net.nemerosa.versioning' version '2.6.1'
+}
+
+task customJavadoc(type: Javadoc) {
+    // Set the JavaDoc webpage title
+    title = "$project.name $version API"
+
+    // Set the custom CSS file containing our logo and theme
+    options.setStylesheetFile(file("assets/javadoc.css"))
+
+    // These fix a JavaDoc bug
+    options.addBooleanOption('-no-module-directories', true)
+    options.author true
+
+    // If you add a new dependancy to the project, add its javadoc URL to this list
+    options.links = [
+        'http://docs.spring.io/spring/docs/4.3.x/javadoc-api/', 
+        'http://docs.oracle.com/javase/8/docs/api/', 
+        'http://docs.spring.io/spring-ws/docs/2.3.0.RELEASE/api/', 
+        'http://docs.spring.io/spring-security/site/docs/4.0.4.RELEASE/apidocs/', 
+        'https://first.wpi.edu/FRC/roborio/release/docs/java/', 
+        'https://www.revrobotics.com/content/sw/max/sw-docs/java/', 
+        'https://www.kauailabs.com/public_files/navx-mxp/apidocs/java/', 
+        'https://knowm.org/javadocs/xchart/'
+    ]
+        
+    // Any JavaDoc options should go here
+    options.addStringOption 'Xdoclint:none', '-quiet'
+}
+
+task allJar(type: Jar) {
+    classifier = "all"
+    from javadoc
+    from sourceSets.main.allJava
+    from jar.source
+}
+
+// Copy the loader script to the output directory
+task copyGradle5K(type: Copy) {
+    from rootProject.file("gradle5k/gradle5k.gradle")
+    into project.file("$buildDir/libs")
+}
+
+task copyPythonScripts(type: Copy) {
+    from rootProject.file("scripts")
+    into project.file("$buildDir/libs")
+}
+
+
+jar {
+    manifest {
+        attributes(
+            'Built-By'       : "Raider Robotics",
+            'Build-Timestamp': new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(new Date()),
+            'Build-Revision' : versioning.info.commit,
+            'Created-By'     : "Gradle ${gradle.gradleVersion}",
+            'Build-Jdk'      : "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.properties['java.vm.version']})",
+            'Build-OS'       : "${System.properties['os.name']} ${System.properties['os.arch']} ${System.properties['os.version']}"
+        )
+    }
+}
+
+java {
+    // Make the java task build a javadoc and source jar
+    withJavadocJar()
+    withSourcesJar()
+
+    // Force the project to compile for Java 11
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+assemble.dependsOn allJar
+assemble.dependsOn copyGradle5K
+assemble.dependsOn copyPythonScripts
+
+// Style checking
+checkstyle {
+    toolVersion '8.20'
+    configFile project(':').file("checkstyle.xml")
+    sourceSets = []
+}
+checkstyleMain{
+    source = project.sourceSets.main.java
+}
+tasks.withType(Checkstyle) {
+    reports {
+        xml.enabled false
+        html.enabled true
+    }
+}
+task checkstyle{
+    dependsOn "checkstyleMain"
+}

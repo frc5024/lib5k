@@ -108,6 +108,7 @@ dependencies{
     implementation 'com.google.code.gson:gson:2.8.6'
 }
 
+// See: https://github.com/MoSadie/GradleVendorJSON
 vendorJSON{
 
     // Metadata

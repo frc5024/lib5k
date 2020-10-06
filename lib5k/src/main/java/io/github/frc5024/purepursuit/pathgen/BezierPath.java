@@ -127,6 +127,11 @@ public class BezierPath extends Path{
 		}
 	}
 
+	/**
+	 * Populates points between x,y and the most recent point
+	 * @param x the x point
+	 * @param y the y point
+	 */
 	private void populatePoints(double x, double y) {
 		double xDelta = x - points.get(points.size() - 1).getX();
 		double yDelta = y - points.get(points.size() - 1).getY();

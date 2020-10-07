@@ -11,6 +11,9 @@ plugins {
 }
 
 task customJavadoc(type: Javadoc) {
+    source = sourceSets.main.allJava
+    classpath = sourceSets.main.runtimeClasspath
+    
     // Set the JavaDoc webpage title
     title = "$project.name $version API"
 

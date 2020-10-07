@@ -8,20 +8,22 @@ import edu.wpi.first.wpilibj.util.Units;
 /**
  * This class is used to generate points along a bezier curves
  */
-public class BezierPath extends Path{
+public class BezierPath extends Path {
 
 	// Maximum space allowed between points
-	private double maxSeperation = Units.inchesToMeters(4);
+	private double maxSeperation;
+
+	private static final double DEFAULT_POINT_SPACING = Units.inchesToMeters(4);
 
 	// The lookup table
 	private static ArrayList<int[]> binomialLookUpTable;
 
 	/**
 	 * 
-	 * @param wayPoints The 3 way points of a quadratic bezier curve
+	 * @param wayPoints The waypoints of the bezier curve
 	 */
 	public BezierPath(Translation2d[] wayPoints) {
-		this(wayPoints, new double[] { 1, 1, 1 }, Units.inchesToMeters(4));
+		this(wayPoints, new double[1]);
 	}
 
 	/**
@@ -30,8 +32,8 @@ public class BezierPath extends Path{
 	 * @param weights   The weights for each point point 0 and 2 should stay as
 	 *                  close to 1 as possible
 	 */
-	public BezierPath(Translation2d[] wayPoints, double[] weights){
-		this(waypoint, weights, Units.inchesToMeters(4));
+	public BezierPath(Translation2d[] wayPoints, double[] weights) {
+		this(wayPoints, weights, DEFAULT_POINT_SPACING);
 	}
 
 	/**
@@ -50,15 +52,19 @@ public class BezierPath extends Path{
 			initilizeLookupTable();
 		}
 
-		if(wayPoints.length != weights.length){
-			weights = new double[wayPoints.length];
+		// This makes sure the proper length of weights is provided
+		double[] newWeights = new double[wayPoints.length];
 
-			for(int i = 0; i < wayPoints.length; i++){
-				weights[i] = 1;
+		for (int i = 0; i < wayPoints.length; i++) {
+			if (i < weights.length) {
+				newWeights[i] = weights[i];
+			} else {
+				newWeights[i] = 1;
 			}
 		}
 
-		calculatePoints(wayPoints, weights);
+		// Calculates the points 
+		calculatePoints(wayPoints, newWeights);
 
 	}
 
@@ -93,9 +99,9 @@ public class BezierPath extends Path{
 	/**
 	 * Calculates the bezier values
 	 * 
-	 * @param t t value for equation between 0, 1
-	 * @param i the current point
-	 * @param n the number of points starting at 0
+	 * @param t      t value for equation between 0, 1
+	 * @param i      the current point
+	 * @param n      the number of points starting at 0
 	 * @param weight the weight to mulitply the value by
 	 * @return the bezier value to add to point x,y
 	 */
@@ -109,7 +115,7 @@ public class BezierPath extends Path{
 	 * calculates points along a bezier curve
 	 * 
 	 * @param wayPoints the waypoints to form the hull
-	 * @param weights values to increase each points weight by
+	 * @param weights   values to increase each points weight by
 	 */
 	private void calculatePoints(Translation2d[] wayPoints, double[] weights) {
 		// The number of waypoints starting from 1
@@ -144,6 +150,7 @@ public class BezierPath extends Path{
 
 	/**
 	 * Populates points between x,y and the most recent point
+	 * 
 	 * @param x the x point
 	 * @param y the y point
 	 */

@@ -34,6 +34,23 @@ public class BezierPathTest {
 
 	}
 
+
+	@Test
+	public void testBezierPathWeight() throws IOException {
+
+		// Creates a bezier path
+		BezierPath path = new BezierPath(wayPoints6, new double[] {1, 2, 3});
+
+		// Makes a chart and saves it
+		XYChart chart = path.getPathVisualization();
+
+		BitmapEncoder.saveBitmap(chart, "./build/tmp/PurePursuit_UnitTest_BezierCurveWeightTest",
+                BitmapFormat.PNG);
+        System.out.println(
+                "Test result PNG generated to ./build/tmp/PurePursuit_UnitTest_BezierCurveWeightTest.png");
+
+	}
+
 	@Test
 	public void testLookUpList() throws IOException {
 		

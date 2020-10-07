@@ -6,7 +6,7 @@ Welcome to the lib5k wiki!
 
 ## The history of Lib5K
 
-Lib5K is the software library that powers the Raider Robotics control system. It originally started as a summer project by [@ewpratten]() back in the 2018 offseason, and in it's early versions, only contained logging tools. During the 2019 season, Lib5K was slightly expanded to contain some custom PID controllers, and utils.
+Lib5K is the software library that powers the Raider Robotics control system. It originally started as a summer project by @ewpratten back in the 2018 offseason, and in it's early versions, only contained logging tools. During the 2019 season, Lib5K was slightly expanded to contain some custom PID controllers, and utils.
 
 Lib5K development really picked up during summer 2019, where the library (and all of Raider Robotics development) switched from C++ to Java Native. This switch also brought a lot of the core features to Lib5K, and the whole team got involved in development during the 2020 season.
 

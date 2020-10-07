@@ -23,7 +23,7 @@ public class BezierPath extends Path {
 	 * @param wayPoints The waypoints of the bezier curve
 	 */
 	public BezierPath(Translation2d[] wayPoints) {
-		this(wayPoints, new double[1]);
+		this(wayPoints, new double[0]);
 	}
 
 	/**

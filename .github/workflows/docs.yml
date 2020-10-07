@@ -22,7 +22,15 @@ jobs:
 
       - uses: eskatos/gradle-command-action@v1
         with:
-          arguments: :lib5k:build :lib5k:customJavadoc --scan
+          arguments: :lib5k:build --scan
+
+      - name: Remove pre-generated docs
+        run: |
+          rm -rf lib5k/build/docs/javadoc
+
+      - uses: eskatos/gradle-command-action@v1
+        with:
+          arguments: :lib5k:customJavadoc --scan
 
       - name: Copy javadoc into Jekyll
         run: |

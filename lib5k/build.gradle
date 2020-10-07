@@ -15,7 +15,7 @@ task customJavadoc(type: Javadoc) {
     title = "$project.name $version API"
 
     // Set the custom CSS file containing our logo and theme
-    options.setStylesheetFile(file("assets/javadoc.css"))
+    options.setStylesheetFile(rootProject.file("assets/javadoc.css"))
 
     // These fix a JavaDoc bug
     options.addBooleanOption('-no-module-directories', true)

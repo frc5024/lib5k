@@ -1,0 +1,7 @@
+# Robot Sessions
+
+All file management inside of Lib5K is built around the concept of "sessions". The idea is that, every time the robot turns on, a new timestamped folder is created. By calling the helper functions in the [`FileManagement`](https://github.com/frc5024/lib5k/blob/master/utils/src/main/java/io/github/frc5024/lib5k/utils/FileManagement.java) class, robot code can read and write files to the latest session folder, and everything will end up automatically being neatly organized and timestamped in the background.
+
+The reason we do this is simple. Think of the following scenario: We have some code that saves a CSV file containing a robot's flywheel velocity and the goal velocity for a ball shooter. Everything is going fine at an event until suddenly, one match, we miss every single one of our shots, as they are all going too high. To debug this, all a developer needs to do is, once the robot gets off the field, unmount the robot's USB stick, and open up the latest folder (timestamped with the start of the match). In this folder, there is all the logs from the most recent match, including the shooter CSV file. Insure this file we discover that an integer overflow is causing the shooter to spin up to an unachievable rate.
+
+If we didn't do this session system, the team member would have had to spend a large amount of time scrolling through a massive log of the entire event trying to find the correct match and data.

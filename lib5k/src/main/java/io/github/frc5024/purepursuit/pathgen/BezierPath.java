@@ -6,15 +6,14 @@ import ca.retrylife.ewmath.MathUtils;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 
 /**
- * This class is used to generate points along a bezier curve TODO Add consist
- * point distance, Allow controlling the path with weights and ratios
+ * This class is used to generate points along a bezier curves
  */
 public class BezierPath extends Path{
 
-	// What percentage of the curve should each point be at.
-	private double spacing;
+	// Maximum space allowed between points
 	private double maxSeperation = .1;
 
+	// The lookup table
 	private static ArrayList<int[]> binomialLookUpTable;
 
 	/**
@@ -30,20 +29,26 @@ public class BezierPath extends Path{
 	 * @param wayPoints The 3 waypoints of a quadratic bezier curve
 	 * @param weights   The weights for each point point 0 and 2 should stay as
 	 *                  close to 1 as possible
-	 * @param spacing   How seperated each point will be. 1 / spacing = points
+	 * @param spacing   the maximum amount of spacing allowed
 	 */
 	public BezierPath(Translation2d[] wayPoints, double[] weights, double spacing) {
 		this.waypoints = wayPoints;
 		this.points = new ArrayList<>();
-
-		this.spacing = MathUtils.clamp(spacing, .001, 1);
+		this.maxSeperation = spacing;
 
 		if (binomialLookUpTable == null) {
 			initilizeLookupTable();
 		}
 
-		// TODO implement spacing and weights and ratios
-		calculatePoints(wayPoints);
+		if(wayPoints.length != weights.length){
+			weights = new double[wayPoints.length];
+
+			for(int i = 0; i < wayPoints.length; i++){
+				weights[i] = 1;
+			}
+		}
+
+		calculatePoints(wayPoints, weights);
 
 	}
 
@@ -56,7 +61,6 @@ public class BezierPath extends Path{
 	private double binomial(int k, int n) {
 		// Adds new entries to LUT table if they are missing.
 		while (n >= binomialLookUpTable.size()) {
-
 			// continues pascal triangle
 			int lutSize = binomialLookUpTable.size();
 
@@ -84,10 +88,10 @@ public class BezierPath extends Path{
 	 * @param n the number of points starting at 0
 	 * @return the bezier value to add to point x,y
 	 */
-	private double calculateBezier(double t, int i, int n) {
+	private double calculateBezier(double t, int i, int n, double weight) {
 
 		// Formula to calculate value
-		return binomial(i, n) * Math.pow(t, i) * Math.pow((1 - t), (n - i));
+		return weight * binomial(i, n) * Math.pow(t, i) * Math.pow((1 - t), (n - i));
 	}
 
 	/**
@@ -95,7 +99,7 @@ public class BezierPath extends Path{
 	 * 
 	 * @param wayPoints the waypoints to form the hull
 	 */
-	private void calculatePoints(Translation2d[] wayPoints) {
+	private void calculatePoints(Translation2d[] wayPoints, double[] weights) {
 		// The number of waypoints starting from 1
 		int numberOfWayPoints = wayPoints.length - 1;
 
@@ -112,10 +116,9 @@ public class BezierPath extends Path{
 			// Calculates the T value
 			double t = .01 * i;
 
-			// TODO Make customizable
 			// calculates x, y value for each point
 			for (int j = 0; j < numberOfWayPoints + 1; j++) {
-				double bezierNumber = calculateBezier(t, j, numberOfWayPoints);
+				double bezierNumber = calculateBezier(t, j, numberOfWayPoints, weights[j]);
 				x += wayPoints[j].getX() * bezierNumber;
 				y += wayPoints[j].getY() * bezierNumber;
 			}
@@ -133,15 +136,20 @@ public class BezierPath extends Path{
 	 * @param y the y point
 	 */
 	private void populatePoints(double x, double y) {
+		// the deltas between the last point and the new one
 		double xDelta = x - points.get(points.size() - 1).getX();
 		double yDelta = y - points.get(points.size() - 1).getY();
 		double pointsDelta = Math.hypot(xDelta, yDelta);
 
+		// If the delta is larger than max allowed add more spaces
 		if (pointsDelta > maxSeperation) {
+
+			// Calculate the amount of points need and their required seperation
 			double factor = pointsDelta / maxSeperation;
 			double xSpacing = xDelta / factor;
 			double ySpacing = yDelta / factor;
 
+			// add the points
 			for (int i = 1; i < (int) (factor) + 1; i++) {
 				points.add(new Translation2d(xSpacing + points.get(points.size() - 1).getX(),
 						ySpacing + points.get(points.size() - 1).getY()));

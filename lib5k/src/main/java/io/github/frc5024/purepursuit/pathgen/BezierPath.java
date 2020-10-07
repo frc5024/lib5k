@@ -86,6 +86,7 @@ public class BezierPath extends Path{
 	 * @param t t value for equation between 0, 1
 	 * @param i the current point
 	 * @param n the number of points starting at 0
+	 * @param weight the weight to mulitply the value by
 	 * @return the bezier value to add to point x,y
 	 */
 	private double calculateBezier(double t, int i, int n, double weight) {
@@ -98,6 +99,7 @@ public class BezierPath extends Path{
 	 * calculates points along a bezier curve
 	 * 
 	 * @param wayPoints the waypoints to form the hull
+	 * @param weights values to increase each points weight by
 	 */
 	private void calculatePoints(Translation2d[] wayPoints, double[] weights) {
 		// The number of waypoints starting from 1

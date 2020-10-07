@@ -1,9 +1,9 @@
 package io.github.frc5024.purepursuit.pathgen;
 
 import java.util.ArrayList;
-
 import ca.retrylife.ewmath.MathUtils;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
+import edu.wpi.first.wpilibj.util.Units;
 
 /**
  * This class is used to generate points along a bezier curves
@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.geometry.Translation2d;
 public class BezierPath extends Path{
 
 	// Maximum space allowed between points
-	private double maxSeperation = .1;
+	private double maxSeperation = Units.inchesToMeters(4);
 
 	// The lookup table
 	private static ArrayList<int[]> binomialLookUpTable;
@@ -21,12 +21,22 @@ public class BezierPath extends Path{
 	 * @param wayPoints The 3 way points of a quadratic bezier curve
 	 */
 	public BezierPath(Translation2d[] wayPoints) {
-		this(wayPoints, new double[] { 1, 1, 1 }, .1);
+		this(wayPoints, new double[] { 1, 1, 1 }, Units.inchesToMeters(4));
 	}
 
 	/**
 	 * 
-	 * @param wayPoints The 3 waypoints of a quadratic bezier curve
+	 * @param wayPoints The waypoints of the bezier curve
+	 * @param weights   The weights for each point point 0 and 2 should stay as
+	 *                  close to 1 as possible
+	 */
+	public BezierPath(Translation2d[] wayPoints, double[] weights){
+		this(waypoint, weights, Units.inchesToMeters(4));
+	}
+
+	/**
+	 * 
+	 * @param wayPoints The waypoints of the bezier curve
 	 * @param weights   The weights for each point point 0 and 2 should stay as
 	 *                  close to 1 as possible
 	 * @param spacing   the maximum amount of spacing allowed

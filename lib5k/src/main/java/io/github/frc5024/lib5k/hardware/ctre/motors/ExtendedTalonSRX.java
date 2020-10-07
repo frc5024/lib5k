@@ -34,6 +34,7 @@ public class ExtendedTalonSRX extends WPI_TalonSRX {
     public ExtendedTalonSRX(int id, CTREConfig config) {
         super(id);
         this.config = config;
+        setSafetyEnabled(false);
 
     }
 

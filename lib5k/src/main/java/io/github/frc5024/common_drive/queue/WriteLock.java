@@ -1,7 +1,9 @@
 package io.github.frc5024.common_drive.queue;
 
+import java.util.function.Consumer;
+
 /**
- * A dataclass for storing a value, and if it should be written out or not
+ * This class is used to store and handle values that can only be read once
  * 
  * @param <T> Datatype
  */
@@ -32,7 +34,15 @@ public class WriteLock<T> {
     /**
      * Set to defaults
      */
-    public void zero() {
+    public void zero(){
+        reset();
+    }
+
+    /**
+     * Set to defaults
+     */
+    @Deprecated(since = "October 2020", forRemoval = true)
+    public void reset() {
         this.write = false;
         this.value = this.defaultValue;
     }
@@ -42,7 +52,17 @@ public class WriteLock<T> {
      * 
      * @param value Value
      */
+    @Deprecated(since = "October 2020", forRemoval = true)
     public void write(T value) {
+        set(value);
+    }
+
+    /**
+     * Write a value and enable reading
+     * 
+     * @param value Value
+     */
+    public void set(T value) {
         this.write = true;
         this.value = value;
     }
@@ -52,8 +72,21 @@ public class WriteLock<T> {
      * 
      * @return Value
      */
+    @Deprecated(since = "October 2020", forRemoval = true)
     public T consume() {
         this.write = false;
         return this.value;
+    }
+
+    /**
+     * Safely consume the contained value
+     * 
+     * @param closure Consuming action
+     */
+    public void consume(Consumer<T> closure) {
+        if (write) {
+            closure.accept(this.value);
+            this.write = false;
+        }
     }
 }

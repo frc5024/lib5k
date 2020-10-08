@@ -12,6 +12,7 @@ import io.github.frc5024.lib5k.logging.RobotLogger.Level;
  * 
  * Based off of faceincake's PID code from 2018 and 2019
  */
+@Deprecated(since = "October 2020", forRemoval = true)
 public class PID implements Sendable {
     RobotLogger logger = RobotLogger.getInstance();
 

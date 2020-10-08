@@ -10,6 +10,7 @@ import io.github.frc5024.lib5k.control_loops.models.PIDProfile;
  * <a href="https://lynkz.me/HqhJIuG">SimPID</a>, that works with lib5k's
  * kinematics systems, and provides telemetry
  */
+@Deprecated(since = "October 2020", forRemoval = true)
 public class PIDv2 implements Sendable {
 
     private double kp, ki, kd;

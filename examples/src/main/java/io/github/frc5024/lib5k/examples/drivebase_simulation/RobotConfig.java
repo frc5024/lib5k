@@ -2,9 +2,8 @@ package io.github.frc5024.lib5k.examples.drivebase_simulation;
 
 import edu.wpi.first.wpilibj.util.Units;
 import io.github.frc5024.common_drive.DriveTrainConfig;
-import io.github.frc5024.common_drive.controller.PDFGains;
-import io.github.frc5024.common_drive.controller.PIFGains;
 import io.github.frc5024.common_drive.types.ShifterType;
+import io.github.frc5024.lib5k.control_loops.ExtendedPIDController;
 import io.github.frc5024.lib5k.hardware.ctre.motors.CTREConfig;
 
 public class RobotConfig {
@@ -26,8 +25,8 @@ public class RobotConfig {
             this.defaultHighGear = false;
 
             // Control gains
-            this.turningGains = new PIFGains(0.0088, 0.01);
-            this.distanceGains = new PDFGains(0.478, 0.008);
+            this.turningController = new ExtendedPIDController(0.0088, 0.01, 0);
+            this.distanceController = new ExtendedPIDController(0.478, 0, 0.008);
 
             // Ramp rates
             this.defaultRampSeconds = 0.12;

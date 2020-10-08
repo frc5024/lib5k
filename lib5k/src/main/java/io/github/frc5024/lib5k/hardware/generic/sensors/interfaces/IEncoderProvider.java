@@ -11,6 +11,7 @@ public interface IEncoderProvider {
      * 
      * @return Default encoder
      */
+    @SuppressWarnings({"deprecation", "removal"})
     public EncoderBase getDefaultEncoder();
 
     /**
@@ -24,5 +25,6 @@ public interface IEncoderProvider {
      * @param phase True if flipped phase
      * @return Encoder
      */
+    @SuppressWarnings({"deprecation", "removal"})
     public EncoderBase getEncoder(int id, boolean phase);
 }

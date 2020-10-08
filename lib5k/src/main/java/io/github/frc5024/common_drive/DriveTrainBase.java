@@ -8,14 +8,11 @@ import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import io.github.frc5024.lib5k.utils.InputUtils;
 import io.github.frc5024.lib5k.utils.InputUtils.ScalingMode;
 
-import io.github.frc5024.common_drive.controller.PDFController;
-import io.github.frc5024.common_drive.controller.PIFController;
 import io.github.frc5024.common_drive.gearing.Gear;
 import io.github.frc5024.common_drive.queue.DriveTrainOutput;
 import io.github.frc5024.common_drive.queue.DriveTrainSensors;
@@ -32,6 +29,7 @@ import io.github.frc5024.purepursuit.pathgen.Path;
 
 import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.FPGAClock;
 import io.github.frc5024.lib5k.logging.RobotLogger;
+import io.github.frc5024.lib5k.control_loops.ExtendedPIDController;
 import io.github.frc5024.lib5k.hardware.common.drivebase.IDifferentialDrivebase;
 
 /**
@@ -86,8 +84,8 @@ public abstract class DriveTrainBase extends SubsystemBase implements IDifferent
     private DifferentialDriveOdometry localizer;
 
     // Controllers
-    private PIFController turnController;
-    private PDFController distanceController;
+    private ExtendedPIDController turnController;
+    private ExtendedPIDController distanceController;
 
     // Defaults
     private Gear defaultGear;
@@ -122,8 +120,8 @@ public abstract class DriveTrainBase extends SubsystemBase implements IDifferent
         this.localizer = new DifferentialDriveOdometry(new Rotation2d());
 
         // Set up controllers
-        this.turnController = new PIFController(this.config.turningGains, true);
-        this.distanceController = new PDFController(this.config.distanceGains, true);
+        this.turnController = config.turningController;
+        this.distanceController = config.distanceController;
 
         // Set up some empty status frames
         this.lastInput = new DriveTrainSensors();
@@ -298,7 +296,7 @@ public abstract class DriveTrainBase extends SubsystemBase implements IDifferent
         double dt = getAdjustedInputs().timestamp_ms - this.lastInput.timestamp_ms;
 
         // Calculate output
-        double output = this.turnController.calculate(error, dt, true);
+        double output = this.turnController.calculate(error, 0);
 
         // Write output frame
         this.writePercentOutputs(output, -output);
@@ -357,7 +355,7 @@ public abstract class DriveTrainBase extends SubsystemBase implements IDifferent
         throttleOutput *= speedMul;
 
         // Calculate rotation PIF
-        double turnOutput = this.turnController.calculate(angularError.getDegrees(), dt, false);
+        double turnOutput = this.turnController.calculate(angularError.getDegrees(), 0);
 
         // Calculate motor outputs
         double left = throttleOutput + turnOutput;
@@ -408,7 +406,7 @@ public abstract class DriveTrainBase extends SubsystemBase implements IDifferent
         double dt = getAdjustedInputs().timestamp_ms - this.lastInput.timestamp_ms;
 
         // Calculate output
-        double output = this.turnController.calculate(error, dt, true);
+        double output = this.turnController.calculate(error, 0);
 
         // Write output frame
         this.writePercentOutputs(output, -output);

@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.Timer;
  * time before finishing.
  */
 @Deprecated(since = "October 2020", forRemoval = true)
+@SuppressWarnings({"deprecation", "removal"})
 public abstract class SettlingController extends ControllerBase {
 
     // Rest time

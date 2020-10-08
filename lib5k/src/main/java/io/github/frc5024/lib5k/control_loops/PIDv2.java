@@ -32,7 +32,7 @@ public class PIDv2 implements Sendable {
      * 
      * @param profile PIDProfile containing gains
      */
-    @SuppressWarnings("deprecation")
+    @SuppressWarnings({"deprecation", "removal"})
     public PIDv2(PIDProfile profile) {
         this(profile.kp, profile.ki, profile.kd);
     }
@@ -67,7 +67,7 @@ public class PIDv2 implements Sendable {
      * 
      * @param profile New PIDProfile contaning PID gains
      */
-    @SuppressWarnings("deprecation")
+    @SuppressWarnings({"deprecation", "removal"})
     public void config(PIDProfile profile) {
         this.config(profile.kp, profile.ki, profile.kd);
     }

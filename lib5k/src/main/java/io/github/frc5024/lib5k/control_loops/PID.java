@@ -29,7 +29,7 @@ public class PID implements Sendable {
      * 
      * @param profile PIDProfile
      */
-    @SuppressWarnings("deprecation")
+    @SuppressWarnings({"deprecation", "removal"})
     public PID(PIDProfile profile) {
         this(profile.kp, profile.ki, profile.kd);
     }
@@ -74,7 +74,7 @@ public class PID implements Sendable {
      * 
      * @param profile New PID gains
      */
-    @SuppressWarnings("deprecation")
+    @SuppressWarnings({"deprecation", "removal"})
     public void setGains(PIDProfile profile) {
         setGains(profile.kp, profile.ki, profile.kd);
     }

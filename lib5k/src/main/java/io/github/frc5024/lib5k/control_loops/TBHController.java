@@ -39,7 +39,18 @@ public class TBHController implements Controller {
     /**
      * Create a TBHController
      * 
-     * @param gain Controller gain (should be between 0.0 and 1.0)
+     * @param gain            Controller gain (should be between 0.0 and 1.0)
+     */
+    public TBHController(double gain) {
+        this(gain, 0);
+    }
+
+    /**
+     * Create a TBHController
+     * 
+     * @param gain            Controller gain (should be between 0.0 and 1.0)
+     * @param restTimeSeconds Amount of time the system must be stable for to be
+     *                        considered "truly stable"
      */
     public TBHController(double gain, double restTimeSeconds) {
 

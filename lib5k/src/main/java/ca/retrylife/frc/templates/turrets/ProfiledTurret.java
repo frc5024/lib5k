@@ -4,19 +4,11 @@ import java.util.function.Supplier;
 
 import ca.retrylife.ewmath.MathUtils;
 import edu.wpi.first.wpilibj.SpeedController;
-import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
-import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.geometry.Translation2d;
-import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
-import io.github.frc5024.lib5k.control_loops.models.PIDProfile;
-import io.github.frc5024.lib5k.hardware.common.sensors.interfaces.CommonEncoder;
 import io.github.frc5024.lib5k.logging.RobotLogger;
-import io.github.frc5024.lib5k.logging.RobotLogger.Level;
 import io.github.frc5024.lib5k.utils.ObjectCounter;
-import io.github.frc5024.lib5k.utils.PoseRelation;
 import io.github.frc5024.libkontrol.statemachines.StateMachine;
 import io.github.frc5024.libkontrol.statemachines.StateMetadata;
 
@@ -63,11 +55,10 @@ public class ProfiledTurret extends TurretBase {
      *                            starts
      * @param maxDeadzoneAngle    Robot-relative angle where the turret deadzone
      *                            ends
-     * @param characteristics     Characteristics of the turret's movement
      * @param epsilon             Turret angle epsilon
      */
-    public ProfiledTurret(SpeedController motor, Supplier<Rotation2d> turretAngleSupplier, PIDProfile turretPID,
-            Rotation2d minDeadzoneAngle, Rotation2d maxDeadzoneAngle, TrapezoidProfile.Constraints characteristics,
+    public ProfiledTurret(SpeedController motor, Supplier<Rotation2d> turretAngleSupplier, ProfiledPIDController turretPID,
+            Rotation2d minDeadzoneAngle, Rotation2d maxDeadzoneAngle, 
             Rotation2d epsilon) {
         super(minDeadzoneAngle, maxDeadzoneAngle);
 
@@ -77,7 +68,7 @@ public class ProfiledTurret extends TurretBase {
         this.epsilon = epsilon;
 
         // Set up PID profile controller
-        this.pidController = new ProfiledPIDController(turretPID.kp, turretPID.ki, turretPID.kd, characteristics);
+        this.pidController = turretPID;
 
         // Set up state machine
         String name = String.format("ProfiledTurret[%d]", objCounter.getNewID());

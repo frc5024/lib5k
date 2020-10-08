@@ -42,4 +42,9 @@ public interface Controller {
      * @param epsilon Acceptable error
      */
     public void setEpsilon(double epsilon);
+
+    /**
+     * Reset the controller;
+     */
+    public void reset();
 }

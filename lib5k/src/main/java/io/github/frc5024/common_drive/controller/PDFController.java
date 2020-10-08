@@ -4,6 +4,8 @@ package io.github.frc5024.common_drive.controller;
  * A PDFController is a simple PD + FeedForward calculation. <br>
  * This is helpful for calculating steering gains
  */
+@Deprecated(since = "October 2020", forRemoval = true)
+@SuppressWarnings("deprecation")
 public class PDFController implements BaseController {
 
     private PDFGains gains;

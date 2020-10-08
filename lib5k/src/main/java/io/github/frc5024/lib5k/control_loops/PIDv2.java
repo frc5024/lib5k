@@ -32,6 +32,7 @@ public class PIDv2 implements Sendable {
      * 
      * @param profile PIDProfile containing gains
      */
+    @SuppressWarnings("deprecation")
     public PIDv2(PIDProfile profile) {
         this(profile.kp, profile.ki, profile.kd);
     }
@@ -66,6 +67,7 @@ public class PIDv2 implements Sendable {
      * 
      * @param profile New PIDProfile contaning PID gains
      */
+    @SuppressWarnings("deprecation")
     public void config(PIDProfile profile) {
         this.config(profile.kp, profile.ki, profile.kd);
     }
@@ -131,6 +133,7 @@ public class PIDv2 implements Sendable {
 
     /**
      * Get the controller setpoint
+     * 
      * @return Set point
      */
     public double getSetpoint() {
@@ -139,6 +142,7 @@ public class PIDv2 implements Sendable {
 
     /**
      * Get the integrator range
+     * 
      * @param iRange Range
      */
     public void setIRange(double iRange) {
@@ -147,6 +151,7 @@ public class PIDv2 implements Sendable {
 
     /**
      * Get the integrator range
+     * 
      * @return Range
      */
     public double getIRange() {

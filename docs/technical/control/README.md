@@ -2,7 +2,7 @@
 sort: 1
 ---
 
-# Control Theory
+# Basic Control Theory
 
 The following documents contain information about basic control theory, and how we implement controllers in Lib5K:
 

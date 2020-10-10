@@ -148,6 +148,16 @@ public class DifferentialVoltages {
     /**
      * Create new DifferentialVoltages from a throttle and steering value
      * 
+     * @param values Throttle and steering values
+     * @return new DifferentialVoltages
+     */
+    public static DifferentialVoltages fromThrottleAndSteering(ThrottleSteering values) {
+        return fromThrottleAndSteering(values.getThrottle(), values.getSteering());
+    }
+
+    /**
+     * Create new DifferentialVoltages from a throttle and steering value
+     * 
      * @param throttlePercentage Throttle percent
      * @param steeringPercentage Steering percent
      * @return new DifferentialVoltages

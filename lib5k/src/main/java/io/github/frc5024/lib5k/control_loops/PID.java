@@ -12,6 +12,7 @@ import io.github.frc5024.lib5k.logging.RobotLogger.Level;
  * 
  * Based off of faceincake's PID code from 2018 and 2019
  */
+@Deprecated(since = "October 2020", forRemoval = true)
 public class PID implements Sendable {
     RobotLogger logger = RobotLogger.getInstance();
 
@@ -28,6 +29,7 @@ public class PID implements Sendable {
      * 
      * @param profile PIDProfile
      */
+    @SuppressWarnings({"deprecation", "removal"})
     public PID(PIDProfile profile) {
         this(profile.kp, profile.ki, profile.kd);
     }
@@ -72,6 +74,7 @@ public class PID implements Sendable {
      * 
      * @param profile New PID gains
      */
+    @SuppressWarnings({"deprecation", "removal"})
     public void setGains(PIDProfile profile) {
         setGains(profile.kp, profile.ki, profile.kd);
     }

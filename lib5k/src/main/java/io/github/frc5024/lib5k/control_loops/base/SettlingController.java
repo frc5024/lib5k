@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj.Timer;
  * An extension of the {@link ControllerBase} that will wait a set amount of
  * time before finishing.
  */
+@Deprecated(since = "October 2020", forRemoval = true)
+@SuppressWarnings({"deprecation", "removal"})
 public abstract class SettlingController extends ControllerBase {
 
     // Rest time

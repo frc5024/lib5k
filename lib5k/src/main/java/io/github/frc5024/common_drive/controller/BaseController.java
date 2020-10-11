@@ -1,5 +1,6 @@
 package io.github.frc5024.common_drive.controller;
 
+@Deprecated(since = "October 2020", forRemoval = true)
 public interface BaseController {
 
     /**

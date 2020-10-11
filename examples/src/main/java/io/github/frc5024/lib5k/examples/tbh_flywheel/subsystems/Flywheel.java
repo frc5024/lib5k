@@ -73,16 +73,12 @@ public class Flywheel extends SubsystemBase {
         this.motorController = new ExtendedSparkMax(15, MotorType.kBrushless);
         this.encoder = motorController.getCommonEncoder();
 
-        // We will configure the TBH controller with a reasonable gain
-        this.controller = new TBHController(0.3);
+        // We will configure the TBH controller with a reasonable gain and set the minimum settling time to 500ms
+        this.controller = new TBHController(0.3, 0.5);
 
         // This will set the acceptable error to (0.4 * Kv) of the velocity goal.
         // Kv is shot for "RPM per volt"
         this.controller.setEpsilon(0.4 * model.getKv());
-
-        // We will tell the flywheel that it needs to be stable for 500ms after reaching
-        // it's foal
-        this.controller.setMinRestTime(500);
 
         // Here, we configure the state machine
         stateMachine = new StateMachine<>("Flywheel");
@@ -124,17 +120,17 @@ public class Flywheel extends SubsystemBase {
             logger.log("Spinning up");
 
             // Set the controller goal
-            controller.setGoal(goalVelocity);
+            controller.setReference(goalVelocity);
 
             // Disable motion profiling on motor controller
             motorController.setOpenLoopRampRate(0);
         }
 
         // Calculate motor output
-        motorController.set(controller.update(encoder.getVelocity()));
+        motorController.set(controller.calculate(encoder.getVelocity()));
 
         // If we reach the goal velocity, switch state
-        if (controller.isAtGoal()) {
+        if (controller.atReference()) {
             stateMachine.setState(FlywheelStates.kAtGoal);
         }
 
@@ -152,10 +148,10 @@ public class Flywheel extends SubsystemBase {
         }
 
         // Update controller without consuming output to keep "is at goal" up to date
-        controller.update(encoder.getVelocity());
+        controller.calculate(encoder.getVelocity());
 
         // If the current velocity falls too low, spin back up
-        if (!controller.isAtGoal()) {
+        if (!controller.atReference()) {
             stateMachine.setState(FlywheelStates.kSpinup);
         }
 

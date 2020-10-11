@@ -4,6 +4,8 @@ package io.github.frc5024.common_drive.controller;
  * A PIFController is a simple PI + FeedForward calculation. <br>
  * This is helpful for calculating steering gains
  */
+@Deprecated(since = "October 2020", forRemoval = true)
+@SuppressWarnings({"deprecation", "removal"})
 public class PIFController implements BaseController {
 
     private PIFGains gains;
@@ -17,6 +19,7 @@ public class PIFController implements BaseController {
      * @param gains    PIF gains
      * @param signedFF Should FF be inverted if the output is negative?
      */
+    @SuppressWarnings({"deprecation", "removal"})
     public PIFController(PIFGains gains, boolean signedFF) {
         this.gains = gains;
         this.signedFF = signedFF;

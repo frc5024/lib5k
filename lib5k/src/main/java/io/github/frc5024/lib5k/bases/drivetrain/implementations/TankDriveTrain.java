@@ -1,8 +1,10 @@
 package io.github.frc5024.lib5k.bases.drivetrain.implementations;
 
 import io.github.frc5024.lib5k.bases.drivetrain.AbstractDriveTrain;
+import io.github.frc5024.lib5k.logging.RobotLogger.Level;
 import io.github.frc5024.lib5k.math.DifferentialDriveMath;
 import io.github.frc5024.lib5k.utils.types.DifferentialVoltages;
+import io.github.frc5024.libkontrol.statemachines.StateMetadata;
 
 public abstract class TankDriveTrain extends AbstractDriveTrain {
 
@@ -10,7 +12,26 @@ public abstract class TankDriveTrain extends AbstractDriveTrain {
     private boolean constantCurvatureEnabled = false;
 
     // Open loop control
-    private DifferentialVoltages openLoopGoal;
+    private DifferentialVoltages openLoopGoal = null;
+
+    public TankDriveTrain() {
+        
+    }
+
+    @Override
+    protected void handleOpenLoopControl(StateMetadata<State> meta) {
+        if (meta.isFirstRun()) {
+            logger.log("Switched to Open-Loop control");
+        }
+
+        // As long as the goal is non-null, write out to the motors
+        if (openLoopGoal != null) {
+            handleVoltage(openLoopGoal.getLeftVolts(), openLoopGoal.getRightVolts());
+        } else {
+            logger.log("An Open-Loop goal of NULL was passed to TankDriveTrain. Failed to write to motors!",
+                    Level.kWarning);
+        }
+    }
 
     protected abstract void handleVoltage(double leftVolts, double rightVolts);
 

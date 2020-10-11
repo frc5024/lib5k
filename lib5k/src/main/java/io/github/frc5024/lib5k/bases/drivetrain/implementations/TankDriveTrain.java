@@ -42,8 +42,13 @@ public abstract class TankDriveTrain extends AbstractDriveTrain {
     private DifferentialDriveOdometry localizer;
 
     public TankDriveTrain(Controller distanceController, Controller rotationController) {
+
+        // Set controllers
         this.distanceController = distanceController;
         this.rotationController = rotationController;
+
+        // Set up the localizer
+        localizer = new DifferentialDriveOdometry(new Rotation2d());
     }
 
     @Override
@@ -205,6 +210,12 @@ public abstract class TankDriveTrain extends AbstractDriveTrain {
     }
 
     @Override
+    public void resetPose(Pose2d pose) {
+        logger.log(String.format("Resetting robot pose to: %s", pose.toString()));
+        localizer.resetPosition(pose, getCurrentHeading());
+    }
+
+    @Override
     public void setFrontSide(Side side) {
         // Handle impossible sides
         if (side.equals(Side.kLeft) || side.equals(Side.kRight)) {
@@ -226,7 +237,7 @@ public abstract class TankDriveTrain extends AbstractDriveTrain {
                 currentPose.getRotation().minus(Rotation2d.fromDegrees(180)));
 
         // Reset the localizer
-        localizer.resetPosition(newPose, getCurrentHeading());
+        resetPose(newPose);
 
         // Reset the encoders
         resetEncoders();
@@ -262,6 +273,11 @@ public abstract class TankDriveTrain extends AbstractDriveTrain {
 
     public void enableConstantCurvature(boolean enabled) {
         this.constantCurvatureEnabled = enabled;
+    }
+
+    @Override
+    public void setMaxSpeedPercent(double maxSpeedPercent) {
+        this.maxSpeedPercent = maxSpeedPercent;
     }
 
     @Override

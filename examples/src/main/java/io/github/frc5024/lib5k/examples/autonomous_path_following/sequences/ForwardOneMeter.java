@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import io.github.frc5024.lib5k.autonomous.AutonomousSequence;
+import io.github.frc5024.lib5k.bases.drivetrain.Chassis;
 import io.github.frc5024.lib5k.examples.autonomous_path_following.subsystems.DriveTrain;
 import io.github.frc5024.purepursuit.pathgen.Path;
 
@@ -23,14 +24,14 @@ public class ForwardOneMeter implements AutonomousSequence {
 
         // Pose set command
         output.addCommands(new InstantCommand(() -> {
-            DriveTrain.getInstance().setPose(getStartingPose());
+            DriveTrain.getInstance().resetPose(getStartingPose());
         }));
 
         // Path follow command
         output.addCommands(DriveTrain.getInstance()
                 .createPathingCommand(new Path(getStartingPose().getTranslation(),
                         getStartingPose().getTranslation().plus(new Translation2d(1.0, 0.0))), 0.1)
-                .withMaxSpeed(0.8).withLookahead(0.2).inReverse(false));
+                .withMaxSpeed(0.8).withLookahead(0.2).setFrontSide(Chassis.Side.kFront));
 
         return output;
     }

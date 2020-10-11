@@ -5,11 +5,13 @@ import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import io.github.frc5024.common_drive.gearing.Gear;
+import io.github.frc5024.lib5k.bases.drivetrain.commands.PathFollowerCommand;
 import io.github.frc5024.lib5k.hardware.common.drivebase.IDifferentialDrivebase;
 import io.github.frc5024.lib5k.logging.RobotLogger;
 import io.github.frc5024.lib5k.utils.interfaces.SafeSystem;
 import io.github.frc5024.libkontrol.statemachines.StateMachine;
 import io.github.frc5024.libkontrol.statemachines.StateMetadata;
+import io.github.frc5024.purepursuit.pathgen.Path;
 
 public abstract class AbstractDriveTrain extends SubsystemBase implements IDifferentialDrivebase, SafeSystem {
 
@@ -96,6 +98,13 @@ public abstract class AbstractDriveTrain extends SubsystemBase implements IDiffe
     public abstract Pose2d getPose();
 
     /**
+     * Set a new pose for the robot
+     * 
+     * @param pose New pose
+     */
+    public abstract void resetPose(Pose2d pose);
+
+    /**
      * State handler for open-loop control
      * 
      * @param meta State metadata
@@ -171,6 +180,19 @@ public abstract class AbstractDriveTrain extends SubsystemBase implements IDiffe
 
         // Run state machine
         stateMachine.update();
+    }
+
+    /**
+     * Create and configure a command that will follow a path using this drivetrain.
+     * This returns a builder-style object, where you can chain extra methods to
+     * configure the command
+     * 
+     * @param path      Path to follow
+     * @param epsRadius Radius around the final pose for trigger isFinished()
+     * @return Path following command
+     */
+    public PathFollowerCommand createPathingCommand(Path path, double epsRadius) {
+        return new PathFollowerCommand(this, path, epsRadius);
     }
 
     /**

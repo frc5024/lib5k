@@ -10,7 +10,7 @@ import io.github.frc5024.common_drive.queue.DriveTrainOutput;
 import io.github.frc5024.common_drive.queue.DriveTrainSensors;
 import io.github.frc5024.common_drive.types.MotorMode;
 import io.github.frc5024.lib5k.control_loops.models.DCBrushedMotor;
-import io.github.frc5024.lib5k.examples.autonomous_path_following.RobotConfig;
+import io.github.frc5024.lib5k.examples.drivebase_simulation.RobotConfig;
 import io.github.frc5024.lib5k.hardware.common.sensors.interfaces.CommonEncoder;
 import io.github.frc5024.lib5k.hardware.common.sensors.interfaces.EncoderSimulation;
 import io.github.frc5024.lib5k.hardware.common.sensors.interfaces.ISimGyro;

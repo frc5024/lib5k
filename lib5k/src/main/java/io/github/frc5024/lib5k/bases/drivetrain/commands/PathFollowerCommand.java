@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import io.github.frc5024.common_drive.DriveTrainBase;
 import io.github.frc5024.common_drive.types.ChassisSide;
 import io.github.frc5024.lib5k.bases.drivetrain.AbstractDriveTrain;
+import io.github.frc5024.lib5k.bases.drivetrain.Chassis;
 import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.FPGAClock;
 import io.github.frc5024.lib5k.logging.RobotLogger;
 import io.github.frc5024.lib5k.logging.RobotLogger.Level;
@@ -34,7 +35,7 @@ public class PathFollowerCommand extends CommandBase {
 
     // DriveTrain
     private AbstractDriveTrain driveTrain;
-    private boolean inReverse;
+    private Chassis.Side frontSide = Chassis.Side.kFront;
 
     // Epsilon
     private double epsRadius;
@@ -69,13 +70,13 @@ public class PathFollowerCommand extends CommandBase {
     }
 
     /**
-     * Configure reverse path following
+     * Configure path following side
      * 
-     * @param reverse Should the path be followed in reverse?
+     * @param reverse Which side of the robot should be the "front"
      * @return This Object
      */
-    public PathFollowerCommand inReverse(boolean reverse) {
-        this.inReverse = reverse;
+    public PathFollowerCommand setFrontSide(Chassis.Side frontSide) {
+        this.frontSide = frontSide;
         return this;
     }
 
@@ -125,10 +126,10 @@ public class PathFollowerCommand extends CommandBase {
         initTime = FPGAClock.getFPGASeconds();
 
         // Set the drivetrain side
-        driveTrain.setActiveSide((inReverse) ? ChassisSide.kSecondary : ChassisSide.kPrimary);
+        driveTrain.setFrontSide(frontSide);
 
         // Set the speed cap
-        driveTrain.setSpeedCap(maxSpeed);
+        driveTrain.setMaxSpeedPercent(maxSpeed);
     }
 
     @Override
@@ -141,8 +142,8 @@ public class PathFollowerCommand extends CommandBase {
         Translation2d goalPose = follower.getNextPoint(currentPose);
 
         // Drive to that pose
-        // We wil give an epsilon of 1cm, and override the epsilon check in isFinished()
-        driveTrain.driveTo(goalPose, 0.01);
+        // Using a fake epsilon here because we override the check in isFinished.
+        driveTrain.setGoalPose(goalPose, new Translation2d(0.01, 0.01));
 
         // Try to write to the logfile
         if (logFile != null) {
@@ -172,11 +173,8 @@ public class PathFollowerCommand extends CommandBase {
             logger.log("Robot successfully reached goal pose: %s", follower.getFinalPose());
         }
 
-        // Reset the active side
-        driveTrain.setActiveSide(ChassisSide.kPrimary);
-
         // Stop the robot
-        driveTrain.stop();
+        driveTrain.reset();
 
         // Save the logfile
         if (logFile != null) {
@@ -190,9 +188,6 @@ public class PathFollowerCommand extends CommandBase {
             logFile = null;
         }
 
-        // Remove the speed cap
-        driveTrain.setSpeedCap(1.0);
-
     }
 
     @Override
@@ -204,6 +199,8 @@ public class PathFollowerCommand extends CommandBase {
         // Get the goal position
         Translation2d goalPosition = follower.getFinalPose();
 
+        // We override the built-in finished checker in the drivetrain to make sure we
+        // are at the FINAL pose. not an arbitrary goal along the way.
         return RobotMath.epsilonEquals(robotPosition, goalPosition, new Translation2d(epsRadius, epsRadius));
     }
 

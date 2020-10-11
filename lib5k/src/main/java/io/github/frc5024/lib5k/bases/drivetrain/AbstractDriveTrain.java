@@ -103,6 +103,13 @@ public abstract class AbstractDriveTrain extends SubsystemBase implements IDiffe
     protected abstract void handleOpenLoopControl(StateMetadata<State> meta);
 
     /**
+     * Set the maximum speed percent
+     * 
+     * @param maxSpeedPercent Maximum speed percent
+     */
+    public abstract void setMaxSpeedPercent(double maxSpeedPercent);
+
+    /**
      * State handler for autonomous rotation control
      * 
      * @param meta        State metadata

@@ -2,7 +2,9 @@ package io.github.frc5024.lib5k.bases.drivetrain.implementations;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import io.github.frc5024.common_drive.types.ChassisSide;
 import io.github.frc5024.lib5k.bases.drivetrain.AbstractDriveTrain;
+import io.github.frc5024.lib5k.bases.drivetrain.Chassis;
 import io.github.frc5024.lib5k.control_loops.base.Controller;
 import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.RR_HAL;
 import io.github.frc5024.lib5k.logging.RobotLogger.Level;
@@ -27,6 +29,12 @@ public abstract class TankDriveTrain extends AbstractDriveTrain {
     // Timer for actions
     private Timer actionTimer = new Timer();
 
+    // Front side
+    private Chassis.Side frontSide = Chassis.Side.kFront;
+
+    // Max speed percent
+    private double maxSpeedPercent = 1.0;
+
     public TankDriveTrain(Controller distanceController, Controller rotationController) {
         this.distanceController = distanceController;
         this.rotationController = rotationController;
@@ -40,7 +48,8 @@ public abstract class TankDriveTrain extends AbstractDriveTrain {
 
         // As long as the goal is non-null, write out to the motors
         if (openLoopGoal != null) {
-            handleVoltage(openLoopGoal.getLeftVolts(), openLoopGoal.getRightVolts());
+            handleVoltage(openLoopGoal.getLeftVolts() * maxSpeedPercent,
+                    openLoopGoal.getRightVolts() * maxSpeedPercent);
         } else {
             logger.log("An Open-Loop goal of NULL was passed to TankDriveTrain. Failed to write to motors!",
                     Level.kWarning);
@@ -70,7 +79,7 @@ public abstract class TankDriveTrain extends AbstractDriveTrain {
         double error = RotationMath.getAngularErrorDegrees(currentHeading, goalHeading);
 
         // Calculate the needed output
-        double output = rotationController.calculate(error) * RR_HAL.MAXIMUM_BUS_VOLTAGE;
+        double output = rotationController.calculate(error) * RR_HAL.MAXIMUM_BUS_VOLTAGE * maxSpeedPercent;
 
         // Write voltage outputs
         handleVoltage(output, -output);
@@ -131,5 +140,7 @@ public abstract class TankDriveTrain extends AbstractDriveTrain {
 
         // Reset options
         constantCurvatureEnabled = false;
+        frontSide = Chassis.Side.kFront;
+        maxSpeedPercent = 1.0;
     }
 }

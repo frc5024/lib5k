@@ -113,7 +113,7 @@ public class DifferentialVoltages {
      * Multiply this DifferentialVoltages by another DifferentialVoltages object.
      * THIS WILL MODIFY THE OBJECT CONTENTS.
      * 
-     * @param volts DifferentialVoltages
+     * @param other DifferentialVoltages
      * @return this
      */
     public DifferentialVoltages times(DifferentialVoltages other) {

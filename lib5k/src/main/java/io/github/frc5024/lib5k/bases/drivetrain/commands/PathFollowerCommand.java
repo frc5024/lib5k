@@ -72,7 +72,7 @@ public class PathFollowerCommand extends CommandBase {
     /**
      * Configure path following side
      * 
-     * @param reverse Which side of the robot should be the "front"
+     * @param frontSide Which side of the robot should be the "front"
      * @return This Object
      */
     public PathFollowerCommand setFrontSide(Chassis.Side frontSide) {

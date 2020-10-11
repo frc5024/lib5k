@@ -4,9 +4,10 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
-import io.github.frc5024.common_drive.types.ChassisSide;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import io.github.frc5024.lib5k.bases.drivetrain.AbstractDriveTrain;
 import io.github.frc5024.lib5k.bases.drivetrain.Chassis;
+import io.github.frc5024.lib5k.bases.drivetrain.Chassis.Side;
 import io.github.frc5024.lib5k.control_loops.base.Controller;
 import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.RR_HAL;
 import io.github.frc5024.lib5k.logging.RobotLogger.Level;
@@ -36,6 +37,9 @@ public abstract class TankDriveTrain extends AbstractDriveTrain {
 
     // Max speed percent
     private double maxSpeedPercent = 1.0;
+
+    // Localization
+    private DifferentialDriveOdometry localizer;
 
     public TankDriveTrain(Controller distanceController, Controller rotationController) {
         this.distanceController = distanceController;
@@ -185,6 +189,57 @@ public abstract class TankDriveTrain extends AbstractDriveTrain {
 
     protected abstract void handleVoltage(double leftVolts, double rightVolts);
 
+    protected abstract void resetEncoders();
+
+    protected abstract void setMotorsInverted(boolean motorsInverted);
+
+    protected abstract void setEncodersInverted(boolean encodersInverted);
+
+    @Override
+    public void periodic() {
+        // Run super code
+        super.periodic();
+
+        // Update localization
+        localizer.update(getCurrentHeading(), getLeftMeters(), getRightMeters());
+    }
+
+    @Override
+    public void setFrontSide(Side side) {
+        // Handle impossible sides
+        if (side.equals(Side.kLeft) || side.equals(Side.kRight)) {
+            throw new RuntimeException("setFrontSide cannot be kLeft or kRight for a tank-drive system");
+        }
+
+        // If this is the same as the current side, do nothing
+        if (side.equals(frontSide)) {
+            return;
+        }
+
+        logger.log(String.format("Setting front side to: %s", side.toString()));
+
+        // Get the current pose
+        Pose2d currentPose = getPose();
+
+        // Build a new pose, with a flipped angle
+        Pose2d newPose = new Pose2d(currentPose.getTranslation(),
+                currentPose.getRotation().minus(Rotation2d.fromDegrees(180)));
+
+        // Reset the localizer
+        localizer.resetPosition(newPose, getCurrentHeading());
+
+        // Reset the encoders
+        resetEncoders();
+
+        // Flip everything
+        setMotorsInverted(side.equals(Side.kBack));
+        setEncodersInverted(side.equals(Side.kBack));
+
+        // Set the active side tracker
+        frontSide = side;
+
+    }
+
     public void handleDriverInputs(double throttlePercent, double steeringPercent) {
         // Handle drive mode
         if (constantCurvatureEnabled) {
@@ -207,6 +262,11 @@ public abstract class TankDriveTrain extends AbstractDriveTrain {
 
     public void enableConstantCurvature(boolean enabled) {
         this.constantCurvatureEnabled = enabled;
+    }
+
+    @Override
+    public Pose2d getPose() {
+        return localizer.getPoseMeters();
     }
 
     @Override

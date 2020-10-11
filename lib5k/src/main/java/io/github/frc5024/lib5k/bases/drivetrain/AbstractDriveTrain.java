@@ -164,6 +164,15 @@ public abstract class AbstractDriveTrain extends SubsystemBase implements IDiffe
         this.stateMachine.setState(State.kAutonomousRotation);
     }
 
+    @Override
+    public void periodic() {
+        // Run user periodic code
+        runIteration();
+
+        // Run state machine
+        stateMachine.update();
+    }
+
     /**
      * Get the internal state of the DriveTrain
      * 

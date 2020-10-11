@@ -3,6 +3,7 @@ package io.github.frc5024.common_drive.controller;
 /**
  * Gains for a PDF controller
  */
+@Deprecated(since = "October 2020", forRemoval = true)
 public class PDFGains {
 
     public double kP;

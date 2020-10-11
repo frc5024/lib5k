@@ -14,7 +14,7 @@ public class TestTBH {
         TBHController controller = new TBHController(0.3);
 
         // Calculate & check
-        assert controller.calculate(100) > 0.0;
+        assert controller.calculate(0, 100) > 0.0;
     }
     
 }

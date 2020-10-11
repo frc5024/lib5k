@@ -3,6 +3,7 @@ package io.github.frc5024.lib5k.control_loops.models;
 /**
  * Used to store PID control data
  */
+@Deprecated(since = "October 2020", forRemoval = true)
 public class PIDProfile {
     public double kp, ki, kd;
 

@@ -3,6 +3,7 @@ package io.github.frc5024.common_drive.controller;
 /**
  * Gains for a PIF controller
  */
+@Deprecated(since = "October 2020", forRemoval = true)
 public class PIFGains {
 
     public double kP;

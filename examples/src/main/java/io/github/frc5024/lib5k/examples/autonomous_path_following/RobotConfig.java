@@ -2,15 +2,14 @@ package io.github.frc5024.lib5k.examples.autonomous_path_following;
 
 import edu.wpi.first.wpilibj.util.Units;
 import io.github.frc5024.common_drive.DriveTrainConfig;
-import io.github.frc5024.common_drive.controller.PDFGains;
-import io.github.frc5024.common_drive.controller.PIFGains;
 import io.github.frc5024.common_drive.types.ShifterType;
+import io.github.frc5024.lib5k.control_loops.ExtendedPIDController;
 import io.github.frc5024.lib5k.hardware.ctre.motors.CTREConfig;
 
 public class RobotConfig {
 
     // Config for drivetrain calculations
-    public static DriveTrainConfig DRIVETRAIN_CONFIG = new DriveTrainConfig(){
+    public static DriveTrainConfig DRIVETRAIN_CONFIG = new DriveTrainConfig() {
         {
             // Don't use a gear shifter
             this.shifterType = ShifterType.NO_SHIFTER;
@@ -20,19 +19,18 @@ public class RobotConfig {
             this.wheelRadius = Units.inchesToMeters(6.0) / 2.0;
             this.robotWidth = Units.inchesToMeters(26.0);
 
-            // Set gearing 
+            // Set gearing
             this.highGearRatio = 8.45 / 1;
             this.lowGearRatio = 8.45 / 1;
             this.defaultHighGear = false;
 
             // Control gains
-            this.turningGains = new PIFGains(0.0088, 0.01);
-            this.distanceGains = new PDFGains(0.478, 0.008);
+            this.turningController = new ExtendedPIDController(0.0088, 0.01, 0);
+            this.distanceController = new ExtendedPIDController(0.478, 0, 0.008);
 
             // Ramp rates
             this.defaultRampSeconds = 0.12;
             this.pathingRampSeconds = 0.20;
-
 
         }
     };

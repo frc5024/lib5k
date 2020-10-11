@@ -7,9 +7,9 @@ import java.util.function.Supplier;
 import org.junit.Test;
 
 import ca.retrylife.ewmath.MathUtils;
+import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
-import io.github.frc5024.lib5k.control_loops.models.PIDProfile;
 import io.github.frc5024.lib5k.hardware.generic.motors.MockSpeedController;
 import io.github.frc5024.lib5k.logging.RobotLogger;
 
@@ -21,10 +21,10 @@ public class ProfiledTurretTest {
     private Supplier<Rotation2d> angleGetter = () -> {
         return angle;
     };
-    private PIDProfile pidGains = new PIDProfile(0.5);
     private Rotation2d minDeadzone = Rotation2d.fromDegrees(-100);
     private Rotation2d maxDeadzone = Rotation2d.fromDegrees(100);
     private TrapezoidProfile.Constraints characteristics = new TrapezoidProfile.Constraints(1.0, 1.0);
+    private ProfiledPIDController controller = new ProfiledPIDController(0.5, 0, 0, characteristics);
     private Rotation2d epsilon = Rotation2d.fromDegrees(2.0);
 
     @Test
@@ -35,8 +35,7 @@ public class ProfiledTurretTest {
         angle = Rotation2d.fromDegrees(0.0);
 
         // Create a ProfiledTurret
-        ProfiledTurret turret = new ProfiledTurret(motor, angleGetter, pidGains, minDeadzone, maxDeadzone,
-                characteristics, epsilon);
+        ProfiledTurret turret = new ProfiledTurret(motor, angleGetter, controller, minDeadzone, maxDeadzone, epsilon);
         RobotLogger.getInstance().flush();
 
         // Set a setpoint for moving left
@@ -78,8 +77,7 @@ public class ProfiledTurretTest {
         angle = Rotation2d.fromDegrees(0.0);
 
         // Create a ProfiledTurret
-        ProfiledTurret turret = new ProfiledTurret(motor, angleGetter, pidGains, minDeadzone, maxDeadzone,
-                characteristics, epsilon);
+        ProfiledTurret turret = new ProfiledTurret(motor, angleGetter, controller, minDeadzone, maxDeadzone, epsilon);
         RobotLogger.getInstance().flush();
 
         // Set the current angle near one side of the deadzone
@@ -127,8 +125,7 @@ public class ProfiledTurretTest {
         angle = Rotation2d.fromDegrees(0.0);
 
         // Create a ProfiledTurret
-        ProfiledTurret turret = new ProfiledTurret(motor, angleGetter, pidGains, minDeadzone, maxDeadzone,
-                characteristics, epsilon);
+        ProfiledTurret turret = new ProfiledTurret(motor, angleGetter, controller, minDeadzone, maxDeadzone, epsilon);
         RobotLogger.getInstance().flush();
 
         // Set a setpoint
@@ -166,8 +163,7 @@ public class ProfiledTurretTest {
         angle = Rotation2d.fromDegrees(0.0);
 
         // Create a ProfiledTurret
-        ProfiledTurret turret = new ProfiledTurret(motor, angleGetter, pidGains, minDeadzone, maxDeadzone,
-                characteristics, epsilon);
+        ProfiledTurret turret = new ProfiledTurret(motor, angleGetter, controller, minDeadzone, maxDeadzone, epsilon);
         RobotLogger.getInstance().flush();
 
         // Set a setpoint
@@ -206,7 +202,6 @@ public class ProfiledTurretTest {
 
         // Check that the turret is now moving left again
         assertEquals("Turret moving left", true, motor.get() < 0.0);
-
 
     }
 }

@@ -3,6 +3,7 @@ package io.github.frc5024.lib5k.control_loops.base;
 /**
  * Base class for all non-statespace controllers.
  */
+@Deprecated(since = "October 2020", forRemoval = true)
 public abstract class ControllerBase {
 
     // Controller epsilon

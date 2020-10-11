@@ -10,6 +10,7 @@ import io.github.frc5024.lib5k.control_loops.models.PIDProfile;
  * <a href="https://lynkz.me/HqhJIuG">SimPID</a>, that works with lib5k's
  * kinematics systems, and provides telemetry
  */
+@Deprecated(since = "October 2020", forRemoval = true)
 public class PIDv2 implements Sendable {
 
     private double kp, ki, kd;
@@ -31,6 +32,7 @@ public class PIDv2 implements Sendable {
      * 
      * @param profile PIDProfile containing gains
      */
+    @SuppressWarnings({"deprecation", "removal"})
     public PIDv2(PIDProfile profile) {
         this(profile.kp, profile.ki, profile.kd);
     }
@@ -65,6 +67,7 @@ public class PIDv2 implements Sendable {
      * 
      * @param profile New PIDProfile contaning PID gains
      */
+    @SuppressWarnings({"deprecation", "removal"})
     public void config(PIDProfile profile) {
         this.config(profile.kp, profile.ki, profile.kd);
     }
@@ -130,6 +133,7 @@ public class PIDv2 implements Sendable {
 
     /**
      * Get the controller setpoint
+     * 
      * @return Set point
      */
     public double getSetpoint() {
@@ -138,6 +142,7 @@ public class PIDv2 implements Sendable {
 
     /**
      * Get the integrator range
+     * 
      * @param iRange Range
      */
     public void setIRange(double iRange) {
@@ -146,6 +151,7 @@ public class PIDv2 implements Sendable {
 
     /**
      * Get the integrator range
+     * 
      * @return Range
      */
     public double getIRange() {

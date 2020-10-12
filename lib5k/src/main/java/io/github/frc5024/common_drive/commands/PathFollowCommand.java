@@ -23,6 +23,7 @@ import io.github.frc5024.purepursuit.Follower;
  * In the background, it also logs the robot's current position vs the goal
  * position for match analysis.
  */
+@Deprecated(since = "October 2020", forRemoval = true)
 public class PathFollowCommand extends CommandBase {
 
     // Logger

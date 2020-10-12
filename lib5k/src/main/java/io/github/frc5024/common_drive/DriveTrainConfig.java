@@ -6,6 +6,7 @@ import io.github.frc5024.lib5k.control_loops.ExtendedPIDController;
 /**
  * Configuration data for the drivetrain
  */
+@Deprecated(since = "October 2020", forRemoval = true)
 public abstract class DriveTrainConfig {
 
     // Shifting method to use

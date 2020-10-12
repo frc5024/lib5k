@@ -5,6 +5,7 @@ import io.github.frc5024.common_drive.gearing.Gear;
 /**
  * DriveTrain position data
  */
+@Deprecated(since = "October 2020", forRemoval = true)
 public class Position {
 
     // Data

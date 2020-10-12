@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.geometry.Rotation2d;
  * A data class for sharing sensor readings from the client to code to the
  * drivetrain base
  */
+@Deprecated(since = "October 2020", forRemoval = true)
 public class DriveTrainSensors {
 
     // Timestamp

@@ -6,6 +6,7 @@ import io.github.frc5024.common_drive.types.MotorMode;
 /**
  * A data class containing all drivetrain outputs
  */
+@Deprecated(since = "October 2020", forRemoval = true)
 public class DriveTrainOutput {
 
     // Timestamp

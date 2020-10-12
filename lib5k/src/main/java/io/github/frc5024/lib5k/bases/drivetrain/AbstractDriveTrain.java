@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import io.github.frc5024.common_drive.gearing.Gear;
 import io.github.frc5024.lib5k.bases.drivetrain.commands.PathFollowerCommand;
+import io.github.frc5024.lib5k.bases.drivetrain.commands.TurnToCommand;
 import io.github.frc5024.lib5k.hardware.common.drivebase.IDifferentialDrivebase;
 import io.github.frc5024.lib5k.logging.RobotLogger;
 import io.github.frc5024.lib5k.utils.interfaces.SafeSystem;
@@ -32,6 +33,7 @@ public abstract class AbstractDriveTrain extends SubsystemBase implements IDiffe
     private Rotation2d goalHeadingEpsilon = null;
     private Translation2d goalPose = null;
     private Translation2d goalPoseEpsilon = null;
+    private boolean waitingForNextLoop = false;
 
     public AbstractDriveTrain() {
 
@@ -155,6 +157,7 @@ public abstract class AbstractDriveTrain extends SubsystemBase implements IDiffe
      * @param epsilon Pose epsilon in meters
      */
     public void setGoalPose(Translation2d pose, Translation2d epsilon) {
+        waitingForNextLoop = true;
         this.goalPose = pose;
         this.goalPoseEpsilon = new Translation2d(Math.abs(epsilon.getX()), Math.abs(epsilon.getY()));
         this.stateMachine.setState(State.kDrivingToPose);
@@ -168,6 +171,7 @@ public abstract class AbstractDriveTrain extends SubsystemBase implements IDiffe
      * @param epsilon Heading epsilon
      */
     public void setGoalHeading(Rotation2d heading, Rotation2d epsilon) {
+        waitingForNextLoop = true;
         this.goalHeading = heading;
         this.goalHeadingEpsilon = new Rotation2d(Math.abs(epsilon.getRadians()));
         this.stateMachine.setState(State.kAutonomousRotation);
@@ -180,6 +184,7 @@ public abstract class AbstractDriveTrain extends SubsystemBase implements IDiffe
 
         // Run state machine
         stateMachine.update();
+        waitingForNextLoop = false;
     }
 
     /**
@@ -188,11 +193,26 @@ public abstract class AbstractDriveTrain extends SubsystemBase implements IDiffe
      * configure the command
      * 
      * @param path      Path to follow
-     * @param epsRadius Radius around the final pose for trigger isFinished()
+     * @param epsRadius Radius in meters around the final pose for trigger
+     *                  isFinished()
      * @return Path following command
      */
     public PathFollowerCommand createPathingCommand(Path path, double epsRadius) {
         return new PathFollowerCommand(this, path, epsRadius);
+    }
+
+    /**
+     * Create a new TurnToCommand for this drivetrain.
+     * 
+     * @param heading         Desired heading
+     * @param epsilon         Rotational epsilon
+     * @param maxSpeedPercent Maximum speed as a percent
+     * @param fieldRelative   Is the desired heading field-relative?
+     * @return Generated TurnToCommand object
+     */
+    public TurnToCommand createTurnCommand(Rotation2d heading, Rotation2d epsilon, double maxSpeedPercent,
+            boolean fieldRelative) {
+        return new TurnToCommand(this, heading, epsilon, maxSpeedPercent, fieldRelative);
     }
 
     /**
@@ -202,6 +222,15 @@ public abstract class AbstractDriveTrain extends SubsystemBase implements IDiffe
      */
     public State getCurrentState() {
         return stateMachine.getCurrentState();
+    }
+
+    /**
+     * Check if the drivetrain is currently at its goal
+     * 
+     * @return Is currently at goal
+     */
+    public boolean isAtGoal() {
+        return !waitingForNextLoop && getCurrentState().equals(State.kOpenLoopControl);
     }
 
     @Override

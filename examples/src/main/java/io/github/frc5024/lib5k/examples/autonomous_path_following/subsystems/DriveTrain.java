@@ -35,17 +35,23 @@ public class DriveTrain extends TankDriveTrain {
 
         // Set up motors
         leftFrontMotor = new ExtendedTalonSRX(RobotConfig.DRIVETRAIN_FRONT_LEFT_ID);
-        leftRearMotor = new ExtendedTalonSRX(RobotConfig.DRIVETRAIN_REAR_LEFT_ID);
+        leftRearMotor = leftFrontMotor.makeSlave(RobotConfig.DRIVETRAIN_REAR_LEFT_ID);
         rightFrontMotor = new ExtendedTalonSRX(RobotConfig.DRIVETRAIN_FRONT_RIGHT_ID);
-        rightRearMotor = new ExtendedTalonSRX(RobotConfig.DRIVETRAIN_REAR_RIGHT_ID);
+        rightRearMotor = rightFrontMotor.makeSlave(RobotConfig.DRIVETRAIN_REAR_RIGHT_ID);
 
-        // Set up following
-        leftRearMotor.follow(leftFrontMotor);
-        rightRearMotor.follow(rightFrontMotor);
+        // Set inversions on motors
+        leftFrontMotor.setInverted(false);
+        leftRearMotor.setInverted(false);
+        rightFrontMotor.setInverted(true);
+        rightRearMotor.setInverted(true);
+
+        // Set the sensor phases
+        leftFrontMotor.setSensorPhase(false);
+        rightFrontMotor.setSensorPhase(false);
 
         // Set up encoders
-        leftEncoder = leftFrontMotor.getCommonEncoder(RobotConfig.DRIVETRAIN_ENCODER_TPR);
-        rightEncoder = leftFrontMotor.getCommonEncoder(RobotConfig.DRIVETRAIN_ENCODER_TPR);
+        leftEncoder = leftRearMotor.getCommonEncoder(RobotConfig.DRIVETRAIN_ENCODER_TPR);
+        rightEncoder = rightRearMotor.getCommonEncoder(RobotConfig.DRIVETRAIN_ENCODER_TPR);
 
         // Set up gyroscope
         gyroscope = NavX.getInstance();

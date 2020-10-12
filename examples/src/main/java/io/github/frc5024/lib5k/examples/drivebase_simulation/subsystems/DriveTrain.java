@@ -4,34 +4,37 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
-import io.github.frc5024.common_drive.DriveTrainBase;
-import io.github.frc5024.common_drive.queue.DriveTrainOutput;
-import io.github.frc5024.common_drive.queue.DriveTrainSensors;
-import io.github.frc5024.common_drive.types.MotorMode;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import io.github.frc5024.common_drive.gearing.Gear;
+import io.github.frc5024.lib5k.bases.drivetrain.implementations.TankDriveTrain;
 import io.github.frc5024.lib5k.control_loops.models.DCBrushedMotor;
 import io.github.frc5024.lib5k.examples.drivebase_simulation.RobotConfig;
 import io.github.frc5024.lib5k.hardware.common.sensors.interfaces.CommonEncoder;
 import io.github.frc5024.lib5k.hardware.common.sensors.interfaces.EncoderSimulation;
-import io.github.frc5024.lib5k.hardware.common.sensors.interfaces.ISimGyro;
-import io.github.frc5024.lib5k.hardware.ctre.motors.CTREMotorFactory;
 import io.github.frc5024.lib5k.hardware.ctre.motors.ExtendedTalonSRX;
 import io.github.frc5024.lib5k.hardware.kauai.gyroscopes.NavX;
-import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.FPGAClock;
 
-public class DriveTrain extends DriveTrainBase {
-    private static DriveTrain instance;
+public class DriveTrain extends TankDriveTrain {
+    private static DriveTrain instance = null;
 
     // Motors
-    private ExtendedTalonSRX frontLeftMotor;
-    private ExtendedTalonSRX rearLeftMotor;
-    private ExtendedTalonSRX frontRightMotor;
-    private ExtendedTalonSRX rearRightMotor;
+    private ExtendedTalonSRX leftFrontMotor;
+    private ExtendedTalonSRX leftRearMotor;
+    private ExtendedTalonSRX rightFrontMotor;
+    private ExtendedTalonSRX rightRearMotor;
 
-    // Sensors
+    // Encoders
     private EncoderSimulation leftEncoder;
     private EncoderSimulation rightEncoder;
-    private ISimGyro gyroscope;
+
+    // Gyroscope
+    private NavX gyroscope;
+
+    // Motor and encoder inversion multiplier
+    private double motorInversionMultiplier = 1.0;
+    private double encoderInversionMultiplier = 1.0;
 
     // Simulation
     private NetworkTableInstance ntInst;
@@ -40,55 +43,51 @@ public class DriveTrain extends DriveTrainBase {
     private NetworkTableEntry ntTheta;
 
     private DriveTrain() {
-        // Set up DriveTrain with out config
-        super(RobotConfig.DRIVETRAIN_CONFIG);
+        super(RobotConfig.DRIVETRAIN_DISTANCE_CONTROLLER, RobotConfig.DRIVETRAIN_ROTATION_CONTROLLER);
 
         // Set up motors
-        frontLeftMotor = CTREMotorFactory.createTalonSRX(RobotConfig.DRIVETRAIN_FRONT_LEFT_ID,
-                RobotConfig.DRIVETRAIN_MOTOR_CONFIG);
-        rearLeftMotor = frontLeftMotor.makeSlave(RobotConfig.DRIVETRAIN_REAR_LEFT_ID);
-        frontRightMotor = CTREMotorFactory.createTalonSRX(RobotConfig.DRIVETRAIN_FRONT_RIGHT_ID,
-                RobotConfig.DRIVETRAIN_MOTOR_CONFIG);
-        rearRightMotor = frontRightMotor.makeSlave(RobotConfig.DRIVETRAIN_REAR_RIGHT_ID);
+        leftFrontMotor = new ExtendedTalonSRX(RobotConfig.DRIVETRAIN_FRONT_LEFT_ID);
+        leftRearMotor = leftFrontMotor.makeSlave(RobotConfig.DRIVETRAIN_REAR_LEFT_ID);
+        rightFrontMotor = new ExtendedTalonSRX(RobotConfig.DRIVETRAIN_FRONT_RIGHT_ID);
+        rightRearMotor = rightFrontMotor.makeSlave(RobotConfig.DRIVETRAIN_REAR_RIGHT_ID);
 
         // Set inversions on motors
-        frontLeftMotor.setInverted(false);
-        rearLeftMotor.setInverted(false);
-        frontRightMotor.setInverted(true);
-        rearRightMotor.setInverted(true);
+        leftFrontMotor.setInverted(false);
+        leftRearMotor.setInverted(false);
+        rightFrontMotor.setInverted(true);
+        rightRearMotor.setInverted(true);
 
         // Set the sensor phases
-        frontLeftMotor.setSensorPhase(false);
-        frontRightMotor.setSensorPhase(false);
-
-        // Disable safety
-        frontLeftMotor.setSafetyEnabled(false);
-        frontRightMotor.setSafetyEnabled(false);
+        leftFrontMotor.setSensorPhase(false);
+        rightFrontMotor.setSensorPhase(false);
 
         // Set up encoders
-        leftEncoder = (EncoderSimulation) rearLeftMotor.getCommonEncoder(RobotConfig.DRIVETRAIN_ENCODER_TPR);
-        rightEncoder = (EncoderSimulation) rearRightMotor.getCommonEncoder(RobotConfig.DRIVETRAIN_ENCODER_TPR);
+        leftEncoder = (EncoderSimulation) leftRearMotor.getCommonEncoder(RobotConfig.DRIVETRAIN_ENCODER_TPR);
+        rightEncoder = (EncoderSimulation) rightRearMotor.getCommonEncoder(RobotConfig.DRIVETRAIN_ENCODER_TPR);
 
-        // Set up encoder simulation
-        leftEncoder.initSimulationDevice(frontLeftMotor, RobotConfig.DRIVETRAIN_CONFIG.lowGearRatio,
-                ((DCBrushedMotor) DCBrushedMotor.getCIM(1)).getFreeSpeedRPM(),
-                RobotConfig.DRIVETRAIN_CONFIG.defaultRampSeconds);
-        rightEncoder.initSimulationDevice(frontRightMotor, RobotConfig.DRIVETRAIN_CONFIG.lowGearRatio,
-                ((DCBrushedMotor) DCBrushedMotor.getCIM(1)).getFreeSpeedRPM(),
-                RobotConfig.DRIVETRAIN_CONFIG.defaultRampSeconds);
+        // Set up motor simulation
+        if (RobotBase.isSimulation()) {
+            leftEncoder.initSimulationDevice(leftFrontMotor, RobotConfig.DRIVETRAIN_GEAR_RATIO,
+                    RobotConfig.DRIVETRAIN_GEARBOX_MOTOR_TYPE.getFreeSpeedRPM(),
+                    RobotConfig.MAXIMUM_TIME_TO_ACCELERATE_SECONDS);
+            rightEncoder.initSimulationDevice(rightFrontMotor, RobotConfig.DRIVETRAIN_GEAR_RATIO,
+                    RobotConfig.DRIVETRAIN_GEARBOX_MOTOR_TYPE.getFreeSpeedRPM(),
+                    RobotConfig.MAXIMUM_TIME_TO_ACCELERATE_SECONDS);
+        }
 
         // Set up gyroscope
         gyroscope = NavX.getInstance();
 
-        // Enable gyro simulation
-        gyroscope.initDrivebaseSimulation(this);
+        // Set up gyro simulation
+        if (RobotBase.isSimulation()) {
+            gyroscope.initDrivebaseSimulation(this);
+        }
 
         // Set up networktables
         ntInst = NetworkTableInstance.getDefault();
         ntX = ntInst.getEntry("drivetrain_x");
         ntY = ntInst.getEntry("drivetrain_y");
         ntTheta = ntInst.getEntry("drivetrain_theta");
-
     }
 
     public static DriveTrain getInstance() {
@@ -99,78 +98,76 @@ public class DriveTrain extends DriveTrainBase {
     }
 
     @Override
-    public DriveTrainSensors readInputs() {
-        DriveTrainSensors output = new DriveTrainSensors();
-
-        // Update encoders
-        leftEncoder.update();
-        rightEncoder.update();
-
-        // Timestamp
-        output.timestamp_ms = FPGAClock.getFPGAMilliseconds();
-
-        // Gyroscope
-        output.rotation = gyroscope.getRotation();
-        output.angle = gyroscope.getAngle();
-        output.angularRate = gyroscope.getRate();
-
-        // Encoders
-        output.leftEncoderMetres = getLeftMeters();
-        output.rightEncoderMetres = getRightMeters();
-
-        return output;
-    }
-
-    @Override
-    public void consumeOutputs(DriveTrainOutput output) {
-
-        // Set motor voltages
-        frontLeftMotor.setVoltage(output.leftVoltage);
-        frontRightMotor.setVoltage(output.rightVoltage);
-
-        // Handle motor settings
-        if (output.invertSensorPhase.write) {
-            frontLeftMotor.setSensorPhase(output.invertSensorPhase.value);
-            frontRightMotor.setSensorPhase(output.invertSensorPhase.value);
-            output.invertSensorPhase.consume();
-        }
-        if (output.motorMode.write) {
-            if (output.motorMode.value == MotorMode.kCoast) {
-                frontLeftMotor.setNeutralMode(NeutralMode.Coast);
-                frontRightMotor.setNeutralMode(NeutralMode.Coast);
-            } else {
-                frontLeftMotor.setNeutralMode(NeutralMode.Brake);
-                frontRightMotor.setNeutralMode(NeutralMode.Brake);
-            }
-            output.motorMode.consume();
-        }
-        if (output.motorRamp.write) {
-            frontLeftMotor.configOpenloopRamp(output.motorRamp.value);
-            frontRightMotor.configOpenloopRamp(output.motorRamp.value);
-            output.motorRamp.consume();
-        }
-
+    public double getLeftMeters() {
+        return leftEncoder.getPosition() * (2 * Math.PI * RobotConfig.DRIVETRAIN_WHEEL_RADIUS)
+                * encoderInversionMultiplier;
     }
 
     @Override
     public double getRightMeters() {
-        return rightEncoder.getPosition() * RobotConfig.DRIVETRAIN_CONFIG.getWheelCircumference();
+        return rightEncoder.getPosition() * (2 * Math.PI * RobotConfig.DRIVETRAIN_WHEEL_RADIUS)
+                * encoderInversionMultiplier;
     }
 
     @Override
-    public double getLeftMeters() {
-        return leftEncoder.getPosition() * RobotConfig.DRIVETRAIN_CONFIG.getWheelCircumference();
+    public double getWidthMeters() {
+        return RobotConfig.ROBOT_WIDTH;
     }
 
     @Override
-    public void customPeriodic() {
+    protected void handleVoltage(double leftVolts, double rightVolts) {
+        leftFrontMotor.setVoltage(leftVolts * motorInversionMultiplier);
+        rightFrontMotor.setVoltage(rightVolts * motorInversionMultiplier);
+    }
 
+    @Override
+    protected void resetEncoders() {
+    }
+
+    @Override
+    protected void setMotorsInverted(boolean motorsInverted) {
+        this.motorInversionMultiplier = (motorsInverted) ? -1.0 : 1.0;
+    }
+
+    @Override
+    protected void setEncodersInverted(boolean encodersInverted) {
+        this.encoderInversionMultiplier = (encodersInverted) ? -1.0 : 1.0;
+    }
+
+    @Override
+    protected void handleGearShift(Gear gear) {
+        // Do nothing here since we dont have a gear shifter
+    }
+
+    @Override
+    protected void enableBrakes(boolean enabled) {
+        if (enabled) {
+            leftFrontMotor.setNeutralMode(NeutralMode.Brake);
+            rightFrontMotor.setNeutralMode(NeutralMode.Brake);
+        } else {
+            leftFrontMotor.setNeutralMode(NeutralMode.Coast);
+            rightFrontMotor.setNeutralMode(NeutralMode.Coast);
+        }
+    }
+
+    @Override
+    protected Rotation2d getCurrentHeading() {
+        return gyroscope.getRotation();
+    }
+
+    @Override
+    protected void runIteration() {
         // Publish pose to NT
         Pose2d pose = getPose();
         ntX.setDouble(pose.getTranslation().getX());
         ntY.setDouble(pose.getTranslation().getY());
         ntTheta.setDouble(pose.getRotation().getDegrees());
+    }
 
+    @Override
+    public void setRampRate(double rampTimeSeconds) {
+        leftFrontMotor.configOpenloopRamp(rampTimeSeconds);
+        rightFrontMotor.configOpenloopRamp(rampTimeSeconds);
     }
 
 }

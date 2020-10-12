@@ -33,6 +33,8 @@ public class ExtendedTalonFX extends WPI_TalonFX {
     public ExtendedTalonFX(int id, CTREConfig config) {
         super(id);
         this.config = config;
+        setSafetyEnabled(false);
+
     }
 
     /**

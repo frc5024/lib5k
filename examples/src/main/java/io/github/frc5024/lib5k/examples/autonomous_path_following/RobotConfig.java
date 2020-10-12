@@ -23,4 +23,15 @@ public class RobotConfig {
     // Robot sizing
     public static final double ROBOT_WIDTH = Units.inchesToMeters(26.0);
     public static final double DRIVETRAIN_WHEEL_RADIUS = Units.inchesToMeters(6.0) / 2.0;
+
+    // Motor inversions
+    public static final boolean FRONT_LEFT_MOTOR_INVERTED = false;
+    public static final boolean REAR_LEFT_MOTOR_INVERTED = false;
+    public static final boolean FRONT_RIGHT_MOTOR_INVERTED = true;
+    public static final boolean REAR_RIGHT_MOTOR_INVERTED = true;
+
+    // Sensor inversions
+    public static final boolean LEFT_ENCODER_INVERTED = false;
+    public static final boolean RIGHT_ENCODER_INVERTED = false;
+
 }

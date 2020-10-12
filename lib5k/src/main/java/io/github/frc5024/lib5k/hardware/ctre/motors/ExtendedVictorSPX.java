@@ -30,6 +30,7 @@ public class ExtendedVictorSPX extends WPI_VictorSPX {
     public ExtendedVictorSPX(int id, CTREConfig config) {
         super(id);
         this.config = config;
+        setSafetyEnabled(false);
 
     }
 

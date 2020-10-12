@@ -1,3 +1,7 @@
+---
+sort: 1
+---
+
 # Different Types of DriveTrains
 
 In FRC, we commonly encounter three main types of chassis / drivetrain design:

@@ -18,6 +18,10 @@ import io.github.frc5024.lib5k.utils.RobotMath;
 import io.github.frc5024.lib5k.utils.types.DifferentialVoltages;
 import io.github.frc5024.libkontrol.statemachines.StateMetadata;
 
+/**
+ * TankDriveTrain is an implementation of AbstractDriveTrain for tank-drive
+ * robots.
+ */
 public abstract class TankDriveTrain extends AbstractDriveTrain {
 
     // True if constant curvature is enabled
@@ -42,6 +46,12 @@ public abstract class TankDriveTrain extends AbstractDriveTrain {
     // Localization
     private DifferentialDriveOdometry localizer;
 
+    /**
+     * Create a new TankDriveTrain
+     * 
+     * @param distanceController Controller for distance control
+     * @param rotationController Controller for rotation control
+     */
     public TankDriveTrain(Controller distanceController, Controller rotationController) {
 
         // Set controllers
@@ -193,12 +203,31 @@ public abstract class TankDriveTrain extends AbstractDriveTrain {
 
     }
 
+    /**
+     * TO BE OVERRIDDEN BY THE USER. Send voltage to the motors
+     * 
+     * @param leftVolts  Left side voltage
+     * @param rightVolts Right side voltage
+     */
     protected abstract void handleVoltage(double leftVolts, double rightVolts);
 
+    /**
+     * TO BE OVERRIDDEN BY THE USER. Reset the encoders to read 0 rotations each
+     */
     protected abstract void resetEncoders();
 
+    /**
+     * TO BE OVERRIDDEN BY THE USER. Set if the motor outputs should be inverted
+     * 
+     * @param motorsInverted Should invert motor outputs
+     */
     protected abstract void setMotorsInverted(boolean motorsInverted);
 
+    /**
+     * TO BE OVERRIDDEN BY THE USER. Set if the encoder inputs should be inverted
+     * 
+     * @param encodersInverted Should invert encoder inputs
+     */
     protected abstract void setEncodersInverted(boolean encodersInverted);
 
     @Override
@@ -252,6 +281,12 @@ public abstract class TankDriveTrain extends AbstractDriveTrain {
 
     }
 
+    /**
+     * Handle inputs from a human operator
+     * 
+     * @param throttlePercent Throttle percentage
+     * @param steeringPercent Steering percentage
+     */
     public void handleDriverInputs(double throttlePercent, double steeringPercent) {
         // Handle drive mode
         if (constantCurvatureEnabled) {
@@ -263,15 +298,31 @@ public abstract class TankDriveTrain extends AbstractDriveTrain {
         }
     }
 
+    /**
+     * Set an open-loop output
+     * 
+     * @param leftVolts  Left side voltage
+     * @param rightVolts Right side voltage
+     */
     public void setOpenLoop(double leftVolts, double rightVolts) {
         setOpenLoop(new DifferentialVoltages(leftVolts, rightVolts));
     }
 
+    /**
+     * Set an open-loop output
+     * 
+     * @param voltages Voltages
+     */
     public void setOpenLoop(DifferentialVoltages voltages) {
         openLoopGoal = voltages;
         super.stateMachine.setState(State.kOpenLoopControl);
     }
 
+    /**
+     * Set if constant-curvature control should be used
+     * 
+     * @param enabled Should use constant-curvature control?
+     */
     public void enableConstantCurvature(boolean enabled) {
         this.constantCurvatureEnabled = enabled;
     }

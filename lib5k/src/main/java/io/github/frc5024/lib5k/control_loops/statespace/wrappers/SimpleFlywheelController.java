@@ -19,10 +19,13 @@ package io.github.frc5024.lib5k.control_loops.statespace.wrappers;
 
 import edu.wpi.first.wpilibj.controller.LinearQuadraticRegulator;
 import edu.wpi.first.wpilibj.estimator.KalmanFilter;
+import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj.system.LinearSystem;
 import edu.wpi.first.wpilibj.system.LinearSystemLoop;
+import edu.wpi.first.wpilibj.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.util.Units;
+import edu.wpi.first.wpiutil.math.Matrix;
 import edu.wpi.first.wpiutil.math.Nat;
 import edu.wpi.first.wpiutil.math.VecBuilder;
 import edu.wpi.first.wpiutil.math.numbers.N1;
@@ -41,10 +44,16 @@ import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.FPGAClock;
  */
 public class SimpleFlywheelController {
 
+    // Amount of noise to simulate
+    private static final Matrix<N1, N1> SIMULATED_NOISE = VecBuilder.fill(0.01);
+
     // Plant, observer, and LQR
     private LinearSystem<N1, N1, N1> plant;
     private KalmanFilter<N1, N1, N1> observer;
     private LinearQuadraticRegulator<N1, N1, N1> lqr;
+
+    // Simulator
+    private FlywheelSim simulator;
 
     // State space loop
     private LinearSystemLoop<N1, N1, N1> loop;
@@ -170,7 +179,10 @@ public class SimpleFlywheelController {
                 VecBuilder.fill(maxVoltageOutput), 0.020);
 
         // Build loop
-        loop = new LinearSystemLoop<>(plant, lqr, observer, maxVoltageOutput, expectedLoopTimeSeconds);
+        loop = new LinearSystemLoop<N1, N1, N1>(plant, lqr, observer, maxVoltageOutput, expectedLoopTimeSeconds);
+
+        // Set up simulation
+        this.simulator = new FlywheelSim(plant, (DCMotor) motorType, gearing, SIMULATED_NOISE);
     }
 
     /**
@@ -202,6 +214,15 @@ public class SimpleFlywheelController {
         // Set the next reference
         loop.setNextR(VecBuilder.fill(rads));
 
+    }
+
+    /**
+     * Get the simulated system RPM
+     * 
+     * @return Simulated RPM
+     */
+    public double getSimulatedRPN() {
+        return this.simulator.getAngularVelocityRPM();
     }
 
     /**

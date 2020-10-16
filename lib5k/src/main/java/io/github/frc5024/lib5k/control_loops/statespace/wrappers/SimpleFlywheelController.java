@@ -32,6 +32,7 @@ import edu.wpi.first.wpiutil.math.numbers.N1;
 import io.github.frc5024.lib5k.control_loops.models.DCBrushedMotor;
 import io.github.frc5024.lib5k.control_loops.statespace.util.easylqr.FlywheelMath;
 import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.FPGAClock;
+import io.github.frc5024.lib5k.utils.RobotMath;
 
 /**
  * This is a wrapper around a state space plant, observer, and LQR. The
@@ -52,14 +53,15 @@ public class SimpleFlywheelController {
     private KalmanFilter<N1, N1, N1> observer;
     private LinearQuadraticRegulator<N1, N1, N1> lqr;
 
-    // Simulator
-    private FlywheelSim simulator;
-
     // State space loop
     private LinearSystemLoop<N1, N1, N1> loop;
 
     // Timekeeping
     private double lastTimeSeconds = 0.0;
+
+    // Simulation
+    private FlywheelSim simulator;
+    private double epsilonRADS;
 
     /**
      * Create a SimpleFlywheelController
@@ -172,7 +174,7 @@ public class SimpleFlywheelController {
                 VecBuilder.fill(Units.rotationsPerMinuteToRadiansPerSecond(encoderAccuracy)), expectedLoopTimeSeconds);
 
         // Convert eps to RAD/s
-        double epsilonRADS = Units.rotationsPerMinuteToRadiansPerSecond(epsilonRPM);
+        epsilonRADS = Units.rotationsPerMinuteToRadiansPerSecond(epsilonRPM);
 
         // Build LQR
         lqr = new LinearQuadraticRegulator<N1, N1, N1>(plant, VecBuilder.fill(epsilonRADS),
@@ -181,8 +183,8 @@ public class SimpleFlywheelController {
         // Build loop
         loop = new LinearSystemLoop<N1, N1, N1>(plant, lqr, observer, maxVoltageOutput, expectedLoopTimeSeconds);
 
-        // Set up simulation
         this.simulator = new FlywheelSim(plant, (DCMotor) motorType, gearing, SIMULATED_NOISE);
+
     }
 
     /**
@@ -217,12 +219,12 @@ public class SimpleFlywheelController {
     }
 
     /**
-     * Get the simulated system RPM
+     * Get the simulator for this controller
      * 
-     * @return Simulated RPM
+     * @return Simulator
      */
-    public double getSimulatedRPN() {
-        return this.simulator.getAngularVelocityRPM();
+    public FlywheelSim getSimulator() {
+        return this.simulator;
     }
 
     /**
@@ -251,6 +253,17 @@ public class SimpleFlywheelController {
 
         // Return the new voltage
         return loop.getU(0);
+    }
+
+    /**
+     * Check if a velocity is within epsilon of goal
+     * 
+     * @param velocityRPM Measurement
+     * @return Is at goal?
+     */
+    public boolean withinEpsilon(double velocityRPM) {
+        return RobotMath.epsilonEquals(Units.rotationsPerMinuteToRadiansPerSecond(velocityRPM), this.loop.getNextR(0),
+                this.epsilonRADS);
     }
 
 }

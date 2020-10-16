@@ -19,6 +19,9 @@ include ":examples"
 // Lib5K
 include ":lib5k"
 
+// Testbed
+include ":testbed"
+
 // This enables some fancy gradle enterprise features for us
 gradleEnterprise {
     buildScan {

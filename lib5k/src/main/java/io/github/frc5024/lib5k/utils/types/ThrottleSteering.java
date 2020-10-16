@@ -9,6 +9,9 @@ public class ThrottleSteering {
     private double throttle;
     private double steering;
 
+    /**
+     * Create a ThrottleSteering of 0,0
+     */
     public ThrottleSteering() {
         this(0, 0);
     }

@@ -35,6 +35,9 @@ public abstract class AbstractDriveTrain extends SubsystemBase implements IDiffe
     private Translation2d goalPoseEpsilon = null;
     private boolean waitingForNextLoop = false;
 
+    /**
+     * Create an AbstractDriveTrain
+     */
     public AbstractDriveTrain() {
 
         // Set up state machine

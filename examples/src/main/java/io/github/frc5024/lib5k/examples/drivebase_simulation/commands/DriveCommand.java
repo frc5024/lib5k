@@ -3,6 +3,7 @@ package io.github.frc5024.lib5k.examples.drivebase_simulation.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import io.github.frc5024.lib5k.examples.drivebase_simulation.OI;
 import io.github.frc5024.lib5k.examples.drivebase_simulation.subsystems.DriveTrain;
+import io.github.frc5024.lib5k.utils.InputUtils;
 import io.github.frc5024.lib5k.utils.InputUtils.ScalingMode;
 
 public class DriveCommand extends CommandBase {
@@ -23,6 +24,7 @@ public class DriveCommand extends CommandBase {
 
     @Override
     public void execute() {
-        DriveTrain.getInstance().drive(OI.getThrottle(), OI.getTurn(), ScalingMode.CUBIC);
+        DriveTrain.getInstance().handleDriverInputs(InputUtils.scale(OI.getThrottle(), ScalingMode.CUBIC),
+                InputUtils.scale(OI.getTurn(), ScalingMode.CUBIC));
     }
 }

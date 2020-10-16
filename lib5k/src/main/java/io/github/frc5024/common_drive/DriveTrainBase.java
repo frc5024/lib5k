@@ -39,6 +39,7 @@ import io.github.frc5024.lib5k.hardware.common.drivebase.IDifferentialDrivebase;
  * robot move, and allowing anyone to easily write autonomous code by calling a
  * single function.
  */
+@Deprecated(since = "October 2020", forRemoval = true)
 public abstract class DriveTrainBase extends SubsystemBase implements IDifferentialDrivebase {
     private RobotLogger logger = RobotLogger.getInstance();
 

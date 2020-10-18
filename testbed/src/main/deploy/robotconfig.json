@@ -1,0 +1,31 @@
+{
+    "driver_controller_hid_slot": 0,
+    "drivetrain": {
+        "throttleController": {
+            "Kp": 0.0088,
+            "Ki": 0.01,
+            "Kd": 0
+        },
+        "steeringController": {
+            "Kp": 0.478,
+            "Ki": 0,
+            "Kd": 0.008
+        },
+        "frontLeftMotor": {
+            "id": 1,
+            "inverted": false
+        },
+        "rearLeftMotor": {
+            "id": 2,
+            "inverted": false
+        },
+        "frontRightMotor": {
+            "id": 3,
+            "inverted": true
+        },
+        "rearRightMotor": {
+            "id": 4,
+            "inverted": true
+        }
+    }
+}

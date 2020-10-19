@@ -19,17 +19,15 @@ package io.github.frc5024.lib5k.control_loops.statespace.wrappers;
 
 import edu.wpi.first.wpilibj.controller.LinearQuadraticRegulator;
 import edu.wpi.first.wpilibj.estimator.KalmanFilter;
-import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj.system.LinearSystem;
 import edu.wpi.first.wpilibj.system.LinearSystemLoop;
-import edu.wpi.first.wpilibj.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.util.Units;
-import edu.wpi.first.wpiutil.math.Matrix;
 import edu.wpi.first.wpiutil.math.Nat;
 import edu.wpi.first.wpiutil.math.VecBuilder;
 import edu.wpi.first.wpiutil.math.numbers.N1;
 import io.github.frc5024.lib5k.control_loops.models.DCBrushedMotor;
+import io.github.frc5024.lib5k.control_loops.statespace.StateSpaceSystem;
 import io.github.frc5024.lib5k.control_loops.statespace.util.easylqr.FlywheelMath;
 import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.FPGAClock;
 import io.github.frc5024.lib5k.utils.RobotMath;
@@ -43,10 +41,7 @@ import io.github.frc5024.lib5k.utils.RobotMath;
  * See for information on the math going on here:
  * https://file.tavsys.net/control/controls-engineering-in-frc.pdf#%5B%7B%22num%22%3A40%2C%22gen%22%3A0%7D%2C%7B%22name%22%3A%22XYZ%22%7D%2C85.04%2C265.56%2Cnull%5D
  */
-public class SimpleFlywheelController {
-
-    // Amount of noise to simulate
-    private static final Matrix<N1, N1> SIMULATED_NOISE = VecBuilder.fill(0.01);
+public class SimpleFlywheelController implements StateSpaceSystem {
 
     // Plant, observer, and LQR
     private LinearSystem<N1, N1, N1> plant;
@@ -56,11 +51,13 @@ public class SimpleFlywheelController {
     // State space loop
     private LinearSystemLoop<N1, N1, N1> loop;
 
+    // Characteristics
+    private DCBrushedMotor motor;
+    private double gearing;
+
     // Timekeeping
     private double lastTimeSeconds = 0.0;
 
-    // Simulation
-    private FlywheelSim simulator;
     private double epsilonRADS;
 
     /**
@@ -183,7 +180,9 @@ public class SimpleFlywheelController {
         // Build loop
         loop = new LinearSystemLoop<N1, N1, N1>(plant, lqr, observer, maxVoltageOutput, expectedLoopTimeSeconds);
 
-        this.simulator = new FlywheelSim(plant, (DCMotor) motorType, gearing, SIMULATED_NOISE);
+        // Save characteristics
+        this.motor = motorType;
+        this.gearing = gearing;
 
     }
 
@@ -219,15 +218,6 @@ public class SimpleFlywheelController {
     }
 
     /**
-     * Get the simulator for this controller
-     * 
-     * @return Simulator
-     */
-    public FlywheelSim getSimulator() {
-        return this.simulator;
-    }
-
-    /**
      * Compute the voltage to send to the motor
      * 
      * @param currentRPM Current velocity in RPM
@@ -240,6 +230,18 @@ public class SimpleFlywheelController {
         double dt = currentTimeSeconds - lastTimeSeconds;
         lastTimeSeconds = currentTimeSeconds;
 
+        return computeNextVoltage(currentRPM, dt);
+
+    }
+
+    /**
+     * Compute the voltage to send to the motor
+     * 
+     * @param currentRPM Current velocity in RPM
+     * @param dt         Time since last call
+     * @return Output voltage
+     */
+    public double computeNextVoltage(double currentRPM, double dt) {
         // Convert current velocity to RAD/s
         double currentRADS = Units.rotationsPerMinuteToRadiansPerSecond(currentRPM);
 
@@ -264,6 +266,31 @@ public class SimpleFlywheelController {
     public boolean withinEpsilon(double velocityRPM) {
         return RobotMath.epsilonEquals(Units.rotationsPerMinuteToRadiansPerSecond(velocityRPM), this.loop.getNextR(0),
                 this.epsilonRADS);
+    }
+
+    @Override
+    public DCBrushedMotor getMotorCharacteristics() {
+        return motor;
+    }
+
+    @Override
+    public double getGearRatio() {
+        return gearing;
+    }
+
+    @Override
+    public LinearSystem<N1, N1, N1> getPlant() {
+        return plant;
+    }
+
+    @Override
+    public KalmanFilter<N1, N1, N1> getObserver() {
+        return observer;
+    }
+
+    @Override
+    public LinearQuadraticRegulator<N1, N1, N1> getLQR() {
+        return lqr;
     }
 
 }

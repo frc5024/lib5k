@@ -11,6 +11,7 @@ import io.github.frc5024.lib5k.hardware.common.sensors.interfaces.CommonEncoder;
 import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.RR_HAL;
 import io.github.frc5024.lib5k.hardware.revrobotics.motors.ExtendedSparkMax;
 import io.github.frc5024.lib5k.logging.RobotLogger;
+import io.github.frc5024.lib5k.simulation.systems.FlywheelSystemSimulator;
 import io.github.frc5024.libkontrol.statemachines.StateMachine;
 import io.github.frc5024.libkontrol.statemachines.StateMetadata;
 
@@ -36,7 +37,7 @@ public class Flywheel extends SubsystemBase {
 
     // The star of the show: the flywheel controller and simulator
     private SimpleFlywheelController controller;
-    private FlywheelSim simulator;
+    private FlywheelSystemSimulator simulator;
 
     // Nearly all of 5024's subsystems run ontop of a State Machine. Here is the
     // states list for a flywheel:
@@ -60,7 +61,7 @@ public class Flywheel extends SubsystemBase {
                 RobotConfig.FlywheelConfig.FLYWHEEL_MASS_KG, RobotConfig.FlywheelConfig.FLYWHEEL_DIAMETER,
                 RobotConfig.FlywheelConfig.REALISTIC_MAX_VELOCITY_RPM, RobotConfig.FlywheelConfig.SENSOR_GEAR_RATIO,
                 12.0, RobotConfig.FlywheelConfig.VELOCITY_EPSILON_RPM);
-        this.simulator = controller.getSimulator();
+        this.simulator = new FlywheelSystemSimulator(controller);
 
         // Here, we configure the state machine
         stateMachine = new StateMachine<>("Flywheel");

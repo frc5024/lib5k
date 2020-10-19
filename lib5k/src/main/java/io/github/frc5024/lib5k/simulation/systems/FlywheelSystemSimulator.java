@@ -65,7 +65,7 @@ public class FlywheelSystemSimulator extends FlywheelSim {
      *                         represent reductions).
      * @param jKgMetersSquared The moment of inertia of the flywheel. If this is
      *                         unknown, use the
-     *                         {@link #FlywheelSim(LinearSystem, DCMotor, double, Matrix)}
+     *                         {@link #FlywheelSystemSimulator(LinearSystem, DCBrushedMotor, double, Matrix)}
      *                         constructor.
      */
     public FlywheelSystemSimulator(DCBrushedMotor gearbox, double gearing, double jKgMetersSquared) {
@@ -81,7 +81,7 @@ public class FlywheelSystemSimulator extends FlywheelSim {
      *                           represent reductions).
      * @param jKgMetersSquared   The moment of inertia of the flywheel. If this is
      *                           unknown, use the
-     *                           {@link #FlywheelSim(LinearSystem, DCMotor, double, Matrix)}
+     *                           {@link #FlywheelSystemSimulator(LinearSystem, DCBrushedMotor, double, Matrix)}
      *                           constructor.
      * @param measurementStdDevs The standard deviations of the measurements.
      */

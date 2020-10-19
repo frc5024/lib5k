@@ -28,8 +28,11 @@ import edu.wpi.first.wpiutil.math.Nat;
 import edu.wpi.first.wpiutil.math.VecBuilder;
 import edu.wpi.first.wpiutil.math.numbers.N1;
 import edu.wpi.first.wpiutil.math.numbers.N2;
+
 import io.github.frc5024.lib5k.control_loops.models.DCBrushedMotor;
+import io.github.frc5024.lib5k.control_loops.statespace.StateSpaceSystem;
 import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.FPGAClock;
+import io.github.frc5024.lib5k.utils.annotations.Untested;
 
 /**
  * This is a wrapper around a state space plant, observer, motion profiling, and
@@ -42,7 +45,8 @@ import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.FPGAClock;
  * See for information on the math going on here:
  * https://file.tavsys.net/control/controls-engineering-in-frc.pdf#%5B%7B%22num%22%3A39%2C%22gen%22%3A0%7D%2C%7B%22name%22%3A%22XYZ%22%7D%2C85.04%2C391.42%2Cnull%5D
  */
-public class EncoderElevatorController {
+@Untested
+public class EncoderElevatorController implements StateSpaceSystem {
 
     // Motion profiler
     private TrapezoidProfile.Constraints motionConstraints;
@@ -54,6 +58,10 @@ public class EncoderElevatorController {
     private KalmanFilter<N2, N1, N1> observer;
     private LinearQuadraticRegulator<N2, N1, N1> lqr;
     private LinearSystemLoop<N2, N1, N1> loop;
+
+    // Characteristics
+    private DCBrushedMotor motor;
+    private double gearing;
 
     // Timekeeping
     private double lastTimeSeconds = 0.0;
@@ -100,8 +108,8 @@ public class EncoderElevatorController {
      *                                          ENCODER IS ATTACHED TO THE MOTOR
      * @param carriageMaxVelocityMPS            The maximum upward velocity of the
      *                                          carriage at max voltage
-     * @param carriageMaxAccelerationMPSSquared The maximum upward acceleration of the
-     *                                          carriage at max voltage
+     * @param carriageMaxAccelerationMPSSquared The maximum upward acceleration of
+     *                                          the carriage at max voltage
      * @param positionEpsilonM                  Position epsilon in meters
      * @param velocityEpsilonMPS                Velocity epsilon in meters/second
      */
@@ -168,6 +176,9 @@ public class EncoderElevatorController {
         // Create a loop
         loop = new LinearSystemLoop<>(plant, lqr, observer, maxVoltageOutput, expectedLoopTimeSeconds);
 
+        // Save characteristics
+        this.motor = motorType;
+        this.gearing = gearRatio;
     }
 
     /**
@@ -204,11 +215,6 @@ public class EncoderElevatorController {
      */
     public double computeVoltage(double encoderDistanceM) {
 
-        // Skip if no goal is set
-        if (goal == null) {
-            return 0.0;
-        }
-
         // Calculate DT
         double dt;
         if (lastTimeSeconds != 0) {
@@ -219,6 +225,22 @@ public class EncoderElevatorController {
 
             // Unlike other controllers, things can go wrong if we don't do this
             dt = 0.02;
+        }
+
+        return computeVoltage(encoderDistanceM, dt);
+    }
+
+    /**
+     * Calculate the controller output
+     * 
+     * @param encoderDistanceM Distance reading from encoder
+     * @param dt               Time since last call
+     * @return Voltage output
+     */
+    public double computeVoltage(double encoderDistanceM, double dt) {
+        // Skip if no goal is set
+        if (goal == null) {
+            return 0.0;
         }
 
         // Get the next motion profile step
@@ -235,6 +257,31 @@ public class EncoderElevatorController {
 
         // Return the calculated voltage
         return loop.getU(0);
+    }
+
+    @Override
+    public DCBrushedMotor getMotorCharacteristics() {
+        return motor;
+    }
+
+    @Override
+    public double getGearRatio() {
+        return gearing;
+    }
+
+    @Override
+    public LinearSystem<N2, N1, N1> getPlant() {
+        return plant;
+    }
+
+    @Override
+    public KalmanFilter<N2, N1, N1> getObserver() {
+        return observer;
+    }
+
+    @Override
+    public LinearQuadraticRegulator<N2, N1, N1> getLQR() {
+        return lqr;
     }
 
 }

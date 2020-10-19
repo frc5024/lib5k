@@ -19,6 +19,7 @@ package io.github.frc5024.lib5k.control_loops.statespace.wrappers;
 
 import edu.wpi.first.wpilibj.util.Units;
 import io.github.frc5024.lib5k.control_loops.models.DCBrushedMotor;
+import io.github.frc5024.lib5k.utils.annotations.Untested;
 
 /**
  * This is a wrapper around a state space plant, observer, motion profiling, and
@@ -32,6 +33,7 @@ import io.github.frc5024.lib5k.control_loops.models.DCBrushedMotor;
  * See for information on the math going on here:
  * https://file.tavsys.net/control/controls-engineering-in-frc.pdf#%5B%7B%22num%22%3A39%2C%22gen%22%3A0%7D%2C%7B%22name%22%3A%22XYZ%22%7D%2C85.04%2C391.42%2Cnull%5D
  */
+@Untested
 public class RangeFinderElevatorController extends EncoderElevatorController {
 
     /**
@@ -82,7 +84,7 @@ public class RangeFinderElevatorController extends EncoderElevatorController {
             double carriageMaxAccelerationMPSSquared, double modelPositionAccuracyM, double modalVelocityAccuracyMPS,
             double rangefinderAccuracy, double expectedLoopTimeSeconds, double positionEpsilonM,
             double velocityEpsilonMPS, double maxVoltageOutput) {
-        super(motorType, carriageMassKg, 0.0, 0.0, carriageMaxVelocityMPS, carriageMaxAccelerationMPSSquared,
+        super(motorType, carriageMassKg, 1.0, 1.0, carriageMaxVelocityMPS, carriageMaxAccelerationMPSSquared,
                 modelPositionAccuracyM, modalVelocityAccuracyMPS, rangefinderAccuracy, expectedLoopTimeSeconds,
                 positionEpsilonM, velocityEpsilonMPS, maxVoltageOutput);
 

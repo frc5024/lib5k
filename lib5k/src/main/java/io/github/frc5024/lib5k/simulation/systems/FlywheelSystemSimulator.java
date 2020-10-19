@@ -8,6 +8,10 @@ import io.github.frc5024.lib5k.control_loops.models.DCBrushedMotor;
 import io.github.frc5024.lib5k.control_loops.models.SystemCharacteristics;
 import io.github.frc5024.lib5k.control_loops.statespace.StateSpaceSystem;
 
+/**
+ * FlywheelSystemSimulator is a utility for simulating the outputs of a Flywheel
+ * system based on its characteristics.
+ */
 public class FlywheelSystemSimulator extends FlywheelSim {
 
     /**
@@ -23,10 +27,33 @@ public class FlywheelSystemSimulator extends FlywheelSim {
     /**
      * Creates a simulated flywheel mechanism.
      * 
+     * @param plant              The linear system that represents the flywheel
+     * @param characteristics    The characteristics of the system
+     * @param measurementStdDevs The standard deviations of the measurements.
+     */
+    public FlywheelSystemSimulator(LinearSystem<N1, N1, N1> plant, SystemCharacteristics characteristics,
+            Matrix<N1, N1> measurementStdDevs) {
+        this(plant, characteristics.getMotorCharacteristics(), characteristics.getGearRatio(), measurementStdDevs);
+    }
+
+    /**
+     * Creates a simulated flywheel mechanism.
+     * 
      * @param system A StateSpaceSystem representing the flywheel
      */
     public FlywheelSystemSimulator(StateSpaceSystem system) {
         this((LinearSystem<N1, N1, N1>) system.getPlant(), system.getMotorCharacteristics(), system.getGearRatio());
+    }
+
+    /**
+     * Creates a simulated flywheel mechanism.
+     * 
+     * @param system             A StateSpaceSystem representing the flywheel
+     * @param measurementStdDevs The standard deviations of the measurements.
+     */
+    public FlywheelSystemSimulator(StateSpaceSystem system, Matrix<N1, N1> measurementStdDevs) {
+        this((LinearSystem<N1, N1, N1>) system.getPlant(), system.getMotorCharacteristics(), system.getGearRatio(),
+                measurementStdDevs);
     }
 
     /**

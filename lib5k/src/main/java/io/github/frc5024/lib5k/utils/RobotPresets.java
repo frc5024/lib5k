@@ -70,13 +70,13 @@ public class RobotPresets {
             public static final double CARRIAGE_MASS_KG = 1.8;
 
             // Maximum velocity of the carriage
-            public static final double CARRIAGE_MAX_VELOCITY = 4.5;
+            public static final double CARRIAGE_MAX_VELOCITY = 3.5;
 
             // Maximum acceleration of the carriage
             public static final double CARRIAGE_MAX_ACCELERATION = 5.0;
 
             // Position epsilon
-            public static final double POSITION_EPSILON = 0.02;
+            public static final double POSITION_EPSILON = 0.01;
 
             // Velocity epsilon
             public static final double VELOCITY_EPSILON = 0.5;

@@ -2,6 +2,7 @@ package io.github.frc5024.lib5k.utils;
 
 import edu.wpi.first.wpilibj.system.plant.DCMotor;
 import io.github.frc5024.lib5k.control_loops.models.DCBrushedMotor;
+import io.github.frc5024.lib5k.control_loops.statespace.wrappers.SimpleFlywheelController;
 
 /**
  * Robot presets are known measurement taken from various robots. These should
@@ -29,10 +30,10 @@ public class RobotPresets {
             public static final DCBrushedMotor MOTOR_TYPE = new DCBrushedMotor(DCMotor.getNEO(1));
 
             // The mass of the actual wheels on the shooter
-            public static final double LAUNCHER_MASS_KG = 0.144583;
+            public static final double LAUNCHER_MASS_KG = 0.85638239; // 0.144583;
 
             // The diameter of the wheels on the shooter
-            public static final double LAUNCHER_DIAMETER = 0.123825;
+            public static final double LAUNCHER_DIAMETER = 0.635029; // 0.123825;
 
             // The mass of the added weight
             public static final double FLYWHEEL_MASS_KG = 0.1995806;

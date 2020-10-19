@@ -1,4 +1,4 @@
-package io.github.frc5024.lib5k.simulation.systems;
+package io.github.frc5024.lib5k.control_loops.statespace.wrappers;
 
 import java.io.IOException;
 
@@ -10,12 +10,11 @@ import org.knowm.xchart.BitmapEncoder.BitmapFormat;
 import org.knowm.xchart.XYSeries.XYSeriesRenderStyle;
 import org.knowm.xchart.style.Styler.LegendPosition;
 
-import edu.wpi.first.wpilibj.Timer;
-import io.github.frc5024.lib5k.control_loops.statespace.wrappers.SimpleFlywheelController;
+import io.github.frc5024.lib5k.simulation.systems.FlywheelSystemSimulator;
 import io.github.frc5024.lib5k.utils.RobotPresets;
 
-public class FlywheelSystemSimulatorTest {
-
+public class SimpleFlywheelControllerTest {
+    
     private static double SIMULATION_TIME_SECONDS = 5.0;
     private static double PERIOD_SECONDS = 0.02;
 
@@ -42,6 +41,7 @@ public class FlywheelSystemSimulatorTest {
         // Set up a chart
         double[] timeSet = new double[numSamples];
         double[] referenceSet = new double[numSamples];
+        double[] voltageSet = new double[numSamples];
         double[] measurementSet = new double[numSamples];
 
         // Run the simulation for the set time
@@ -51,21 +51,24 @@ public class FlywheelSystemSimulatorTest {
             // second half
             double reference;
             if (i < (numSamples / 2)) {
-                reference = 12.0;
+                reference = RobotPresets.DarthRaider.FlywheelPreset.REALISTIC_MAX_VELOCITY_RPM;
             } else {
                 reference = 0.0;
             }
-
-            // Feed back into the simulator
-            simulator.setInputVoltage(reference);
-            simulator.update(PERIOD_SECONDS);
+            controller.setDesiredVelocity(reference);
 
             // Get the controller output
             double measurement = simulator.getAngularVelocityRPM();
+            double output = controller.computeNextVoltage(measurement, PERIOD_SECONDS);
+
+            // Feed back into the simulator
+            simulator.setInputVoltage(output);
+            simulator.update(PERIOD_SECONDS);
 
             // Log everything
             timeSet[i] = i * PERIOD_SECONDS;
             referenceSet[i] = reference;
+            voltageSet[i] = output;
             measurementSet[i] = measurement;
         }
 
@@ -74,7 +77,8 @@ public class FlywheelSystemSimulatorTest {
 
         // Add data
         chart.addSeries("Reference", timeSet, referenceSet).setYAxisGroup(1);
-        chart.addSeries("Measurement", timeSet, measurementSet);
+        chart.addSeries("Voltage", timeSet, voltageSet);
+        chart.addSeries("Measurement", timeSet, measurementSet).setYAxisGroup(1);
 
         // Configure chart styling
         chart.getStyler().setDefaultSeriesRenderStyle(XYSeriesRenderStyle.Line);
@@ -82,9 +86,8 @@ public class FlywheelSystemSimulatorTest {
         chart.getStyler().setMarkerSize(8);
 
         // Save the chart
-        BitmapEncoder.saveBitmap(chart, "./build/tmp/FlywheelSystemSimulator_UnitTest_Response", BitmapFormat.PNG);
-        System.out.println("Test result PNG generated to ./build/tmp/FlywheelSystemSimulator_UnitTest_Response.png");
+        BitmapEncoder.saveBitmap(chart, "./build/tmp/SimpleFlywheelController_UnitTest_Response", BitmapFormat.PNG);
+        System.out.println("Test result PNG generated to ./build/tmp/SimpleFlywheelController_UnitTest_Response.png");
 
     }
-
 }

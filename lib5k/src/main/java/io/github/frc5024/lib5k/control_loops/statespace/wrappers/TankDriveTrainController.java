@@ -20,6 +20,7 @@ package io.github.frc5024.lib5k.control_loops.statespace.wrappers;
 import edu.wpi.first.wpilibj.controller.LinearQuadraticRegulator;
 import edu.wpi.first.wpilibj.estimator.KalmanFilter;
 import edu.wpi.first.wpilibj.system.LinearSystem;
+import edu.wpi.first.wpilibj.system.LinearSystemLoop;
 import edu.wpi.first.wpilibj.system.plant.LinearSystemId;
 import edu.wpi.first.wpiutil.math.Num;
 import edu.wpi.first.wpiutil.math.numbers.N2;
@@ -31,6 +32,18 @@ public class TankDriveTrainController implements StateSpaceSystem {
 
     // Plant, observer, and LQR
     private LinearSystem<N2, N2, N2> plant;
+    private KalmanFilter<N2, N2, N2> observer;
+    private LinearQuadraticRegulator<N2, N2, N2> lqr;
+
+    // State space loop
+    private LinearSystemLoop<N2, N2, N2> loop;
+
+    // Characteristics
+    private DCBrushedMotor motor;
+    private double gearing;
+
+    // Timekeeping
+    private double lastTimeSeconds = 0.0;
 
     public TankDriveTrainController(DCBrushedMotor motorType, double robotMassKG, double robotRadiusM,
             double trackWidthM, double gearRatio) {
@@ -42,37 +55,38 @@ public class TankDriveTrainController implements StateSpaceSystem {
         plant = LinearSystemId.createDrivetrainVelocitySystem(motorType, robotMassKG, robotRadiusM, trackWidthM, j,
                 gearRatio);
 
+        // Build an observer
         
+
+        // Set characteristics
+        this.motor = motorType;
+        this.gearing = gearRatio;
+
     }
 
     @Override
     public DCBrushedMotor getMotorCharacteristics() {
-        // TODO Auto-generated method stub
-        return null;
+        return this.motor;
     }
 
     @Override
     public double getGearRatio() {
-        // TODO Auto-generated method stub
-        return 0;
+        return this.gearing;
     }
 
     @Override
     public LinearSystem<? extends Num, ? extends Num, ? extends Num> getPlant() {
-        // TODO Auto-generated method stub
-        return null;
+        return this.plant;
     }
 
     @Override
     public KalmanFilter<? extends Num, ? extends Num, ? extends Num> getObserver() {
-        // TODO Auto-generated method stub
-        return null;
+        return this.observer;
     }
 
     @Override
     public LinearQuadraticRegulator<? extends Num, ? extends Num, ? extends Num> getLQR() {
-        // TODO Auto-generated method stub
-        return null;
+        return this.lqr;
     }
 
 }

@@ -124,3 +124,10 @@ public void setDesiredVelocity(double desiredRPM) {
 }
 
 ```
+
+
+## System response
+
+The following is the system response over time for this exact system, as produced by a unit test:
+
+![Flywheel system response over time](https://i.imgur.com/NzkXHu3.png)

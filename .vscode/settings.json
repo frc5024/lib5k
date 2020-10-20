@@ -1,6 +1,8 @@
 {
     "java.configuration.updateBuildConfiguration": "interactive",
     "cSpell.words": [
+        "Holonomic",
+        "drivetrains",
         "seperator"
     ]
 }

@@ -33,6 +33,10 @@ public class DCBrushedMotor extends DCMotor {
 
     }
 
+    /**
+     * Create a DCBrushedMotor from a DCMotor
+     * @param motor DCMotor
+     */
     public DCBrushedMotor(DCMotor motor) {
         this(motor.m_nominalVoltageVolts, motor.m_stallTorqueNewtonMeters, motor.m_stallCurrentAmps,
                 motor.m_freeCurrentAmps, motor.m_freeSpeedRadPerSec);

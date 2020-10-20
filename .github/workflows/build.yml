@@ -19,6 +19,9 @@ jobs:
     - uses: eskatos/gradle-command-action@v1
       with:
         arguments: :lib5k:build --scan
+    - uses: actions/upload-artifact@v2
+      with:
+          path: lib5k/build/tmp/*.png
 
   # Build task for Examples
   examples:

@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 /**
  * Helpers for calculating differential drive kinematics
  */
+@Deprecated(since = "October 2020", forRemoval = true)
 public class DifferentialDriveCalculation {
 
     /**

@@ -21,6 +21,9 @@ import edu.wpi.first.wpilibj.util.WPILibVersion;
  */
 public class RR_HAL {
 
+    // Maximum bus voltage
+    public static final double MAXIMUM_BUS_VOLTAGE = 12.0;
+
     /**
      * Report a custom programming language via FRCNetComm
      * 

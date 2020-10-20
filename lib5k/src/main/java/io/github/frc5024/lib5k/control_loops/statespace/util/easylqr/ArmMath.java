@@ -25,7 +25,7 @@ public class ArmMath {
     public static double calculateSJIJ(double armLengthM, double armMassKg) {
 
         // Calculate MOI
-        return 1 / 3 * armMassKg * Math.pow(armLengthM, 2);
+        return 1.0 / 3.0 * armMassKg * Math.pow(armLengthM, 2);
     }
 
 }

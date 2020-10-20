@@ -34,7 +34,17 @@ public class DCBrushedMotor extends DCMotor {
     }
 
     /**
+     * Create a DCBrushedMotor from a DCMotor
+     * @param motor DCMotor
+     */
+    public DCBrushedMotor(DCMotor motor) {
+        this(motor.m_nominalVoltageVolts, motor.m_stallTorqueNewtonMeters, motor.m_stallCurrentAmps,
+                motor.m_freeCurrentAmps, motor.m_freeSpeedRadPerSec);
+    }
+
+    /**
      * Get the motor's free spinning speed in RPM
+     * 
      * @return Free speed
      */
     public double getFreeSpeedRPM() {
@@ -43,15 +53,26 @@ public class DCBrushedMotor extends DCMotor {
         }
         return this.freeSpeedRPM.doubleValue();
     }
-    
+
     /**
      * Get the motor's Kv in RPM
+     * 
      * @return Kv
      */
     public double getKv() {
         if (this.Kv == null) {
             this.Kv = Units.radiansPerSecondToRotationsPerMinute(super.m_KvRadPerSecPerVolt);
         }
-        return this.Kv.doubleValue();        
+        return this.Kv.doubleValue();
     }
+
+    /**
+     * Converts this to a DC motor, for use with WPILib functions
+     * 
+     * @return Cast to DCMotor
+     */
+    public DCMotor toDCMotor() {
+        return (DCMotor) this;
+    }
+
 }

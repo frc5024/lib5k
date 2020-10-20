@@ -27,8 +27,10 @@ import edu.wpi.first.wpiutil.math.Nat;
 import edu.wpi.first.wpiutil.math.VecBuilder;
 import edu.wpi.first.wpiutil.math.numbers.N1;
 import io.github.frc5024.lib5k.control_loops.models.DCBrushedMotor;
+import io.github.frc5024.lib5k.control_loops.statespace.StateSpaceSystem;
 import io.github.frc5024.lib5k.control_loops.statespace.util.easylqr.FlywheelMath;
 import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.FPGAClock;
+import io.github.frc5024.lib5k.utils.RobotMath;
 
 /**
  * This is a wrapper around a state space plant, observer, and LQR. The
@@ -39,7 +41,7 @@ import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.FPGAClock;
  * See for information on the math going on here:
  * https://file.tavsys.net/control/controls-engineering-in-frc.pdf#%5B%7B%22num%22%3A40%2C%22gen%22%3A0%7D%2C%7B%22name%22%3A%22XYZ%22%7D%2C85.04%2C265.56%2Cnull%5D
  */
-public class SimpleFlywheelController {
+public class SimpleFlywheelController implements StateSpaceSystem {
 
     // Plant, observer, and LQR
     private LinearSystem<N1, N1, N1> plant;
@@ -49,8 +51,14 @@ public class SimpleFlywheelController {
     // State space loop
     private LinearSystemLoop<N1, N1, N1> loop;
 
+    // Characteristics
+    private DCBrushedMotor motor;
+    private double gearing;
+
     // Timekeeping
     private double lastTimeSeconds = 0.0;
+
+    private double epsilonRADS;
 
     /**
      * Create a SimpleFlywheelController
@@ -163,14 +171,19 @@ public class SimpleFlywheelController {
                 VecBuilder.fill(Units.rotationsPerMinuteToRadiansPerSecond(encoderAccuracy)), expectedLoopTimeSeconds);
 
         // Convert eps to RAD/s
-        double epsilonRADS = Units.rotationsPerMinuteToRadiansPerSecond(epsilonRPM);
+        epsilonRADS = Units.rotationsPerMinuteToRadiansPerSecond(epsilonRPM);
 
         // Build LQR
         lqr = new LinearQuadraticRegulator<N1, N1, N1>(plant, VecBuilder.fill(epsilonRADS),
                 VecBuilder.fill(maxVoltageOutput), 0.020);
 
         // Build loop
-        loop = new LinearSystemLoop<>(plant, lqr, observer, maxVoltageOutput, expectedLoopTimeSeconds);
+        loop = new LinearSystemLoop<N1, N1, N1>(plant, lqr, observer, maxVoltageOutput, expectedLoopTimeSeconds);
+
+        // Save characteristics
+        this.motor = motorType;
+        this.gearing = gearing;
+
     }
 
     /**
@@ -217,6 +230,18 @@ public class SimpleFlywheelController {
         double dt = currentTimeSeconds - lastTimeSeconds;
         lastTimeSeconds = currentTimeSeconds;
 
+        return computeNextVoltage(currentRPM, dt);
+
+    }
+
+    /**
+     * Compute the voltage to send to the motor
+     * 
+     * @param currentRPM Current velocity in RPM
+     * @param dt         Time since last call
+     * @return Output voltage
+     */
+    public double computeNextVoltage(double currentRPM, double dt) {
         // Convert current velocity to RAD/s
         double currentRADS = Units.rotationsPerMinuteToRadiansPerSecond(currentRPM);
 
@@ -230,6 +255,42 @@ public class SimpleFlywheelController {
 
         // Return the new voltage
         return loop.getU(0);
+    }
+
+    /**
+     * Check if a velocity is within epsilon of goal
+     * 
+     * @param velocityRPM Measurement
+     * @return Is at goal?
+     */
+    public boolean withinEpsilon(double velocityRPM) {
+        return RobotMath.epsilonEquals(Units.rotationsPerMinuteToRadiansPerSecond(velocityRPM), this.loop.getNextR(0),
+                this.epsilonRADS);
+    }
+
+    @Override
+    public DCBrushedMotor getMotorCharacteristics() {
+        return motor;
+    }
+
+    @Override
+    public double getGearRatio() {
+        return gearing;
+    }
+
+    @Override
+    public LinearSystem<N1, N1, N1> getPlant() {
+        return plant;
+    }
+
+    @Override
+    public KalmanFilter<N1, N1, N1> getObserver() {
+        return observer;
+    }
+
+    @Override
+    public LinearQuadraticRegulator<N1, N1, N1> getLQR() {
+        return lqr;
     }
 
 }

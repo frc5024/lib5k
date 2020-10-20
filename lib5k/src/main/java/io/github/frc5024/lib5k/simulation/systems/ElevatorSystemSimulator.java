@@ -44,9 +44,9 @@ public class ElevatorSystemSimulator extends ElevatorSim {
      */
     public ElevatorSystemSimulator(LinearSystem<N2, N1, N1> plant, SystemCharacteristics characteristics,
             double drumRadiusMeters, double minHeightMeters, double maxHeightMeters,
-            Matrix<N1, N1> measurementStdDevsMatrix) {
+            Matrix<N1, N1> measurementStdDevs) {
         this(plant, characteristics.getMotorCharacteristics(), characteristics.getGearRatio(), drumRadiusMeters,
-                minHeightMeters, maxHeightMeters, measurementStdDevsMatrix);
+                minHeightMeters, maxHeightMeters, measurementStdDevs);
     }
 
     /**
@@ -75,9 +75,9 @@ public class ElevatorSystemSimulator extends ElevatorSim {
      * @param measurementStdDevs The standard deviations of the measurements.
      */
     public ElevatorSystemSimulator(StateSpaceSystem system, double drumRadiusMeters, double minHeightMeters,
-            double maxHeightMeters, Matrix<N1, N1> measurementStdDevsMatrix) {
+            double maxHeightMeters, Matrix<N1, N1> measurementStdDevs) {
         this((LinearSystem<N2, N1, N1>) system.getPlant(), system.getMotorCharacteristics(), system.getGearRatio(),
-                drumRadiusMeters, minHeightMeters, maxHeightMeters, measurementStdDevsMatrix);
+                drumRadiusMeters, minHeightMeters, maxHeightMeters, measurementStdDevs);
     }
 
     /**

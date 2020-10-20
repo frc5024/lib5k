@@ -14,7 +14,7 @@ PID+F stands for Proportional + Integral + Derivative + Feed Forward. This comes
 
 ## Proportional
 
-P is the simplest element of the equation. The P value is made up of the difference between the current state and the reference (the elevator's current height, and desired height from the [Introduction]()), multiplied by the constant `Kp`.
+P is the simplest element of the equation. The P value is made up of the difference between the current state and the reference (the elevator's current height, and desired height from the [Introduction](/lib5k/technical/control/Introduction.html)), multiplied by the constant `Kp`.
 
 ```java
 double calculateP(double desiredHeight, double currentHeight, double Kp) {

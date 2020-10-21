@@ -83,4 +83,9 @@ public class ExtendedCANCoder extends CANCoder implements EncoderSimulation {
         return super.getVelocity() / 360.0;
     }
 
+    @Override
+    public void reset() {
+        super.setPosition(0.0);
+    }
+
 }

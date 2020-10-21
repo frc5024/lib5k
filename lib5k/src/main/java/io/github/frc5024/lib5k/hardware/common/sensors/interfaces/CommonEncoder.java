@@ -43,6 +43,9 @@ public interface CommonEncoder {
      */
     public double getVelocity();
 
-    
+    /**
+     * Reset
+     */
+    public void reset();
 
 }

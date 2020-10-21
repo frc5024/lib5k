@@ -81,4 +81,9 @@ public class TalonEncoder implements EncoderSimulation {
         sim.update();
     }
 
+    @Override
+    public void reset() {
+        talon.setSelectedSensorPosition(0);
+    }
+
 }

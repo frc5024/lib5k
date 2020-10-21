@@ -145,7 +145,9 @@ public class StateMachine<T> {
      * @param key State key
      */
     public void setState(T key) {
-        logger.log("Switching to state: %s", Level.kDebug, key);
+        if (desiredStateKey != null && !desiredStateKey.equals(key)) {
+            logger.log("Switching to state: %s", Level.kDebug, key);
+        }
         desiredStateKey = key;
     }
 

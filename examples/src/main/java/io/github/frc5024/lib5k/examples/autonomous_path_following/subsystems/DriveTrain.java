@@ -53,6 +53,8 @@ public class DriveTrain extends TankDriveTrain {
         leftEncoder = leftRearMotor.getCommonEncoder(RobotConfig.DRIVETRAIN_ENCODER_TPR);
         rightEncoder = rightRearMotor.getCommonEncoder(RobotConfig.DRIVETRAIN_ENCODER_TPR);
 
+        resetEncoders();
+
         // Set up gyroscope
         gyroscope = NavX.getInstance();
     }
@@ -89,6 +91,8 @@ public class DriveTrain extends TankDriveTrain {
 
     @Override
     protected void resetEncoders() {
+        leftEncoder.reset();
+        rightEncoder.reset();
     }
 
     @Override

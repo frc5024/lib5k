@@ -167,4 +167,9 @@ public class DifferentialVoltages {
                 throttlePercentage - steeringPercentage).times(RR_HAL.MAXIMUM_BUS_VOLTAGE);
     }
 
+    @Override
+    public String toString() {
+        return String.format("<%.2f, %.2f>", left, right);
+    }
+
 }

@@ -1,4 +1,4 @@
-package io.github.frc5024.lib5k.examples.drivebase_simulation.subsystems;
+package io.github.frc5024.lib5k.examples.teleop_drive.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import io.github.frc5024.common_drive.gearing.Gear;
 import io.github.frc5024.lib5k.bases.drivetrain.implementations.TankDriveTrain;
 import io.github.frc5024.lib5k.control_loops.models.DCBrushedMotor;
-import io.github.frc5024.lib5k.examples.drivebase_simulation.RobotConfig;
+import io.github.frc5024.lib5k.examples.teleop_drive.RobotConfig;
 import io.github.frc5024.lib5k.hardware.common.sensors.interfaces.CommonEncoder;
 import io.github.frc5024.lib5k.hardware.common.sensors.interfaces.EncoderSimulation;
 import io.github.frc5024.lib5k.hardware.ctre.motors.ExtendedTalonSRX;
@@ -43,7 +43,7 @@ public class DriveTrain extends TankDriveTrain {
     private NetworkTableEntry ntTheta;
 
     private DriveTrain() {
-        super(RobotConfig.DRIVETRAIN_DISTANCE_CONTROLLER, RobotConfig.DRIVETRAIN_ROTATION_CONTROLLER);
+        super();
 
         // Set up motors
         leftFrontMotor = new ExtendedTalonSRX(RobotConfig.DRIVETRAIN_FRONT_LEFT_ID);

@@ -1,9 +1,9 @@
-package io.github.frc5024.lib5k.examples.drivebase_simulation;
+package io.github.frc5024.lib5k.examples.teleop_drive;
 
 import edu.wpi.first.wpilibj.RobotBase;
 import io.github.frc5024.lib5k.autonomous.RobotProgram;
-import io.github.frc5024.lib5k.examples.drivebase_simulation.commands.DriveCommand;
-import io.github.frc5024.lib5k.examples.drivebase_simulation.subsystems.DriveTrain;
+import io.github.frc5024.lib5k.examples.teleop_drive.commands.DriveCommand;
+import io.github.frc5024.lib5k.examples.teleop_drive.subsystems.DriveTrain;
 import io.github.frc5024.lib5k.logging.USBLogger;
 
 public class Main extends RobotProgram {

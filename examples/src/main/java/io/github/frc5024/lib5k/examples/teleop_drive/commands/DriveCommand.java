@@ -1,8 +1,8 @@
-package io.github.frc5024.lib5k.examples.drivebase_simulation.commands;
+package io.github.frc5024.lib5k.examples.teleop_drive.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import io.github.frc5024.lib5k.examples.drivebase_simulation.OI;
-import io.github.frc5024.lib5k.examples.drivebase_simulation.subsystems.DriveTrain;
+import io.github.frc5024.lib5k.examples.teleop_drive.OI;
+import io.github.frc5024.lib5k.examples.teleop_drive.subsystems.DriveTrain;
 import io.github.frc5024.lib5k.utils.InputUtils;
 import io.github.frc5024.lib5k.utils.InputUtils.ScalingMode;
 

@@ -1,4 +1,10 @@
+---
+sort: 2
+---
+
 # Using Lib5K in your robot project
+
+*Before following this guide, please ensure you have [set up your development environment](/lib5k/installation/Workspace-Setup.html)*
 
 The process for creating a robot project that uses Lib5K is a little different from the normal process for setting up a WPILib project. This document is specifically written for 5024 members.
 

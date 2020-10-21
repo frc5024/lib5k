@@ -1,3 +1,7 @@
+---
+sort: 4
+---
+
 # Releasing a New Version
 
 Releasing a new version of Lib5K is very simple. Firstly, make sure the version code is correct in `build.gradle`, then, in the terminal, run:

@@ -1,3 +1,7 @@
+---
+sort: 3
+---
+
 # Compiling Lib5K From Source
 
 Compiling Lib5K from source is reasonably simple.

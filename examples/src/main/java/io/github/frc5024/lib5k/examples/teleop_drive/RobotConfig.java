@@ -1,8 +1,7 @@
-package io.github.frc5024.lib5k.examples.drivebase_simulation;
+package io.github.frc5024.lib5k.examples.teleop_drive;
 
 import edu.wpi.first.wpilibj.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.util.Units;
-import io.github.frc5024.lib5k.control_loops.ExtendedPIDController;
 import io.github.frc5024.lib5k.control_loops.models.DCBrushedMotor;
 
 public class RobotConfig {
@@ -15,12 +14,6 @@ public class RobotConfig {
 
     // Drivetrain sensor TPR
     public static final int DRIVETRAIN_ENCODER_TPR = 1400;
-
-    // Drivetrain control loops
-    public static final ExtendedPIDController DRIVETRAIN_ROTATION_CONTROLLER = new ExtendedPIDController(0.0088, 0.01,
-            0);
-    public static final ExtendedPIDController DRIVETRAIN_DISTANCE_CONTROLLER = new ExtendedPIDController(0.478, 0,
-            0.008);
 
     // Robot sizing
     public static final double ROBOT_WIDTH = Units.inchesToMeters(26.0);

@@ -5,6 +5,7 @@ import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import ca.retrylife.ewmath.MathUtils;
+import edu.wpi.first.wpilibj.system.plant.DCMotor;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import io.github.frc5024.lib5k.control_loops.models.DCBrushedMotor;
 import io.github.frc5024.lib5k.hardware.common.sensors.interfaces.CommonEncoder;
@@ -65,7 +66,7 @@ public class Flywheel extends SubsystemBase {
 
         // We need to set the model to represent the characteristics of the motor being
         // used. This saves us some work when configuring the system later.
-        model = (DCBrushedMotor)DCBrushedMotor.getNEO(1);
+        model = new DCBrushedMotor(DCMotor.getNEO(1));
 
         // We will set up the motor controller, then get references to it's encoder and
         // PID controller.

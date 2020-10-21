@@ -1,5 +1,6 @@
 package io.github.frc5024.lib5k.examples.statespace_flywheel;
 
+import edu.wpi.first.wpilibj.system.plant.DCMotor;
 import io.github.frc5024.lib5k.control_loops.models.DCBrushedMotor;
 
 public class RobotConfig {
@@ -7,7 +8,7 @@ public class RobotConfig {
     public static class FlywheelConfig {
         
         // The type of motor used
-        public static final DCBrushedMotor MOTOR_TYPE = (DCBrushedMotor) DCBrushedMotor.getNEO(1);
+        public static final DCBrushedMotor MOTOR_TYPE = new DCBrushedMotor(DCMotor.getNEO(1));
 
         // The mass of the actual wheels on the shooter
         public static final double LAUNCHER_MASS_KG = 0.144583;

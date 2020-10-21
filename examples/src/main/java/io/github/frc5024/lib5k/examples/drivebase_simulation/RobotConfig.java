@@ -36,7 +36,7 @@ public class RobotConfig {
     public static final boolean RIGHT_ENCODER_INVERTED = false;
 
     // Drivetrain motor type
-    public static final DCBrushedMotor DRIVETRAIN_GEARBOX_MOTOR_TYPE = (DCBrushedMotor) DCBrushedMotor.getCIM(2);
+    public static final DCBrushedMotor DRIVETRAIN_GEARBOX_MOTOR_TYPE = new DCBrushedMotor(DCMotor.getCIM(2));
 
     // Some characteristics about the drivetrain
     public static final double MAXIMUM_TIME_TO_ACCELERATE_SECONDS = 0.12;

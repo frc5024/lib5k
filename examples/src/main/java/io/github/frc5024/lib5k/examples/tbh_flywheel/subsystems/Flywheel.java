@@ -5,6 +5,7 @@ import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import ca.retrylife.ewmath.MathUtils;
+import edu.wpi.first.wpilibj.system.plant.DCMotor;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import io.github.frc5024.lib5k.control_loops.TBHController;
 import io.github.frc5024.lib5k.control_loops.models.DCBrushedMotor;

@@ -63,7 +63,7 @@ final double EPSILON = 80.0; // 80 RPM is generally a good epsilon for shooters,
 
 // Motor objects
 ExtendedSparkMax neo1 = new ExtendedSparkMax(1, MotorType.kBrushless);
-ExtendedSparkMax neo2 = new ExtendedSparkMax(2, MotorType.kBrushless);
+ExtendedSparkMax neo2 = neo1.makeSlave(2, false);
 
 // Encoder
 CommonEncoder encoder = neo1.getCommonEncoder();

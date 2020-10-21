@@ -3,6 +3,7 @@ package io.github.frc5024.lib5k.telemetry;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
+@Deprecated(since = "October 2020", forRemoval = true)
 public class ComponentTelemetry {
     private static ComponentTelemetry m_instance = null;
 

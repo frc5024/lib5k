@@ -2,6 +2,7 @@ package io.github.frc5024.lib5k.hardware.revrobotics.motors;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANEncoder;
+import com.revrobotics.CANError;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.EncoderType;
 
@@ -13,18 +14,26 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SendableRegistry;
 import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.RR_HAL;
 import io.github.frc5024.lib5k.hardware.revrobotics.sensors.SparkMaxEncoder;
+import io.github.frc5024.lib5k.telemetry.interfaces.TelemetryProvider;
+import io.github.frc5024.lib5k.utils.Functional;
 import io.github.frc5024.lib5k.hardware.common.sensors.interfaces.CommonEncoder;
 
 /**
  * An extension of the CANSparkMax with simulation support, and mappings from
  * CANEncoder to CommonEncoder for hot-swappability with CTRE products
  */
-public class ExtendedSparkMax extends CANSparkMax implements Sendable {
+public class ExtendedSparkMax extends CANSparkMax implements TelemetryProvider {
     public RevConfig config;
 
     // HALSIM
     private SimDevice m_simDevice;
     private SimDouble m_simSpeed;
+
+    // System name
+    private String name;
+
+    // Properties
+    private int maxStallCurrent = 240;
 
     /**
      * Create an extended spark max
@@ -41,14 +50,16 @@ public class ExtendedSparkMax extends CANSparkMax implements Sendable {
     /**
      * Create an extended spark max
      * 
-     * @param deviceID  Device CAN id
-     * @param config device config
+     * @param deviceID Device CAN id
+     * @param config   device config
      */
     public ExtendedSparkMax(int deviceID, RevConfig config) {
         super(deviceID, config.motorType);
         this.config = config;
 
+        setTelemetryEnabled(true);
         SendableRegistry.addLW(this, "ExtendedSparkMax", deviceID);
+        this.name = SendableRegistry.getName(this);
 
         // handle simulation device settings
         m_simDevice = SimDevice.create("ExtendedSparkMax", getDeviceId());
@@ -119,13 +130,42 @@ public class ExtendedSparkMax extends CANSparkMax implements Sendable {
     }
 
     @Override
+    public double getMotorTemperature() {
+        if (RobotBase.isSimulation()) {
+            return 0.0;
+        } else {
+            return super.getMotorTemperature();
+        }
+    }
+
+    @Override
+    public double getOutputCurrent() {
+        if (RobotBase.isSimulation()) {
+            return 0.0;
+        } else {
+            return super.getOutputCurrent();
+        }
+    }
+
+    @Override
+    public CANError setSmartCurrentLimit(int stallLimit, int freeLimit, int limitRPM) {
+        maxStallCurrent = stallLimit;
+        return super.setSmartCurrentLimit(stallLimit, freeLimit, limitRPM);
+    }
+
+    @Override
     public void initSendable(SendableBuilder builder) {
         builder.setSmartDashboardType("Speed Controller");
         builder.setSafeState(() -> {
             set(0.0);
         });
         builder.addDoubleProperty("Value", this::get, this::set);
-
+        builder.addDoubleProperty("BusVoltage", this::getBusVoltage, Functional::unused);
+        builder.addDoubleProperty("Temperature", this::getMotorTemperature, Functional::unused);
+        builder.addDoubleProperty("Current", this::getOutputCurrent, Functional::unused);
+        builder.addBooleanProperty("IsOverdrawingCurrent", () -> {
+            return (maxStallCurrent - getOutputCurrent()) < 1;
+        }, Functional::unused);
     }
 
     /**
@@ -141,7 +181,7 @@ public class ExtendedSparkMax extends CANSparkMax implements Sendable {
     /**
      * Make a slave of this motor
      * 
-     * @param id       Slave CAN id
+     * @param id     Slave CAN id
      * @param invert Is Slave inverted?
      * @return Slave
      */
@@ -152,6 +192,11 @@ public class ExtendedSparkMax extends CANSparkMax implements Sendable {
 
         return slave;
 
+    }
+
+    @Override
+    public String getName() {
+        return this.name;
     }
 
 }

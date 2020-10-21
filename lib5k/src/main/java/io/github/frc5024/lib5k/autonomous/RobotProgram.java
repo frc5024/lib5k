@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import io.github.frc5024.lib5k.logging.RobotLogger;
 import io.github.frc5024.lib5k.hardware.ni.roborio.FaultReporter;
@@ -87,6 +86,14 @@ public abstract class RobotProgram extends TimedRobot {
      */
     public void publishChooser(Sendable component) {
         dashboard.add(component);
+    }
+
+    /**
+     * Get a reference to the ShuffleboardTab used by this program
+     * @return Internal ShuffleboardTab
+     */
+    public ShuffleboardTab getDashboardTab() {
+        return dashboard;
     }
 
     /**

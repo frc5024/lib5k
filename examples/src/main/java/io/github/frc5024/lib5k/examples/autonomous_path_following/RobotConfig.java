@@ -17,7 +17,7 @@ public class RobotConfig {
     // Drivetrain control loops
     public static final ExtendedPIDController DRIVETRAIN_ROTATION_CONTROLLER = new ExtendedPIDController(0.0088, 0.01,
             0);
-    public static final ExtendedPIDController DRIVETRAIN_DISTANCE_CONTROLLER = new ExtendedPIDController(0.478, 0,
+    public static final ExtendedPIDController DRIVETRAIN_DISTANCE_CONTROLLER = new ExtendedPIDController(0.478, 1e-7,
             0.008);
 
     // Robot sizing

@@ -80,4 +80,9 @@ public class SparkMaxEncoder extends CANEncoder implements EncoderSimulation {
         return super.getVelocity();
     }
 
+    @Override
+    public void reset() {
+        super.setPosition(0.0);
+    }
+
 }

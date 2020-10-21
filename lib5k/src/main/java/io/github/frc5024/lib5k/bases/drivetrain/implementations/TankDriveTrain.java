@@ -28,7 +28,7 @@ public abstract class TankDriveTrain extends AbstractDriveTrain {
     private boolean constantCurvatureEnabled = false;
 
     // Open loop control
-    private DifferentialVoltages openLoopGoal = null;
+    private DifferentialVoltages openLoopGoal = new DifferentialVoltages();
 
     // Control loops
     private Controller distanceController;
@@ -162,6 +162,7 @@ public abstract class TankDriveTrain extends AbstractDriveTrain {
             }
 
             logger.log("Switched to pose control");
+            logger.log(String.format("Driving to pose: %s", goalPose));
 
             // Reset the controllers
             rotationController.reset();
@@ -185,8 +186,9 @@ public abstract class TankDriveTrain extends AbstractDriveTrain {
         Translation2d error = goalPose.minus(currentPose.getTranslation());
 
         // Get the hypot to determine scalar distance
-        double distanceError = Math.sqrt(Math.pow((goalPose.getX() - currentPose.getTranslation().getX()), 2)
-                + Math.pow((goalPose.getY() - currentPose.getTranslation().getY()), 2));
+        double distanceError = currentPose.getTranslation().getDistance(goalPose) * -1;
+        // Math.sqrt(Math.pow((goalPose.getX() - currentPose.getTranslation().getX()), 2)
+        //         + Math.pow((goalPose.getY() - currentPose.getTranslation().getY()), 2));
 
         // Calculate clockwise-positive rotational error
         Rotation2d angularError = Rotation2d.fromDegrees(Math.toDegrees(Math.atan2(error.getY(), error.getX())) * -1);
@@ -196,7 +198,7 @@ public abstract class TankDriveTrain extends AbstractDriveTrain {
         // This is a trick I learned from a programmer at 1114. It provides really
         // smooth outputs
         // https://bitbucket.org/kaleb_dodd/simbot2019public/src/abc56f5220b5c94bca216f86e3b6b5757d0ffeff/src/main/java/frc/subsystems/Drive.java#lines-337
-        double speedMul = ((Math.min(Math.abs(angularError.getDegrees()), 90.0) / 90.0) + 1);
+        double speedMul = ((-1 * (Math.min(Math.abs(angularError.getDegrees()), 90.0)) / 90.0) + 1);
 
         // Calculate needed throttle
         double throttleOutput = distanceController.calculate(distanceError);
@@ -209,6 +211,9 @@ public abstract class TankDriveTrain extends AbstractDriveTrain {
 
         // Calculate motor outputs
         DifferentialVoltages voltages = DifferentialVoltages.fromThrottleAndSteering(throttleOutput, turnOutput);
+
+        // logger.log(voltages.toString());
+        logger.log(new DifferentialVoltages(throttleOutput, turnOutput).toString());
 
         // Write output frame
         handleVoltage(voltages.getLeftVolts(), voltages.getRightVolts());
@@ -369,6 +374,8 @@ public abstract class TankDriveTrain extends AbstractDriveTrain {
     @Override
     public void stop() {
         super.stop();
+
+        setOpenLoop(new DifferentialVoltages());
     }
 
     @Override

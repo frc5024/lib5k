@@ -76,4 +76,9 @@ public class CANIfierEncoder extends CANifier implements EncoderSimulation {
         return super.getQuadratureVelocity() / cpr;
     }
 
+    @Override
+    public void reset() {
+        super.setQuadraturePosition(0, 20);
+    }
+
 }

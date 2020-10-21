@@ -43,7 +43,7 @@ public class CSVFile implements AutoCloseable {
         // Build a filename
         String generatedFileName;
         if (appendTimestampToFileName) {
-            generatedFileName = String.format("%s_%.2f.csv", filename, System.currentTimeMillis());
+            generatedFileName = String.format("%s_%s.csv", filename, Long.toString(System.currentTimeMillis()));
         } else {
             generatedFileName = String.format("%s.csv", filename);
         }

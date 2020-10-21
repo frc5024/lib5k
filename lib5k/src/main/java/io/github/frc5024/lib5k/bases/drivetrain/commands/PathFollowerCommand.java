@@ -60,7 +60,7 @@ public class PathFollowerCommand extends CommandBase {
         addRequirements(driveTrain);
 
         // Configure the follower
-        follower = new Follower(path, 0.2, 0.1, driveTrain.getWidthMeters());
+        follower = new Follower(path, 0.2, 0.2, driveTrain.getWidthMeters());
         this.epsRadius = epsRadius;
 
         // Store the drivetrain
@@ -139,7 +139,7 @@ public class PathFollowerCommand extends CommandBase {
 
         // Drive to that pose
         // Using a fake epsilon here because we override the check in isFinished.
-        driveTrain.setGoalPose(goalPose, new Translation2d(0.01, 0.01));
+        driveTrain.setGoalPose(goalPose, new Translation2d(0.001, 0.001));
 
         // Try to write to the logfile
         if (logFile != null) {

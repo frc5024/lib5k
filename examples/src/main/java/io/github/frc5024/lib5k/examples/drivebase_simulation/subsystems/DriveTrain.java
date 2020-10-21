@@ -8,15 +8,13 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import io.github.frc5024.common_drive.gearing.Gear;
-import io.github.frc5024.lib5k.bases.drivetrain.implementations.TankDriveTrain;
-import io.github.frc5024.lib5k.control_loops.models.DCBrushedMotor;
+import io.github.frc5024.lib5k.bases.drivetrain.implementations.DualPIDTankDriveTrain;
 import io.github.frc5024.lib5k.examples.drivebase_simulation.RobotConfig;
-import io.github.frc5024.lib5k.hardware.common.sensors.interfaces.CommonEncoder;
 import io.github.frc5024.lib5k.hardware.common.sensors.interfaces.EncoderSimulation;
 import io.github.frc5024.lib5k.hardware.ctre.motors.ExtendedTalonSRX;
 import io.github.frc5024.lib5k.hardware.kauai.gyroscopes.NavX;
 
-public class DriveTrain extends TankDriveTrain {
+public class DriveTrain extends DualPIDTankDriveTrain {
     private static DriveTrain instance = null;
 
     // Motors

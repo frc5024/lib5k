@@ -120,6 +120,8 @@ public class DriveTrain extends DualPIDTankDriveTrain {
 
     @Override
     protected void resetEncoders() {
+        leftEncoder.reset();
+        rightEncoder.reset();
     }
 
     @Override

@@ -47,6 +47,13 @@ public abstract class TankDriveTrain extends AbstractDriveTrain {
     private DifferentialDriveOdometry localizer;
 
     /**
+     * Create a new TankDriveTrain that can only be controlled in open-loop mode
+     */
+    public TankDriveTrain() {
+        this(null, null);
+    }
+
+    /**
      * Create a new TankDriveTrain
      * 
      * @param distanceController Controller for distance control
@@ -82,6 +89,17 @@ public abstract class TankDriveTrain extends AbstractDriveTrain {
     protected void handleAutonomousRotation(StateMetadata<State> meta, Rotation2d goalHeading, Rotation2d epsilon) {
 
         if (meta.isFirstRun()) {
+
+            // Handle this being an open-loop-only drivetrain
+            if (rotationController == null || distanceController == null) {
+                logger.log(
+                        "This drivetrain does not support autonomous control. Please pass controllers into its constructor",
+                        Level.kWarning);
+                // Switch to open loop control
+                setOpenLoop(new DifferentialVoltages());
+                return;
+            }
+
             logger.log("Switched to rotation control");
             logger.log(String.format("Turning to %s with epsilon of %s", goalHeading.toString(), epsilon.toString()));
 
@@ -132,6 +150,17 @@ public abstract class TankDriveTrain extends AbstractDriveTrain {
     protected void handleDrivingToPose(StateMetadata<State> meta, Translation2d goalPose, Translation2d epsilon) {
 
         if (meta.isFirstRun()) {
+
+            // Handle this being an open-loop-only drivetrain
+            if (rotationController == null || distanceController == null) {
+                logger.log(
+                        "This drivetrain does not support autonomous control. Please pass controllers into its constructor",
+                        Level.kWarning);
+                // Switch to open loop control
+                setOpenLoop(new DifferentialVoltages());
+                return;
+            }
+
             logger.log("Switched to pose control");
 
             // Reset the controllers
@@ -350,5 +379,13 @@ public abstract class TankDriveTrain extends AbstractDriveTrain {
         constantCurvatureEnabled = false;
         frontSide = Chassis.Side.kFront;
         maxSpeedPercent = 1.0;
+
+        // Reset controllers
+        if (rotationController != null) {
+            rotationController.reset();
+        }
+        if (distanceController != null) {
+            distanceController.reset();
+        }
     }
 }

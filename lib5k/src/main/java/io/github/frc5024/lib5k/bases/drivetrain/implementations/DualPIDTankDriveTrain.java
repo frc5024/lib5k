@@ -21,6 +21,7 @@ public abstract class DualPIDTankDriveTrain extends TankDriveTrain {
     // Control loops
     private Controller distanceController;
     private Controller rotationController;
+    private double Kr;
 
     // Timer for actions
     private Timer actionTimer = new Timer();
@@ -32,11 +33,22 @@ public abstract class DualPIDTankDriveTrain extends TankDriveTrain {
      * @param rotationController Controller for rotation control
      */
     public DualPIDTankDriveTrain(Controller distanceController, Controller rotationController) {
+        this(distanceController, rotationController, 1.0);
+    }
+
+    /**
+     * Create a new DualPIDTankDriveTrain
+     * 
+     * @param distanceController Controller for distance control
+     * @param rotationController Controller for rotation control
+     */
+    public DualPIDTankDriveTrain(Controller distanceController, Controller rotationController, double Kr) {
         super();
 
         // Set controllers
         this.distanceController = distanceController;
         this.rotationController = rotationController;
+        this.Kr = Kr;
     }
 
     @Override
@@ -120,7 +132,7 @@ public abstract class DualPIDTankDriveTrain extends TankDriveTrain {
         // Get the heading error
         Rotation2d headingError = new Rotation2d(
                 Math.atan2(currentCoordinate.getY() - goalPose.getY(), currentCoordinate.getX() - goalPose.getX()))
-                        .minus(currentHeading);
+                        .minus(currentHeading).plus(Rotation2d.fromDegrees(180.0));
         // NOTE: add 180 degrees when following in reverse
 
         // Get the robot velocity
@@ -130,24 +142,43 @@ public abstract class DualPIDTankDriveTrain extends TankDriveTrain {
         double kLookaheadGain = 0.2;
 
         // Calculate the needed velocity to reach the goal pose
-        double delta;
+        double throttle;
 
         // Handle the goal being straight
-        if (RobotMath.epsilonEquals(headingError.getDegrees(), 0.0, RobotMath.kVerySmallNumber)) {
-            delta = RobotMath.clamp(currentCoordinate.getDistance(goalPose), -1, 1);
-        } else {
+        // if (RobotMath.epsilonEquals(headingError.getDegrees(), 0.0,
+        // RobotMath.kVerySmallNumber)) {
+        throttle = RobotMath.clamp(currentCoordinate.getDistance(goalPose), -1, 1);
+        // } else {
 
-            // Calculate a corrective factor
-            double correctiveFactor = kLookaheadGain * velocity;
+        // // Calculate a corrective factor
+        // double correctiveFactor = kLookaheadGain * velocity;
 
-            // Calculate a corrected delta
-            delta = Math.atan2(2.0 * getWidthMeters() * Math.sin(headingError.getRadians()) / correctiveFactor, 1.0);
-        }
+        // // Calculate a corrected throttle
+        // throttle = Math.atan2(2.0 * getWidthMeters() *
+        // Math.sin(headingError.getRadians()) / correctiveFactor, 1.0);
+        // }
 
         // Handle the robot being in reverse
         if (getFrontSide().equals(Chassis.Side.kBack)) {
-            delta *= -1;
+            throttle *= -1;
         }
+
+        // Feed both controllers
+        throttle = distanceController.calculate(throttle * -1, 0.0);
+        double steering = headingError.getRadians() * Kr;
+
+        // Get the throttle correction factor
+        double throttleCorrectiveFactor = calculateThrottleCorrectionFactor(headingError);
+        throttle *= throttleCorrectiveFactor;
+
+        // Calculate motor outputs
+        DifferentialVoltages voltages = new DifferentialVoltages(throttle + steering, throttle - steering).normalize()
+                .times(12);
+
+        logger.log(voltages.toString());
+
+        // Write output frame
+        handleVoltage(voltages.getLeftVolts(), voltages.getRightVolts());
 
         // // Calculate positional error
         // Translation2d error = goalPose.minus(currentPose.getTranslation());
@@ -191,7 +222,7 @@ public abstract class DualPIDTankDriveTrain extends TankDriveTrain {
         // handleVoltage(voltages.getLeftVolts(), voltages.getRightVolts());
 
         // If the robot is at its goal, we are done
-        if (RobotMath.epsilonEquals(currentPose.getTranslation(), goalPose, epsilon)) {
+        if (RobotMath.epsilonEquals(currentCoordinate, goalPose, epsilon)) {
             // Reset the controllers
             rotationController.reset();
             distanceController.reset();

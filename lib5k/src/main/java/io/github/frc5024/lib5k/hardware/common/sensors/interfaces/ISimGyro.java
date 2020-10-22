@@ -1,6 +1,7 @@
 package io.github.frc5024.lib5k.hardware.common.sensors.interfaces;
 
 import io.github.frc5024.lib5k.hardware.common.drivebase.IDifferentialDrivebase;
+import io.github.frc5024.lib5k.hardware.common.sensors.simulation.GyroSimUtil;
 
 public interface ISimGyro extends IGyroscope {
 
@@ -10,7 +11,8 @@ public interface ISimGyro extends IGyroscope {
      * should never be trusted IRL
      * 
      * @param drivebase Drivebase to read from
+     * @return Reference to the simulator
      */
-    public void initDrivebaseSimulation(IDifferentialDrivebase drivebase);
+    public GyroSimUtil initDrivebaseSimulation(IDifferentialDrivebase drivebase);
 
 }

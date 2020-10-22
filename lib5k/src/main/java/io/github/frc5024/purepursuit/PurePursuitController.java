@@ -157,7 +157,7 @@ public class PurePursuitController {
     }
 
     /**
-     * Calculate outputs for a tank drivebase
+     * Calculate ou tputs for a tank drivebase
      * 
      * @param robotPose Robot's pose
      * @return Output velocity percentages

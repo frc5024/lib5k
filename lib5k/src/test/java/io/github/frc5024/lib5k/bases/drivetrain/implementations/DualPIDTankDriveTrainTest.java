@@ -21,6 +21,7 @@ import io.github.frc5024.lib5k.bases.drivetrain.commands.PathFollowerCommand;
 import io.github.frc5024.lib5k.control_loops.ExtendedPIDController;
 import io.github.frc5024.lib5k.control_loops.models.DCBrushedMotor;
 import io.github.frc5024.lib5k.hardware.common.sensors.interfaces.EncoderSimulation;
+import io.github.frc5024.lib5k.hardware.common.sensors.simulation.GyroSimUtil;
 import io.github.frc5024.lib5k.hardware.ctre.motors.ExtendedTalonSRX;
 import io.github.frc5024.lib5k.hardware.kauai.gyroscopes.NavX;
 import io.github.frc5024.lib5k.logging.RobotLogger;
@@ -28,14 +29,17 @@ import io.github.frc5024.purepursuit.pathgen.Path;
 
 public class DualPIDTankDriveTrainTest {
 
-    private static double SIMULATION_TIME_SECONDS = 5.0;
+    private static double SIMULATION_TIME_SECONDS = 15.0;
     private static double PERIOD_SECONDS = 0.02;
 
     static class TestDriveTrain extends DualPIDTankDriveTrain {
 
         // PID controllers
-        private static ExtendedPIDController velocityController = new ExtendedPIDController(0.478, 0.0, 0.008);
-        private static ExtendedPIDController rotationController = new ExtendedPIDController(0.0088, 0.01, 0.0106);
+        private static ExtendedPIDController velocityController = new ExtendedPIDController(1.0, 0.0, 0.0);
+        private static ExtendedPIDController rotationController = new ExtendedPIDController(0.002, 0, 0); // new
+                                                                                                           // ExtendedPIDController(0.0088,
+                                                                                                           // 0.01,
+                                                                                                           // 0.0106);
 
         // Parameters
         private static double TRACK_WIDTH_M = 0.1524;
@@ -55,13 +59,14 @@ public class DualPIDTankDriveTrainTest {
 
         // Gyroscope
         private NavX gyroscope = NavX.getInstance();
+        private GyroSimUtil gyroSim;
 
         // Motor and encoder inversion multiplier
         private double motorInversionMultiplier = 1.0;
         private double encoderInversionMultiplier = 1.0;
 
         public TestDriveTrain() {
-            super(velocityController, rotationController);
+            super(velocityController, rotationController, 1.0);
 
             // Set inversions on motors
             leftFrontMotor.setInverted(false);
@@ -83,7 +88,7 @@ public class DualPIDTankDriveTrainTest {
             gyroscope = NavX.getInstance();
 
             // Set up gyro simulation
-            gyroscope.initDrivebaseSimulation(this);
+            gyroSim = gyroscope.initDrivebaseSimulation(this);
         }
 
         @Override
@@ -148,6 +153,7 @@ public class DualPIDTankDriveTrainTest {
         protected void runIteration() {
             leftEncoder.update();
             rightEncoder.update();
+            gyroSim.update();
         }
 
         @Override
@@ -166,7 +172,7 @@ public class DualPIDTankDriveTrainTest {
         RobotLogger.getInstance().flush();
 
         // Create a new path
-        Path path = new Path(new Translation2d(0.0, 0.0), new Translation2d(1.0, 3.0), new Translation2d(2.0, 2.0),
+        Path path = new Path(0.5, new Translation2d(0.0, 0.0), new Translation2d(1.0, 3.0), new Translation2d(2.0, 2.0),
                 new Translation2d(3.0, 3.0));
 
         // Get a command that can follow the path

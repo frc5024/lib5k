@@ -234,4 +234,21 @@ public abstract class TankDriveTrain extends AbstractDriveTrain {
         frontSide = Chassis.Side.kFront;
         maxSpeedPercent = 1.0;
     }
+
+    /**
+     * Calculates a corrective factor for throttle values, as per:
+     * https://bitbucket.org/kaleb_dodd/simbot2019public/src/abc56f5220b5c94bca216f86e3b6b5757d0ffeff/src/main/java/frc/subsystems/Drive.java#lines-337
+     * 
+     * @param angularError Error from target heading
+     * @return Throttle correction
+     */
+    public static double calculateThrottleCorrectionFactor(Rotation2d angularError) {
+
+        double distanceFromTargetHeading = Math.abs(angularError.getDegrees());
+        if (distanceFromTargetHeading > 90) { // prevents the output from being reversed in the next calculation
+            distanceFromTargetHeading = 90;
+        }
+
+        return ((-1 * distanceFromTargetHeading) / 90.0) + 1;
+    }
 }

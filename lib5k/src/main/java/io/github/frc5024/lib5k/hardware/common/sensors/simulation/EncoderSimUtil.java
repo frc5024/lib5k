@@ -150,4 +150,16 @@ public class EncoderSimUtil implements PeriodicComponent {
         return simDevice != null;
     }
 
+    /**
+     * Reset the simulation
+     */
+    public void reset() {
+        if (simDevice != null) {
+            simTicks.set(0.0);
+            simRotations.set(0.0);
+            simVelocity.set(0.0);
+        }
+        simSlew.reset();
+    }
+
 }

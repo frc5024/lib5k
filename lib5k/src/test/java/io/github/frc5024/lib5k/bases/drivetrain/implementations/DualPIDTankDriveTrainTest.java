@@ -224,6 +224,9 @@ public class DualPIDTankDriveTrainTest {
         }
         RobotLogger.getInstance().flush();
 
+        // Reset the calculation timer
+        TimeScale.globallyOverrideCalculationOutput(null);
+
         // Build chart
         XYChart chart = new XYChartBuilder().width(1000).height(600).build();
 

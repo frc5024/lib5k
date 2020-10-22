@@ -6,6 +6,7 @@ import edu.wpi.first.hal.SimDouble;
 import edu.wpi.first.wpilibj.SpeedController;
 import io.github.frc5024.lib5k.control_loops.SlewLimiter;
 import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.FPGAClock;
+import io.github.frc5024.lib5k.utils.TimeScale;
 import io.github.frc5024.lib5k.utils.interfaces.PeriodicComponent;
 
 /**
@@ -15,9 +16,11 @@ public class EncoderSimUtil implements PeriodicComponent {
 
     /* Simulation vars */
     private SpeedController controller;
-    private double last_time;
     private double gearbox_ratio, max_rpm;
     private int cpr;
+
+    // Timing
+    private TimeScale dtCalculator;
 
     /* Simulation */
     private SimDevice simDevice;
@@ -47,6 +50,8 @@ public class EncoderSimUtil implements PeriodicComponent {
         this.simSlew = new SlewLimiter(ramp_time);
         this.cpr = cpr;
 
+        dtCalculator = new TimeScale();
+
         // Init sim device
         simDevice = SimDevice.create("GenericEncoder", id);
 
@@ -62,19 +67,13 @@ public class EncoderSimUtil implements PeriodicComponent {
     public void update() {
         // Handle simulation updates
         if (simDevice != null) {
-            // If this is the first loop, simply re-set the timer, and skip
-            if (last_time == 0) {
-                last_time = FPGAClock.getFPGASeconds();
-                return;
-            }
 
             // Determine dt
-            double current_time = FPGAClock.getFPGASeconds();
-            double dt = current_time - last_time;
-            last_time = current_time;
+            double dt = dtCalculator.calculate();
 
             // Calc encoder position
-            double rpm = ((simSlew.feed(controller.get() * ((controller.getInverted()) ? -1 : 1)) * max_rpm) / gearbox_ratio) * ((simInverted.get()) ? -1 : 1);
+            double rpm = ((simSlew.feed(controller.get() * ((controller.getInverted()) ? -1 : 1)) * max_rpm)
+                    / gearbox_ratio) * ((simInverted.get()) ? -1 : 1);
             double revs = (rpm / 60.0) * dt; // RPM -> RPS -> Multiply by seconds to find rotations since last update
             simTicks.set((int) (simTicks.get() + (revs * cpr)));
             simRotations.set((simRotations.get() + revs));
@@ -144,10 +143,23 @@ public class EncoderSimUtil implements PeriodicComponent {
 
     /**
      * Get if the simulation is ready
+     * 
      * @return Is ready?
      */
-    public boolean simReady(){
+    public boolean simReady() {
         return simDevice != null;
+    }
+
+    /**
+     * Reset the simulation
+     */
+    public void reset() {
+        if (simDevice != null) {
+            simTicks.set(0.0);
+            simRotations.set(0.0);
+            simVelocity.set(0.0);
+        }
+        simSlew.reset();
     }
 
 }

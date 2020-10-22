@@ -10,7 +10,7 @@ import io.github.frc5024.lib5k.utils.annotations.FieldTested;
  * http://www.revrobotics.com/rev-11-1105/
  */
 @FieldTested(year = 2019)
-public class BlinkinDriver implements Sendable {
+public class BlinkinDriver implements Sendable, AutoCloseable {
 
     public enum LEDSetting {
         RAINBOW(-0.99), RAINBOW_PARTY(-0.97), RAINBOW_OCEAN(-0.95), RAINBOW_LAVA(-0.93), RAINBOW_FOREST(-0.91),
@@ -56,7 +56,7 @@ public class BlinkinDriver implements Sendable {
 
     }
 
-    Spark m_controller;
+    protected Spark m_controller;
 
     /**
      * A wrapper for the REV Blinkin LED driver
@@ -82,6 +82,11 @@ public class BlinkinDriver implements Sendable {
     @Override
     public void initSendable(SendableBuilder builder) {
 
+    }
+
+    @Override
+    public void close() {
+        m_controller.close();
     }
 
 }

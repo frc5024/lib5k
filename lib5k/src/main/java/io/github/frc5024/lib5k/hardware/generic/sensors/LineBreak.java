@@ -18,10 +18,22 @@ public class LineBreak extends DigitalInput implements IBinarySensor {
      * @param pcmChannel PCM device channel
      */
     public LineBreak(int dioChannel, int pcmID, int pcmChannel) {
-        this(dioChannel);
+        this(dioChannel, new Solenoid(pcmID, pcmChannel));
 
-        // Configure and enable the power source solenoid
-        m_powerSource = new Solenoid(pcmID, pcmChannel);
+    }
+
+    /**
+     * Create a Line Break sensor object for a sensor that is powered via a
+     * Pneumatic Control Module
+     * 
+     * @param dioChannel     DigitalIO signal channel
+     * @param pcmPowerSource Solenoid power output
+     */
+    public LineBreak(int dioChannel, Solenoid pcmPowerSource) {
+        super(dioChannel);
+
+        // enable the power source solenoid
+        m_powerSource = pcmPowerSource;
         m_powerSource.set(true);
     }
 
@@ -43,6 +55,14 @@ public class LineBreak extends DigitalInput implements IBinarySensor {
      */
     public void flush() {
         m_powerSource.set(true);
+    }
+
+    @Override
+    public void close() {
+        super.close();
+        if (m_powerSource != null) {
+            m_powerSource.close();
+        }
     }
 
 }

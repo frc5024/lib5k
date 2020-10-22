@@ -8,15 +8,13 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import io.github.frc5024.common_drive.gearing.Gear;
-import io.github.frc5024.lib5k.bases.drivetrain.implementations.TankDriveTrain;
-import io.github.frc5024.lib5k.control_loops.models.DCBrushedMotor;
+import io.github.frc5024.lib5k.bases.drivetrain.implementations.DualPIDTankDriveTrain;
 import io.github.frc5024.lib5k.examples.drivebase_simulation.RobotConfig;
-import io.github.frc5024.lib5k.hardware.common.sensors.interfaces.CommonEncoder;
 import io.github.frc5024.lib5k.hardware.common.sensors.interfaces.EncoderSimulation;
 import io.github.frc5024.lib5k.hardware.ctre.motors.ExtendedTalonSRX;
 import io.github.frc5024.lib5k.hardware.kauai.gyroscopes.NavX;
 
-public class DriveTrain extends TankDriveTrain {
+public class DriveTrain extends DualPIDTankDriveTrain {
     private static DriveTrain instance = null;
 
     // Motors
@@ -43,7 +41,7 @@ public class DriveTrain extends TankDriveTrain {
     private NetworkTableEntry ntTheta;
 
     private DriveTrain() {
-        super(RobotConfig.DRIVETRAIN_DISTANCE_CONTROLLER, RobotConfig.DRIVETRAIN_ROTATION_CONTROLLER);
+        super(RobotConfig.DRIVETRAIN_ROTATION_CONTROLLER, RobotConfig.PATH_FOLLOWER_GAIN);
 
         // Set up motors
         leftFrontMotor = new ExtendedTalonSRX(RobotConfig.DRIVETRAIN_FRONT_LEFT_ID);
@@ -122,6 +120,8 @@ public class DriveTrain extends TankDriveTrain {
 
     @Override
     protected void resetEncoders() {
+        leftEncoder.reset();
+        rightEncoder.reset();
     }
 
     @Override
@@ -162,6 +162,10 @@ public class DriveTrain extends TankDriveTrain {
         ntX.setDouble(pose.getTranslation().getX());
         ntY.setDouble(pose.getTranslation().getY());
         ntTheta.setDouble(pose.getRotation().getDegrees());
+
+        // Update the encoders
+        leftEncoder.update();
+        rightEncoder.update();
     }
 
     @Override

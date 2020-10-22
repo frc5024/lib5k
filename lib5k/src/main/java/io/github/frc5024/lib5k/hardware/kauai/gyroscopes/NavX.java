@@ -62,12 +62,29 @@ public class NavX extends AHRS implements ISimGyro {
      * Init gyroscope simulation from fusing encoder readings
      * 
      * @param drivebase Robot drivetrain
+     * @return Reference to the internal GyroSimUtil object
      */
-    public void initDrivebaseSimulation(final IDifferentialDrivebase drivebase) {
+    public GyroSimUtil initDrivebaseSimulation(final IDifferentialDrivebase drivebase) {
+        return initDrivebaseSimulation(drivebase, true);
+    }
+
+    /**
+     * Init gyroscope simulation from fusing encoder readings
+     * 
+     * @param drivebase      Robot drivetrain
+     * @param startOwnThread Should this simulation run in its own thread?
+     * @return Reference to the internal GyroSimUtil object
+     */
+    public GyroSimUtil initDrivebaseSimulation(final IDifferentialDrivebase drivebase, boolean startOwnThread) {
 
         // Set up simulation
         sim = new GyroSimUtil("NavX", port.value, drivebase, 0.02, 40.0);
-        sim.start();
+
+        if (startOwnThread) {
+            sim.start();
+        }
+
+        return sim;
     }
 
     @Override

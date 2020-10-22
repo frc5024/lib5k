@@ -4,13 +4,13 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import io.github.frc5024.common_drive.gearing.Gear;
-import io.github.frc5024.lib5k.bases.drivetrain.implementations.TankDriveTrain;
+import io.github.frc5024.lib5k.bases.drivetrain.implementations.DualPIDTankDriveTrain;
 import io.github.frc5024.lib5k.examples.autonomous_path_following.RobotConfig;
 import io.github.frc5024.lib5k.hardware.common.sensors.interfaces.CommonEncoder;
 import io.github.frc5024.lib5k.hardware.ctre.motors.ExtendedTalonSRX;
 import io.github.frc5024.lib5k.hardware.kauai.gyroscopes.NavX;
 
-public class DriveTrain extends TankDriveTrain {
+public class DriveTrain extends DualPIDTankDriveTrain {
     private static DriveTrain instance = null;
 
     // Motors
@@ -31,7 +31,7 @@ public class DriveTrain extends TankDriveTrain {
     private double encoderInversionMultiplier = 1.0;
 
     private DriveTrain() {
-        super(RobotConfig.DRIVETRAIN_DISTANCE_CONTROLLER, RobotConfig.DRIVETRAIN_ROTATION_CONTROLLER);
+        super(RobotConfig.DRIVETRAIN_ROTATION_CONTROLLER, RobotConfig.PATH_FOLLOWER_GAIN);
 
         // Set up motors
         leftFrontMotor = new ExtendedTalonSRX(RobotConfig.DRIVETRAIN_FRONT_LEFT_ID);

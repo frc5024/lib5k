@@ -5,14 +5,13 @@ import edu.wpi.first.hal.SimDevice;
 import edu.wpi.first.hal.SimDouble;
 import edu.wpi.first.wpilibj.SpeedController;
 import io.github.frc5024.lib5k.control_loops.SlewLimiter;
-import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.FPGAClock;
 import io.github.frc5024.lib5k.utils.TimeScale;
 import io.github.frc5024.lib5k.utils.interfaces.PeriodicComponent;
 
 /**
  * An internal class used for simulating encoder hardware
  */
-public class EncoderSimUtil implements PeriodicComponent {
+public class EncoderSimUtil implements PeriodicComponent, AutoCloseable {
 
     /* Simulation vars */
     private SpeedController controller;
@@ -53,7 +52,7 @@ public class EncoderSimUtil implements PeriodicComponent {
         dtCalculator = new TimeScale();
 
         // Init sim device
-        simDevice = SimDevice.create("GenericEncoder", id);
+        simDevice = SimDevice.create(name, id);
 
         if (simDevice != null) {
             simTicks = simDevice.createDouble("Ticks", false, 0.0);
@@ -72,8 +71,7 @@ public class EncoderSimUtil implements PeriodicComponent {
             double dt = dtCalculator.calculate();
 
             // Calc encoder position
-            double rpm = ((simSlew.feed(controller.get() * ((controller.getInverted()) ? -1 : 1)) * max_rpm)
-                    / gearbox_ratio) * ((simInverted.get()) ? -1 : 1);
+            double rpm = ((simSlew.feed(controller.get()) * max_rpm) / gearbox_ratio) * ((simInverted.get()) ? -1 : 1);
             double revs = (rpm / 60.0) * dt; // RPM -> RPS -> Multiply by seconds to find rotations since last update
             simTicks.set((int) (simTicks.get() + (revs * cpr)));
             simRotations.set((simRotations.get() + revs));
@@ -160,6 +158,11 @@ public class EncoderSimUtil implements PeriodicComponent {
             simVelocity.set(0.0);
         }
         simSlew.reset();
+    }
+
+    @Override
+    public void close() {
+        simDevice.close();
     }
 
 }

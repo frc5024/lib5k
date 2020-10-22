@@ -8,13 +8,13 @@ import io.github.frc5024.lib5k.hardware.common.sensors.simulation.EncoderSimUtil
 import io.github.frc5024.lib5k.hardware.common.sensors.interfaces.EncoderSimulation;
 
 /**
- * A wrapper around the CTRE CANIfier's encoder interface that integrates with 5024's encoder system
+ * A wrapper around the CTRE CANIfier's encoder interface that integrates with
+ * 5024's encoder system
  */
 public class CANIfierEncoder extends CANifier implements EncoderSimulation {
 
     private int cpr;
     private double offset;
-
 
     // Simulation
     private EncoderSimUtil sim;
@@ -23,7 +23,7 @@ public class CANIfierEncoder extends CANifier implements EncoderSimulation {
      * Constructor.
      * 
      * @param deviceNumber The CAN Device ID of the CANIfier.
-     * @param cpr Sensor counts per rotation
+     * @param cpr          Sensor counts per rotation
      */
     public CANIfierEncoder(int deviceNumber, int cpr) {
         super(deviceNumber);
@@ -34,7 +34,7 @@ public class CANIfierEncoder extends CANifier implements EncoderSimulation {
     @Override
     public void initSimulationDevice(SpeedController controller, double gearbox_ratio, double max_rpm,
             double ramp_time) {
-        
+
         sim = new EncoderSimUtil("CANIfierEncoder", getDeviceID(), cpr, controller, gearbox_ratio, max_rpm, ramp_time);
 
     }
@@ -79,6 +79,13 @@ public class CANIfierEncoder extends CANifier implements EncoderSimulation {
     @Override
     public void reset() {
         super.setQuadraturePosition(0, 20);
+    }
+
+    @Override
+    public void close() throws Exception {
+        if (sim != null) {
+            sim.close();
+        }
     }
 
 }

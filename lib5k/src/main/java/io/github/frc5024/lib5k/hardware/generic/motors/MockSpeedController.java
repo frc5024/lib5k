@@ -5,14 +5,14 @@ import edu.wpi.first.wpilibj.SpeedController;
 /**
  * For mocking a speed controller in tests
  */
-public class MockSpeedController implements SpeedController{
+public class MockSpeedController implements SpeedController {
 
     private double speed = 0.0;
     private boolean inverted = false;
-    
+
     @Override
     public void set(double speed) {
-        this.speed = speed;
+        this.speed = speed * (getInverted() ? -1 : 1);
     }
 
     @Override
@@ -46,5 +46,5 @@ public class MockSpeedController implements SpeedController{
     public boolean getInverted() {
         return inverted;
     }
-    
+
 }

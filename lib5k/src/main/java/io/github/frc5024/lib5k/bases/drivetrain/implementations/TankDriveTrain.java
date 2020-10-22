@@ -30,41 +30,22 @@ public abstract class TankDriveTrain extends AbstractDriveTrain {
     // Open loop control
     private DifferentialVoltages openLoopGoal = new DifferentialVoltages();
 
-    // Control loops
-    private Controller distanceController;
-    private Controller rotationController;
-
-    // Timer for actions
-    private Timer actionTimer = new Timer();
-
     // Front side
     private Chassis.Side frontSide = Chassis.Side.kFront;
 
     // Max speed percent
-    private double maxSpeedPercent = 1.0;
+    protected double maxSpeedPercent = 1.0;
 
     // Localization
     private DifferentialDriveOdometry localizer;
 
-    /**
-     * Create a new TankDriveTrain that can only be controlled in open-loop mode
-     */
-    public TankDriveTrain() {
-        this(null, null);
-    }
+    // Tracker for last pose
+    private Pose2d lastPose = new Pose2d();
 
     /**
      * Create a new TankDriveTrain
-     * 
-     * @param distanceController Controller for distance control
-     * @param rotationController Controller for rotation control
      */
-    public TankDriveTrain(Controller distanceController, Controller rotationController) {
-
-        // Set controllers
-        this.distanceController = distanceController;
-        this.rotationController = rotationController;
-
+    public TankDriveTrain() {
         // Set up the localizer
         localizer = new DifferentialDriveOdometry(new Rotation2d());
     }
@@ -83,158 +64,6 @@ public abstract class TankDriveTrain extends AbstractDriveTrain {
             logger.log("An Open-Loop goal of NULL was passed to TankDriveTrain. Failed to write to motors!",
                     Level.kWarning);
         }
-    }
-
-    @Override
-    protected void handleAutonomousRotation(StateMetadata<State> meta, Rotation2d goalHeading, Rotation2d epsilon) {
-
-        if (meta.isFirstRun()) {
-
-            // Handle this being an open-loop-only drivetrain
-            if (rotationController == null || distanceController == null) {
-                logger.log(
-                        "This drivetrain does not support autonomous control. Please pass controllers into its constructor",
-                        Level.kWarning);
-                // Switch to open loop control
-                setOpenLoop(new DifferentialVoltages());
-                return;
-            }
-
-            logger.log("Switched to rotation control");
-            logger.log(String.format("Turning to %s with epsilon of %s", goalHeading.toString(), epsilon.toString()));
-
-            // Reset the controller
-            rotationController.reset();
-
-            // Configure the controller
-            rotationController.setEpsilon(epsilon.getDegrees());
-            rotationController.setReference(0);
-
-            // Reset and start the action timer
-            actionTimer.reset();
-            actionTimer.start();
-        }
-
-        // Get the current heading
-        Rotation2d currentHeading = getPose().getRotation();
-
-        // Determine the error from the goal
-        double error = RotationMath.getAngularErrorDegrees(currentHeading, goalHeading);
-
-        // Calculate the needed output
-        double output = rotationController.calculate(error) * RR_HAL.MAXIMUM_BUS_VOLTAGE * maxSpeedPercent;
-
-        // Write voltage outputs
-        handleVoltage(output, -output);
-
-        // Handle reaching the goal heading
-        if (rotationController.atReference()) {
-
-            // Reset the controller
-            rotationController.reset();
-
-            // Stop the motors
-            handleVoltage(0, 0);
-            actionTimer.stop();
-
-            // Switch to open loop control
-            setOpenLoop(new DifferentialVoltages());
-
-            // Log success
-            logger.log(String.format("Reached heading goal after %.2f seconds", actionTimer.get()));
-        }
-
-    }
-
-    @Override
-    protected void handleDrivingToPose(StateMetadata<State> meta, Translation2d goalPose, Translation2d epsilon) {
-
-        if (meta.isFirstRun()) {
-
-            // Handle this being an open-loop-only drivetrain
-            if (rotationController == null || distanceController == null) {
-                logger.log(
-                        "This drivetrain does not support autonomous control. Please pass controllers into its constructor",
-                        Level.kWarning);
-                // Switch to open loop control
-                setOpenLoop(new DifferentialVoltages());
-                return;
-            }
-
-            logger.log("Switched to pose control");
-            logger.log(String.format("Driving to pose: %s", goalPose));
-
-            // Reset the controllers
-            rotationController.reset();
-            distanceController.reset();
-
-            // Configure the controllers
-            rotationController.setEpsilon(1.0);
-            rotationController.setReference(0.0);
-            distanceController.setEpsilon((epsilon.getX() + epsilon.getY()) / 2);
-            distanceController.setReference(0.0);
-
-            // Reset and start the action timer
-            actionTimer.reset();
-            actionTimer.start();
-        }
-
-        // Get the robot's current pose
-        Pose2d currentPose = getPose();
-
-        // Calculate positional error
-        Translation2d error = goalPose.minus(currentPose.getTranslation());
-
-        // Get the hypot to determine scalar distance
-        double distanceError = currentPose.getTranslation().getDistance(goalPose) * -1;
-        // Math.sqrt(Math.pow((goalPose.getX() - currentPose.getTranslation().getX()), 2)
-        //         + Math.pow((goalPose.getY() - currentPose.getTranslation().getY()), 2));
-
-        // Calculate clockwise-positive rotational error
-        Rotation2d angularError = Rotation2d.fromDegrees(Math.toDegrees(Math.atan2(error.getY(), error.getX())) * -1);
-
-        // Calculate speed multiplier based on distance from target.
-        // This lets the robot curve towards the target, instead of snapping to it.
-        // This is a trick I learned from a programmer at 1114. It provides really
-        // smooth outputs
-        // https://bitbucket.org/kaleb_dodd/simbot2019public/src/abc56f5220b5c94bca216f86e3b6b5757d0ffeff/src/main/java/frc/subsystems/Drive.java#lines-337
-        double speedMul = ((-1 * (Math.min(Math.abs(angularError.getDegrees()), 90.0)) / 90.0) + 1);
-
-        // Calculate needed throttle
-        double throttleOutput = distanceController.calculate(distanceError);
-
-        // Restrict throttle output
-        throttleOutput *= speedMul;
-
-        // Calculate rotation PIF
-        double turnOutput = rotationController.calculate(angularError.getDegrees());
-
-        // Calculate motor outputs
-        DifferentialVoltages voltages = DifferentialVoltages.fromThrottleAndSteering(throttleOutput, turnOutput);
-
-        // logger.log(voltages.toString());
-        logger.log(new DifferentialVoltages(throttleOutput, turnOutput).toString());
-
-        // Write output frame
-        handleVoltage(voltages.getLeftVolts(), voltages.getRightVolts());
-
-        // If the robot is at its goal, we are done
-        if (RobotMath.epsilonEquals(currentPose.getTranslation(), goalPose, epsilon)) {
-            // Reset the controllers
-            rotationController.reset();
-            distanceController.reset();
-
-            // Stop the motors
-            handleVoltage(0, 0);
-            actionTimer.stop();
-
-            // Switch to open loop control
-            setOpenLoop(new DifferentialVoltages());
-
-            // Log success
-            logger.log(String.format("Reached pose goal after %.2f seconds", actionTimer.get()));
-        }
-
     }
 
     /**
@@ -270,13 +99,21 @@ public abstract class TankDriveTrain extends AbstractDriveTrain {
         super.periodic();
 
         // Update localization
+        lastPose = getPose();
         localizer.update(getCurrentHeading(), getLeftMeters(), getRightMeters());
+
     }
 
     @Override
     public void resetPose(Pose2d pose) {
         logger.log(String.format("Resetting robot pose to: %s", pose.toString()));
         localizer.resetPosition(pose, getCurrentHeading());
+        lastPose = pose;
+    }
+
+    @Override
+    public Translation2d getVelocity() {
+        return getPose().getTranslation().minus(lastPose.getTranslation());
     }
 
     @Override
@@ -293,26 +130,36 @@ public abstract class TankDriveTrain extends AbstractDriveTrain {
 
         logger.log(String.format("Setting front side to: %s", side.toString()));
 
-        // Get the current pose
-        Pose2d currentPose = getPose();
+        // TODO: I dont think this is needed
+        // // Get the current pose
+        // Pose2d currentPose = getPose();
 
-        // Build a new pose, with a flipped angle
-        Pose2d newPose = new Pose2d(currentPose.getTranslation(),
-                currentPose.getRotation().minus(Rotation2d.fromDegrees(180)));
+        // // Build a new pose, with a flipped angle
+        // Pose2d newPose = new Pose2d(currentPose.getTranslation(),
+        // currentPose.getRotation().minus(Rotation2d.fromDegrees(180)));
 
-        // Reset the localizer
-        resetPose(newPose);
+        // // Reset the localizer
+        // resetPose(newPose);
 
-        // Reset the encoders
-        resetEncoders();
+        // // Reset the encoders
+        // resetEncoders();
 
-        // Flip everything
-        setMotorsInverted(side.equals(Side.kBack));
-        setEncodersInverted(side.equals(Side.kBack));
+        // // Flip everything
+        // setMotorsInverted(side.equals(Side.kBack));
+        // setEncodersInverted(side.equals(Side.kBack));
 
         // Set the active side tracker
         frontSide = side;
 
+    }
+
+    /**
+     * Get which side is the front
+     * 
+     * @return Front side
+     */
+    public Chassis.Side getFrontSide() {
+        return frontSide;
     }
 
     /**
@@ -386,13 +233,22 @@ public abstract class TankDriveTrain extends AbstractDriveTrain {
         constantCurvatureEnabled = false;
         frontSide = Chassis.Side.kFront;
         maxSpeedPercent = 1.0;
+    }
 
-        // Reset controllers
-        if (rotationController != null) {
-            rotationController.reset();
+    /**
+     * Calculates a corrective factor for throttle values, as per:
+     * https://bitbucket.org/kaleb_dodd/simbot2019public/src/abc56f5220b5c94bca216f86e3b6b5757d0ffeff/src/main/java/frc/subsystems/Drive.java#lines-337
+     * 
+     * @param angularError Error from target heading
+     * @return Throttle correction
+     */
+    public static double calculateThrottleCorrectionFactor(Rotation2d angularError) {
+
+        double distanceFromTargetHeading = Math.abs(angularError.getDegrees());
+        if (distanceFromTargetHeading > 90) { // prevents the output from being reversed in the next calculation
+            distanceFromTargetHeading = 90;
         }
-        if (distanceController != null) {
-            distanceController.reset();
-        }
+
+        return ((-1 * distanceFromTargetHeading) / 90.0) + 1;
     }
 }

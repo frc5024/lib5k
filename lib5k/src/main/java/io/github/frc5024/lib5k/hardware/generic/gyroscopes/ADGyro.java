@@ -45,16 +45,28 @@ public class ADGyro extends ADXRS450_Gyro implements ISimGyro {
         return m_instance;
     }
 
+    @Override
+    public GyroSimUtil initDrivebaseSimulation(final IDifferentialDrivebase drivebase) {
+        return initDrivebaseSimulation(drivebase, true);
+    }
+
     /**
      * Init gyroscope simulation from fusing encoder readings
      * 
-     * @param drivebase Robot drivetrain
+     * @param drivebase      Robot drivetrain
+     * @param startOwnThread Should this simulation run in its own thread?
+     * @return Reference to the internal GyroSimUtil object
      */
-    public void initDrivebaseSimulation(final IDifferentialDrivebase drivebase) {
+    public GyroSimUtil initDrivebaseSimulation(final IDifferentialDrivebase drivebase, boolean startOwnThread) {
 
         // Set up simulation
-        sim = new GyroSimUtil("NavX", SPI.Port.kOnboardCS0.value, drivebase, 0.02, 40.0);
-        sim.start();
+        sim = new GyroSimUtil("ADGyro", SPI.Port.kOnboardCS0.value, drivebase, 0.02, 40.0);
+
+        if (startOwnThread) {
+            sim.start();
+        }
+
+        return sim;
     }
 
     @Override

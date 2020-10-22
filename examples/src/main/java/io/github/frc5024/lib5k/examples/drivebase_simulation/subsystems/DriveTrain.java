@@ -41,7 +41,7 @@ public class DriveTrain extends DualPIDTankDriveTrain {
     private NetworkTableEntry ntTheta;
 
     private DriveTrain() {
-        super(RobotConfig.DRIVETRAIN_DISTANCE_CONTROLLER, RobotConfig.DRIVETRAIN_ROTATION_CONTROLLER);
+        super(RobotConfig.DRIVETRAIN_ROTATION_CONTROLLER, RobotConfig.PATH_FOLLOWER_GAIN);
 
         // Set up motors
         leftFrontMotor = new ExtendedTalonSRX(RobotConfig.DRIVETRAIN_FRONT_LEFT_ID);

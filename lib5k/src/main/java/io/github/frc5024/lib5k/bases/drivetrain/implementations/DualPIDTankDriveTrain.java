@@ -130,44 +130,12 @@ public abstract class DualPIDTankDriveTrain extends TankDriveTrain {
         Rotation2d currentHeading = getPose().getRotation();
 
         // Get the heading error
-        // Rotation2d headingError = new Rotation2d(
-        // Math.atan2(currentCoordinate.getY() - goalPose.getY(),
-        // currentCoordinate.getX() - goalPose.getX()))
-        // .minus(currentHeading).plus(Rotation2d.fromDegrees(180.0));
         Rotation2d headingError = new Rotation2d(
                 Math.atan2(goalPose.getY() - currentCoordinate.getY(), goalPose.getX() - currentCoordinate.getX()))
-                        .minus(currentHeading);// .plus(Rotation2d.fromDegrees(180.0));
-
-        // double headingErrorRadians = (Math.atan2(goalPose.getY() -
-        // currentCoordinate.getY(),
-        // goalPose.getX() - currentCoordinate.getX()) * -1) -
-        // currentHeading.getRadians();
-        // headingErrorRadians = RobotMath.clamp(headingErrorRadians, (Math.PI / 2) *
-        // -1, (Math.PI / 2));
-        // NOTE: add 180 degrees when following in reverse
-
-        // Get the robot velocity
-        double velocity = getSpeed();
-
-        // TEMP: Gain
-        double kLookaheadGain = 0.2;
+                        .minus(currentHeading);
 
         // Calculate the needed velocity to reach the goal pose
         double throttle = RobotMath.clamp(currentCoordinate.getDistance(goalPose), -1, 1);
-
-        // Handle the goal being straight
-        // if (RobotMath.epsilonEquals(headingError.getDegrees(), 0.0,
-        // RobotMath.kVerySmallNumber)) {
-        // throttle = RobotMath.clamp(currentCoordinate.getDistance(goalPose), -1, 1);
-        // } else {
-
-        // // Calculate a corrective factor
-        // double correctiveFactor = kLookaheadGain * velocity;
-
-        // // Calculate a corrected throttle
-        // throttle = Math.atan2(2.0 * getWidthMeters() *
-        // Math.sin(headingError.getRadians()) / correctiveFactor, 1.0);
-        // }
 
         // Handle the robot being in reverse
         if (getFrontSide().equals(Chassis.Side.kBack)) {
@@ -176,12 +144,13 @@ public abstract class DualPIDTankDriveTrain extends TankDriveTrain {
 
         // Feed both controllers
         // throttle = distanceController.calculate(throttle, 0.0);
+
+        // Calculate the needed steering value
         double steering = headingError.getRadians();
         steering /= (Math.PI / 2);
         steering *= Kr;
-        // headingError.getRadians() * Kr;
 
-        // Get the throttle correction factor
+        // Get the throttle correction factor and correct
         double throttleCorrectiveFactor = calculateThrottleCorrectionFactor(headingError);
         throttle *= throttleCorrectiveFactor;
 
@@ -193,52 +162,13 @@ public abstract class DualPIDTankDriveTrain extends TankDriveTrain {
         DifferentialVoltages voltages = new DifferentialVoltages(throttle + steering, throttle - steering).normalize()
                 .times(12);
 
-        logger.log(String.format("%.2f | %.2f | %.2f, %.2f", currentHeading.getDegrees(), headingError.getDegrees(),
-                currentCoordinate.getX(), currentCoordinate.getY()));
+        // This line is rather helpful for debugging:
+        // logger.log(String.format("%.2f | %.2f | %.2f, %.2f",
+        // currentHeading.getDegrees(), headingError.getDegrees(),
+        // currentCoordinate.getX(), currentCoordinate.getY()));
 
         // Write output frame
         handleVoltage(voltages.getLeftVolts(), voltages.getRightVolts());
-
-        // // Calculate positional error
-        // Translation2d error = goalPose.minus(currentPose.getTranslation());
-
-        // // Get the hypot to determine scalar distance
-        // double distanceError = currentPose.getTranslation().getDistance(goalPose) *
-        // -1;
-        // // Math.sqrt(Math.pow((goalPose.getX() -
-        // currentPose.getTranslation().getX()),
-        // // 2)
-        // // + Math.pow((goalPose.getY() - currentPose.getTranslation().getY()), 2));
-
-        // // Calculate clockwise-positive rotational error
-        // Rotation2d angularError =
-        // Rotation2d.fromDegrees(Math.toDegrees(Math.atan2(error.getY(), error.getX()))
-        // * -1).minus(currentPose.getRotation());
-
-        // // Calculate speed multiplier based on distance from target.
-        // // This lets the robot curve towards the target, instead of snapping to it.
-        // // This is a trick I learned from a programmer at 1114. It provides really
-        // // smooth outputs
-        // //
-        // https://bitbucket.org/kaleb_dodd/simbot2019public/src/abc56f5220b5c94bca216f86e3b6b5757d0ffeff/src/main/java/frc/subsystems/Drive.java#lines-337
-        // double speedMul = ((-1 * (Math.min(Math.abs(angularError.getDegrees()),
-        // 90.0)) / 90.0) + 1);
-
-        // // Calculate needed throttle
-        // double throttleOutput = distanceController.calculate(distanceError);
-
-        // // Restrict throttle output
-        // throttleOutput *= speedMul;
-
-        // // Calculate rotation PIF
-        // double turnOutput = rotationController.calculate(angularError.getDegrees());
-
-        // // Calculate motor outputs
-        // DifferentialVoltages voltages =
-        // DifferentialVoltages.fromThrottleAndSteering(throttleOutput, turnOutput);
-
-        // // Write output frame
-        // handleVoltage(voltages.getLeftVolts(), voltages.getRightVolts());
 
         // If the robot is at its goal, we are done
         if (RobotMath.epsilonEquals(currentCoordinate, goalPose, epsilon)) {

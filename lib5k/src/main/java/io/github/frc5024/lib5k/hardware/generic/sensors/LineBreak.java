@@ -60,7 +60,9 @@ public class LineBreak extends DigitalInput implements IBinarySensor {
     @Override
     public void close() {
         super.close();
-        m_powerSource.close();
+        if (m_powerSource != null) {
+            m_powerSource.close();
+        }
     }
 
 }

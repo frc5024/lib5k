@@ -40,4 +40,25 @@ public class LineBreakTest {
 
     }
 
+    @Test
+    public void testExternalPoweredLineBreakSensor() {
+
+        // Set up a line break sensor
+        LineBreak sensor = new LineBreak(10);
+
+        // Set up simulation
+        DIOSim sim = new DIOSim(sensor);
+
+        // Check line unbroken
+        sim.setValue(false);
+        assertFalse("LineBreak disabled", sensor.get());
+
+        // Check line broken
+        sim.setValue(true);
+        assertTrue("LineBreak enabled", sensor.get());
+
+        sensor.close();
+
+    }
+
 }

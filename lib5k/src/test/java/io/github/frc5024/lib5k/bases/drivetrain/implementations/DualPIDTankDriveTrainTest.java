@@ -37,7 +37,6 @@ public class DualPIDTankDriveTrainTest {
     static class TestDriveTrain extends DualPIDTankDriveTrain {
 
         // PID controllers
-        private static ExtendedPIDController velocityController = new ExtendedPIDController(1.0, 0.0, 0.0);
         private static ExtendedPIDController rotationController = new ExtendedPIDController(0.0088, 0.01, 0.0106);
 
         // Parameters
@@ -161,6 +160,17 @@ public class DualPIDTankDriveTrainTest {
             rightFrontMotor.configOpenloopRamp(rampTimeSeconds);
         }
 
+        @Override
+        public void close() {
+            try {
+                leftEncoder.close();
+                rightEncoder.close();
+                gyroSim.close();
+            } catch (Exception e) {
+
+            }
+        }
+
     }
 
     @Test
@@ -243,6 +253,9 @@ public class DualPIDTankDriveTrainTest {
         // Save the chart
         BitmapEncoder.saveBitmap(chart, "./build/tmp/DualPIDTankDriveTrain_UnitTest_Response", BitmapFormat.PNG);
         System.out.println("Test result PNG generated to ./build/tmp/DualPIDTankDriveTrain_UnitTest_Response.png");
+
+        // Clean up
+        drivetrain.close();
 
     }
 

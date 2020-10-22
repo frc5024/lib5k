@@ -14,7 +14,7 @@ import io.github.frc5024.libkontrol.statemachines.StateMachine;
 import io.github.frc5024.libkontrol.statemachines.StateMetadata;
 import io.github.frc5024.purepursuit.pathgen.Path;
 
-public abstract class AbstractDriveTrain extends SubsystemBase implements IDifferentialDrivebase, SafeSystem {
+public abstract class AbstractDriveTrain extends SubsystemBase implements IDifferentialDrivebase, SafeSystem, AutoCloseable {
 
     // Logging
     protected RobotLogger logger = RobotLogger.getInstance();
@@ -267,6 +267,11 @@ public abstract class AbstractDriveTrain extends SubsystemBase implements IDiffe
 
         logger.log("Resetting");
 
+    }
+
+    @Override
+    public void close() throws Exception {
+        
     }
 
 }

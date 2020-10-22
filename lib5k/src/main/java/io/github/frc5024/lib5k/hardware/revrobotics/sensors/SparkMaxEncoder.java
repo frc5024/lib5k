@@ -85,4 +85,10 @@ public class SparkMaxEncoder extends CANEncoder implements EncoderSimulation {
         super.setPosition(0.0);
     }
 
+    @Override
+    public void close() throws Exception {
+        if(sim!=null){
+            sim.close();
+        }
+    }
 }

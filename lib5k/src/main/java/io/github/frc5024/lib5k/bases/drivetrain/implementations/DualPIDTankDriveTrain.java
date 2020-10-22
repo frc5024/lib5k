@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
+import io.github.frc5024.lib5k.bases.drivetrain.Chassis;
 import io.github.frc5024.lib5k.control_loops.base.Controller;
 import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.RR_HAL;
 import io.github.frc5024.lib5k.math.RotationMath;
@@ -113,41 +114,81 @@ public abstract class DualPIDTankDriveTrain extends TankDriveTrain {
         }
 
         // Get the robot's current pose
-        Pose2d currentPose = getPose();
+        Translation2d currentCoordinate = getPose().getTranslation();
+        Rotation2d currentHeading = getPose().getRotation();
 
-        // Calculate positional error
-        Translation2d error = goalPose.minus(currentPose.getTranslation());
+        // Get the heading error
+        Rotation2d headingError = new Rotation2d(
+                Math.atan2(currentCoordinate.getY() - goalPose.getY(), currentCoordinate.getX() - goalPose.getX()))
+                        .minus(currentHeading);
+        // NOTE: add 180 degrees when following in reverse
 
-        // Get the hypot to determine scalar distance
-        double distanceError = currentPose.getTranslation().getDistance(goalPose) * -1;
-        // Math.sqrt(Math.pow((goalPose.getX() - currentPose.getTranslation().getX()),
-        // 2)
-        // + Math.pow((goalPose.getY() - currentPose.getTranslation().getY()), 2));
+        // Get the robot velocity
+        double velocity = getSpeed();
 
-        // Calculate clockwise-positive rotational error
-        Rotation2d angularError = Rotation2d.fromDegrees(Math.toDegrees(Math.atan2(error.getY(), error.getX())) * -1);
+        // TEMP: Gain
+        double kLookaheadGain = 0.2;
 
-        // Calculate speed multiplier based on distance from target.
-        // This lets the robot curve towards the target, instead of snapping to it.
-        // This is a trick I learned from a programmer at 1114. It provides really
-        // smooth outputs
+        // Calculate the needed velocity to reach the goal pose
+        double delta;
+
+        // Handle the goal being straight
+        if (RobotMath.epsilonEquals(headingError.getDegrees(), 0.0, RobotMath.kVerySmallNumber)) {
+            delta = RobotMath.clamp(currentCoordinate.getDistance(goalPose), -1, 1);
+        } else {
+
+            // Calculate a corrective factor
+            double correctiveFactor = kLookaheadGain * velocity;
+
+            // Calculate a corrected delta
+            delta = Math.atan2(2.0 * getWidthMeters() * Math.sin(headingError.getRadians()) / correctiveFactor, 1.0);
+        }
+
+        // Handle the robot being in reverse
+        if (getFrontSide().equals(Chassis.Side.kBack)) {
+            delta *= -1;
+        }
+
+        // // Calculate positional error
+        // Translation2d error = goalPose.minus(currentPose.getTranslation());
+
+        // // Get the hypot to determine scalar distance
+        // double distanceError = currentPose.getTranslation().getDistance(goalPose) *
+        // -1;
+        // // Math.sqrt(Math.pow((goalPose.getX() -
+        // currentPose.getTranslation().getX()),
+        // // 2)
+        // // + Math.pow((goalPose.getY() - currentPose.getTranslation().getY()), 2));
+
+        // // Calculate clockwise-positive rotational error
+        // Rotation2d angularError =
+        // Rotation2d.fromDegrees(Math.toDegrees(Math.atan2(error.getY(), error.getX()))
+        // * -1).minus(currentPose.getRotation());
+
+        // // Calculate speed multiplier based on distance from target.
+        // // This lets the robot curve towards the target, instead of snapping to it.
+        // // This is a trick I learned from a programmer at 1114. It provides really
+        // // smooth outputs
+        // //
         // https://bitbucket.org/kaleb_dodd/simbot2019public/src/abc56f5220b5c94bca216f86e3b6b5757d0ffeff/src/main/java/frc/subsystems/Drive.java#lines-337
-        double speedMul = ((-1 * (Math.min(Math.abs(angularError.getDegrees()), 90.0)) / 90.0) + 1);
+        // double speedMul = ((-1 * (Math.min(Math.abs(angularError.getDegrees()),
+        // 90.0)) / 90.0) + 1);
 
-        // Calculate needed throttle
-        double throttleOutput = distanceController.calculate(distanceError);
+        // // Calculate needed throttle
+        // double throttleOutput = distanceController.calculate(distanceError);
 
-        // Restrict throttle output
-        throttleOutput *= speedMul;
+        // // Restrict throttle output
+        // throttleOutput *= speedMul;
 
-        // Calculate rotation PIF
-        double turnOutput = rotationController.calculate(angularError.getDegrees());
+        // // Calculate rotation PIF
+        // double turnOutput = rotationController.calculate(angularError.getDegrees());
 
-        // Calculate motor outputs
-        DifferentialVoltages voltages = DifferentialVoltages.fromThrottleAndSteering(throttleOutput, turnOutput);
+        // // Calculate motor outputs
+        // DifferentialVoltages voltages =
+        // DifferentialVoltages.fromThrottleAndSteering(throttleOutput, turnOutput);
 
-        // Write output frame
-        handleVoltage(voltages.getLeftVolts(), voltages.getRightVolts());
+        // // Write output frame
+        // handleVoltage(voltages.getLeftVolts(), voltages.getRightVolts());
 
         // If the robot is at its goal, we are done
         if (RobotMath.epsilonEquals(currentPose.getTranslation(), goalPose, epsilon)) {

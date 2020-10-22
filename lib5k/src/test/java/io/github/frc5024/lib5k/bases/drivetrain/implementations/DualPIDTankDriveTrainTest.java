@@ -1,20 +1,35 @@
 package io.github.frc5024.lib5k.bases.drivetrain.implementations;
 
+import java.io.IOException;
+
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import org.junit.Test;
+import org.knowm.xchart.BitmapEncoder;
+import org.knowm.xchart.XYChart;
+import org.knowm.xchart.XYChartBuilder;
+import org.knowm.xchart.BitmapEncoder.BitmapFormat;
+import org.knowm.xchart.XYSeries.XYSeriesRenderStyle;
+import org.knowm.xchart.style.Styler.LegendPosition;
 
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.util.Units;
 import io.github.frc5024.common_drive.gearing.Gear;
+import io.github.frc5024.lib5k.bases.drivetrain.commands.PathFollowerCommand;
 import io.github.frc5024.lib5k.control_loops.ExtendedPIDController;
 import io.github.frc5024.lib5k.control_loops.models.DCBrushedMotor;
 import io.github.frc5024.lib5k.hardware.common.sensors.interfaces.EncoderSimulation;
 import io.github.frc5024.lib5k.hardware.ctre.motors.ExtendedTalonSRX;
 import io.github.frc5024.lib5k.hardware.kauai.gyroscopes.NavX;
+import io.github.frc5024.lib5k.logging.RobotLogger;
+import io.github.frc5024.purepursuit.pathgen.Path;
 
 public class DualPIDTankDriveTrainTest {
+
+    private static double SIMULATION_TIME_SECONDS = 5.0;
+    private static double PERIOD_SECONDS = 0.02;
 
     static class TestDriveTrain extends DualPIDTankDriveTrain {
 
@@ -131,6 +146,8 @@ public class DualPIDTankDriveTrainTest {
 
         @Override
         protected void runIteration() {
+            leftEncoder.update();
+            rightEncoder.update();
         }
 
         @Override
@@ -142,8 +159,67 @@ public class DualPIDTankDriveTrainTest {
     }
 
     @Test
-    public void chartDriveTrainResponse() {
-        
+    public void chartDriveTrainResponse() throws IOException {
+
+        // Create a drivetrain
+        TestDriveTrain drivetrain = new TestDriveTrain();
+        RobotLogger.getInstance().flush();
+
+        // Create a new path
+        Path path = new Path(new Translation2d(0.0, 0.0), new Translation2d(1.0, 3.0), new Translation2d(2.0, 2.0),
+                new Translation2d(3.0, 3.0));
+
+        // Get a command that can follow the path
+        PathFollowerCommand command = drivetrain.createPathingCommand(path, 0.2);
+
+        // Determine the number of samples needed
+        int numSamples = (int) (SIMULATION_TIME_SECONDS / PERIOD_SECONDS);
+
+        // Set up a chart
+        double[] referenceXSet = new double[numSamples];
+        double[] referenceYSet = new double[numSamples];
+        double[] measurementXSet = new double[numSamples];
+        double[] measurementYSet = new double[numSamples];
+
+        // Init the command
+        command.initialize();
+        RobotLogger.getInstance().flush();
+
+        // Run the simulation for the set time
+        for (int i = 0; i < numSamples; i++) {
+
+            // Update the drivetrain and command
+            drivetrain.periodic();
+            command.execute();
+            RobotLogger.getInstance().flush();
+
+            // Get the current and goal poses
+            Translation2d currentPose = drivetrain.getPose().getTranslation();
+            Translation2d goalPose = command.getMostRecentGoal();
+
+            // Log everything
+            referenceXSet[i] = goalPose.getX();
+            referenceYSet[i] = goalPose.getY();
+            measurementXSet[i] = currentPose.getX();
+            measurementYSet[i] = currentPose.getY();
+        }
+
+        // Build chart
+        XYChart chart = new XYChartBuilder().width(1000).height(600).build();
+
+        // Add data
+        chart.addSeries("Reference", referenceXSet, referenceYSet);
+        chart.addSeries("Measurement", measurementXSet, measurementYSet);
+
+        // Configure chart styling
+        chart.getStyler().setDefaultSeriesRenderStyle(XYSeriesRenderStyle.Line);
+        chart.getStyler().setLegendPosition(LegendPosition.OutsideE);
+        chart.getStyler().setMarkerSize(8);
+
+        // Save the chart
+        BitmapEncoder.saveBitmap(chart, "./build/tmp/DualPIDTankDriveTrain_UnitTest_Response", BitmapFormat.PNG);
+        System.out.println("Test result PNG generated to ./build/tmp/DualPIDTankDriveTrain_UnitTest_Response.png");
+
     }
 
 }

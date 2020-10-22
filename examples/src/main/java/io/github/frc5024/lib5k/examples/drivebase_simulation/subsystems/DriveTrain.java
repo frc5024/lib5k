@@ -162,6 +162,10 @@ public class DriveTrain extends DualPIDTankDriveTrain {
         ntX.setDouble(pose.getTranslation().getX());
         ntY.setDouble(pose.getTranslation().getY());
         ntTheta.setDouble(pose.getRotation().getDegrees());
+
+        // Update the encoders
+        leftEncoder.update();
+        rightEncoder.update();
     }
 
     @Override

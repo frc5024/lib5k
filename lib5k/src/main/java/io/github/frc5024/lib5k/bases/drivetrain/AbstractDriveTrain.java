@@ -110,6 +110,23 @@ public abstract class AbstractDriveTrain extends SubsystemBase implements IDiffe
     public abstract void resetPose(Pose2d pose);
 
     /**
+     * Get the robot's velocity in meters per period
+     * 
+     * @return Velocity
+     */
+    public abstract Translation2d getVelocity();
+
+    /**
+     * Get the robot's speed in meters per period
+     * 
+     * @return Robot speed
+     */
+    public double getSpeed() {
+        Translation2d velocity = getVelocity();
+        return Math.hypot(velocity.getX(), velocity.getY());
+    }
+
+    /**
      * State handler for open-loop control
      * 
      * @param meta State metadata

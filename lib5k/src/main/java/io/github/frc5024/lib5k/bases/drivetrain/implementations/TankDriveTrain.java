@@ -39,6 +39,9 @@ public abstract class TankDriveTrain extends AbstractDriveTrain {
     // Localization
     private DifferentialDriveOdometry localizer;
 
+    // Tracker for last pose
+    private Pose2d lastPose = new Pose2d();
+
     /**
      * Create a new TankDriveTrain
      */
@@ -96,13 +99,21 @@ public abstract class TankDriveTrain extends AbstractDriveTrain {
         super.periodic();
 
         // Update localization
+        lastPose = getPose();
         localizer.update(getCurrentHeading(), getLeftMeters(), getRightMeters());
+
     }
 
     @Override
     public void resetPose(Pose2d pose) {
         logger.log(String.format("Resetting robot pose to: %s", pose.toString()));
         localizer.resetPosition(pose, getCurrentHeading());
+        lastPose = pose;
+    }
+
+    @Override
+    public Translation2d getVelocity() {
+        return getPose().getTranslation().minus(lastPose.getTranslation());
     }
 
     @Override
@@ -119,26 +130,36 @@ public abstract class TankDriveTrain extends AbstractDriveTrain {
 
         logger.log(String.format("Setting front side to: %s", side.toString()));
 
-        // Get the current pose
-        Pose2d currentPose = getPose();
+        // TODO: I dont think this is needed
+        // // Get the current pose
+        // Pose2d currentPose = getPose();
 
-        // Build a new pose, with a flipped angle
-        Pose2d newPose = new Pose2d(currentPose.getTranslation(),
-                currentPose.getRotation().minus(Rotation2d.fromDegrees(180)));
+        // // Build a new pose, with a flipped angle
+        // Pose2d newPose = new Pose2d(currentPose.getTranslation(),
+        // currentPose.getRotation().minus(Rotation2d.fromDegrees(180)));
 
-        // Reset the localizer
-        resetPose(newPose);
+        // // Reset the localizer
+        // resetPose(newPose);
 
-        // Reset the encoders
-        resetEncoders();
+        // // Reset the encoders
+        // resetEncoders();
 
-        // Flip everything
-        setMotorsInverted(side.equals(Side.kBack));
-        setEncodersInverted(side.equals(Side.kBack));
+        // // Flip everything
+        // setMotorsInverted(side.equals(Side.kBack));
+        // setEncodersInverted(side.equals(Side.kBack));
 
         // Set the active side tracker
         frontSide = side;
 
+    }
+
+    /**
+     * Get which side is the front
+     * 
+     * @return Front side
+     */
+    public Chassis.Side getFrontSide() {
+        return frontSide;
     }
 
     /**

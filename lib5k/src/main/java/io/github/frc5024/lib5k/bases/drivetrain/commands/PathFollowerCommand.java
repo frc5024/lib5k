@@ -46,6 +46,9 @@ public class PathFollowerCommand extends CommandBase {
     // Max speed
     private double maxSpeed = 1.0;
 
+    // Most recent goal
+    private Translation2d mostRecentGoal = null;
+
     /**
      * Create a PathFollowCommand. This should not be called from user code. To
      * create one of these, call AbstractDriveTrain.createPathingCommand() instead.
@@ -136,6 +139,7 @@ public class PathFollowerCommand extends CommandBase {
 
         // Get the next goal pose
         Translation2d goalPose = follower.getNextPoint(currentPose);
+        mostRecentGoal = goalPose;
 
         // Drive to that pose
         // Using a fake epsilon here because we override the check in isFinished.
@@ -170,6 +174,7 @@ public class PathFollowerCommand extends CommandBase {
 
         // Stop the robot
         driveTrain.reset();
+        mostRecentGoal = null;
 
         // Save the logfile
         if (logFile != null) {
@@ -182,6 +187,15 @@ public class PathFollowerCommand extends CommandBase {
             logFile = null;
         }
 
+    }
+
+    /**
+     * Get the most recent goal pose
+     * 
+     * @return Most recent goal
+     */
+    public Translation2d getMostRecentGoal() {
+        return mostRecentGoal;
     }
 
     @Override

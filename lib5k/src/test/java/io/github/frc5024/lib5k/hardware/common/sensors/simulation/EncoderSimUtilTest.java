@@ -71,6 +71,7 @@ public class EncoderSimUtilTest {
         controller.set(-1.0);
         sim.update();
         sim.update();
+        assertTrue("Controller inverted", controller.getInverted());
         assertTrue("Encoder incremented", sim.getRotations() > 0.0);
         assertFalse("Encoder not inverted", sim.getInverted());
         assertTrue("Encoder velocity", sim.getVelocity() > 0.0);
@@ -82,11 +83,13 @@ public class EncoderSimUtilTest {
         sim.update();
         sim.update();
         assertTrue("Encoder decremented", sim.getRotations() < 0.0);
+        assertTrue("Controller inverted", controller.getInverted());
         assertFalse("Encoder not inverted", sim.getInverted());
         assertTrue("Encoder velocity", sim.getVelocity() < 0.0);
 
         // Unset global time scale
         TimeScale.globallyOverrideCalculationOutput(null);
+        sim.close();
 
     }
 
@@ -126,6 +129,7 @@ public class EncoderSimUtilTest {
 
         // Unset global time scale
         TimeScale.globallyOverrideCalculationOutput(null);
+        sim.close();
 
     }
 
@@ -151,6 +155,7 @@ public class EncoderSimUtilTest {
         sim.update();
         sim.update();
         assertTrue("Encoder incremented", sim.getRotations() > 0.0);
+        assertTrue("Controller inverted", controller.getInverted());
         assertTrue("Encoder inverted", sim.getInverted());
         assertTrue("Encoder velocity", sim.getVelocity() > 0.0);
 
@@ -161,11 +166,13 @@ public class EncoderSimUtilTest {
         sim.update();
         sim.update();
         assertTrue("Encoder decremented", sim.getRotations() < 0.0);
+        assertTrue("Controller inverted", controller.getInverted());
         assertTrue("Encoder inverted", sim.getInverted());
         assertTrue("Encoder velocity", sim.getVelocity() < 0.0);
 
         // Unset global time scale
         TimeScale.globallyOverrideCalculationOutput(null);
+        sim.close();
 
     }
 

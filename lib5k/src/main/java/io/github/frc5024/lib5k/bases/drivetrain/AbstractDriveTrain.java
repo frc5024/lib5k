@@ -14,7 +14,7 @@ import io.github.frc5024.libkontrol.statemachines.StateMachine;
 import io.github.frc5024.libkontrol.statemachines.StateMetadata;
 import io.github.frc5024.purepursuit.pathgen.Path;
 
-public abstract class AbstractDriveTrain extends SubsystemBase implements IDifferentialDrivebase, SafeSystem {
+public abstract class AbstractDriveTrain extends SubsystemBase implements IDifferentialDrivebase, SafeSystem, AutoCloseable {
 
     // Logging
     protected RobotLogger logger = RobotLogger.getInstance();
@@ -108,6 +108,23 @@ public abstract class AbstractDriveTrain extends SubsystemBase implements IDiffe
      * @param pose New pose
      */
     public abstract void resetPose(Pose2d pose);
+
+    /**
+     * Get the robot's velocity in meters per period
+     * 
+     * @return Velocity
+     */
+    public abstract Translation2d getVelocity();
+
+    /**
+     * Get the robot's speed in meters per period
+     * 
+     * @return Robot speed
+     */
+    public double getSpeed() {
+        Translation2d velocity = getVelocity();
+        return Math.hypot(velocity.getX(), velocity.getY());
+    }
 
     /**
      * State handler for open-loop control
@@ -250,6 +267,11 @@ public abstract class AbstractDriveTrain extends SubsystemBase implements IDiffe
 
         logger.log("Resetting");
 
+    }
+
+    @Override
+    public void close() throws Exception {
+        
     }
 
 }

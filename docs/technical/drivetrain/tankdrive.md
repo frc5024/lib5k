@@ -26,9 +26,9 @@ By fusing the left and right distance measurements with the Z angle over time, w
 
 ## Implementing a Tank Drive DriveTrain
 
-Lib5K provides a helper base class called [`TankDriveTrain`](/lib5k/javadoc/io/github/frc5024/lib5k/bases/drivetrain/implementations/TankDriveTrain.html), which extends the base class for all drivetrains, [`AbstractDriveTrain`](/lib5k/javadoc/io/github/frc5024/lib5k/bases/drivetrain/AbstractDriveTrain.html). An example of implementing a drivetrain for autonomous movement can be found [in this example](https://github.com/frc5024/lib5k/blob/master/examples/src/main/java/io/github/frc5024/lib5k/examples/autonomous_path_following/subsystems/DriveTrain.java).
+Lib5K provides a helper base class called [`DualPIDTankDriveTrain`](/lib5k/javadoc/io/github/frc5024/lib5k/bases/drivetrain/implementations/DualPIDTankDriveTrain.html), which extends the base class for all drivetrains, [`AbstractDriveTrain`](/lib5k/javadoc/io/github/frc5024/lib5k/bases/drivetrain/AbstractDriveTrain.html). An example of implementing a drivetrain for autonomous movement can be found [in this example](https://github.com/frc5024/lib5k/blob/master/examples/src/main/java/io/github/frc5024/lib5k/examples/autonomous_path_following/subsystems/DriveTrain.java).
 
-The idea behind `TankDriveTrain` is, Lib5K handles all the complex path planning code, and the user (you) is expected to implement function calls to the robot hardware. This lets us keep the same backend code, and switch out components like motor controllers and gyroscopes without needing to re-implement code.
+The idea behind `DualPIDTankDriveTrain` is, Lib5K handles all the complex path planning code, and the user (you) is expected to implement function calls to the robot hardware. This lets us keep the same backend code, and switch out components like motor controllers and gyroscopes without needing to re-implement code.
 
 When writing an [`AutonomousSequence`](/lib5k/javadoc/io/github/frc5024/lib5k/autonomous/AutonomousSequence.html), you can call one of the following methods on your drivetrain to get a pre-built path following, or on-the-spot turning command:
 

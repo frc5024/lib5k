@@ -6,7 +6,7 @@ package io.github.frc5024.lib5k.hardware.common.sensors.interfaces;
  * to hot-swap components, and the biggest bottleneck is rewriting encoder code
  * because they are not cross-compatible.
  */
-public interface CommonEncoder {
+public interface CommonEncoder extends AutoCloseable {
 
 
     /**

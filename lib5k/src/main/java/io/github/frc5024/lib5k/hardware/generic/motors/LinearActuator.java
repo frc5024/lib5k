@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableRegistry;
 /**
  * PCM-Powered Linear actuator
  */
-public class LinearActuator implements Sendable {
+public class LinearActuator implements Sendable, AutoCloseable {
 
     private Solenoid m_trigger;
 
@@ -78,5 +78,10 @@ public class LinearActuator implements Sendable {
      */
     public void clearAllFaults() {
         m_trigger.clearAllPCMStickyFaults();
+    }
+
+    @Override
+    public void close() {
+        m_trigger.close();
     }
 }

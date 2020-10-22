@@ -1,6 +1,7 @@
 package io.github.frc5024.lib5k.bases.drivetrain.implementations;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
@@ -37,7 +38,7 @@ public class DualPIDTankDriveTrainTest {
 
         // PID controllers
         private static ExtendedPIDController velocityController = new ExtendedPIDController(1.0, 0.0, 0.0);
-        private static ExtendedPIDController rotationController = new ExtendedPIDController(0.0088, 0.01, 0.0106); 
+        private static ExtendedPIDController rotationController = new ExtendedPIDController(0.0088, 0.01, 0.0106);
 
         // Parameters
         private static double TRACK_WIDTH_M = 0.1524;
@@ -64,7 +65,7 @@ public class DualPIDTankDriveTrainTest {
         private double encoderInversionMultiplier = 1.0;
 
         public TestDriveTrain() {
-            super( rotationController, 0.5);
+            super(rotationController, 0.5);
 
             // Set inversions on motors
             leftFrontMotor.setInverted(false);
@@ -170,7 +171,7 @@ public class DualPIDTankDriveTrainTest {
         RobotLogger.getInstance().flush();
 
         // Create a new path
-        Path path = new Path( new Translation2d(0.0, 0.0), new Translation2d(1.0, 3.0), new Translation2d(2.0, 2.0),
+        Path path = new Path(new Translation2d(0.0, 0.0), new Translation2d(1.0, 3.0), new Translation2d(2.0, 2.0),
                 new Translation2d(3.0, 3.0));
 
         // Get a command that can follow the path
@@ -193,30 +194,43 @@ public class DualPIDTankDriveTrainTest {
         TimeScale.globallyOverrideCalculationOutput(0.02);
 
         // Run the simulation for the set time
-        for (int i = 0; i < numSamples; i++) {
+        int i = 0;
+        simRunner: {
+            for (; i < numSamples; i++) {
 
-            // Update the drivetrain and command
-            drivetrain.periodic();
-            command.execute();
-            RobotLogger.getInstance().flush();
+                // Update the drivetrain and command
+                drivetrain.periodic();
+                command.execute();
+                RobotLogger.getInstance().flush();
 
-            // Get the current and goal poses
-            Translation2d currentPose = drivetrain.getPose().getTranslation();
-            Translation2d goalPose = command.getMostRecentGoal();
+                // Get the current and goal poses
+                Translation2d currentPose = drivetrain.getPose().getTranslation();
+                Translation2d goalPose = command.getMostRecentGoal();
 
-            // Log everything
-            referenceXSet[i] = goalPose.getX();
-            referenceYSet[i] = goalPose.getY();
-            measurementXSet[i] = currentPose.getX();
-            measurementYSet[i] = currentPose.getY();
+                // Log everything
+                referenceXSet[i] = goalPose.getX();
+                referenceYSet[i] = goalPose.getY();
+                measurementXSet[i] = currentPose.getX();
+                measurementYSet[i] = currentPose.getY();
+
+                // Handle command finishing
+                if (command.isFinished()) {
+                    command.end(false);
+                    break simRunner;
+                }
+
+            }
+            command.end(true);
         }
+        RobotLogger.getInstance().flush();
 
         // Build chart
         XYChart chart = new XYChartBuilder().width(1000).height(600).build();
 
         // Add data
-        chart.addSeries("Reference", referenceXSet, referenceYSet);
-        chart.addSeries("Measurement", measurementXSet, measurementYSet);
+        chart.addSeries("Reference", Arrays.copyOfRange(referenceXSet, 0, i), Arrays.copyOfRange(referenceYSet, 0, i));
+        chart.addSeries("Measurement", Arrays.copyOfRange(measurementXSet, 0, i),
+                Arrays.copyOfRange(measurementYSet, 0, i));
 
         // Configure chart styling
         chart.getStyler().setDefaultSeriesRenderStyle(XYSeriesRenderStyle.Line);

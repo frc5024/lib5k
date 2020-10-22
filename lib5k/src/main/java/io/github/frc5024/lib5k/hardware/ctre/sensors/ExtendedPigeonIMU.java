@@ -132,6 +132,7 @@ public class ExtendedPigeonIMU extends PigeonIMU implements ISimGyro {
      * 
      * @param drivebase      Robot drivetrain
      * @param startOwnThread Should this simulation run in its own thread?
+     * @return Reference to the internal GyroSimUtil object
      */
     public GyroSimUtil initDrivebaseSimulation(final IDifferentialDrivebase drivebase, boolean startOwnThread) {
 

@@ -143,7 +143,7 @@ public class PathFollowerCommand extends CommandBase {
 
         // Drive to that pose
         // Using a fake epsilon here because we override the check in isFinished.
-        driveTrain.setGoalPose(goalPose, new Translation2d(0.001, 0.001));
+        driveTrain.setGoalPose(goalPose, new Translation2d(0.000001, 0.000001));
 
         // Try to write to the logfile
         if (logFile != null) {

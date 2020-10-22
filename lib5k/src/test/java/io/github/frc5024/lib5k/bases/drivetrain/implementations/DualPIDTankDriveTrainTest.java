@@ -37,10 +37,7 @@ public class DualPIDTankDriveTrainTest {
 
         // PID controllers
         private static ExtendedPIDController velocityController = new ExtendedPIDController(1.0, 0.0, 0.0);
-        private static ExtendedPIDController rotationController = new ExtendedPIDController(0.002, 0, 0); // new
-                                                                                                          // ExtendedPIDController(0.0088,
-                                                                                                          // 0.01,
-                                                                                                          // 0.0106);
+        private static ExtendedPIDController rotationController = new ExtendedPIDController(0.0088, 0.01, 0.0106); 
 
         // Parameters
         private static double TRACK_WIDTH_M = 0.1524;
@@ -67,7 +64,7 @@ public class DualPIDTankDriveTrainTest {
         private double encoderInversionMultiplier = 1.0;
 
         public TestDriveTrain() {
-            super(velocityController, rotationController, 0.5);
+            super( rotationController, 0.5);
 
             // Set inversions on motors
             leftFrontMotor.setInverted(false);
@@ -176,11 +173,8 @@ public class DualPIDTankDriveTrainTest {
         Path path = new Path( new Translation2d(0.0, 0.0), new Translation2d(1.0, 3.0), new Translation2d(2.0, 2.0),
                 new Translation2d(3.0, 3.0));
 
-        // // Get a command that can follow the path
+        // Get a command that can follow the path
         PathFollowerCommand command = drivetrain.createPathingCommand(path, 0.2);
-
-        // Translation2d goalPose = new Translation2d(3.0, 4.0);
-        // drivetrain.setGoalPose(goalPose, new Translation2d(0.2, 0.2));
 
         // Determine the number of samples needed
         int numSamples = (int) (SIMULATION_TIME_SECONDS / PERIOD_SECONDS);

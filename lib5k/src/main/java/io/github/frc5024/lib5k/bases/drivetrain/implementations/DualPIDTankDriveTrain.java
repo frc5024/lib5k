@@ -19,7 +19,6 @@ import io.github.frc5024.libkontrol.statemachines.StateMetadata;
 public abstract class DualPIDTankDriveTrain extends TankDriveTrain {
 
     // Control loops
-    private Controller distanceController;
     private Controller rotationController;
     private double Kr;
 
@@ -29,24 +28,22 @@ public abstract class DualPIDTankDriveTrain extends TankDriveTrain {
     /**
      * Create a new DualPIDTankDriveTrain
      * 
-     * @param distanceController Controller for distance control
      * @param rotationController Controller for rotation control
      */
-    public DualPIDTankDriveTrain(Controller distanceController, Controller rotationController) {
-        this(distanceController, rotationController, 1.0);
+    public DualPIDTankDriveTrain(Controller rotationController) {
+        this(rotationController, 0.5);
     }
 
     /**
      * Create a new DualPIDTankDriveTrain
      * 
-     * @param distanceController Controller for distance control
      * @param rotationController Controller for rotation control
+     * @param Kr                 Rotational P gain for path following
      */
-    public DualPIDTankDriveTrain(Controller distanceController, Controller rotationController, double Kr) {
+    public DualPIDTankDriveTrain(Controller rotationController, double Kr) {
         super();
 
         // Set controllers
-        this.distanceController = distanceController;
         this.rotationController = rotationController;
         this.Kr = Kr;
     }
@@ -112,13 +109,10 @@ public abstract class DualPIDTankDriveTrain extends TankDriveTrain {
 
             // Reset the controllers
             rotationController.reset();
-            distanceController.reset();
 
             // Configure the controllers
             rotationController.setEpsilon(1.0);
             rotationController.setReference(0.0);
-            distanceController.setEpsilon((epsilon.getX() + epsilon.getY()) / 2);
-            distanceController.setReference(0.0);
 
             // Reset and start the action timer
             actionTimer.reset();
@@ -141,9 +135,6 @@ public abstract class DualPIDTankDriveTrain extends TankDriveTrain {
         if (getFrontSide().equals(Chassis.Side.kBack)) {
             throttle *= -1;
         }
-
-        // Feed both controllers
-        // throttle = distanceController.calculate(throttle, 0.0);
 
         // Calculate the needed steering value
         double steering = headingError.getRadians();
@@ -174,7 +165,6 @@ public abstract class DualPIDTankDriveTrain extends TankDriveTrain {
         if (RobotMath.epsilonEquals(currentCoordinate, goalPose, epsilon)) {
             // Reset the controllers
             rotationController.reset();
-            distanceController.reset();
 
             // Stop the motors
             handleVoltage(0, 0);
@@ -196,9 +186,6 @@ public abstract class DualPIDTankDriveTrain extends TankDriveTrain {
         // Reset controllers
         if (rotationController != null) {
             rotationController.reset();
-        }
-        if (distanceController != null) {
-            distanceController.reset();
         }
     }
 

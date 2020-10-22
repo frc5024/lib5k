@@ -25,6 +25,7 @@ import io.github.frc5024.lib5k.hardware.common.sensors.simulation.GyroSimUtil;
 import io.github.frc5024.lib5k.hardware.ctre.motors.ExtendedTalonSRX;
 import io.github.frc5024.lib5k.hardware.kauai.gyroscopes.NavX;
 import io.github.frc5024.lib5k.logging.RobotLogger;
+import io.github.frc5024.lib5k.utils.TimeScale;
 import io.github.frc5024.purepursuit.pathgen.Path;
 
 public class DualPIDTankDriveTrainTest {
@@ -190,6 +191,9 @@ public class DualPIDTankDriveTrainTest {
         // Init the command
         command.initialize();
         RobotLogger.getInstance().flush();
+
+        // Globally override the calculation timer
+        TimeScale.globallyOverrideCalculationOutput(0.02);
 
         // Run the simulation for the set time
         for (int i = 0; i < numSamples; i++) {

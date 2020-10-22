@@ -65,7 +65,7 @@ public class TimeScale {
 
         // Handle an override
         if (globalOverride != null) {
-            return override;
+            return globalOverride;
         }
         if (override != null) {
             return override;

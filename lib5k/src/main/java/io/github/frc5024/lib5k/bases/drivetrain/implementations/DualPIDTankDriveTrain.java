@@ -130,9 +130,13 @@ public abstract class DualPIDTankDriveTrain extends TankDriveTrain {
         Rotation2d currentHeading = getPose().getRotation();
 
         // Get the heading error
+        // Rotation2d headingError = new Rotation2d(
+        // Math.atan2(currentCoordinate.getY() - goalPose.getY(),
+        // currentCoordinate.getX() - goalPose.getX()))
+        // .minus(currentHeading).plus(Rotation2d.fromDegrees(180.0));
         Rotation2d headingError = new Rotation2d(
-                Math.atan2(currentCoordinate.getY() - goalPose.getY(), currentCoordinate.getX() - goalPose.getX()))
-                        .minus(currentHeading).plus(Rotation2d.fromDegrees(180.0));
+                Math.atan2(goalPose.getY() - currentCoordinate.getY(), goalPose.getX() - currentCoordinate.getX()))
+                        .minus(currentHeading);// .plus(Rotation2d.fromDegrees(180.0));
         // NOTE: add 180 degrees when following in reverse
 
         // Get the robot velocity
@@ -164,12 +168,19 @@ public abstract class DualPIDTankDriveTrain extends TankDriveTrain {
         }
 
         // Feed both controllers
-        throttle = distanceController.calculate(throttle * -1, 0.0);
+        throttle = distanceController.calculate(throttle, 0.0);
         double steering = headingError.getRadians() * Kr;
+
+        // Invert steering to match robot outputs
+        steering *= -1;
 
         // Get the throttle correction factor
         double throttleCorrectiveFactor = calculateThrottleCorrectionFactor(headingError);
         throttle *= throttleCorrectiveFactor;
+
+        // Clamp the inputs
+        throttle = RobotMath.clamp(throttle, -1, 1);
+        steering = RobotMath.clamp(steering, -1, 1);
 
         // Calculate motor outputs
         DifferentialVoltages voltages = new DifferentialVoltages(throttle + steering, throttle - steering).normalize()

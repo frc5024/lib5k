@@ -81,7 +81,7 @@ public class GyroSimUtil implements AutoCloseable {
     /**
      * Update the simulation data
      */
-    private void update() {
+    public void update() {
 
         // Ensure sim is running
         if (simDevice != null) {

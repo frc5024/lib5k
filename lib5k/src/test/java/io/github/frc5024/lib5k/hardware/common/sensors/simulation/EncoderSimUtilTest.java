@@ -68,7 +68,7 @@ public class EncoderSimUtilTest {
         // Ensure the encoder increments when moving backwards
         controller.stopMotor();
         sim.reset();
-        controller.set(-1.0);
+        controller.set(1.0);
         sim.update();
         sim.update();
         assertTrue("Controller inverted", controller.getInverted());
@@ -79,7 +79,7 @@ public class EncoderSimUtilTest {
         // Ensure the encoder decrements when moving forwards
         controller.stopMotor();
         sim.reset();
-        controller.set(1.0);
+        controller.set(-1.0);
         sim.update();
         sim.update();
         assertTrue("Encoder decremented", sim.getRotations() < 0.0);
@@ -151,7 +151,7 @@ public class EncoderSimUtilTest {
         // Ensure the encoder increments when moving forwards
         controller.stopMotor();
         sim.reset();
-        controller.set(1.0);
+        controller.set(-1.0);
         sim.update();
         sim.update();
         assertTrue("Encoder incremented", sim.getRotations() > 0.0);
@@ -162,7 +162,7 @@ public class EncoderSimUtilTest {
         // Ensure the encoder decrements when moving backwards
         controller.stopMotor();
         sim.reset();
-        controller.set(-1.0);
+        controller.set(1.0);
         sim.update();
         sim.update();
         assertTrue("Encoder decremented", sim.getRotations() < 0.0);

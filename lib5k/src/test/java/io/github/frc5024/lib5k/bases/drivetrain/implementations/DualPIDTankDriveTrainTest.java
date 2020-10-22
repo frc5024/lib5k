@@ -38,9 +38,9 @@ public class DualPIDTankDriveTrainTest {
         // PID controllers
         private static ExtendedPIDController velocityController = new ExtendedPIDController(1.0, 0.0, 0.0);
         private static ExtendedPIDController rotationController = new ExtendedPIDController(0.002, 0, 0); // new
-                                                                                                           // ExtendedPIDController(0.0088,
-                                                                                                           // 0.01,
-                                                                                                           // 0.0106);
+                                                                                                          // ExtendedPIDController(0.0088,
+                                                                                                          // 0.01,
+                                                                                                          // 0.0106);
 
         // Parameters
         private static double TRACK_WIDTH_M = 0.1524;
@@ -78,6 +78,7 @@ public class DualPIDTankDriveTrainTest {
             // Set the sensor phases
             leftFrontMotor.setSensorPhase(false);
             rightFrontMotor.setSensorPhase(false);
+            
 
             // Set up motor simulation
             leftEncoder.initSimulationDevice(leftFrontMotor, GEAR_RATIO,
@@ -87,6 +88,7 @@ public class DualPIDTankDriveTrainTest {
 
             // Set up gyroscope
             gyroscope = NavX.getInstance();
+            // gyroscope.setInverted(true);
 
             // Set up gyro simulation
             gyroSim = gyroscope.initDrivebaseSimulation(this);
@@ -173,11 +175,15 @@ public class DualPIDTankDriveTrainTest {
         RobotLogger.getInstance().flush();
 
         // Create a new path
-        Path path = new Path(0.5, new Translation2d(0.0, 0.0), new Translation2d(1.0, 3.0), new Translation2d(2.0, 2.0),
-                new Translation2d(3.0, 3.0));
+        // Path path = new Path(0.5, new Translation2d(0.0, 0.0), new Translation2d(1.0,
+        // 3.0), new Translation2d(2.0, 2.0),
+        // new Translation2d(3.0, 3.0));
 
-        // Get a command that can follow the path
-        PathFollowerCommand command = drivetrain.createPathingCommand(path, 0.2);
+        // // Get a command that can follow the path
+        // PathFollowerCommand command = drivetrain.createPathingCommand(path, 0.2);
+
+        Translation2d goalPose = new Translation2d(3.0, 4.0);
+        drivetrain.setGoalPose(goalPose, new Translation2d(0.2, 0.2));
 
         // Determine the number of samples needed
         int numSamples = (int) (SIMULATION_TIME_SECONDS / PERIOD_SECONDS);
@@ -189,7 +195,7 @@ public class DualPIDTankDriveTrainTest {
         double[] measurementYSet = new double[numSamples];
 
         // Init the command
-        command.initialize();
+        // command.initialize();
         RobotLogger.getInstance().flush();
 
         // Globally override the calculation timer
@@ -200,12 +206,12 @@ public class DualPIDTankDriveTrainTest {
 
             // Update the drivetrain and command
             drivetrain.periodic();
-            command.execute();
+            // command.execute();
             RobotLogger.getInstance().flush();
 
             // Get the current and goal poses
             Translation2d currentPose = drivetrain.getPose().getTranslation();
-            Translation2d goalPose = command.getMostRecentGoal();
+            // Translation2d goalPose = command.getMostRecentGoal();
 
             // Log everything
             referenceXSet[i] = goalPose.getX();

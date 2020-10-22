@@ -137,6 +137,13 @@ public abstract class DualPIDTankDriveTrain extends TankDriveTrain {
         Rotation2d headingError = new Rotation2d(
                 Math.atan2(goalPose.getY() - currentCoordinate.getY(), goalPose.getX() - currentCoordinate.getX()))
                         .minus(currentHeading);// .plus(Rotation2d.fromDegrees(180.0));
+
+        // double headingErrorRadians = (Math.atan2(goalPose.getY() -
+        // currentCoordinate.getY(),
+        // goalPose.getX() - currentCoordinate.getX()) * -1) -
+        // currentHeading.getRadians();
+        // headingErrorRadians = RobotMath.clamp(headingErrorRadians, (Math.PI / 2) *
+        // -1, (Math.PI / 2));
         // NOTE: add 180 degrees when following in reverse
 
         // Get the robot velocity
@@ -146,12 +153,12 @@ public abstract class DualPIDTankDriveTrain extends TankDriveTrain {
         double kLookaheadGain = 0.2;
 
         // Calculate the needed velocity to reach the goal pose
-        double throttle;
+        double throttle = RobotMath.clamp(currentCoordinate.getDistance(goalPose), -1, 1);
 
         // Handle the goal being straight
         // if (RobotMath.epsilonEquals(headingError.getDegrees(), 0.0,
         // RobotMath.kVerySmallNumber)) {
-        throttle = RobotMath.clamp(currentCoordinate.getDistance(goalPose), -1, 1);
+        // throttle = RobotMath.clamp(currentCoordinate.getDistance(goalPose), -1, 1);
         // } else {
 
         // // Calculate a corrective factor
@@ -168,11 +175,11 @@ public abstract class DualPIDTankDriveTrain extends TankDriveTrain {
         }
 
         // Feed both controllers
-        throttle = distanceController.calculate(throttle, 0.0);
-        double steering = headingError.getRadians() * Kr;
-
-        // Invert steering to match robot outputs
-        steering *= -1;
+        // throttle = distanceController.calculate(throttle, 0.0);
+        double steering = headingError.getRadians();
+        steering /= (Math.PI / 2);
+        steering *= Kr;
+        // headingError.getRadians() * Kr;
 
         // Get the throttle correction factor
         double throttleCorrectiveFactor = calculateThrottleCorrectionFactor(headingError);
@@ -186,7 +193,8 @@ public abstract class DualPIDTankDriveTrain extends TankDriveTrain {
         DifferentialVoltages voltages = new DifferentialVoltages(throttle + steering, throttle - steering).normalize()
                 .times(12);
 
-        logger.log(voltages.toString());
+        logger.log(String.format("%.2f | %.2f | %.2f, %.2f", currentHeading.getDegrees(), headingError.getDegrees(),
+                currentCoordinate.getX(), currentCoordinate.getY()));
 
         // Write output frame
         handleVoltage(voltages.getLeftVolts(), voltages.getRightVolts());

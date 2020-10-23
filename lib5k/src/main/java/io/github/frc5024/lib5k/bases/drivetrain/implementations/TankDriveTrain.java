@@ -108,6 +108,8 @@ public abstract class TankDriveTrain extends AbstractDriveTrain {
     public void resetPose(Pose2d pose) {
         logger.log(String.format("Resetting robot pose to: %s", pose.toString()));
         localizer.resetPosition(pose, getCurrentHeading());
+        // Reset the encoders
+        resetEncoders();
         lastPose = pose;
     }
 

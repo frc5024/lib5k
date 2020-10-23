@@ -84,11 +84,14 @@ public class TalonEncoder implements EncoderSimulation {
     @Override
     public void reset() {
         talon.setSelectedSensorPosition(0);
+        if (sim != null && sim.simReady()) {
+            sim.reset();
+        }
     }
 
     @Override
     public void close() throws Exception {
-        if(sim!=null){
+        if (sim != null) {
             sim.close();
         }
     }

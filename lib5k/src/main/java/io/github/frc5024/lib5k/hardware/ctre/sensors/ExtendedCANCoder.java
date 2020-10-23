@@ -86,6 +86,9 @@ public class ExtendedCANCoder extends CANCoder implements EncoderSimulation {
     @Override
     public void reset() {
         super.setPosition(0.0);
+        if (sim != null && sim.simReady()) {
+            sim.reset();
+        }
     }
 
     @Override

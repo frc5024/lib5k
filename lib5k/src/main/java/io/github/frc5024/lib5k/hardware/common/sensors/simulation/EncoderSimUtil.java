@@ -158,6 +158,7 @@ public class EncoderSimUtil implements PeriodicComponent, AutoCloseable {
             simVelocity.set(0.0);
         }
         simSlew.reset();
+        dtCalculator.reset();
     }
 
     @Override

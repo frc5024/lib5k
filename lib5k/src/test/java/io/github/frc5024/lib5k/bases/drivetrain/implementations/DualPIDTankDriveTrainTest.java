@@ -15,6 +15,7 @@ import org.knowm.xchart.BitmapEncoder.BitmapFormat;
 import org.knowm.xchart.XYSeries.XYSeriesRenderStyle;
 import org.knowm.xchart.style.Styler.LegendPosition;
 
+import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.system.plant.DCMotor;
@@ -40,6 +41,15 @@ public class DualPIDTankDriveTrainTest {
     private static double PERIOD_SECONDS = 0.02;
 
     static class TestDriveTrain extends DualPIDTankDriveTrain {
+        static TestDriveTrain instance = null;
+
+        public static TestDriveTrain getInstance() {
+            if (instance == null) {
+                instance = new TestDriveTrain();
+                RobotLogger.getInstance().flush();
+            }
+            return instance;
+        }
 
         // PID controllers
         private static ExtendedPIDController rotationController = new ExtendedPIDController(0.0088, 0.01, 0.0106);
@@ -78,8 +88,8 @@ public class DualPIDTankDriveTrainTest {
             rightRearMotor.setInverted(true);
 
             // Set the sensor phases
-            leftFrontMotor.setSensorPhase(false);
-            rightFrontMotor.setSensorPhase(false);
+            leftEncoder.setPhaseInverted(false);
+            rightEncoder.setPhaseInverted(false);
 
             // Set up motor simulation
             leftEncoder.initSimulationDevice(leftFrontMotor, GEAR_RATIO,
@@ -178,11 +188,8 @@ public class DualPIDTankDriveTrainTest {
 
     }
 
-    public void chartDriveTrainResponseForPath(Path path, String outfileName) throws IOException {
-
-        // Create a drivetrain
-        TestDriveTrain drivetrain = new TestDriveTrain();
-        RobotLogger.getInstance().flush();
+    public void chartDriveTrainResponseForPath(TankDriveTrain drivetrain, Path path, String outfileName)
+            throws IOException {
 
         // Get a command that can follow the path
         PathFollowerCommand command = drivetrain.createPathingCommand(path, 0.2);
@@ -199,9 +206,6 @@ public class DualPIDTankDriveTrainTest {
         // Init the command
         command.initialize();
         RobotLogger.getInstance().flush();
-
-        // Globally override the calculation timer
-        TimeScale.globallyOverrideCalculationOutput(0.02);
 
         // Run the simulation for the set time
         int i = 0;
@@ -234,9 +238,6 @@ public class DualPIDTankDriveTrainTest {
         }
         RobotLogger.getInstance().flush();
 
-        // Reset the calculation timer
-        TimeScale.globallyOverrideCalculationOutput(null);
-
         // Build chart
         XYChart chart = new XYChartBuilder().width(1000).height(600).build();
 
@@ -254,16 +255,9 @@ public class DualPIDTankDriveTrainTest {
         BitmapEncoder.saveBitmap(chart, "./build/tmp/" + outfileName, BitmapFormat.PNG);
         System.out.println("Test result PNG generated to ./build/tmp/" + outfileName + ".png");
 
-        // Clean up
-        drivetrain.close();
-
     }
 
-    public void ensureDriveTrainStaysOnCourseForPath(Path path, double threshEps) {
-
-        // Create a drivetrain
-        TestDriveTrain drivetrain = new TestDriveTrain();
-        RobotLogger.getInstance().flush();
+    public void ensureDriveTrainStaysOnCourseForPath(TankDriveTrain drivetrain, Path path, double threshEps) {
 
         // Get a command that can follow the path
         PathFollowerCommand command = drivetrain.createPathingCommand(path, 0.2);
@@ -274,9 +268,6 @@ public class DualPIDTankDriveTrainTest {
         // Init the command
         command.initialize();
         RobotLogger.getInstance().flush();
-
-        // Globally override the calculation timer
-        TimeScale.globallyOverrideCalculationOutput(0.02);
 
         // Run the simulation for the set time
         int i = 0;
@@ -307,12 +298,6 @@ public class DualPIDTankDriveTrainTest {
         }
         RobotLogger.getInstance().flush();
 
-        // Reset the calculation timer
-        TimeScale.globallyOverrideCalculationOutput(null);
-
-        // Clean up
-        drivetrain.close();
-
     }
 
     @Test
@@ -325,11 +310,23 @@ public class DualPIDTankDriveTrainTest {
         // Test name
         String file = "DualPIDTankDriveTrain_UnitTest_ResponseFourPoint";
 
+        // Globally override the calculation timer
+        TimeScale.globallyOverrideCalculationOutput(0.02);
+
+        TestDriveTrain.getInstance().reset();
+        TestDriveTrain.getInstance().resetPose(new Pose2d());
+
         // Chart
-        chartDriveTrainResponseForPath(path, file);
+        chartDriveTrainResponseForPath(TestDriveTrain.getInstance(), path, file);
+
+        TestDriveTrain.getInstance().reset();
+        TestDriveTrain.getInstance().resetPose(new Pose2d());
 
         // Check proximity
-        ensureDriveTrainStaysOnCourseForPath(path, 0.5);
+        ensureDriveTrainStaysOnCourseForPath(TestDriveTrain.getInstance(), path, 0.5);
+
+        // Reset the calculation timer
+        TimeScale.globallyOverrideCalculationOutput(null);
 
     }
 
@@ -343,11 +340,23 @@ public class DualPIDTankDriveTrainTest {
         // Test name
         String file = "DualPIDTankDriveTrain_UnitTest_ResponseSmoothed";
 
+        // Globally override the calculation timer
+        TimeScale.globallyOverrideCalculationOutput(0.02);
+
+        TestDriveTrain.getInstance().reset();
+        TestDriveTrain.getInstance().resetPose(new Pose2d());
+
         // Chart
-        chartDriveTrainResponseForPath(path, file);
+        chartDriveTrainResponseForPath(TestDriveTrain.getInstance(), path, file);
+
+        TestDriveTrain.getInstance().reset();
+        TestDriveTrain.getInstance().resetPose(new Pose2d());
 
         // Check proximity
-        ensureDriveTrainStaysOnCourseForPath(path, 0.5);
+        ensureDriveTrainStaysOnCourseForPath(TestDriveTrain.getInstance(), path, 0.5);
+
+        // Reset the calculation timer
+        TimeScale.globallyOverrideCalculationOutput(null);
 
     }
 

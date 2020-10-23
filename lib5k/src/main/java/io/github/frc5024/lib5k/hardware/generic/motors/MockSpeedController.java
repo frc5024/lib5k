@@ -1,6 +1,8 @@
 package io.github.frc5024.lib5k.hardware.generic.motors;
 
 import edu.wpi.first.wpilibj.SpeedController;
+import io.github.frc5024.lib5k.hardware.common.sensors.interfaces.CommonEncoder;
+import io.github.frc5024.lib5k.hardware.generic.sensors.MockCommonEncoder;
 
 /**
  * For mocking a speed controller in tests
@@ -9,6 +11,10 @@ public class MockSpeedController implements SpeedController {
 
     private double speed = 0.0;
     private boolean inverted = false;
+
+    public CommonEncoder getCommonEncoder(int cpr) {
+        return new MockCommonEncoder(cpr);
+    }
 
     @Override
     public void set(double speed) {

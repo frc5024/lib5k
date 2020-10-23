@@ -132,6 +132,11 @@ public class Follower {
                     m_lastLookaheadIndex = i;
                 }
             }
+
+            // Handle edge case
+            if (m_lastLookaheadIndex == null) {
+                m_lastLookaheadIndex = 0;
+            }
         } else {
 
             // Determine the distance from the current point
@@ -214,6 +219,7 @@ public class Follower {
 
     /**
      * Get the final pose of the path
+     * 
      * @return Final pose
      */
     public Translation2d getFinalPose() {

@@ -57,6 +57,10 @@ public class Grapher {
         chart.getStyler().setDefaultSeriesRenderStyle(XYSeriesRenderStyle.Line);
         chart.getStyler().setLegendPosition(LegendPosition.OutsideE);
         chart.getStyler().setMarkerSize(8);
+
+        // Set locals
+        this.name = testName;
+        this.identifier = testIdentifier;
     }
 
     /**

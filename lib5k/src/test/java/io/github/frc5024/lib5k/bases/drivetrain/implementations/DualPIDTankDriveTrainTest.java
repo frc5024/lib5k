@@ -84,8 +84,8 @@ public class DualPIDTankDriveTrainTest {
             // Set inversions on motors
             leftFrontMotor.setInverted(false);
             leftRearMotor.setInverted(false);
-            rightFrontMotor.setInverted(false);
-            rightRearMotor.setInverted(false);
+            rightFrontMotor.setInverted(true);
+            rightRearMotor.setInverted(true);
 
             // Set the sensor phases
             leftEncoder.setPhaseInverted(false);

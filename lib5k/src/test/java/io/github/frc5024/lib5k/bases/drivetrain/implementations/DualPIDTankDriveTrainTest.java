@@ -84,8 +84,8 @@ public class DualPIDTankDriveTrainTest {
             // Set inversions on motors
             leftFrontMotor.setInverted(false);
             leftRearMotor.setInverted(false);
-            rightFrontMotor.setInverted(true);
-            rightRearMotor.setInverted(true);
+            rightFrontMotor.setInverted(false);
+            rightRearMotor.setInverted(false);
 
             // Set the sensor phases
             leftEncoder.setPhaseInverted(false);
@@ -101,7 +101,7 @@ public class DualPIDTankDriveTrainTest {
             gyroscope = NavX.getInstance();
 
             // Set up gyro simulation
-            gyroSim = gyroscope.initDrivebaseSimulation(this);
+            gyroSim = gyroscope.initDrivebaseSimulation(this, false);
         }
 
         @Override

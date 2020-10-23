@@ -7,12 +7,22 @@ import edu.wpi.first.wpilibj.Timer;
  */
 public class FPGAClock {
 
+    private static boolean overrideClock;
+    private static double overrideTime;
+
     /**
      * Get the number of seconds since the robot timer started
      * 
      * @return Seconds since timer start
      */
     public static double getFPGASeconds() {
+
+        // Handle override
+        if (overrideClock) {
+            return overrideTime;
+        }
+
+        // Normal operation
         return Timer.getFPGATimestamp();
     }
 
@@ -34,5 +44,27 @@ public class FPGAClock {
      */
     public static boolean getMillisecondCycle(double period) {
         return ((getFPGAMilliseconds() % (period * 2)) - period) >= 0;
+    }
+
+    /**
+     * THIS IS NOT RECOMMENDED UNLESS RUNNING A UNIT TEST. Set a manual override on
+     * the system clock
+     * 
+     * @param enabled     Enable
+     * @param timeSeconds Time to start at
+     */
+    public static void enableSystemClockOverride(boolean enabled, double timeSeconds) {
+        overrideClock = enabled;
+        overrideTime = timeSeconds;
+    }
+
+    /**
+     * HIS IS NOT RECOMMENDED UNLESS RUNNING A UNIT TEST. Increment the override
+     * time
+     * 
+     * @param stepSeconds Time to increment by
+     */
+    public static void incrementSystemClockOverride(double stepSeconds) {
+        overrideTime += stepSeconds;
     }
 }

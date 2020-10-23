@@ -99,4 +99,12 @@ public class TimeScale {
         globalOverride = outputOverride;
     }
 
+    /**
+     * Reset
+     */
+    public void reset() {
+        this.lastTime = getCurrentTime();
+        this.override = null;
+    }
+
 }

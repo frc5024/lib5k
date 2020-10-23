@@ -79,6 +79,9 @@ public class CANIfierEncoder extends CANifier implements EncoderSimulation {
     @Override
     public void reset() {
         super.setQuadraturePosition(0, 20);
+        if (sim != null && sim.simReady()) {
+            sim.reset();
+        }
     }
 
     @Override

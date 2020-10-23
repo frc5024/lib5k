@@ -1,5 +1,7 @@
 package io.github.frc5024.lib5k.bases.drivetrain.implementations;
 
+import static org.junit.Assert.assertTrue;
+
 import java.io.IOException;
 import java.util.Arrays;
 
@@ -13,6 +15,7 @@ import org.knowm.xchart.BitmapEncoder.BitmapFormat;
 import org.knowm.xchart.XYSeries.XYSeriesRenderStyle;
 import org.knowm.xchart.style.Styler.LegendPosition;
 
+import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.system.plant.DCMotor;
@@ -26,8 +29,11 @@ import io.github.frc5024.lib5k.hardware.common.sensors.simulation.GyroSimUtil;
 import io.github.frc5024.lib5k.hardware.ctre.motors.ExtendedTalonSRX;
 import io.github.frc5024.lib5k.hardware.kauai.gyroscopes.NavX;
 import io.github.frc5024.lib5k.logging.RobotLogger;
+import io.github.frc5024.lib5k.utils.RobotMath;
 import io.github.frc5024.lib5k.utils.TimeScale;
+import io.github.frc5024.purepursuit.pathgen.BezierPath;
 import io.github.frc5024.purepursuit.pathgen.Path;
+import io.github.frc5024.purepursuit.pathgen.SmoothPath;
 
 public class DualPIDTankDriveTrainTest {
 
@@ -35,6 +41,15 @@ public class DualPIDTankDriveTrainTest {
     private static double PERIOD_SECONDS = 0.02;
 
     static class TestDriveTrain extends DualPIDTankDriveTrain {
+        static TestDriveTrain instance = null;
+
+        public static TestDriveTrain getInstance() {
+            if (instance == null) {
+                instance = new TestDriveTrain();
+                RobotLogger.getInstance().flush();
+            }
+            return instance;
+        }
 
         // PID controllers
         private static ExtendedPIDController rotationController = new ExtendedPIDController(0.0088, 0.01, 0.0106);
@@ -73,8 +88,8 @@ public class DualPIDTankDriveTrainTest {
             rightRearMotor.setInverted(true);
 
             // Set the sensor phases
-            leftFrontMotor.setSensorPhase(false);
-            rightFrontMotor.setSensorPhase(false);
+            leftEncoder.setPhaseInverted(false);
+            rightEncoder.setPhaseInverted(false);
 
             // Set up motor simulation
             leftEncoder.initSimulationDevice(leftFrontMotor, GEAR_RATIO,
@@ -86,7 +101,7 @@ public class DualPIDTankDriveTrainTest {
             gyroscope = NavX.getInstance();
 
             // Set up gyro simulation
-            gyroSim = gyroscope.initDrivebaseSimulation(this);
+            gyroSim = gyroscope.initDrivebaseSimulation(this, false);
         }
 
         @Override
@@ -173,16 +188,8 @@ public class DualPIDTankDriveTrainTest {
 
     }
 
-    @Test
-    public void chartDriveTrainResponse() throws IOException {
-
-        // Create a drivetrain
-        TestDriveTrain drivetrain = new TestDriveTrain();
-        RobotLogger.getInstance().flush();
-
-        // Create a new path
-        Path path = new Path(new Translation2d(0.0, 0.0), new Translation2d(1.0, 3.0), new Translation2d(2.0, 2.0),
-                new Translation2d(3.0, 3.0));
+    public void chartDriveTrainResponseForPath(TankDriveTrain drivetrain, Path path, String outfileName)
+            throws IOException {
 
         // Get a command that can follow the path
         PathFollowerCommand command = drivetrain.createPathingCommand(path, 0.2);
@@ -199,9 +206,6 @@ public class DualPIDTankDriveTrainTest {
         // Init the command
         command.initialize();
         RobotLogger.getInstance().flush();
-
-        // Globally override the calculation timer
-        TimeScale.globallyOverrideCalculationOutput(0.02);
 
         // Run the simulation for the set time
         int i = 0;
@@ -234,9 +238,6 @@ public class DualPIDTankDriveTrainTest {
         }
         RobotLogger.getInstance().flush();
 
-        // Reset the calculation timer
-        TimeScale.globallyOverrideCalculationOutput(null);
-
         // Build chart
         XYChart chart = new XYChartBuilder().width(1000).height(600).build();
 
@@ -251,11 +252,111 @@ public class DualPIDTankDriveTrainTest {
         chart.getStyler().setMarkerSize(8);
 
         // Save the chart
-        BitmapEncoder.saveBitmap(chart, "./build/tmp/DualPIDTankDriveTrain_UnitTest_Response", BitmapFormat.PNG);
-        System.out.println("Test result PNG generated to ./build/tmp/DualPIDTankDriveTrain_UnitTest_Response.png");
+        BitmapEncoder.saveBitmap(chart, "./build/tmp/" + outfileName, BitmapFormat.PNG);
+        System.out.println("Test result PNG generated to ./build/tmp/" + outfileName + ".png");
 
-        // Clean up
-        drivetrain.close();
+    }
+
+    public void ensureDriveTrainStaysOnCourseForPath(TankDriveTrain drivetrain, Path path, double threshEps) {
+
+        // Get a command that can follow the path
+        PathFollowerCommand command = drivetrain.createPathingCommand(path, 0.2);
+
+        // Determine the number of samples needed
+        int numSamples = (int) (SIMULATION_TIME_SECONDS / PERIOD_SECONDS);
+
+        // Init the command
+        command.initialize();
+        RobotLogger.getInstance().flush();
+
+        // Run the simulation for the set time
+        int i = 0;
+        simRunner: {
+            for (; i < numSamples; i++) {
+
+                // Update the drivetrain and command
+                drivetrain.periodic();
+                command.execute();
+                RobotLogger.getInstance().flush();
+
+                // Get the current and goal poses
+                Translation2d currentPose = drivetrain.getPose().getTranslation();
+                Translation2d goalPose = command.getMostRecentGoal();
+
+                // Ensure the current pose is near the goal
+                assertTrue(String.format("Robot position %s near goal %s", currentPose, goalPose),
+                        RobotMath.epsilonEquals(currentPose, goalPose, new Translation2d(threshEps, threshEps)));
+
+                // Handle command finishing
+                if (command.isFinished()) {
+                    command.end(false);
+                    break simRunner;
+                }
+
+            }
+            command.end(true);
+        }
+        RobotLogger.getInstance().flush();
+
+    }
+
+    @Test
+    public void testDriveTrainFollowingFourPointPath() throws IOException {
+
+        // Create the path
+        Path path = new Path(new Translation2d(0.0, 0.0), new Translation2d(1.0, 3.0), new Translation2d(2.0, 2.0),
+                new Translation2d(3.0, 3.0));
+
+        // Test name
+        String file = "DualPIDTankDriveTrain_UnitTest_ResponseFourPoint";
+
+        // Globally override the calculation timer
+        TimeScale.globallyOverrideCalculationOutput(0.02);
+
+        TestDriveTrain.getInstance().reset();
+        TestDriveTrain.getInstance().resetPose(new Pose2d());
+
+        // Chart
+        chartDriveTrainResponseForPath(TestDriveTrain.getInstance(), path, file);
+
+        TestDriveTrain.getInstance().reset();
+        TestDriveTrain.getInstance().resetPose(new Pose2d());
+
+        // Check proximity
+        ensureDriveTrainStaysOnCourseForPath(TestDriveTrain.getInstance(), path, 0.5);
+
+        // Reset the calculation timer
+        TimeScale.globallyOverrideCalculationOutput(null);
+
+    }
+
+    @Test
+    public void testDriveTrainFollowingSmoothPath() throws IOException {
+
+        // Create the path
+        SmoothPath path = new SmoothPath(0.5, 0.5, 0.5, new Translation2d(0.0, 0.0), new Translation2d(1.0, 3.0),
+                new Translation2d(2.0, 2.0), new Translation2d(3.0, 3.0));
+
+        // Test name
+        String file = "DualPIDTankDriveTrain_UnitTest_ResponseSmoothed";
+
+        // Globally override the calculation timer
+        TimeScale.globallyOverrideCalculationOutput(0.02);
+
+        TestDriveTrain.getInstance().reset();
+        TestDriveTrain.getInstance().resetPose(new Pose2d());
+
+        // Chart
+        chartDriveTrainResponseForPath(TestDriveTrain.getInstance(), path, file);
+
+        TestDriveTrain.getInstance().reset();
+        TestDriveTrain.getInstance().resetPose(new Pose2d());
+
+        // Check proximity
+        ensureDriveTrainStaysOnCourseForPath(TestDriveTrain.getInstance(), path, 0.5);
+
+        // Reset the calculation timer
+        TimeScale.globallyOverrideCalculationOutput(null);
 
     }
 

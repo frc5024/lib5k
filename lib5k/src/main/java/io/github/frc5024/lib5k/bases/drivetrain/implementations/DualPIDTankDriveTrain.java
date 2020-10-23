@@ -154,9 +154,9 @@ public abstract class DualPIDTankDriveTrain extends TankDriveTrain {
                 .times(12);
 
         // This line is rather helpful for debugging:
-        // logger.log(String.format("%.2f | %.2f | %.2f, %.2f",
+        // logger.log(String.format("%.2f | %.2f | %.2f, %.2f | %s",
         // currentHeading.getDegrees(), headingError.getDegrees(),
-        // currentCoordinate.getX(), currentCoordinate.getY()));
+        // currentCoordinate.getX(), currentCoordinate.getY(), voltages.toString()));
 
         // Write output frame
         handleVoltage(voltages.getLeftVolts(), voltages.getRightVolts());

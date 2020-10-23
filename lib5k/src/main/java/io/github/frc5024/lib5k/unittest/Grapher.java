@@ -12,8 +12,6 @@ import org.knowm.xchart.XYSeries.XYSeriesRenderStyle;
 import org.knowm.xchart.style.Styler.LegendPosition;
 
 import edu.wpi.first.wpilibj.RobotBase;
-import io.github.frc5024.lib5k.logging.RobotLogger;
-import io.github.frc5024.lib5k.logging.RobotLogger.Level;
 
 /**
  * Grapher is a utility for producing graphs from a unit test
@@ -34,7 +32,7 @@ public class Grapher {
      * @param testIdentifier Identifier of this specific graph
      */
     public Grapher(String testName, String testIdentifier) {
-        this(testName, testIdentifier, 1000, 600)
+        this(testName, testIdentifier, 1000, 600);
     }
 
     /**
@@ -72,7 +70,39 @@ public class Grapher {
     public XYSeries addSeries(String name, List<Double> x, List<Double> y) {
 
         // The sizes must be the same
-        assert x.size() == y.size();
+        if (x.size() != y.size()) {
+            throw new IllegalArgumentException("X and Y data must be the same length");
+        }
+
+        // Pre-check the data
+        for (int i = 0; i < x.size(); i++) {
+
+            // Handle infinity
+            if (Double.isInfinite(x.get(i))) {
+                throw new IllegalArgumentException(String.format(
+                        "X data element %d (value: %s) is invalid. Inputs must be finite", i, x.get(i).toString()));
+            }
+
+            // Handle NAN
+            if (Double.isNaN(x.get(i))) {
+                throw new IllegalArgumentException(String.format(
+                        "X data element %d (value: %s) is invalid. Inputs must be numbers", i, x.get(i).toString()));
+            }
+        }
+        for (int i = 0; i < y.size(); i++) {
+
+            // Handle infinity
+            if (Double.isInfinite(y.get(i))) {
+                throw new IllegalArgumentException(String.format(
+                        "Y data element %d (value: %s) is invalid. Inputs must be finite", i, y.get(i).toString()));
+            }
+
+            // Handle NAN
+            if (Double.isNaN(y.get(i))) {
+                throw new IllegalArgumentException(String.format(
+                        "Y data element %d (value: %s) is invalid. Inputs must be numbers", i, y.get(i).toString()));
+            }
+        }
 
         // Add the series
         return chart.addSeries(name, x, y);

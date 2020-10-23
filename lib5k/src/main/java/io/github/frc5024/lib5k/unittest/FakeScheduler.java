@@ -1,6 +1,8 @@
 package io.github.frc5024.lib5k.unittest;
 
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.FPGAClock;
 import io.github.frc5024.lib5k.logging.RobotLogger;
 
@@ -16,7 +18,8 @@ public abstract class FakeScheduler implements Runnable {
     private double timeout;
 
     // Scheduler
-    private CommandScheduler scheduler;
+    private Subsystem subsystem;
+    private CommandBase command;
 
     /**
      * Create a FakeScheduler
@@ -25,18 +28,20 @@ public abstract class FakeScheduler implements Runnable {
      * @param maximumExecutionTime The longest this can run
      */
     public FakeScheduler(double periodSeconds, double maximumExecutionTime) {
-        this(null, periodSeconds, maximumExecutionTime);
+        this(null, null, periodSeconds, maximumExecutionTime);
     }
 
     /**
      * Create a FakeScheduler
      * 
-     * @param scheduler            Scheduler to run
+     * @param subsystem            Subsystem to run
+     * @param command              Command to run
      * @param periodSeconds        Period time in seconds
      * @param maximumExecutionTime The longest this can run
      */
-    public FakeScheduler(CommandScheduler scheduler, double periodSeconds, double maximumExecutionTime) {
-        this.scheduler = scheduler;
+    public FakeScheduler(Subsystem subsystem, CommandBase command, double periodSeconds, double maximumExecutionTime) {
+        this.subsystem = subsystem;
+        this.command = command;
 
         // Determine the number of samples needed
         numSamples = (int) (maximumExecutionTime / periodSeconds);
@@ -70,7 +75,9 @@ public abstract class FakeScheduler implements Runnable {
      * 
      * @return Is finished?
      */
-    public abstract boolean isFinished();
+    public boolean isFinished() {
+        return false;
+    }
 
     @Override
     public void run() {
@@ -79,6 +86,9 @@ public abstract class FakeScheduler implements Runnable {
         FPGAClock.enableSystemClockOverride(true, 0.0);
 
         // Init
+        if (command != null) {
+            command.initialize();
+        }
         init();
 
         // Run the system loop
@@ -86,8 +96,10 @@ public abstract class FakeScheduler implements Runnable {
             for (int i = 0; i < numSamples; i++) {
 
                 // Update the scheduler
-                if (scheduler != null) {
-                    scheduler.run();
+                if (subsystem != null) {
+                    subsystem.periodic();
+                }if (command != null) {
+                    command.execute();
                 }
                 periodic(dt, i, i * dt, timeout - (i * dt));
 
@@ -98,12 +110,15 @@ public abstract class FakeScheduler implements Runnable {
                 FPGAClock.incrementSystemClockOverride(dt);
 
                 // Check if the system is finished
-                if (isFinished()) {
+                if (isFinished() || (command != null && command.isFinished())) {
+                    if (command != null) {
+                        command.end(false);
+                    }
                     break systemLoop;
                 }
             }
-            if (scheduler != null) {
-                scheduler.cancelAll();
+            if (command != null) {
+                command.end(true);
             }
         }
 

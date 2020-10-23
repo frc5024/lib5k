@@ -1,5 +1,7 @@
 package io.github.frc5024.lib5k.bases.drivetrain.implementations;
 
+import static org.junit.Assert.assertTrue;
+
 import java.io.IOException;
 import java.util.Arrays;
 
@@ -26,8 +28,11 @@ import io.github.frc5024.lib5k.hardware.common.sensors.simulation.GyroSimUtil;
 import io.github.frc5024.lib5k.hardware.ctre.motors.ExtendedTalonSRX;
 import io.github.frc5024.lib5k.hardware.kauai.gyroscopes.NavX;
 import io.github.frc5024.lib5k.logging.RobotLogger;
+import io.github.frc5024.lib5k.utils.RobotMath;
 import io.github.frc5024.lib5k.utils.TimeScale;
+import io.github.frc5024.purepursuit.pathgen.BezierPath;
 import io.github.frc5024.purepursuit.pathgen.Path;
+import io.github.frc5024.purepursuit.pathgen.SmoothPath;
 
 public class DualPIDTankDriveTrainTest {
 
@@ -173,16 +178,11 @@ public class DualPIDTankDriveTrainTest {
 
     }
 
-    @Test
-    public void chartDriveTrainResponse() throws IOException {
+    public void chartDriveTrainResponseForPath(Path path, String outfileName) throws IOException {
 
         // Create a drivetrain
         TestDriveTrain drivetrain = new TestDriveTrain();
         RobotLogger.getInstance().flush();
-
-        // Create a new path
-        Path path = new Path(new Translation2d(0.0, 0.0), new Translation2d(1.0, 3.0), new Translation2d(2.0, 2.0),
-                new Translation2d(3.0, 3.0));
 
         // Get a command that can follow the path
         PathFollowerCommand command = drivetrain.createPathingCommand(path, 0.2);
@@ -251,11 +251,103 @@ public class DualPIDTankDriveTrainTest {
         chart.getStyler().setMarkerSize(8);
 
         // Save the chart
-        BitmapEncoder.saveBitmap(chart, "./build/tmp/DualPIDTankDriveTrain_UnitTest_Response", BitmapFormat.PNG);
-        System.out.println("Test result PNG generated to ./build/tmp/DualPIDTankDriveTrain_UnitTest_Response.png");
+        BitmapEncoder.saveBitmap(chart, "./build/tmp/" + outfileName, BitmapFormat.PNG);
+        System.out.println("Test result PNG generated to ./build/tmp/" + outfileName + ".png");
 
         // Clean up
         drivetrain.close();
+
+    }
+
+    public void ensureDriveTrainStaysOnCourseForPath(Path path, double threshEps) {
+
+        // Create a drivetrain
+        TestDriveTrain drivetrain = new TestDriveTrain();
+        RobotLogger.getInstance().flush();
+
+        // Get a command that can follow the path
+        PathFollowerCommand command = drivetrain.createPathingCommand(path, 0.2);
+
+        // Determine the number of samples needed
+        int numSamples = (int) (SIMULATION_TIME_SECONDS / PERIOD_SECONDS);
+
+        // Init the command
+        command.initialize();
+        RobotLogger.getInstance().flush();
+
+        // Globally override the calculation timer
+        TimeScale.globallyOverrideCalculationOutput(0.02);
+
+        // Run the simulation for the set time
+        int i = 0;
+        simRunner: {
+            for (; i < numSamples; i++) {
+
+                // Update the drivetrain and command
+                drivetrain.periodic();
+                command.execute();
+                RobotLogger.getInstance().flush();
+
+                // Get the current and goal poses
+                Translation2d currentPose = drivetrain.getPose().getTranslation();
+                Translation2d goalPose = command.getMostRecentGoal();
+
+                // Ensure the current pose is near the goal
+                assertTrue(String.format("Robot position %s near goal %s", currentPose, goalPose),
+                        RobotMath.epsilonEquals(currentPose, goalPose, new Translation2d(threshEps, threshEps)));
+
+                // Handle command finishing
+                if (command.isFinished()) {
+                    command.end(false);
+                    break simRunner;
+                }
+
+            }
+            command.end(true);
+        }
+        RobotLogger.getInstance().flush();
+
+        // Reset the calculation timer
+        TimeScale.globallyOverrideCalculationOutput(null);
+
+        // Clean up
+        drivetrain.close();
+
+    }
+
+    @Test
+    public void testDriveTrainFollowingFourPointPath() throws IOException {
+
+        // Create the path
+        Path path = new Path(new Translation2d(0.0, 0.0), new Translation2d(1.0, 3.0), new Translation2d(2.0, 2.0),
+                new Translation2d(3.0, 3.0));
+
+        // Test name
+        String file = "DualPIDTankDriveTrain_UnitTest_ResponseFourPoint";
+
+        // Chart
+        chartDriveTrainResponseForPath(path, file);
+
+        // Check proximity
+        ensureDriveTrainStaysOnCourseForPath(path, 0.5);
+
+    }
+
+    @Test
+    public void testDriveTrainFollowingSmoothPath() throws IOException {
+
+        // Create the path
+        Path path = new SmoothPath(0.5, 0.5, 0.5, new Translation2d(0.0, 0.0), new Translation2d(1.0, 3.0),
+                new Translation2d(2.0, 2.0), new Translation2d(3.0, 3.0));
+
+        // Test name
+        String file = "DualPIDTankDriveTrain_UnitTest_ResponseSmoothed";
+
+        // Chart
+        chartDriveTrainResponseForPath(path, file);
+
+        // Check proximity
+        ensureDriveTrainStaysOnCourseForPath(path, 0.5);
 
     }
 

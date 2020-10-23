@@ -334,7 +334,7 @@ public class DualPIDTankDriveTrainTest {
     public void testDriveTrainFollowingSmoothPath() throws IOException {
 
         // Create the path
-        Path path = new SmoothPath(0.5, 0.5, 0.5, new Translation2d(0.0, 0.0), new Translation2d(1.0, 3.0),
+        SmoothPath path = new SmoothPath(0.5, 0.5, 0.5, new Translation2d(0.0, 0.0), new Translation2d(1.0, 3.0),
                 new Translation2d(2.0, 2.0), new Translation2d(3.0, 3.0));
 
         // Test name

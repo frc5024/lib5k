@@ -2,7 +2,6 @@ package io.github.frc5024.lib5k.vision.types;
 
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
-import io.github.frc5024.lib5k.utils.RobotMath;
 
 /**
  * A computer-vision axis-aligned bounding box. Relative to a camera

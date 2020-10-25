@@ -42,7 +42,8 @@ public class AxisAlignedBoundingBox extends Contour {
      * @param yRot        Y angle from camera
      */
     public AxisAlignedBoundingBox(Translation2d topLeft, Translation2d bottomRight, Rotation2d xRot, Rotation2d yRot) {
-        super((bottomRight.getX() - topLeft.getX()) / 2, (bottomRight.getY() - topLeft.getY()) / 2, xRot, yRot);
+        super(topLeft.getX() + ((bottomRight.getX() - topLeft.getX()) / 2),
+                topLeft.getY() + ((bottomRight.getY() - topLeft.getY()) / 2), xRot, yRot);
 
         // Set corners
         this.topLeft = topLeft;
@@ -51,8 +52,8 @@ public class AxisAlignedBoundingBox extends Contour {
         this.topRight = new Translation2d(bottomRight.getX(), topLeft.getY());
 
         // Set size
-        this.width = (bottomRight.getX() - topLeft.getX()) / 2;
-        this.height = (bottomRight.getY() - topLeft.getY()) / 2;
+        this.width = (bottomRight.getX() - topLeft.getX());
+        this.height = (bottomRight.getY() - topLeft.getY());
 
         // Set aspect ratio
         this.aspectRatio = width / height;
@@ -69,8 +70,8 @@ public class AxisAlignedBoundingBox extends Contour {
 
     @Override
     public boolean contains(Translation2d point) {
-        return RobotMath.epsilonEquals(super.getX(), point.getX(), this.width)
-                && RobotMath.epsilonEquals(super.getY(), point.getY(), this.height);
+        return (point.getX() >= getTopLeftCorner().getX()) && (point.getX() <= getBottomRightCorner().getX())
+                && (point.getY() >= getTopLeftCorner().getY()) && (point.getX() <= getBottomRightCorner().getY());
     }
 
     @Override
@@ -113,5 +114,31 @@ public class AxisAlignedBoundingBox extends Contour {
      */
     public Translation2d getBottomRightCorner() {
         return bottomRight;
+    }
+
+    /**
+     * Get box width
+     * 
+     * @return Width
+     */
+    public double getWidth() {
+        return width;
+    }
+
+    /**
+     * Get box height
+     * 
+     * @return Height
+     */
+    public double getHeight() {
+        return height;
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+                "AABB{corners: [%s, %s, %s, %s], center: %s, xRot: %s, yRot: %s, width: %.2f, height: %.2f, aspect: %.2f]",
+                topLeft, bottomLeft, topRight, bottomRight, super.toString(), getXRotation(), getYRotation(), width,
+                height, aspectRatio);
     }
 }

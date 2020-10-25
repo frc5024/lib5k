@@ -24,8 +24,10 @@ public class AxisAlignedBoundingBox extends Contour {
     /**
      * Create an AxisAlignedBoundingBox from opposing corners
      * 
-     * @param topLeft     Top left corner
-     * @param bottomRight Bottom right corner
+     * @param topLeft     Top left corner expressed as a percentage of the frame
+     *                    from the center (top left is -1,1)
+     * @param bottomRight Bottom right corner expressed as a percentage of the frame
+     *                    from the center (top left is -1,1)
      */
     public AxisAlignedBoundingBox(Translation2d topLeft, Translation2d bottomRight) {
         this(topLeft, bottomRight, Contour.NO_ROTATION, Contour.NO_ROTATION);
@@ -35,14 +37,16 @@ public class AxisAlignedBoundingBox extends Contour {
      * Create an AxisAlignedBoundingBox from opposing corners, with angles relative
      * to a camera
      * 
-     * @param topLeft     Top left corner
-     * @param bottomRight Bottom right corner
+     * @param topLeft     Top left corner expressed as a percentage of the frame
+     *                    from the center (top left is -1,1)
+     * @param bottomRight Bottom right corner expressed as a percentage of the frame
+     *                    from the center (top left is -1,1)
      * @param xRot        X angle from camera
      * @param yRot        Y angle from camera
      */
     public AxisAlignedBoundingBox(Translation2d topLeft, Translation2d bottomRight, Rotation2d xRot, Rotation2d yRot) {
         super(topLeft.getX() + ((bottomRight.getX() - topLeft.getX()) / 2),
-                topLeft.getY() + ((bottomRight.getY() - topLeft.getY()) / 2), xRot, yRot);
+                bottomRight.getY() + ((topLeft.getY() - bottomRight.getY()) / 2), xRot, yRot);
 
         // Set corners
         this.topLeft = topLeft;
@@ -52,7 +56,7 @@ public class AxisAlignedBoundingBox extends Contour {
 
         // Set size
         this.width = (bottomRight.getX() - topLeft.getX());
-        this.height = (bottomRight.getY() - topLeft.getY());
+        this.height = (topLeft.getY() - bottomRight.getY());
 
         // Set aspect ratio
         this.aspectRatio = width / height;
@@ -70,7 +74,7 @@ public class AxisAlignedBoundingBox extends Contour {
     @Override
     public boolean contains(Translation2d point) {
         return (point.getX() >= getTopLeftCorner().getX()) && (point.getX() <= getBottomRightCorner().getX())
-                && (point.getY() >= getTopLeftCorner().getY()) && (point.getX() <= getBottomRightCorner().getY());
+                && (point.getY() >= getBottomRightCorner().getY()) && (point.getX() <= getTopLeftCorner().getY());
     }
 
     @Override
@@ -80,7 +84,8 @@ public class AxisAlignedBoundingBox extends Contour {
     }
 
     /**
-     * Get the top left corner of this box
+     * Get the top left corner of this box expressed as a percentage of the frame
+     * from the center (top left is -1,1)
      * 
      * @return top left corner
      */
@@ -89,7 +94,8 @@ public class AxisAlignedBoundingBox extends Contour {
     }
 
     /**
-     * Get the bottom left corner of this box
+     * Get the bottom left corner of this box expressed as a percentage of the frame
+     * from the center (top left is -1,1)
      * 
      * @return bottom left corner
      */
@@ -98,7 +104,8 @@ public class AxisAlignedBoundingBox extends Contour {
     }
 
     /**
-     * Get the top right corner of this box
+     * Get the top right corner of this box expressed as a percentage of the frame
+     * from the center (top left is -1,1)
      * 
      * @return top right corner
      */
@@ -107,7 +114,8 @@ public class AxisAlignedBoundingBox extends Contour {
     }
 
     /**
-     * Get the bottom right corner of this box
+     * Get the bottom right corner of this box expressed as a percentage of the
+     * frame from the center (top left is -1,1)
      * 
      * @return bottom right corner
      */

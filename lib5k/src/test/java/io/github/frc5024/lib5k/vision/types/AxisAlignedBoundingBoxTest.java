@@ -15,7 +15,7 @@ public class AxisAlignedBoundingBoxTest {
     public void testAspectRatioCalculation() {
 
         // Create a box
-        AxisAlignedBoundingBox box = new AxisAlignedBoundingBox(new Translation2d(-1, -2), new Translation2d(1, 2));
+        AxisAlignedBoundingBox box = new AxisAlignedBoundingBox(new Translation2d(-1, 2), new Translation2d(1, -2));
 
         // Check aspect ratio
         assertEquals("Aspect ratio", 2. / 4., box.getAspectRatio(), RobotMath.kVerySmallNumber);
@@ -52,7 +52,7 @@ public class AxisAlignedBoundingBoxTest {
     public void testBoxContains() {
 
         // Create a box
-        AxisAlignedBoundingBox box = new AxisAlignedBoundingBox(new Translation2d(-1, -2), new Translation2d(1, 2));
+        AxisAlignedBoundingBox box = new AxisAlignedBoundingBox(new Translation2d(-1, 2), new Translation2d(1, -2));
 
         // Check aspect ratio
         assertTrue("Contains", box.contains(new Translation2d(0.5, 0.5)));
@@ -64,7 +64,7 @@ public class AxisAlignedBoundingBoxTest {
     public void testBoxOverlaps() {
 
         // Create a box
-        AxisAlignedBoundingBox box1 = new AxisAlignedBoundingBox(new Translation2d(-1, -2), new Translation2d(1, 2));
+        AxisAlignedBoundingBox box1 = new AxisAlignedBoundingBox(new Translation2d(-1, 2), new Translation2d(1, -2));
         AxisAlignedBoundingBox box2 = new AxisAlignedBoundingBox(new Translation2d(0, 0), new Translation2d(2, 2));
         AxisAlignedBoundingBox box3 = new AxisAlignedBoundingBox(new Translation2d(5, 5), new Translation2d(6, 6));
 

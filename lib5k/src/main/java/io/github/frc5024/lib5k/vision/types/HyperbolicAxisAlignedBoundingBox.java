@@ -19,8 +19,10 @@ public class HyperbolicAxisAlignedBoundingBox extends AxisAlignedBoundingBox {
      * Create a HyperbolicAxisAlignedBoundingBox from a horizontal and vertical
      * theta
      * 
-     * @param topLeft     Left corner
-     * @param bottomRight Bottom right corner
+     * @param topLeft     Left corner expressed as a percentage of the frame from
+     *                    the center (top left is -1,1)
+     * @param bottomRight Bottom right corner expressed as a percentage of the frame
+     *                    from the center (top left is -1,1)
      * @param hRot        Positive theta between the left and right bounds
      * @param vRot        Positive theta between the top and bottom bounds
      */
@@ -33,8 +35,10 @@ public class HyperbolicAxisAlignedBoundingBox extends AxisAlignedBoundingBox {
      * Create a HyperbolicAxisAlignedBoundingBox from a horizontal and vertical
      * theta
      * 
-     * @param topLeft     left corner
-     * @param bottomRight Bottom right corner
+     * @param topLeft     left corner expressed as a percentage of the frame from
+     *                    the center (top left is -1,1)
+     * @param bottomRight Bottom right corner expressed as a percentage of the frame
+     *                    from the center (top left is -1,1)
      * @param xRot        X angle from camera
      * @param yRot        Y angle from camera
      * @param hRot        Positive theta between the left and right bounds
@@ -48,8 +52,10 @@ public class HyperbolicAxisAlignedBoundingBox extends AxisAlignedBoundingBox {
     /**
      * Create a HyperbolicAxisAlignedBoundingBox using rotations for each side
      * 
-     * @param topLeftTop  left corner
-     * @param bottomRight Bottom right corner
+     * @param topLeftTop  left corner expressed as a percentage of the frame from
+     *                    the center (top left is -1,1)
+     * @param bottomRight Bottom right corner expressed as a percentage of the frame
+     *                    from the center (top left is -1,1)
      * @param xRot        X angle from camera
      * @param yRot        Y angle from camera
      * @param leftRot     Rotation of the left bound from the center point

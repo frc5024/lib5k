@@ -52,8 +52,8 @@ public class HyperbolicAxisAlignedBoundingBox extends AxisAlignedBoundingBox {
     /**
      * Create a HyperbolicAxisAlignedBoundingBox using rotations for each side
      * 
-     * @param topLeftTop  left corner expressed as a percentage of the frame from
-     *                    the center (top left is -1,1)
+     * @param topLeft     Top left corner expressed as a percentage of the frame
+     *                    from the center (top left is -1,1)
      * @param bottomRight Bottom right corner expressed as a percentage of the frame
      *                    from the center (top left is -1,1)
      * @param xRot        X angle from camera

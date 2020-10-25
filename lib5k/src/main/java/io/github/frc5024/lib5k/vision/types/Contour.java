@@ -25,8 +25,10 @@ public abstract class Contour extends Translation2d {
     /**
      * Create a contour with a position
      * 
-     * @param x X offset
-     * @param y Y offset
+     * @param x X offset expressed as a percentage of the frame from the center (top
+     *          left is -1,1)
+     * @param y Y offset expressed as a percentage of the frame from the center (top
+     *          left is -1,1)
      */
     public Contour(double x, double y) {
         this(x, y, NO_ROTATION, NO_ROTATION);
@@ -35,8 +37,10 @@ public abstract class Contour extends Translation2d {
     /**
      * Create a contour with a position and rotation from the camera
      * 
-     * @param x    X offset
-     * @param y    Y offset
+     * @param x    X offset expressed as a percentage of the frame from the center
+     *             (top left is -1,1)
+     * @param y    Y offset expressed as a percentage of the frame from the center
+     *             (top left is -1,1)
      * @param xRot X angle from camera
      * @param yRot Y angle from camera
      */

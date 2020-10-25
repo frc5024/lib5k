@@ -46,7 +46,7 @@ public class HyperbolicAxisAlignedBoundingBox extends AxisAlignedBoundingBox {
      */
     public HyperbolicAxisAlignedBoundingBox(Translation2d topLeft, Translation2d bottomRight, Rotation2d xRot,
             Rotation2d yRot, Rotation2d hRot, Rotation2d vRot) {
-        this(topLeft, bottomRight, xRot, yRot, hRot.times(-0.5), hRot.times(0.5), vRot.times(-0.5), vRot.times(0.5));
+        this(topLeft, bottomRight, xRot, yRot, hRot.times(-0.5), hRot.times(0.5), vRot.times(0.5), vRot.times(-0.5));
     }
 
     /**

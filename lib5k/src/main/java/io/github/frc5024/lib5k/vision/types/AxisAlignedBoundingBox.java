@@ -55,8 +55,8 @@ public class AxisAlignedBoundingBox extends Contour {
         this.topRight = new Translation2d(bottomRight.getX(), topLeft.getY());
 
         // Set size
-        this.width = (bottomRight.getX() - topLeft.getX());
-        this.height = (topLeft.getY() - bottomRight.getY());
+        this.width = Math.abs(bottomRight.getX() - topLeft.getX());
+        this.height = Math.abs(topLeft.getY() - bottomRight.getY());
 
         // Set aspect ratio
         this.aspectRatio = width / height;

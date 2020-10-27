@@ -85,6 +85,7 @@ public class TimeScale {
      * 
      * @param outputOverride Override output
      */
+    @Deprecated
     public void overrideCalculationOutput(Double outputOverride) {
         this.override = outputOverride;
     }
@@ -95,6 +96,8 @@ public class TimeScale {
      * 
      * @param outputOverride Override output
      */
+    @Deprecated
+
     public static void globallyOverrideCalculationOutput(Double outputOverride) {
         globalOverride = outputOverride;
     }

@@ -1,9 +1,9 @@
-package ca.retrylife.frc.limelight.controls;
+package io.github.frc5024.lib5k.hardware.limelightvision.settings;
 
 /**
  * Limelight operation mode setting
  */
-public enum OperationMode {
+public enum LimeLightOperationMode {
 
     VISION(0), // Vision processor
     DRIVER(1); // Driver Camera (Increases exposure, disables vision processing)
@@ -11,16 +11,16 @@ public enum OperationMode {
     private int val;
 
     /**
-     * Create an OperationMode
+     * Create an LimeLightOperationMode
      * 
      * @param val Limelight control byte
      */
-    OperationMode(int val) {
+    LimeLightOperationMode(int val) {
         this.val = val;
     }
 
     /**
-     * Get the OperationMode setting value
+     * Get the LimeLightOperationMode setting value
      * 
      * @return Setting value
      */

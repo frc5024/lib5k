@@ -1,9 +1,9 @@
-package ca.retrylife.frc.limelight.controls;
+package io.github.frc5024.lib5k.hardware.limelightvision.settings;
 
 /**
  * Limelight stream mode setting
  */
-public enum StreamMode {
+public enum LimeLightStreamMode {
 
     STANDARD(0), // Side-by-side streams if a webcam is attached to Limelight
     PIP_MAIN(1), // The secondary camera stream is placed in the lower-right corner of the
@@ -14,16 +14,16 @@ public enum StreamMode {
     private int val;
 
     /**
-     * Create a StreamMode
+     * Create a LimeLightStreamMode
      * 
      * @param val Limelight control byte
      */
-    StreamMode(int val) {
+    LimeLightStreamMode(int val) {
         this.val = val;
     }
 
     /**
-     * Get the StreamMode setting value
+     * Get the LimeLightStreamMode setting value
      * 
      * @return Setting value
      */

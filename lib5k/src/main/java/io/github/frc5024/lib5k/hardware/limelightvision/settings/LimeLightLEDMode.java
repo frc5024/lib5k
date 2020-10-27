@@ -1,9 +1,9 @@
-package ca.retrylife.frc.limelight.controls;
+package io.github.frc5024.lib5k.hardware.limelightvision.settings;
 
 /**
  * Limelight LED mode setting
  */
-public enum LEDMode {
+public enum LimeLightLEDMode {
 
     DEFAULT(0), // Use pipeline default setting
     ON(3), // Force-enable LEDs
@@ -17,12 +17,12 @@ public enum LEDMode {
      * 
      * @param val Limelight control byte
      */
-    LEDMode(int val) {
+    LimeLightLEDMode(int val) {
         this.val = val;
     }
 
     /**
-     * Get the LEDMode setting value
+     * Get the LimeLightLEDMode setting value
      * 
      * @return Setting value
      */

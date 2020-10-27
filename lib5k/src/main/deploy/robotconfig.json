@@ -1,0 +1,9 @@
+{
+    "motor": {
+        "id": 0,
+        "inverted": false
+    },
+    "encoder": {
+        "cpr": 1440
+    }
+}

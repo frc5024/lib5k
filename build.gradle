@@ -28,7 +28,6 @@ project.version = "2.1.0"
 subprojects {
   apply from: rootProject.file("gradle/vendordeploader.gradle")
   apply from: rootProject.file("gradle5k/gradle5k.gradle")
-  apply from: rootProject.file("gradle/simpleunittest.gradle")
 
   
 } 

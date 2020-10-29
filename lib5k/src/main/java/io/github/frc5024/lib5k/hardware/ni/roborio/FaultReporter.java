@@ -1,7 +1,7 @@
 package io.github.frc5024.lib5k.hardware.ni.roborio;
 
 import edu.wpi.first.hal.can.CANStatus;
-import edu.wpi.first.wpilibj.Notifier;
+import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.SafeNotifier;
 import edu.wpi.first.wpilibj.RobotController;
 import io.github.frc5024.lib5k.logging.RobotLogger;
 import io.github.frc5024.lib5k.logging.RobotLogger.Level;
@@ -16,7 +16,7 @@ public class FaultReporter {
     // locals
     RobotLogger logger = RobotLogger.getInstance();
     private static FaultReporter instance = null;
-    private Notifier thread;
+    private SafeNotifier thread;
 
     // Fault counts
     int count3v3, count5v, count6v = 0;
@@ -35,8 +35,7 @@ public class FaultReporter {
 
         // Configure and start the notifier
         logger.log("Starting reporter thread", Level.kRobot);
-        thread = new Notifier(this::update);
-        thread.setName("Lib5K FaultReporter");
+        thread = new SafeNotifier("Lib5k FaultReporter", this::update);
         thread.startPeriodic(0.08);
     }
 

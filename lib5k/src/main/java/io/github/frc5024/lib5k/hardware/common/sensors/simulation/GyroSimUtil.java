@@ -3,7 +3,7 @@ package io.github.frc5024.lib5k.hardware.common.sensors.simulation;
 import edu.wpi.first.hal.SimBoolean;
 import edu.wpi.first.hal.SimDevice;
 import edu.wpi.first.hal.SimDouble;
-import edu.wpi.first.wpilibj.Notifier;
+import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.SafeNotifier;
 import io.github.frc5024.lib5k.hardware.common.drivebase.IDifferentialDrivebase;
 
 /**
@@ -13,7 +13,7 @@ public class GyroSimUtil implements AutoCloseable {
 
     // Internal thread
     private double threadPeriod;
-    private Notifier thread;
+    private SafeNotifier thread;
 
     // Sim device
     private SimDevice simDevice;
@@ -53,7 +53,7 @@ public class GyroSimUtil implements AutoCloseable {
             double rotationGain) {
 
         // Set up locals
-        this.thread = new Notifier(this::update);
+        this.thread = new SafeNotifier("Gyro Sim", this::update);
         this.threadPeriod = threadPeriod;
         this.drivebase = drivebase;
         this.kGain = rotationGain;

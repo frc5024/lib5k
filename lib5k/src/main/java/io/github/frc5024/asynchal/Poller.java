@@ -2,7 +2,7 @@ package io.github.frc5024.asynchal;
 
 import java.util.ArrayList;
 
-import edu.wpi.first.wpilibj.Notifier;
+import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.SafeNotifier;
 
 /**
  * You have been lied to. This library is not fully real-time. I don't want to
@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.Notifier;
 public class Poller {
     private static Poller instance;
 
-    private Notifier thread;
+    private SafeNotifier thread;
 
     private ArrayList<Pollable> pollables = new ArrayList<>();
 
@@ -22,7 +22,7 @@ public class Poller {
     private Poller() {
 
         // Start up the polling thread
-        this.thread = new Notifier(this::update);
+        this.thread = new SafeNotifier("Poller", this::update);
         this.thread.startPeriodic(0.01);
     }
 

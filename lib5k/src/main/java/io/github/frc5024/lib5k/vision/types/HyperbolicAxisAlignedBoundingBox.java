@@ -155,4 +155,31 @@ public class HyperbolicAxisAlignedBoundingBox extends AxisAlignedBoundingBox {
         return bottomRot;
     }
 
+	/**
+	 * Adds a HyperbolicAxisAlignedBoundingBox to another
+	 * 
+	 * @param box the box to add
+	 * 
+	 * @return The Sum of 2 HyperbolicAxisAlignedBoundingBoxes
+	 */
+	public HyperbolicAxisAlignedBoundingBox add(HyperbolicAxisAlignedBoundingBox box){
+
+		// Adds the Translation2d sums
+		Translation2d topLeftSum = getTopLeftCorner().plus(box.getTopLeftCorner());
+		Translation2d bottomRightSum = getBottomRightCorner().plus(box.getBottomRightCorner());
+
+		// Adds AxisAlignedBounding box Rotation2d sums
+		Rotation2d xRotSum = getXRotation().plus(box.getXRotation());
+		Rotation2d yRotSum = getYRotation().plus(box.getYRotation());
+
+		// Add Hyperbolic Rotation2d
+		Rotation2d leftRotSum = getLeftBoundRotation().plus(box.getLeftBoundRotation());
+		Rotation2d rightRotSum = getRightBoundRotation().plus(box.getRightBoundRotation());
+		Rotation2d topRotSum = getTopBoundRotation().plus(box.topRot);
+		Rotation2d bottomRotSum = getBottomBoundRotation().plus(box.getBottomBoundRotation());
+
+		// Returns a sum
+		return new HyperbolicAxisAlignedBoundingBox(topLeftSum, bottomRightSum, xRotSum, yRotSum, leftRotSum, rightRotSum, topRotSum, bottomRotSum);
+	}
+
 }

@@ -2,11 +2,17 @@ package io.github.frc5024.lib5k.vision.types;
 
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
+import io.github.frc5024.lib5k.utils.MathWrapper;
 
 /**
  * A computer-vision axis-aligned bounding box. Relative to a camera
  */
 public class AxisAlignedBoundingBox extends Contour {
+
+    // Collection of mathematical operators
+    public static final MathWrapper<AxisAlignedBoundingBox> OPERATORS = new MathWrapper<AxisAlignedBoundingBox>(
+            AxisAlignedBoundingBox::add, AxisAlignedBoundingBox::subtract, AxisAlignedBoundingBox::multiply,
+            AxisAlignedBoundingBox::divide);
 
     // Box corners
     private final Translation2d topLeft;
@@ -153,82 +159,83 @@ public class AxisAlignedBoundingBox extends Contour {
      * Adds two AxisAlignedBoundingBoxes in 2d space and returns the sum. This is
      * similar to vector addition.
      *
-     * @param other The AxisAlignedBoundingBox to add.
+     * @param a The first AxisAlignedBoundingBox
+     * @param b The second AxisAlignedBoundingBox
      * @return The sum of the AxisAlignedBoundingBoxes.
      */
-    public AxisAlignedBoundingBox plus(AxisAlignedBoundingBox other) {
+    public static AxisAlignedBoundingBox add(AxisAlignedBoundingBox a, AxisAlignedBoundingBox b) {
 
         // Get new rotations
-        Rotation2d newXRot = super.getXRotation().plus(other.getXRotation());
-        Rotation2d newYRot = super.getYRotation().plus(other.getYRotation());
+        Rotation2d newXRot = a.getXRotation().plus(b.getXRotation());
+        Rotation2d newYRot = a.getYRotation().plus(b.getYRotation());
 
         // Get new corners
-        Translation2d newTopLeft = topLeft.plus(other.getTopLeftCorner());
-        Translation2d newBottomRight = bottomRight.plus(other.getBottomRightCorner());
+        Translation2d newTopLeft = a.getTopLeftCorner().plus(b.getTopLeftCorner());
+        Translation2d newBottomRight = a.getBottomRightCorner().plus(b.getBottomRightCorner());
 
         // Build new AABB
         return new AxisAlignedBoundingBox(newTopLeft, newBottomRight, newXRot, newYRot);
     }
 
     /**
-     * Subtracts the other AxisAlignedBoundingBox from this AxisAlignedBoundingBox
-     * and returns the difference.
+     * Subtracts the AxisAlignedBoundingBox b from AxisAlignedBoundingBox a
      *
-     *
-     * @param other The AxisAlignedBoundingBox to subtract.
-     * @return The difference between the two AxisAlignedBoundingBoxes.
+     * @param a The first AxisAlignedBoundingBox
+     * @param b The second AxisAlignedBoundingBox
+     * @return The result of (a-b)
      */
-    public AxisAlignedBoundingBox minus(AxisAlignedBoundingBox other) {
+    public static AxisAlignedBoundingBox subtract(AxisAlignedBoundingBox a, AxisAlignedBoundingBox b) {
 
         // Get new rotations
-        Rotation2d newXRot = super.getXRotation().minus(other.getXRotation());
-        Rotation2d newYRot = super.getYRotation().minus(other.getYRotation());
+        Rotation2d newXRot = a.getXRotation().minus(b.getXRotation());
+        Rotation2d newYRot = a.getYRotation().minus(b.getYRotation());
 
         // Get new corners
-        Translation2d newTopLeft = topLeft.minus(other.getTopLeftCorner());
-        Translation2d newBottomRight = bottomRight.minus(other.getBottomRightCorner());
+        Translation2d newTopLeft = a.getTopLeftCorner().minus(b.getTopLeftCorner());
+        Translation2d newBottomRight = a.getBottomRightCorner().minus(b.getBottomRightCorner());
 
         // Build new AABB
         return new AxisAlignedBoundingBox(newTopLeft, newBottomRight, newXRot, newYRot);
     }
 
     /**
-     * Multiplies the AxisAlignedBoundingBox by a scalar and returns the new
+     * Multiplies a AxisAlignedBoundingBox by a scalar and returns the new
      * AxisAlignedBoundingBox.
      *
+     * @param value  Base AxisAlignedBoundingBox
      * @param scalar The scalar to multiply by.
      * @return The scaled AxisAlignedBoundingBox.
      */
-    public AxisAlignedBoundingBox times(double scalar) {
+    public static AxisAlignedBoundingBox multiply(AxisAlignedBoundingBox value, double scalar) {
 
         // Get new rotations
-        Rotation2d newXRot = super.getXRotation().times(scalar);
-        Rotation2d newYRot = super.getYRotation().times(scalar);
+        Rotation2d newXRot = value.getXRotation().times(scalar);
+        Rotation2d newYRot = value.getYRotation().times(scalar);
 
         // Get new corners
-        Translation2d newTopLeft = topLeft.times(scalar);
-        Translation2d newBottomRight = bottomRight.times(scalar);
+        Translation2d newTopLeft = value.getTopLeftCorner().times(scalar);
+        Translation2d newBottomRight = value.getBottomRightCorner().times(scalar);
 
         // Build new AABB
         return new AxisAlignedBoundingBox(newTopLeft, newBottomRight, newXRot, newYRot);
     }
 
     /**
-     * Divides the AxisAlignedBoundingBox by a scalar and returns the new
+     * Divides the translation by a scalar and returns the new
      * AxisAlignedBoundingBox.
      * 
      * @param scalar The scalar to multiply by.
      * @return The new AxisAlignedBoundingBox.
      */
-    public AxisAlignedBoundingBox div(double scalar) {
+    public static AxisAlignedBoundingBox divide(AxisAlignedBoundingBox value, double scalar) {
 
         // Get new rotations
-        Rotation2d newXRot = Rotation2d.fromDegrees(super.getXRotation().getDegrees() / scalar);
-        Rotation2d newYRot = Rotation2d.fromDegrees(super.getYRotation().getDegrees() / scalar);
+        Rotation2d newXRot = Rotation2d.fromDegrees(value.getXRotation().getDegrees() / scalar);
+        Rotation2d newYRot = Rotation2d.fromDegrees(value.getYRotation().getDegrees() / scalar);
 
         // Get new corners
-        Translation2d newTopLeft = topLeft.div(scalar);
-        Translation2d newBottomRight = bottomRight.div(scalar);
+        Translation2d newTopLeft = value.getTopLeftCorner().div(scalar);
+        Translation2d newBottomRight = value.getBottomRightCorner().div(scalar);
 
         // Build new AABB
         return new AxisAlignedBoundingBox(newTopLeft, newBottomRight, newXRot, newYRot);

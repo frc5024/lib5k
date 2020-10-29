@@ -1,4 +1,4 @@
-package io.github.frc5024.lib5k.hardware.vision.utils;
+package io.github.frc5024.lib5k.vision.utils;
 
 import java.util.LinkedList;
 

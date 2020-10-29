@@ -1,4 +1,4 @@
-package io.github.frc5024.lib5k.hardware.limelightvision.utils;
+package io.github.frc5024.lib5k.hardware.vision.utils;
 
 import java.util.LinkedList;
 

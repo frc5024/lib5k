@@ -47,7 +47,7 @@ public class MovingAverageTest {
         avg.add(30.0);
 
         // Check that we get 1 item thats equal to the value
-        assertEquals(1, avg.getUsage());
+        assertEquals(5, avg.getUsage());
         assertEquals(25.0, avg.getAverage(), RobotMath.kVerySmallNumber);
 
     }

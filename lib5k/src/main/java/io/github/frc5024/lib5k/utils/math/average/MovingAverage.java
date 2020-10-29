@@ -1,7 +1,5 @@
 package io.github.frc5024.lib5k.utils.math.average;
 
-import java.util.LinkedList;
-
 import javax.annotation.CheckForNull;
 
 import io.github.frc5024.lib5k.utils.MathWrapper;
@@ -17,7 +15,7 @@ public class MovingAverage<T> {
     private final MathWrapper<T> operationWrapper;
 
     // List of values
-    private LinkedList<T> values;
+    private Object[] values;
 
     // Index in list
     private final int size;
@@ -34,13 +32,8 @@ public class MovingAverage<T> {
         this.operationWrapper = operationWrapper;
 
         // Build list
-        this.values = new LinkedList<>();
+        this.values = new Object[size];
         this.size = size;
-
-        // Fill list
-        for (int i = 0; i < this.values.size(); i++) {
-            this.values.add(null);
-        }
     }
 
     /**
@@ -56,7 +49,7 @@ public class MovingAverage<T> {
         }
 
         // Set the value at the index
-        this.values.set(idx, value);
+        this.values[idx] = value;
 
         // Move the index forward
         idx++;
@@ -71,7 +64,7 @@ public class MovingAverage<T> {
      */
     public int getUsage() {
         int used = 0;
-        for (T t : values) {
+        for (Object t : values) {
             if (t != null) {
                 used++;
             }
@@ -91,9 +84,12 @@ public class MovingAverage<T> {
         }
 
         // Accumulate T
-        T lastValue = values.get(0);
+        @SuppressWarnings("unchecked")
+        T lastValue = (T) values[0];
 
-        for (T value : values) {
+        for (Object o : values) {
+            @SuppressWarnings("unchecked")
+            T value = (T) o;
             if (value != null && value != lastValue) {
                 lastValue = operationWrapper.add(value, lastValue);
             }

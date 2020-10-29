@@ -2,12 +2,18 @@ package io.github.frc5024.lib5k.vision.types;
 
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
+import io.github.frc5024.lib5k.utils.MathWrapper;
 
 /**
  * HyperbolicAxisAlignedBoundingBox is a non-euclidean
  * {@link AxisAlignedBoundingBox} in hyperbolic space
  */
 public class HyperbolicAxisAlignedBoundingBox extends AxisAlignedBoundingBox {
+
+    // Collection of mathematical operators
+    public static final MathWrapper<HyperbolicAxisAlignedBoundingBox> OPERATORS = new MathWrapper<HyperbolicAxisAlignedBoundingBox>(
+            HyperbolicAxisAlignedBoundingBox::add, HyperbolicAxisAlignedBoundingBox::subtract,
+            HyperbolicAxisAlignedBoundingBox::multiply, HyperbolicAxisAlignedBoundingBox::divide);
 
     // Side rotations
     private final Rotation2d leftRot;
@@ -155,31 +161,104 @@ public class HyperbolicAxisAlignedBoundingBox extends AxisAlignedBoundingBox {
         return bottomRot;
     }
 
-	/**
-	 * Adds a HyperbolicAxisAlignedBoundingBox to another
-	 * 
-	 * @param box the box to add
-	 * 
-	 * @return The Sum of 2 HyperbolicAxisAlignedBoundingBoxes
-	 */
-	public HyperbolicAxisAlignedBoundingBox add(HyperbolicAxisAlignedBoundingBox box){
+    /**
+     * Adds two HyperbolicAxisAlignedBoundingBoxes in 2d space and returns the sum.
+     * This is similar to vector addition.
+     *
+     * @param a The first HyperbolicAxisAlignedBoundingBox
+     * @param b The second HyperbolicAxisAlignedBoundingBox
+     * @return The sum of the HyperbolicAxisAlignedBoundingBoxes.
+     */
+    public static HyperbolicAxisAlignedBoundingBox add(HyperbolicAxisAlignedBoundingBox a,
+            HyperbolicAxisAlignedBoundingBox b) {
 
-		// Adds the Translation2d sums
-		Translation2d topLeftSum = getTopLeftCorner().plus(box.getTopLeftCorner());
-		Translation2d bottomRightSum = getBottomRightCorner().plus(box.getBottomRightCorner());
+        // Get the underlying bounding box
+        AxisAlignedBoundingBox aabb = AxisAlignedBoundingBox.add(a, b);
 
-		// Adds AxisAlignedBounding box Rotation2d sums
-		Rotation2d xRotSum = getXRotation().plus(box.getXRotation());
-		Rotation2d yRotSum = getYRotation().plus(box.getYRotation());
+        // Get the new rotations
+        Rotation2d newTopRot = a.getTopBoundRotation().plus(b.getTopBoundRotation());
+        Rotation2d newBottomRot = a.getBottomBoundRotation().plus(b.getBottomBoundRotation());
+        Rotation2d newLeftRot = a.getLeftBoundRotation().plus(b.getLeftBoundRotation());
+        Rotation2d newRightRot = a.getRightBoundRotation().plus(b.getRightBoundRotation());
 
-		// Add Hyperbolic Rotation2d
-		Rotation2d leftRotSum = getLeftBoundRotation().plus(box.getLeftBoundRotation());
-		Rotation2d rightRotSum = getRightBoundRotation().plus(box.getRightBoundRotation());
-		Rotation2d topRotSum = getTopBoundRotation().plus(box.topRot);
-		Rotation2d bottomRotSum = getBottomBoundRotation().plus(box.getBottomBoundRotation());
+        // Build output
+        return new HyperbolicAxisAlignedBoundingBox(aabb.getTopLeftCorner(), aabb.getBottomRightCorner(),
+                aabb.getXRotation(), aabb.getYRotation(), newLeftRot, newRightRot, newTopRot, newBottomRot);
 
-		// Returns a sum
-		return new HyperbolicAxisAlignedBoundingBox(topLeftSum, bottomRightSum, xRotSum, yRotSum, leftRotSum, rightRotSum, topRotSum, bottomRotSum);
-	}
+    }
 
+    /**
+     * Subtracts the HyperbolicAxisAlignedBoundingBox b from
+     * HyperbolicAxisAlignedBoundingBox a
+     *
+     * @param a The first HyperbolicAxisAlignedBoundingBox
+     * @param b The second HyperbolicAxisAlignedBoundingBox
+     * @return The result of (a-b)
+     */
+    public static HyperbolicAxisAlignedBoundingBox subtract(HyperbolicAxisAlignedBoundingBox a,
+            HyperbolicAxisAlignedBoundingBox b) {
+
+        // Get the underlying bounding box
+        AxisAlignedBoundingBox aabb = AxisAlignedBoundingBox.subtract(a, b);
+
+        // Get the new rotations
+        Rotation2d newTopRot = a.getTopBoundRotation().minus(b.getTopBoundRotation());
+        Rotation2d newBottomRot = a.getBottomBoundRotation().minus(b.getBottomBoundRotation());
+        Rotation2d newLeftRot = a.getLeftBoundRotation().minus(b.getLeftBoundRotation());
+        Rotation2d newRightRot = a.getRightBoundRotation().minus(b.getRightBoundRotation());
+
+        // Build output
+        return new HyperbolicAxisAlignedBoundingBox(aabb.getTopLeftCorner(), aabb.getBottomRightCorner(),
+                aabb.getXRotation(), aabb.getYRotation(), newLeftRot, newRightRot, newTopRot, newBottomRot);
+
+    }
+
+    /**
+     * Multiplies a HyperbolicAxisAlignedBoundingBox by a scalar and returns the new
+     * HyperbolicAxisAlignedBoundingBox.
+     *
+     * @param value  Base HyperbolicAxisAlignedBoundingBox
+     * @param scalar The scalar to multiply by.
+     * @return The scaled HyperbolicAxisAlignedBoundingBox.
+     */
+    public static HyperbolicAxisAlignedBoundingBox multiply(HyperbolicAxisAlignedBoundingBox value, double scalar) {
+
+        // Get the underlying bounding box
+        AxisAlignedBoundingBox aabb = AxisAlignedBoundingBox.multiply(value, scalar);
+
+        // Get the new rotations
+        Rotation2d newTopRot = value.getTopBoundRotation().times(scalar);
+        Rotation2d newBottomRot = value.getBottomBoundRotation().times(scalar);
+        Rotation2d newLeftRot = value.getLeftBoundRotation().times(scalar);
+        Rotation2d newRightRot = value.getRightBoundRotation().times(scalar);
+
+        // Build output
+        return new HyperbolicAxisAlignedBoundingBox(aabb.getTopLeftCorner(), aabb.getBottomRightCorner(),
+                aabb.getXRotation(), aabb.getYRotation(), newLeftRot, newRightRot, newTopRot, newBottomRot);
+
+    }
+
+    /**
+     * Divides the HyperbolicAxisAlignedBoundingBox by a scalar and returns the new
+     * HyperbolicAxisAlignedBoundingBox.
+     * 
+     * @param scalar The scalar to multiply by.
+     * @return The new HyperbolicAxisAlignedBoundingBox.
+     */
+    public static HyperbolicAxisAlignedBoundingBox divide(HyperbolicAxisAlignedBoundingBox value, double scalar) {
+
+        // Get the underlying bounding box
+        AxisAlignedBoundingBox aabb = AxisAlignedBoundingBox.divide(value, scalar);
+
+        // Get the new rotations
+        Rotation2d newTopRot = Rotation2d.fromDegrees(value.getTopBoundRotation().getDegrees() / scalar);
+        Rotation2d newBottomRot = Rotation2d.fromDegrees(value.getBottomBoundRotation().getDegrees() / scalar);
+        Rotation2d newLeftRot = Rotation2d.fromDegrees(value.getLeftBoundRotation().getDegrees() / scalar);
+        Rotation2d newRightRot = Rotation2d.fromDegrees(value.getRightBoundRotation().getDegrees() / scalar);
+
+        // Build output
+        return new HyperbolicAxisAlignedBoundingBox(aabb.getTopLeftCorner(), aabb.getBottomRightCorner(),
+                aabb.getXRotation(), aabb.getYRotation(), newLeftRot, newRightRot, newTopRot, newBottomRot);
+
+    }
 }

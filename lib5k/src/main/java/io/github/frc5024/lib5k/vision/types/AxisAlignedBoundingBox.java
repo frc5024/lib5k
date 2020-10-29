@@ -221,7 +221,7 @@ public class AxisAlignedBoundingBox extends Contour {
     }
 
     /**
-     * Divides the translation by a scalar and returns the new
+     * Divides the AxisAlignedBoundingBox by a scalar and returns the new
      * AxisAlignedBoundingBox.
      * 
      * @param scalar The scalar to multiply by.

@@ -242,6 +242,7 @@ public class HyperbolicAxisAlignedBoundingBox extends AxisAlignedBoundingBox {
      * Divides the HyperbolicAxisAlignedBoundingBox by a scalar and returns the new
      * HyperbolicAxisAlignedBoundingBox.
      * 
+     * @param value  Base HyperbolicAxisAlignedBoundingBox
      * @param scalar The scalar to multiply by.
      * @return The new HyperbolicAxisAlignedBoundingBox.
      */

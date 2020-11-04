@@ -1,9 +1,11 @@
 {
     "java.configuration.updateBuildConfiguration": "interactive",
+    "java.server.launchMode":"hybrid",
     "cSpell.words": [
         "Holonomic",
         "Robo",
         "drivetrains",
-        "seperator"
+        "seperator",
+        "waypoints"
     ]
 }

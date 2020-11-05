@@ -1,4 +1,4 @@
-package io.github.frc5024.purepursuit.pathgen;
+package io.github.frc5024.purepursuit.util;
 
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 

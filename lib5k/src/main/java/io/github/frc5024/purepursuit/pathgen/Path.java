@@ -30,6 +30,9 @@ public class Path {
     protected double pathGenStartTimeMs = 0.0;
     protected double pathGenTimeMs = 0.0;
 
+    // Metadata
+    protected String name = "Path";
+
     /**
      * Create a motion path from points
      * 
@@ -90,7 +93,7 @@ public class Path {
         }
 
         // Log path generation time
-        saveAndLogGenerationTime("Path");
+        saveAndLogGenerationTime();
     }
 
     /**
@@ -103,11 +106,10 @@ public class Path {
     /**
      * Logs how long path gen took
      * 
-     * @param generatorName Name of caller
      */
-    protected void saveAndLogGenerationTime(String generatorName) {
+    protected void saveAndLogGenerationTime() {
         pathGenTimeMs = FPGAClock.getFPGAMilliseconds() - pathGenStartTimeMs;
-        RobotLogger.getInstance().log(String.format("%s generation finished in: %.4fms", generatorName, pathGenTimeMs));
+        RobotLogger.getInstance().log(String.format("%s generation finished in: %.4fms", name, pathGenTimeMs));
     }
 
     /**
@@ -162,7 +164,8 @@ public class Path {
         // Build as a chart
         // XYChart chart = QuickChart.getChart("Generated Path", "X (meters)", "Y
         // (meters)", "path", xData, yData);
-        XYChart chart = new XYChartBuilder().width(1000).height(600).xAxisTitle("X (Meters)").yAxisTitle("Y (Meters)").title("Generated Path Graph").build();
+        XYChart chart = new XYChartBuilder().width(1000).height(600).xAxisTitle("X (Meters)").yAxisTitle("Y (Meters)")
+                .title(name).build();
 
         // Add data
         chart.addSeries("Generated Path", xData, yData);

@@ -1,4 +1,4 @@
-package io.github.frc5024.purepursuit.pathgen;
+package io.github.frc5024.purepursuit.util;
 
 import org.junit.Test;
 import org.knowm.xchart.BitmapEncoder;
@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import edu.wpi.first.wpilibj.Filesystem;
+import io.github.frc5024.purepursuit.pathgen.RawPath;
 
 public class PathImporterVizTest {
 

@@ -162,7 +162,7 @@ public class Path {
         // Build as a chart
         // XYChart chart = QuickChart.getChart("Generated Path", "X (meters)", "Y
         // (meters)", "path", xData, yData);
-        XYChart chart = new XYChartBuilder().width(1000).height(600).build();
+        XYChart chart = new XYChartBuilder().width(1000).height(600).xAxisTitle("X (Meters)").yAxisTitle("Y (Meters)").title("Generated Path Graph").build();
 
         // Add data
         chart.addSeries("Generated Path", xData, yData);

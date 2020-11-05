@@ -27,17 +27,6 @@ public class MutableTranslation {
     }
 
     /**
-     * Create a MutableTranslation from a Translation2d
-     * 
-     * @param x X
-     * @param y Y
-     */
-    public MutableTranslation(double x, double y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    /**
      * Convert back to a Translation2d
      * 
      * @return Translation2d clone
@@ -114,60 +103,50 @@ public class MutableTranslation {
      * result in a MutableTranslation of {0, 2}.
      *
      * @param other The rotation to rotate the translation by.
-     * @return this
      */
-    public MutableTranslation rotateBy(Rotation2d other) {
+    public void rotateBy(Rotation2d other) {
         this.x = x * other.getCos() - y * other.getSin();
         this.y = x * other.getSin() + y * other.getCos();
-        return this;
     }
 
     /**
      * Add another translation to this one
      * 
      * @param other Other translation
-     * @return this
      */
-    public MutableTranslation plus(MutableTranslation other) {
+    public void plus(MutableTranslation other) {
         this.x += other.x;
         this.y += other.y;
-        return this;
     }
 
     /**
      * Add another translation to this one
      * 
      * @param other Other translation
-     * @return this
      */
-    public MutableTranslation plus(Translation2d other) {
+    public void plus(Translation2d other) {
         this.x += other.getX();
         this.y += other.getY();
-        return this;
     }
 
     /**
      * Subtracts another translation from this one
      * 
      * @param other Other translation
-     * @return this
      */
-    public MutableTranslation minus(MutableTranslation other) {
+    public void minus(MutableTranslation other) {
         this.x -= other.x;
         this.y -= other.y;
-        return this;
     }
 
     /**
      * Subtracts another translation from this one
      * 
      * @param other Other translation
-     * @return this
      */
-    public MutableTranslation minus(Translation2d other) {
+    public void minus(Translation2d other) {
         this.x -= other.getX();
         this.y -= other.getY();
-        return this;
     }
 
     /**
@@ -183,24 +162,20 @@ public class MutableTranslation {
      * Multiply this by a scalar
      * 
      * @param scalar Scalar
-     * @return this
      */
-    public MutableTranslation times(double scalar) {
+    public void times(double scalar) {
         this.x *= scalar;
         this.y *= scalar;
-        return this;
     }
 
     /**
      * Divides this by a scalar
      * 
      * @param scalar Scalar
-     * @return this
      */
-    public MutableTranslation div(double scalar) {
+    public void div(double scalar) {
         this.x /= scalar;
         this.y /= scalar;
-        return this;
     }
 
     @Override
@@ -225,15 +200,6 @@ public class MutableTranslation {
     @Override
     public int hashCode() {
         return Objects.hash(x, y);
-    }
-
-    /**
-     * Copy this
-     * 
-     * @return New copy
-     */
-    public MutableTranslation copy() {
-        return new MutableTranslation(x, y);
     }
 
 }

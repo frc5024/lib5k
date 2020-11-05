@@ -4,10 +4,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Test;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
-import io.github.frc5024.purepursuit.util.Smoothing;
 
 
 public class SmoothingTest{
@@ -19,7 +19,7 @@ public class SmoothingTest{
         testPath.add(new Translation2d(1,1));
         testPath.add(new Translation2d(2,2));
         testPath.add(new Translation2d(3,3));
-        ArrayList<Translation2d> newPath = Smoothing.smooth(testPath, 1, .75, .01);
+        List<Translation2d> newPath = Smoothing.smooth(testPath, 1, .75, .01);
 
         // Size remains the samne
         assertEquals(newPath.size(), testPath.size());

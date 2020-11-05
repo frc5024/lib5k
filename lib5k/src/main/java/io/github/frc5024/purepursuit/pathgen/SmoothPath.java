@@ -1,5 +1,7 @@
 package io.github.frc5024.purepursuit.pathgen;
 
+import java.util.ArrayList;
+
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.util.Units;
 import io.github.frc5024.purepursuit.util.Smoothing;
@@ -38,7 +40,7 @@ public class SmoothPath extends Path {
 
         // Smooth the generated path
         beginTimingGeneration();
-        points = Smoothing.smooth(points, weight, smoothing, tolerance);
+        points = new ArrayList<>(Smoothing.smooth(points, weight, smoothing, tolerance));
         saveAndLogGenerationTime();
 
     }

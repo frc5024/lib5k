@@ -24,6 +24,7 @@ public class Path {
     // Path points
     protected ArrayList<Translation2d> points;
     protected Translation2d[] waypoints;
+    private Translation2d[] innerPoints = null;
 
     // Timer for path generation
     protected double pathGenStartTimeMs = 0.0;
@@ -58,15 +59,13 @@ public class Path {
             Translation2d endTrans = waypoints[i + 1];
 
             // Find the distance to the next point
-            Translation2d displacement = new Translation2d(endTrans.getX() - startTrans.getX(),
-                    endTrans.getY() - startTrans.getY());
+            Translation2d displacement = endTrans.minus(startTrans);
 
             // Find the normal
-            double theta = Math.atan2(displacement.getY(), displacement.getX());
-            Translation2d normal = new Translation2d(Math.cos(theta), Math.sin(theta));
+            Translation2d normal = displacement.div(displacement.getNorm());
 
             // Determine the number of points we can fit between the start and end
-            double innerCount = Math.ceil(Math.hypot(displacement.getX(), displacement.getY()) / spacing);
+            double innerCount = Math.ceil(displacement.getNorm() / spacing);
 
             // For each point, multiply it by the normal to get an inner point
             for (int j = 0; j < innerCount; j++) {
@@ -74,11 +73,8 @@ public class Path {
                 // Determine the magnitude for this point
                 double magnitude = spacing * j;
 
-                // Create a new vector for this magnitude
-                Translation2d innerPoint = new Translation2d(normal.getX() * magnitude, normal.getY() * magnitude);
-
-                // Add the point to it's "base" point
-                innerPoint = innerPoint.plus(startTrans);
+                // Create a new vector for this magnitude and add to it's "base" point
+                Translation2d innerPoint = normal.times(magnitude).plus(startTrans);
 
                 // Add this vector to the list
                 this.points.add(innerPoint);
@@ -120,7 +116,10 @@ public class Path {
      * @return Poses
      */
     public Translation2d[] getPoses() {
-        return this.points.toArray(new Translation2d[this.points.size()]);
+        if (innerPoints == null) {
+            innerPoints = this.points.toArray(new Translation2d[this.points.size()]);
+        }
+        return innerPoints;
     }
 
     @Override

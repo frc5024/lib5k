@@ -3,18 +3,21 @@ package io.github.frc5024.lib5k.bases.drivetrain;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
+import edu.wpi.first.wpilibj.simulation.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import io.github.frc5024.common_drive.gearing.Gear;
 import io.github.frc5024.lib5k.bases.drivetrain.commands.PathFollowerCommand;
 import io.github.frc5024.lib5k.bases.drivetrain.commands.TurnToCommand;
 import io.github.frc5024.lib5k.hardware.common.drivebase.IDifferentialDrivebase;
 import io.github.frc5024.lib5k.logging.RobotLogger;
+import io.github.frc5024.lib5k.utils.FRCFieldConstants;
 import io.github.frc5024.lib5k.utils.interfaces.SafeSystem;
 import io.github.frc5024.libkontrol.statemachines.StateMachine;
 import io.github.frc5024.libkontrol.statemachines.StateMetadata;
 import io.github.frc5024.purepursuit.pathgen.Path;
 
-public abstract class AbstractDriveTrain extends SubsystemBase implements IDifferentialDrivebase, SafeSystem, AutoCloseable {
+public abstract class AbstractDriveTrain extends SubsystemBase
+        implements IDifferentialDrivebase, SafeSystem, AutoCloseable {
 
     // Logging
     protected RobotLogger logger = RobotLogger.getInstance();
@@ -34,6 +37,9 @@ public abstract class AbstractDriveTrain extends SubsystemBase implements IDiffe
     private Translation2d goalPose = null;
     private Translation2d goalPoseEpsilon = null;
     private boolean waitingForNextLoop = false;
+
+    // Simulation
+    private Field2d simField = new Field2d();
 
     /**
      * Create an AbstractDriveTrain
@@ -205,6 +211,9 @@ public abstract class AbstractDriveTrain extends SubsystemBase implements IDiffe
         // Run state machine
         stateMachine.update();
         waitingForNextLoop = false;
+
+        // Save the field location
+        simField.setRobotPose(getPose().plus(FRCFieldConstants.LIB5K_TO_WPILIB_COORDINATE_TRANSFORM));
     }
 
     /**
@@ -271,7 +280,7 @@ public abstract class AbstractDriveTrain extends SubsystemBase implements IDiffe
 
     @Override
     public void close() throws Exception {
-        
+
     }
 
 }

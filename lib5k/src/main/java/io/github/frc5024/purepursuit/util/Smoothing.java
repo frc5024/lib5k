@@ -28,25 +28,34 @@ public class Smoothing {
 
         // Change variable
         double change = tolerance;
-        double aux1;
-        double aux2;
 
+        // This exists to prevent an infinite loop
         int countdown = 10000;
 
+        // Run erosion until we reach a timeout, or the tolerance
         while (change >= tolerance && countdown > 0) {
             change = 0.0;
 
+            // Erode every point once
             for (int i = 1; i < positions.size() - 1; i++) {
-                aux1 = newPositions.get(i).getX();
-                aux2 = newPositions.get(i).getY();
 
-                newPositions.set(i, new Translation2d(
-                        aux1 + weight_data * (positions.get(i).getX() - aux1) + weight_smooth
-                                * (newPositions.get(i - 1).getX() + newPositions.get(i + 1).getX() - (2.0 * aux1)),
-                        aux2 + weight_data * (positions.get(i).getY() - aux2) + weight_smooth
-                                * (newPositions.get(i - 1).getY() + newPositions.get(i + 1).getY() - (2.0 * aux2))));
+                // Get the state of this point in the last erosion step
+                Translation2d previousPointState = newPositions.get(i);
 
-                change += Math.abs(aux1 - newPositions.get(i).getX()) + Math.abs(aux2 - newPositions.get(i).getY());
+                // Compute the first erosion factor
+                Translation2d firstFactor = previousPointState
+                        .plus(positions.get(i).minus(previousPointState).times(weight_data));
+
+                // Compute the second erosion factor
+                Translation2d secondFactor = newPositions.get(i - 1).plus(newPositions.get(i + 1))
+                        .minus(previousPointState.times(2.0)).times(weight_smooth);
+
+                // Save the eroded point
+                newPositions.set(i, firstFactor.plus(secondFactor));
+
+                // Calculate the amount of change
+                Translation2d erosionDifference = previousPointState.minus(newPositions.get(i));
+                change += Math.abs(erosionDifference.getX()) + Math.abs(erosionDifference.getY());
             }
 
             countdown -= 1;

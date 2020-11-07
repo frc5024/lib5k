@@ -16,6 +16,7 @@ public class RawPath extends Path {
      * @param points Points
      */
     public RawPath(Translation2d... points) {
+        this.name = "RawPath";
 
         // Create and fill points list
         this.points = new ArrayList<Translation2d>();

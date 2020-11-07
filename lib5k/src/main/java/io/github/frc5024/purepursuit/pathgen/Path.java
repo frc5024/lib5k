@@ -5,6 +5,8 @@ import java.util.Arrays;
 
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.util.Units;
+import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.FPGAClock;
+import io.github.frc5024.lib5k.logging.RobotLogger;
 
 import org.knowm.xchart.XYChart;
 import org.knowm.xchart.XYChartBuilder;
@@ -22,6 +24,14 @@ public class Path {
     // Path points
     protected ArrayList<Translation2d> points;
     protected Translation2d[] waypoints;
+    private Translation2d[] innerPoints = null;
+
+    // Timer for path generation
+    protected double pathGenStartTimeMs = 0.0;
+    protected double pathGenTimeMs = 0.0;
+
+    // Metadata
+    protected String name = "Path";
 
     /**
      * Create a motion path from points
@@ -39,6 +49,7 @@ public class Path {
      * @param waypoints Path waypoints to follow
      */
     public Path(double spacing, Translation2d... waypoints) {
+        beginTimingGeneration();
         this.points = new ArrayList<>();
         this.waypoints = waypoints;
 
@@ -51,15 +62,13 @@ public class Path {
             Translation2d endTrans = waypoints[i + 1];
 
             // Find the distance to the next point
-            Translation2d displacement = new Translation2d(endTrans.getX() - startTrans.getX(),
-                    endTrans.getY() - startTrans.getY());
+            Translation2d displacement = endTrans.minus(startTrans);
 
             // Find the normal
-            double theta = Math.atan2(displacement.getY(), displacement.getX());
-            Translation2d normal = new Translation2d(Math.cos(theta), Math.sin(theta));
+            Translation2d normal = displacement.div(displacement.getNorm());
 
             // Determine the number of points we can fit between the start and end
-            double innerCount = Math.ceil(Math.hypot(displacement.getX(), displacement.getY()) / spacing);
+            double innerCount = Math.ceil(displacement.getNorm() / spacing);
 
             // For each point, multiply it by the normal to get an inner point
             for (int j = 0; j < innerCount; j++) {
@@ -67,11 +76,8 @@ public class Path {
                 // Determine the magnitude for this point
                 double magnitude = spacing * j;
 
-                // Create a new vector for this magnitude
-                Translation2d innerPoint = new Translation2d(normal.getX() * magnitude, normal.getY() * magnitude);
-
-                // Add the point to it's "base" point
-                innerPoint = innerPoint.plus(startTrans);
+                // Create a new vector for this magnitude and add to it's "base" point
+                Translation2d innerPoint = normal.times(magnitude).plus(startTrans);
 
                 // Add this vector to the list
                 this.points.add(innerPoint);
@@ -85,6 +91,25 @@ public class Path {
             // Remove the first point, as it may cause bugs with followers
             this.points.remove(0);
         }
+
+        // Log path generation time
+        saveAndLogGenerationTime();
+    }
+
+    /**
+     * Begins an internal timer for profiling path gen time
+     */
+    protected void beginTimingGeneration() {
+        pathGenStartTimeMs = FPGAClock.getFPGAMilliseconds();
+    }
+
+    /**
+     * Logs how long path gen took
+     * 
+     */
+    protected void saveAndLogGenerationTime() {
+        pathGenTimeMs = FPGAClock.getFPGAMilliseconds() - pathGenStartTimeMs;
+        RobotLogger.getInstance().log(String.format("%s generation finished in: %.4fms", name, pathGenTimeMs));
     }
 
     /**
@@ -93,7 +118,10 @@ public class Path {
      * @return Poses
      */
     public Translation2d[] getPoses() {
-        return this.points.toArray(new Translation2d[this.points.size()]);
+        if (innerPoints == null) {
+            innerPoints = this.points.toArray(new Translation2d[this.points.size()]);
+        }
+        return innerPoints;
     }
 
     @Override
@@ -136,7 +164,8 @@ public class Path {
         // Build as a chart
         // XYChart chart = QuickChart.getChart("Generated Path", "X (meters)", "Y
         // (meters)", "path", xData, yData);
-        XYChart chart = new XYChartBuilder().width(1000).height(600).build();
+        XYChart chart = new XYChartBuilder().width(1000).height(600).xAxisTitle("X (Meters)").yAxisTitle("Y (Meters)")
+                .title(name).build();
 
         // Add data
         chart.addSeries("Generated Path", xData, yData);

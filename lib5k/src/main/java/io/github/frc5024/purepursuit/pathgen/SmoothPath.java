@@ -34,9 +34,12 @@ public class SmoothPath extends Path {
 
         // Generate a linear path
         super(spacing, waypoints);
+        this.name = "SmoothPath";
 
         // Smooth the generated path
+        beginTimingGeneration();
         points = Smoothing.smooth(points, weight, smoothing, tolerance);
+        saveAndLogGenerationTime();
 
     }
 }

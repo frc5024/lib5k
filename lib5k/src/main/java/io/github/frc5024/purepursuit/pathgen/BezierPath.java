@@ -13,7 +13,7 @@ public class BezierPath extends Path {
 	// Maximum space allowed between points
 	private double maxSeperation;
 
-	private static final double DEFAULT_POINT_SPACING = Units.inchesToMeters(4);
+	private static final double DEFAULT_POINT_SPACING = Units.inchesToMeters(6);
 
 	// The lookup table
 	private static ArrayList<int[]> binomialLookUpTable;
@@ -44,6 +44,7 @@ public class BezierPath extends Path {
 	 * @param spacing   the maximum amount of spacing allowed
 	 */
 	public BezierPath(Translation2d[] wayPoints, double[] weights, double spacing) {
+		this.name = "BezierPath";
 		this.waypoints = wayPoints;
 		this.points = new ArrayList<>();
 		this.maxSeperation = spacing;
@@ -63,7 +64,7 @@ public class BezierPath extends Path {
 			}
 		}
 
-		// Calculates the points 
+		// Calculates the points
 		calculatePoints(wayPoints, newWeights);
 
 	}

@@ -22,7 +22,7 @@ plugins {
 }
 
 // LIB VERSION
-project.version = "2.1.0"
+project.version = "2.2.0"
 
 // Enable Java support for all projects
 subprojects {

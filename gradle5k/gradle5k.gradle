@@ -33,6 +33,7 @@ def maven_repos = [
     rev_color:   "http://www.revrobotics.com/content/sw/color-sensor-v3/sdk/maven/",
     rev:         "https://www.revrobotics.com/content/sw/max/sdk/maven/",
     wpi:         "https://frcmaven.wpi.edu/artifactory/development/",
+    retrylife:   "https://release.maven.retrylife.ca/",
 ]
 
 /* --- These are all publicly exposed --- */
@@ -63,7 +64,10 @@ dependencies{
     testImplementation 'junit:junit:4.13'
 
     // @ewpratten's MathUtils library
-    implementation 'com.github.ewpratten:ewmath:master-SNAPSHOT'
+    // implementation 'com.github.ewpratten:ewmath:master-SNAPSHOT'
+    implementation 'ca.retrylife:mathutils:1.0.0'
+    implementation 'ca.retrylife:mathutils:1.0.0:sources'
+    implementation 'ca.retrylife:mathutils:1.0.0:javadoc'
 
     // Java language extensions
     implementation "org.apache.commons:commons-lang3:3.11"

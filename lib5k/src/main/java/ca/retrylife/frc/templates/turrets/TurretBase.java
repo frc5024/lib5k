@@ -1,6 +1,7 @@
 package ca.retrylife.frc.templates.turrets;
 
-import ca.retrylife.ewmath.MathUtils;
+import ca.retrylife.mathutils.Angles;
+import ca.retrylife.mathutils.Comparison;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -25,9 +26,9 @@ public abstract class TurretBase extends SubsystemBase {
     public TurretBase(Rotation2d minDeadzoneAngle, Rotation2d maxDeadzoneAngle) {
 
         // Correctly order the min and max angles (in case the programmer can't read)
-        this.deadzone = (MathUtils.epsilonEquals(Math.min(minDeadzoneAngle.getDegrees(), maxDeadzoneAngle.getDegrees()),
-                minDeadzoneAngle.getDegrees(), MathUtils.kVerySmallNumber))
-                        ? new Rotation2d[] { minDeadzoneAngle, maxDeadzoneAngle }
+        this.deadzone = (Comparison.epsilonEquals(
+                Math.min(minDeadzoneAngle.getDegrees(), maxDeadzoneAngle.getDegrees()), minDeadzoneAngle.getDegrees(),
+                Comparison.K_VERY_SMALL_NUMBER)) ? new Rotation2d[] { minDeadzoneAngle, maxDeadzoneAngle }
                         : new Rotation2d[] { maxDeadzoneAngle, minDeadzoneAngle };
 
     }
@@ -86,7 +87,7 @@ public abstract class TurretBase extends SubsystemBase {
         double deadzoneSize = Math.abs(remappedMaxDeadzone - remappedMinDeadzone);
 
         // The angle between the sides of the deadzone must not be 180 degrees
-        if (MathUtils.epsilonEquals(deadzoneSize, 180, MathUtils.kVerySmallNumber)) {
+        if (Comparison.epsilonEquals(deadzoneSize, 180, Comparison.K_VERY_SMALL_NUMBER)) {
             logger.log("The angle between the min and max of a turret's deadzone must not be exactly 180 degrees!",
                     Level.kRobot);
             throw new RuntimeException(
@@ -115,14 +116,14 @@ public abstract class TurretBase extends SubsystemBase {
             if (remappedB > remappedMinDeadzone && remappedB < remappedMaxDeadzone) {
                 // B is not a valid goal position (it lands inside the deadzone)
                 // Return the deadzone boundary closest to b
-                return MathUtils.getWrappedError(remappedA,
+                return Angles.getSmallestCoTerminalDegrees(
                         (Math.abs(remappedB - remappedMinDeadzone) >= Math.abs(remappedB - remappedMaxDeadzone))
                                 ? remappedMaxDeadzone
-                                : remappedMinDeadzone)
-                        * -1;
+                                : remappedMinDeadzone,
+                        remappedA);
             } else {
                 // Return the sum of distances between A, B, and the 0/360 boundary
-                return MathUtils.getWrappedError(remappedA, remappedB);
+                return Angles.getSmallestCoTerminalDegrees(remappedB, remappedA);
             }
         }
 

@@ -1,3 +1,5 @@
+/** Enables the "betterJavadoc" task, which produces a better javadoc */
+
 task('betterJavadoc', type: Javadoc) {
     source = project.sourceSets.main.allJava
     classpath = project.sourceSets.main.runtimeClasspath + project.sourceSets.main.compileClasspath

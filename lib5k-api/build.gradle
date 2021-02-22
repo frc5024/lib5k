@@ -11,6 +11,9 @@ plugins {
 }
 
 apply from: rootProject.file("gradle/scripts/better_javadoc.gradle")
+apply from: rootProject.file("gradle/scripts/better_tests_ui.gradle")
+apply from: rootProject.file("gradle/scripts/jar_metadata.gradle")
+apply from: rootProject.file("gradle/scripts/srcjar.gradle")
 
 task allJar(type: Jar) {
     classifier = "all"
@@ -29,34 +32,6 @@ task copyPythonScripts(type: Copy) {
     from rootProject.file("scripts")
     into project.file("$buildDir/libs")
 }
-
-
-jar {
-    manifest {
-        attributes(
-            'Built-By'       : "Raider Robotics",
-            'Build-Timestamp': new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(new Date()),
-            'Build-Revision' : versioning.info.commit,
-            'Created-By'     : "Gradle ${gradle.gradleVersion}",
-            'Build-Jdk'      : "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.properties['java.vm.version']})",
-            'Build-OS'       : "${System.properties['os.name']} ${System.properties['os.arch']} ${System.properties['os.version']}"
-        )
-    }
-}
-
-java {
-    // Make the java task build a javadoc and source jar
-    withJavadocJar()
-    withSourcesJar()
-
-    // Force the project to compile for Java 11
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
-}
-
-assemble.dependsOn allJar
-assemble.dependsOn copyGradle5K
-assemble.dependsOn copyPythonScripts
 
 // Style checking
 checkstyle {

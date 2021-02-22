@@ -1,0 +1,10 @@
+/** Enables the srcJar task, which produces an srcJar */
+
+apply plugin: "java"
+
+task('srcJar', type: Jar) {
+    from sourceSets.main.allJava
+    classifier = 'sources'
+}
+
+project.tasks.assemble.dependsOn project.tasks.srcJar

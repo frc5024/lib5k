@@ -14,7 +14,7 @@ plugins {
 rootProject.name = 'lib5k'
 
 // Examples
-include ":examples"
+// include ":examples"
 
 // Lib5K
 include ":lib5k-api"

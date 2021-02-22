@@ -26,8 +26,8 @@ project.version = "2.2.0"
 
 // Enable Java support for all projects
 subprojects {
-  apply from: rootProject.file("gradle/vendordeploader.gradle")
-  apply from: rootProject.file("gradle5k/gradle5k.gradle")
+  // apply from: rootProject.file("gradle/vendordeploader.gradle")
+  // apply from: rootProject.file("gradle5k/gradle5k.gradle")
 
   
 } 

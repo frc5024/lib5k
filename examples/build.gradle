@@ -38,7 +38,7 @@ deploy {
 dependencies {
 
     // All of lib5k
-    implementation project(":lib5k")
+    implementation project(":lib5k-api")
 
     // HALSIM
     simulation wpi.deps.sim.gui(wpi.platforms.desktop, false)
@@ -66,7 +66,7 @@ task fatJar{
 
 jar {
     // Require other libraries
-    dependsOn ":lib5k:assemble"
+    dependsOn ":lib5k-api:assemble"
 
     // Bundle the JAR
     from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }

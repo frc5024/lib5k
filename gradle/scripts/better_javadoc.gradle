@@ -1,0 +1,37 @@
+task('betterJavadoc', type: Javadoc) {
+    source = project.sourceSets.main.allJava
+    classpath = project.sourceSets.main.runtimeClasspath + project.sourceSets.main.compileClasspath
+
+    // Set the JavaDoc webpage title
+    title = "$project.name $project.version"
+
+    // These fix a JavaDoc bug
+    options.addBooleanOption('-no-module-directories', true)
+    options.author true
+
+    // Set the custom CSS file containing our logo and theme
+    options.setStylesheetFile(rootProject.file("assets/javadoc.css"))
+
+    // External references and options
+    options.links = [
+        'http://docs.spring.io/spring/docs/4.3.x/javadoc-api/', 
+        'http://docs.oracle.com/javase/8/docs/api/', 
+        'http://docs.spring.io/spring-ws/docs/2.3.0.RELEASE/api/', 
+        'http://docs.spring.io/spring-security/site/docs/4.0.4.RELEASE/apidocs/', 
+        'https://first.wpi.edu/FRC/roborio/development/docs/java/', 
+        'https://www.revrobotics.com/content/sw/max/sw-docs/java/', 
+        'https://www.kauailabs.com/public_files/navx-mxp/apidocs/java/', 
+        'https://knowm.org/javadocs/xchart/'
+    ]
+    
+    options.addStringOption 'Xdoclint:none'
+    options.addStringOption '-quiet'
+}
+
+// Javadoc JAR
+project.task('javadocJar', type: Jar) {
+    from project.tasks.betterJavadoc
+    classifier = 'javadoc'
+}
+
+project.tasks.assemble.dependsOn project.tasks.javadocJar

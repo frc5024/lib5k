@@ -10,35 +10,7 @@ plugins {
     id 'net.nemerosa.versioning' version '2.14.0'
 }
 
-task customJavadoc(type: Javadoc) {
-    source = sourceSets.main.allJava
-    classpath = sourceSets.main.runtimeClasspath
-    
-    // Set the JavaDoc webpage title
-    title = "$project.name $version API"
-
-    // Set the custom CSS file containing our logo and theme
-    options.setStylesheetFile(rootProject.file("assets/javadoc.css"))
-
-    // These fix a JavaDoc bug
-    options.addBooleanOption('-no-module-directories', true)
-    options.author true
-
-    // If you add a new dependancy to the project, add its javadoc URL to this list
-    options.links = [
-        'http://docs.spring.io/spring/docs/4.3.x/javadoc-api/', 
-        'http://docs.oracle.com/javase/8/docs/api/', 
-        'http://docs.spring.io/spring-ws/docs/2.3.0.RELEASE/api/', 
-        'http://docs.spring.io/spring-security/site/docs/4.0.4.RELEASE/apidocs/', 
-        'https://first.wpi.edu/FRC/roborio/development/docs/java/', 
-        'https://www.revrobotics.com/content/sw/max/sw-docs/java/', 
-        'https://www.kauailabs.com/public_files/navx-mxp/apidocs/java/', 
-        'https://knowm.org/javadocs/xchart/'
-    ]
-        
-    // Any JavaDoc options should go here
-    options.addStringOption 'Xdoclint:none', '-quiet'
-}
+apply from: rootProject.file("gradle/scripts/better_javadoc.gradle")
 
 task allJar(type: Jar) {
     classifier = "all"

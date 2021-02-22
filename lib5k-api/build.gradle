@@ -4,7 +4,7 @@ plugins {
     id "java-library"
 
     // Style checks
-    id "checkstyle"
+    // id "checkstyle"
 
     // Metadata plugin
     id 'net.nemerosa.versioning' version '2.14.0'

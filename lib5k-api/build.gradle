@@ -10,44 +10,103 @@ plugins {
     id 'net.nemerosa.versioning' version '2.14.0'
 }
 
+apply plugin: "edu.wpi.first.GradleRIO"
+
 apply from: rootProject.file("gradle/scripts/better_javadoc.gradle")
 apply from: rootProject.file("gradle/scripts/better_tests_ui.gradle")
 apply from: rootProject.file("gradle/scripts/jar_metadata.gradle")
 apply from: rootProject.file("gradle/scripts/srcjar.gradle")
 
-task allJar(type: Jar) {
-    classifier = "all"
-    from javadoc
-    from sourceSets.main.allJava
-    from jar.source
-}
-
-// Copy the loader script to the output directory
-task copyGradle5K(type: Copy) {
-    from rootProject.file("gradle5k/gradle5k.gradle")
-    into project.file("$buildDir/libs")
-}
-
-task copyPythonScripts(type: Copy) {
-    from rootProject.file("scripts")
-    into project.file("$buildDir/libs")
-}
-
-// Style checking
-checkstyle {
-    toolVersion '8.20'
-    configFile project(':').file("checkstyle.xml")
-    sourceSets = []
-}
-checkstyleMain{
-    source = project.sourceSets.main.java
-}
-tasks.withType(Checkstyle) {
-    reports {
-        xml.enabled false
-        html.enabled true
+repositories {
+    mavenCentral()
+    mavenLocal()
+    jcenter()
+    maven {
+        name "JitPack"
+        url "https://jitpack.io/"
+    }
+    maven {
+        name "CTRE"
+        url "http://devsite.ctr-electronics.com/maven/release/"
+    }
+    maven {
+        name "RevRobotics"
+        url "https://www.revrobotics.com/content/sw/max/sdk/maven/"
+    }
+    maven {
+        name "RevRobotics-Color"
+        url "http://www.revrobotics.com/content/sw/color-sensor-v3/sdk/maven/"
+    }
+    maven {
+        name "WPILib"
+        url "https://frcmaven.wpi.edu/artifactory/release/"
     }
 }
-task checkstyle{
-    dependsOn "checkstyleMain"
+
+dependencies {
+
+    // Utilities
+    implementation 'org.apache.commons:commons-math3:3.6.1'
+    implementation 'com.google.guava:guava:29.0-jre'
+    implementation 'com.github.ewpratten:ewmath:master-SNAPSHOT'
+    implementation 'org.apache.commons:commons-lang3:3.11'
+    implementation 'com.google.code.gson:gson:2.8.6'
+
+    // Unit testing
+    testImplementation 'junit:junit:4.13'
+
+    // Graphing
+    compile group: 'org.knowm.xchart', name: 'xchart', version: '3.6.5'
+
+    // WPILib
+    compileOnly wpi.deps.wpilib()
+    compileOnly 'edu.wpi.first.wpilibNewCommands:wpilibNewCommands-java:2021.1.1'
+
+    // NavX
+    compileOnly 'com.kauailabs.navx.frc:navx-java:3.1.400'
+
+    // CTRE
+    compileOnly 'com.ctre.phoenix:api-java:5.17.6'
+    compileOnly 'com.ctre.phoenix:wpiapi-java:5.17.6'
+
+    // Rev
+    compileOnly 'com.revrobotics.frc:SparkMax-java:1.5.1'
+
 }
+
+// task allJar(type: Jar) {
+//     classifier = "all"
+//     from javadoc
+//     from sourceSets.main.allJava
+//     from jar.source
+// }
+
+// // Copy the loader script to the output directory
+// task copyGradle5K(type: Copy) {
+//     from rootProject.file("gradle5k/gradle5k.gradle")
+//     into project.file("$buildDir/libs")
+// }
+
+// task copyPythonScripts(type: Copy) {
+//     from rootProject.file("scripts")
+//     into project.file("$buildDir/libs")
+// }
+
+// // Style checking
+// checkstyle {
+//     toolVersion '8.20'
+//     configFile project(':').file("checkstyle.xml")
+//     sourceSets = []
+// }
+// checkstyleMain{
+//     source = project.sourceSets.main.java
+// }
+// tasks.withType(Checkstyle) {
+//     reports {
+//         xml.enabled false
+//         html.enabled true
+//     }
+// }
+// task checkstyle{
+//     dependsOn "checkstyleMain"
+// }

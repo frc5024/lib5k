@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import edu.wpi.first.wpilibj.Notifier;
+import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.SafeNotifier;
 import edu.wpi.first.wpilibj.RobotBase;
 import io.github.frc5024.lib5k.utils.annotations.FieldTested;
 import io.github.frc5024.lib5k.utils.annotations.Tested;
@@ -19,7 +19,7 @@ import io.github.frc5024.lib5k.utils.annotations.TestedInSimulation;
 @TestedInSimulation
 public class RobotLogger {
     private static RobotLogger instance = null;
-    private Notifier notifier;
+    private SafeNotifier notifier;
     ArrayList<String> periodic_buffer = new ArrayList<String>();
     private USBLogger m_usbLogger;
     private double bootTime;
@@ -52,7 +52,7 @@ public class RobotLogger {
      * Create the RobotLogger instance
      */
     private RobotLogger() {
-        this.notifier = new Notifier(this::pushLogs);
+        this.notifier = new SafeNotifier("Robot Logger", this::pushLogs);
 
         // set boot time
         this.bootTime = (double) System.currentTimeMillis() / 1000.0;

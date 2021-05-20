@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Notifier;
+import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.SafeNotifier;
 import io.github.frc5024.lib5k.logging.RobotLogger.Level;
 import io.github.frc5024.lib5k.utils.FileManagement;
 
@@ -20,7 +20,7 @@ import io.github.frc5024.lib5k.utils.FileManagement;
  */
 public class USBLogger implements AutoCloseable {
 
-    private Notifier m_thread;
+    private SafeNotifier m_thread;
     private ArrayList<String> m_messageBuffer = new ArrayList<>();
     private FileWriter m_file;
 
@@ -47,7 +47,7 @@ public class USBLogger implements AutoCloseable {
         }
 
         // Start the thread
-        m_thread = new Notifier(this::update);
+        m_thread = new SafeNotifier("USB Logger", this::update);
         m_thread.startPeriodic(0.5);
 
     }

@@ -84,4 +84,6 @@ public abstract class Contour extends Translation2d {
      */
     public abstract boolean overlaps(AxisAlignedBoundingBox box);
 
+    
+
 }

@@ -40,7 +40,7 @@ public class SafeNotifier extends Notifier {
     }
 
     /**
-     * /** Create a SafeNotifier with a custom period
+     * Create a SafeNotifier with a custom period
      * 
      * @param name          Thread name
      * @param periodSeconds Period time in seconds

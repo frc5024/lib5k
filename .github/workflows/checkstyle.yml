@@ -1,5 +1,6 @@
 name: Style Checks
-on: [pull_request, push]
+#on: [pull_request, push]
+on: []
 jobs:
   gradle:
     strategy:

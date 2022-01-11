@@ -12,19 +12,6 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 apply plugin: "java"
 apply plugin: "edu.wpi.first.GradleRIO"
 
-/* --- Lib5K Maintainers: Set version info here --- */
-def versions = [
-
-    // Core FRC libraries
-    // Using a "+" here will allow you to use beta versions of libraries
-    wpilib:     "2021.1.1-alpha-1" // See: https://github.com/wpilibsuite/allwpilib/releases
-    // ctre       "5.+" // See: http://devsite.ctr-electronics.com/maven/release/com/ctre/phoenix/wpiapi-java/
-    // navx       "3.+" // See: https://www.kauailabs.com/dist/frc/2020/navx_frc.json (Check ["javaDependencies"][0]["version"])
-    // rev_color  "1.+" // See: https://github.com/REVrobotics/Color-Sensor-v3/releases
-    // rev_spark  "1.+" // See: http://www.revrobotics.com/content/sw/max/sdk/REVRobotics.json (Check ["javaDependencies"][0]["version"])
-
-]
-
 /* --- Lib5K Maintainers: Set maven repos here --- */
 def maven_repos = [
     jitpack:     "https://jitpack.io",
@@ -32,7 +19,7 @@ def maven_repos = [
     ctre:        "http://devsite.ctr-electronics.com/maven/release/",
     rev_color:   "http://www.revrobotics.com/content/sw/color-sensor-v3/sdk/maven/",
     rev:         "https://www.revrobotics.com/content/sw/max/sdk/maven/",
-    wpi:         "https://frcmaven.wpi.edu/artifactory/development/",
+    wpi:         "https://frcmaven.wpi.edu/artifactory/release/",
 ]
 
 /* --- These are all publicly exposed --- */
@@ -74,26 +61,10 @@ dependencies{
     // Google JSON support
     implementation 'com.google.code.gson:gson:2.8.6'
 
-    wpi.deps.wpilib().each{
-        implementation it.replaceAll(wpi.wpilibVersion, versions.wpilib)
-    }
-
-    // This is usually wpilibJni, but I am manually calling the internal function instead to get access to debug symbols if needed
-    wpi.deps.wpilibJniInternal(false, wpi.platforms.roborio).each{
-        nativeZip it.replaceAll(wpi.wpilibVersion, versions.wpilib)
-    }
-
-    // This is usually wpilibJni, but I am manually calling the internal function instead to get access to debug symbols if needed
-    wpi.deps.wpilibJniInternal(false, wpi.platforms.desktop).each{
-        nativeDesktopZip it.replaceAll(wpi.wpilibVersion, versions.wpilib)
-    }
-
-    // These are only needed during the 2020 -> 2021 offseason
-    // I am just manually adding beta files to the build step here
-    // See: https://github.com/wpilibsuite/GradleRIO/blob/08b47b835661e3b97dc599c242c6eda53cdbc738/src/main/groovy/edu/wpi/first/gradlerio/wpi/dependencies/WPIDepsExtension.groovy#L78-L96
-    implementation "edu.wpi.first.wpimath:wpimath-java:${versions.wpilib}"
-    nativeZip "edu.wpi.first.wpimath:wpimath-cpp:${versions.wpilib}:${wpi.platforms.roborio}@zip"
-    nativeDesktopZip "edu.wpi.first.wpimath:wpimath-cpp:${versions.wpilib}:${wpi.platforms.desktop}@zip"
+    // Wpilib
+    implementation wpi.deps.wpilib()
+    nativeZip wpi.deps.wpilibJni(wpi.platforms.roborio)
+    nativeDesktopZip wpi.deps.wpilibJni(wpi.platforms.desktop)
 
     // Handlers for vendordeps
     implementation wpi.deps.vendor.java()
@@ -101,7 +72,7 @@ dependencies{
     nativeDesktopZip wpi.deps.vendor.jni(wpi.platforms.desktop)
 
     // WPILib command framework
-    implementation("edu.wpi.first.wpilibNewCommands:wpilibNewCommands-java:${versions.wpilib}")
+    implementation("edu.wpi.first.wpilibNewCommands:wpilibNewCommands-java:2021.3.1")
 }
 
 // Fancy tests output

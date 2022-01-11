@@ -2,6 +2,7 @@ package io.github.frc5024.lib5k.control_loops.models;
 
 import edu.wpi.first.wpilibj.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.util.Units;
+import java.lang.Deprecated;
 
 /**
  * DC Brushed motor constants. <br>
@@ -9,6 +10,7 @@ import edu.wpi.first.wpilibj.util.Units;
  * A Java translation of:
  * https://github.com/calcmogul/frccontrol/blob/master/frccontrol/models.py
  */
+@Deprecated(since = "2022", forRemoval = true)
 public class DCBrushedMotor extends DCMotor {
 
     private Double Kv;
@@ -25,11 +27,11 @@ public class DCBrushedMotor extends DCMotor {
      */
     private DCBrushedMotor(double nominalVoltage, double stallTorque, double stallCurrent, double freeCurrent,
             double freeSpeed) {
-        super(nominalVoltage, stallCurrent, stallCurrent, freeCurrent, freeSpeed);
+        super(nominalVoltage, stallTorque, stallCurrent, freeCurrent, freeSpeed, 1);
 
         // Add a few extra fields
-        this.Kv = Units.radiansPerSecondToRotationsPerMinute(super.m_KvRadPerSecPerVolt);
-        this.freeSpeedRPM = Units.radiansPerSecondToRotationsPerMinute(super.m_freeSpeedRadPerSec);
+        this.Kv = Units.radiansPerSecondToRotationsPerMinute(super.KvRadPerSecPerVolt);
+        this.freeSpeedRPM = Units.radiansPerSecondToRotationsPerMinute(super.freeSpeedRadPerSec);
 
     }
 
@@ -38,8 +40,8 @@ public class DCBrushedMotor extends DCMotor {
      * @param motor DCMotor
      */
     public DCBrushedMotor(DCMotor motor) {
-        this(motor.m_nominalVoltageVolts, motor.m_stallTorqueNewtonMeters, motor.m_stallCurrentAmps,
-                motor.m_freeCurrentAmps, motor.m_freeSpeedRadPerSec);
+        this(motor.nominalVoltageVolts, motor.stallTorqueNewtonMeters, motor.stallCurrentAmps,
+                motor.freeCurrentAmps, motor.freeSpeedRadPerSec);
     }
 
     /**
@@ -49,7 +51,7 @@ public class DCBrushedMotor extends DCMotor {
      */
     public double getFreeSpeedRPM() {
         if (this.freeSpeedRPM == null) {
-            this.freeSpeedRPM = Units.radiansPerSecondToRotationsPerMinute(super.m_freeSpeedRadPerSec);
+            this.freeSpeedRPM = Units.radiansPerSecondToRotationsPerMinute(super.freeSpeedRadPerSec);
         }
         return this.freeSpeedRPM.doubleValue();
     }
@@ -61,7 +63,7 @@ public class DCBrushedMotor extends DCMotor {
      */
     public double getKv() {
         if (this.Kv == null) {
-            this.Kv = Units.radiansPerSecondToRotationsPerMinute(super.m_KvRadPerSecPerVolt);
+            this.Kv = Units.radiansPerSecondToRotationsPerMinute(super.KvRadPerSecPerVolt);
         }
         return this.Kv.doubleValue();
     }

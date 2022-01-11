@@ -10,7 +10,7 @@ buildscript {
     dependencies {
       // Update this version number to update GradleRIO
       // Also update the number below
-      classpath "edu.wpi.first:GradleRIO:2022.+"
+      classpath "edu.wpi.first:GradleRIO:2021.+"
     }
 }
 

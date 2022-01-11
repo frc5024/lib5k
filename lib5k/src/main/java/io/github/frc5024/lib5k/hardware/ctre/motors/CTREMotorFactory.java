@@ -1,9 +1,6 @@
 package io.github.frc5024.lib5k.hardware.ctre.motors;
 
-import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
-
 import io.github.frc5024.lib5k.hardware.ctre.util.TalonHelper;
 
 /**
@@ -40,14 +37,10 @@ public class CTREMotorFactory {
         // Creates a TalonSRX
         ExtendedTalonSRX talon = new ExtendedTalonSRX(id, config);
 
-		
-
         // Configures the motor
         if (config.configFactoryDefault) {
             talon.configFactoryDefault();
         }
-
-		talon.setInverted(config.shouldInvert);
 
         talon.setSafetyEnabled(false);
 
@@ -88,27 +81,13 @@ public class CTREMotorFactory {
 
         ExtendedTalonFX talon = new ExtendedTalonFX(id, config);
 
-		// Configure the motor
         if (config.configFactoryDefault) {
             talon.configFactoryDefault();
         }
 
-		talon.setInverted(config.shouldInvert);
-
         talon.setSafetyEnabled(false);
 
         talon.setNeutralMode(config.setBrake ? NeutralMode.Brake : NeutralMode.Coast);
-
-
-		if(config.setCurrentLimit){
-			talon.configStatorCurrentLimit(
-				new StatorCurrentLimitConfiguration(
-					config.enableCurrentLimit, 
-					config.holdAmps, 
-					config.peakAmps, 
-					config.durationMS)
-				);
-		}
 
         talon.stopMotor();
 
@@ -138,12 +117,9 @@ public class CTREMotorFactory {
     public static ExtendedVictorSPX createVictorSPX(int id, CTREConfig config) {
         ExtendedVictorSPX victor = new ExtendedVictorSPX(id, config);
 
-		// Configure the motor
         if (config.configFactoryDefault) {
             victor.configFactoryDefault();
         }
-
-		victor.setInverted(config.shouldInvert);
 
         victor.setSafetyEnabled(false);
 

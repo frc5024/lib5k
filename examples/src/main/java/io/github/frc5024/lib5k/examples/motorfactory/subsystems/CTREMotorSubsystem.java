@@ -32,7 +32,7 @@ public class CTREMotorSubsystem extends SubsystemBase {
         talon4 = talon3.makeSlave(4);
 
         // This creates a new victoreSPX and gives it a custom config it also adds 2 slaves to it
-        victor1 = CTREMotorFactory.createVictorSPX(5, new CTREConfig(false, true, true, true, 33, 15, 30, 0, true));
+        victor1 = CTREMotorFactory.createVictorSPX(5, new CTREConfig(true, true, true, 33, 15, 30, 0, true));
         victor2 = victor1.makeSlave(6);
         victor3 = victor1.makeSlave(7);
     }

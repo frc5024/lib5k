@@ -29,14 +29,11 @@ public class CTREConfig {
     // Should enable Current Limiting
     public boolean enableCurrentLimit;
 
-	// Should invert Motor
-	public boolean shouldInvert;
-
     /**
      * Default Config Constructor
      */
     public CTREConfig() {
-        this(false, true, 33, 15, 30, 0, true);    
+        this(true, 33, 15, 30, 0, true);    
     }
 
     /**
@@ -44,7 +41,7 @@ public class CTREConfig {
      * @param setInverted should the motor be inverted
      */
     public CTREConfig(boolean setInverted){
-        this(setInverted, true, 33, 15, 30, 0, true);       
+        this(true, 33, 15, 30, 0, true);       
     }
 
     /**
@@ -56,8 +53,8 @@ public class CTREConfig {
      * @param timeoutMS Current limit timeout in milliseconds
      * @param enableCurrentLimit should the current limit be enabled
      */
-    public CTREConfig(boolean setInverted, boolean setCurrentLimit, int peakAmps, int durationMS, int holdAmps, int timeoutMS, boolean enableCurrentLimit){
-        this(setInverted, true, false, setCurrentLimit, peakAmps, durationMS, holdAmps, timeoutMS, enableCurrentLimit); 
+    public CTREConfig(boolean setCurrentLimit, int peakAmps, int durationMS, int holdAmps, int timeoutMS, boolean enableCurrentLimit){
+        this(true, false, setCurrentLimit, peakAmps, durationMS, holdAmps, timeoutMS, enableCurrentLimit); 
     }
 
     /**
@@ -71,10 +68,8 @@ public class CTREConfig {
      * @param timeoutMS Current limit timeout in milliseconds
      * @param enableCurrentLimit should the current limit be enabled
      */
-    public CTREConfig(boolean setInverted, boolean configFactoryDefault, boolean setBrake,
+    public CTREConfig(boolean configFactoryDefault, boolean setBrake,
             boolean setCurrentLimit, int peakAmps, int durationMS, int holdAmps, int timeoutMS, boolean enableCurrentLimit) {
-
-		this.shouldInvert = setInverted;
 
         this.configFactoryDefault = configFactoryDefault;
 

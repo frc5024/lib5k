@@ -1,8 +1,5 @@
-# TODO uncomment, once our CI is back up
-
 name: Build
-#on: [pull_request, push]
-on: []
+on: [pull_request, push]
 jobs:
 
   # Build task for Lib5K

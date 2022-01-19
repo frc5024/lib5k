@@ -1,8 +1,8 @@
 package io.github.frc5024.lib5k.control_loops;
 
-import edu.wpi.first.wpilibj.Sendable;
-import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
-import edu.wpi.first.wpilibj.smartdashboard.SendableRegistry;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.util.sendable.SendableRegistry;
 import io.github.frc5024.lib5k.control_loops.models.PIDProfile;
 import io.github.frc5024.lib5k.logging.RobotLogger;
 import io.github.frc5024.lib5k.logging.RobotLogger.Level;
@@ -15,7 +15,7 @@ import io.github.frc5024.lib5k.logging.RobotLogger.Level;
 @Deprecated(since = "October 2020", forRemoval = true)
 public class PID implements Sendable {
     RobotLogger logger = RobotLogger.getInstance();
-
+    
     private double kP, kI, kD;
     private double integral = 0.0;
     private double previous_error = 0.0;
@@ -210,5 +210,6 @@ public class PID implements Sendable {
         builder.addDoubleProperty("d", () -> kD, (double d) -> kD = d);
         builder.addDoubleProperty("setpoint", () -> setpoint, (double setpoint) -> this.setpoint = setpoint);
     }
+
 
 }

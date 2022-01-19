@@ -49,6 +49,7 @@ public class CTREConfig {
 
     /**
      * Config Constructor for Configuring Current Limits
+     * @param setInverted Should the motor be inverted
      * @param setCurrentLimit Should the current limit be set
      * @param peakAmps Current limits peak amps
      * @param durationMS Duration in milliseconds of current limit
@@ -62,6 +63,7 @@ public class CTREConfig {
 
     /**
      * Creates a custom config
+     * @param setInverted Should the motor be inverted
      * @param configFactoryDefault Should the motor be set to Factory Default
      * @param setBrake Should the brakes be set
      * @param setCurrentLimit Should the current limit be set

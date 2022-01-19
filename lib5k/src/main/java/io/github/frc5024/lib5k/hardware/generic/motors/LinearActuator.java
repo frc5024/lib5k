@@ -1,9 +1,11 @@
 package io.github.frc5024.lib5k.hardware.generic.motors;
 
-import edu.wpi.first.wpilibj.Sendable;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.wpilibj.PneumaticsControlModule;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
-import edu.wpi.first.wpilibj.smartdashboard.SendableRegistry;
+import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.util.sendable.SendableRegistry;
 
 /**
  * PCM-Powered Linear actuator
@@ -20,13 +22,13 @@ public class LinearActuator implements Sendable, AutoCloseable {
     /**
      * Create a Linear Actuator that is powered via a Pneumatic Control Module
      * 
-     * @param pcmID      PCM CAN device ID
+     * @param pcmType      PCM CAN device ID
      * @param pcmChannel PCM device channel
      */
-    public LinearActuator(int pcmID, int pcmChannel) {
+    public LinearActuator(PneumaticsModuleType pcmType, int pcmChannel) {
 
         // Configure the trigger
-        m_trigger = new Solenoid(pcmID, pcmChannel);
+        m_trigger = new Solenoid(pcmType, pcmChannel);
 
         // Replace solenoid sendable with actuator
         // SendableRegistry.remove(m_trigger);
@@ -76,8 +78,9 @@ public class LinearActuator implements Sendable, AutoCloseable {
     /**
      * Clear all PCM faults for the attached PCM
      */
+    @Deprecated(since= "2022", forRemoval = true)
     public void clearAllFaults() {
-        m_trigger.clearAllPCMStickyFaults();
+        //m_trigger.clearAllPCMStickyFaults();
     }
 
     @Override

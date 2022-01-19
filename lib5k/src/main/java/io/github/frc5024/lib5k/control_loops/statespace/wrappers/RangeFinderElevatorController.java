@@ -17,7 +17,7 @@
 
 package io.github.frc5024.lib5k.control_loops.statespace.wrappers;
 
-import edu.wpi.first.wpilibj.util.Units;
+import edu.wpi.first.math.util.Units;
 import io.github.frc5024.lib5k.control_loops.models.DCBrushedMotor;
 import io.github.frc5024.lib5k.utils.annotations.Untested;
 

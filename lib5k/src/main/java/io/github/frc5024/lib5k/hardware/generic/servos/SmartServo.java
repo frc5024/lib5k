@@ -67,7 +67,7 @@ public class SmartServo extends Servo {
      * Stop the servo
      */
     public void stop() {
-        stopMotor();
+            set(getPosition());
     }
 
     /**

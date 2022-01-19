@@ -1,8 +1,8 @@
 package ca.retrylife.frc.templates.turrets;
 
 import ca.retrylife.ewmath.MathUtils;
-import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import io.github.frc5024.lib5k.logging.RobotLogger;
 import io.github.frc5024.lib5k.logging.RobotLogger.Level;

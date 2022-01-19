@@ -1,6 +1,6 @@
 package io.github.frc5024.lib5k.examples.autonomous_path_following;
 
-import edu.wpi.first.wpilibj.util.Units;
+import edu.wpi.first.math.util.Units;
 import io.github.frc5024.lib5k.control_loops.ExtendedPIDController;
 
 public class RobotConfig {

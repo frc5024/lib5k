@@ -3,7 +3,8 @@ package io.github.frc5024.lib5k.hardware.ctre.sensors;
 import com.ctre.phoenix.CANifier;
 import com.ctre.phoenix.ParamEnum;
 
-import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import io.github.frc5024.lib5k.hardware.common.sensors.simulation.EncoderSimUtil;
 import io.github.frc5024.lib5k.hardware.common.sensors.interfaces.EncoderSimulation;
 
@@ -32,7 +33,7 @@ public class CANIfierEncoder extends CANifier implements EncoderSimulation {
     }
 
     @Override
-    public void initSimulationDevice(SpeedController controller, double gearbox_ratio, double max_rpm,
+    public void initSimulationDevice(MotorController controller, double gearbox_ratio, double max_rpm,
             double ramp_time) {
 
         sim = new EncoderSimUtil("CANIfierEncoder", getDeviceID(), cpr, controller, gearbox_ratio, max_rpm, ramp_time);

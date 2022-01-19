@@ -2,7 +2,7 @@ package io.github.frc5024.lib5k.utils;
 
 import edu.wpi.first.hal.SimDevice;
 import edu.wpi.first.hal.SimDouble;
-import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose2d;
 
 /**
  * A tool that hooks into HALSIM to report the robot's simulated position to

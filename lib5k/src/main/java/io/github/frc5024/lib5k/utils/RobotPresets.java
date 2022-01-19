@@ -1,6 +1,6 @@
 package io.github.frc5024.lib5k.utils;
 
-import edu.wpi.first.wpilibj.system.plant.DCMotor;
+import edu.wpi.first.math.system.plant.DCMotor;
 import io.github.frc5024.lib5k.control_loops.models.DCBrushedMotor;
 import io.github.frc5024.lib5k.control_loops.statespace.wrappers.SimpleFlywheelController;
 

@@ -2,7 +2,7 @@ package io.github.frc5024.lib5k.hardware.common.pdp;
 
 import java.util.ArrayList;
 
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import edu.wpi.first.wpilibj.PowerDistribution;
 
 /**
  * A class for running current limits
@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.PowerDistributionPanel;
 public class CurrentLimitManager {
 
     // The Robot's PDP
-    private PowerDistributionPanel pdp;
+    private PowerDistribution pdp;
 
     // List of all active current limits
     private static ArrayList<CurrentLimit> currentLimits;
@@ -19,7 +19,7 @@ public class CurrentLimitManager {
      * 
      * @param pdp the robot pdp
      */
-    public CurrentLimitManager(PowerDistributionPanel pdp) {
+    public CurrentLimitManager(PowerDistribution pdp) {
         this.pdp = pdp;
         this.pdp.clearStickyFaults();
         this.pdp.resetTotalEnergy();

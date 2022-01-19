@@ -4,7 +4,7 @@ package io.github.frc5024.purepursuit.pathgen;
 import org.junit.Test;
 
 import ca.retrylife.ewmath.MathUtils;
-import edu.wpi.first.wpilibj.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 
 public class PathTest {
 

@@ -1,7 +1,7 @@
 package io.github.frc5024.lib5k.examples.teleop_drive;
 
 import edu.wpi.first.wpilibj.system.plant.DCMotor;
-import edu.wpi.first.wpilibj.util.Units;
+import edu.wpi.first.math.util.Units;
 import io.github.frc5024.lib5k.control_loops.models.DCBrushedMotor;
 
 public class RobotConfig {

@@ -1,6 +1,6 @@
 package io.github.frc5024.purepursuit.util;
 
-import edu.wpi.first.wpilibj.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 
 /**
  * This class is the datastructure used to parse WPILib Path json files into

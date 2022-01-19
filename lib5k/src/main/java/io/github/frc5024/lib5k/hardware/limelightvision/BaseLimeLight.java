@@ -3,11 +3,11 @@ package io.github.frc5024.lib5k.hardware.limelightvision;
 import javax.annotation.CheckForNull;
 
 import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.wpilibj.Sendable;
-import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.geometry.Translation2d;
-import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
-import edu.wpi.first.wpiutil.net.PortForwarder;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.util.net.PortForwarder;
 import io.github.frc5024.lib5k.hardware.limelightvision.settings.LimeLightLEDMode;
 import io.github.frc5024.lib5k.hardware.limelightvision.settings.LimeLightOperationMode;
 import io.github.frc5024.lib5k.hardware.limelightvision.settings.LimeLightStreamMode;
@@ -21,7 +21,7 @@ import io.github.frc5024.lib5k.vision.types.HyperbolicAxisAlignedBoundingBox;
  * specification:
  * https://docs.limelightvision.io/en/latest/networktables_api.html
  */
-public abstract class BaseLimeLight implements Sendable {
+public abstract class BaseLimeLight {
 
     // Limelight sizing divisor
     private static final double SIZING_DIVISOR = 320.0;
@@ -197,9 +197,6 @@ public abstract class BaseLimeLight implements Sendable {
         dataTable.getEntry("snapshot").setNumber(enabled ? 1 : 0);
     }
 
-    @Override
-    public void initSendable(SendableBuilder builder) {
-        // TODO: Make this sendable
-    }
+    
 
 }

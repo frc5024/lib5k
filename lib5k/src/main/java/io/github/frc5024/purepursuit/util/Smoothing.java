@@ -2,7 +2,7 @@ package io.github.frc5024.purepursuit.util;
 
 import java.util.ArrayList;
 
-import edu.wpi.first.wpilibj.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 
 public class Smoothing {
 

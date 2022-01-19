@@ -4,7 +4,7 @@ apply plugin: "edu.wpi.first.GradleRIO"
 apply plugin: "java"
 apply plugin: "java-library"
 
-project.ext.WPI_VERSION = "2020.+" // https://github.com/wpilibsuite/allwpilib/releases
+project.ext.WPI_VERSION = "2022.+" // https://github.com/wpilibsuite/allwpilib/releases
 project.ext.CTRE_VERSION = "5.+" // http://devsite.ctr-electronics.com/maven/release/com/ctre/phoenix/wpiapi-java/
 project.ext.NAVX_VERSION = "3.+" // https://www.kauailabs.com/dist/frc/2020/navx_frc.json (Check ["javaDependencies"][0]["version"])
 project.ext.REV_COLOR_VERSION = "1.+" // https://github.com/REVrobotics/Color-Sensor-v3/releases

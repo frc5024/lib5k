@@ -1,6 +1,6 @@
 package io.github.frc5024.lib5k.hardware.common.sensors.interfaces;
 
-import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 
 /**

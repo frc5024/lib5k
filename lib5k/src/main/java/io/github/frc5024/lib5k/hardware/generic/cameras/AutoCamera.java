@@ -1,13 +1,13 @@
 package io.github.frc5024.lib5k.hardware.generic.cameras;
 
-import edu.wpi.cscore.MjpegServer;
-import edu.wpi.cscore.UsbCamera;
-import edu.wpi.cscore.VideoMode;
-import edu.wpi.cscore.VideoSource;
-import edu.wpi.cscore.VideoSource.ConnectionStrategy;
+import edu.wpi.first.cscore.MjpegServer;
+import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.cscore.VideoMode;
+import edu.wpi.first.cscore.VideoSource;
+import edu.wpi.first.cscore.VideoSource.ConnectionStrategy;
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import io.github.frc5024.lib5k.logging.RobotLogger;
 import io.github.frc5024.lib5k.logging.RobotLogger.Level;
 import io.github.frc5024.lib5k.utils.FileUtils;
@@ -20,7 +20,7 @@ public class AutoCamera {
     RobotLogger logger = RobotLogger.getInstance();
     UsbCamera m_UsbCamera;
     MjpegServer m_cameraServer;
-
+    
     /**
      * Create a dynamic auto camera
      */

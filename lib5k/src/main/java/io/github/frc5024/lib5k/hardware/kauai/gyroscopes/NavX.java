@@ -18,6 +18,8 @@ import io.github.frc5024.lib5k.utils.annotations.FieldTested;
 @FieldTested(year = 2020)
 public class NavX extends AHRS implements ISimGyro {
 
+
+    
     private static NavX m_instance = null;
 
     // Trackers

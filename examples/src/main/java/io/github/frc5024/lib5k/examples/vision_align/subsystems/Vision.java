@@ -1,6 +1,6 @@
 package io.github.frc5024.lib5k.examples.vision_align.subsystems;
 
-import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import io.github.frc5024.lib5k.hardware.limelightvision.products.LimeLight2;
 import io.github.frc5024.lib5k.hardware.limelightvision.settings.LimeLightLEDMode;

@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import io.github.frc5024.lib5k.utils.RobotMath;
 
 public class LazySolenoidTest {
@@ -13,7 +14,7 @@ public class LazySolenoidTest {
     public void testLazySolenoid() {
 
         // Create a lazy solenoid
-        LazySolenoid solenoid = new LazySolenoid(8, 1);
+        LazySolenoid solenoid = new LazySolenoid(PneumaticsModuleType.CTREPCM, 1);
 
         // Check that the last packet does not exist
         assertEquals("Last CAN timestamp", solenoid.getLastCANWriteTimestampSeconds(), 0.0, RobotMath.kVerySmallNumber);

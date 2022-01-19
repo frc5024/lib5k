@@ -10,7 +10,7 @@ import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import edu.wpi.first.wpilibj.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 
 /**
  * The PathImporter is a tool for importing Paths from config files

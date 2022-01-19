@@ -1,8 +1,8 @@
 package io.github.frc5024.lib5k.bases.drivetrain.implementations;
 
-import edu.wpi.first.wpilibj.geometry.Pose2d;
-import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import io.github.frc5024.lib5k.logging.RobotLogger.Level;
 import io.github.frc5024.lib5k.utils.types.DifferentialVoltages;
 import io.github.frc5024.libkontrol.statemachines.StateMetadata;

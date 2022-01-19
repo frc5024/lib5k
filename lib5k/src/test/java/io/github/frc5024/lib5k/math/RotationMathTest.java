@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import io.github.frc5024.lib5k.utils.RobotMath;
 
 public class RotationMathTest {

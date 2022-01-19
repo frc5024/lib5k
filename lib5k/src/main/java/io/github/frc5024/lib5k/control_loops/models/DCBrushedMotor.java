@@ -1,7 +1,7 @@
 package io.github.frc5024.lib5k.control_loops.models;
 
-import edu.wpi.first.wpilibj.system.plant.DCMotor;
-import edu.wpi.first.wpilibj.util.Units;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.util.Units;
 import java.lang.Deprecated;
 
 /**
@@ -10,7 +10,7 @@ import java.lang.Deprecated;
  * A Java translation of:
  * https://github.com/calcmogul/frccontrol/blob/master/frccontrol/models.py
  */
-@Deprecated(since = "2022", forRemoval = true)
+//@Deprecated(since = "2022", forRemoval = true)
 public class DCBrushedMotor extends DCMotor {
 
     private Double Kv;

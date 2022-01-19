@@ -17,15 +17,15 @@
 
 package io.github.frc5024.lib5k.control_loops.statespace.wrappers;
 
-import edu.wpi.first.wpilibj.controller.LinearQuadraticRegulator;
-import edu.wpi.first.wpilibj.estimator.KalmanFilter;
-import edu.wpi.first.wpilibj.system.LinearSystem;
-import edu.wpi.first.wpilibj.system.LinearSystemLoop;
-import edu.wpi.first.wpilibj.system.plant.LinearSystemId;
-import edu.wpi.first.wpilibj.util.Units;
-import edu.wpi.first.wpiutil.math.Nat;
-import edu.wpi.first.wpiutil.math.VecBuilder;
-import edu.wpi.first.wpiutil.math.numbers.N1;
+import edu.wpi.first.math.controller.LinearQuadraticRegulator;
+import edu.wpi.first.math.estimator.KalmanFilter;
+import edu.wpi.first.math.system.LinearSystem;
+import edu.wpi.first.math.system.LinearSystemLoop;
+import edu.wpi.first.math.system.plant.LinearSystemId;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.math.Nat;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.numbers.N1;
 import io.github.frc5024.lib5k.control_loops.models.DCBrushedMotor;
 import io.github.frc5024.lib5k.control_loops.statespace.StateSpaceSystem;
 import io.github.frc5024.lib5k.control_loops.statespace.util.easylqr.FlywheelMath;

@@ -1,8 +1,8 @@
 package io.github.frc5024.lib5k.control_loops;
 
-import edu.wpi.first.wpilibj.Sendable;
-import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
-import edu.wpi.first.wpilibj.smartdashboard.SendableRegistry;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.util.sendable.SendableRegistry;
 import io.github.frc5024.lib5k.control_loops.models.PIDProfile;
 
 /**
@@ -12,7 +12,7 @@ import io.github.frc5024.lib5k.control_loops.models.PIDProfile;
  */
 @Deprecated(since = "October 2020", forRemoval = true)
 public class PIDv2 implements Sendable {
-
+    
     private double kp, ki, kd;
     private double setpoint;
     protected double previousError;

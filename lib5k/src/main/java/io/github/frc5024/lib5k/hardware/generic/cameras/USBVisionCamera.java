@@ -1,6 +1,7 @@
 package io.github.frc5024.lib5k.hardware.generic.cameras;
 
 import edu.wpi.first.wpilibj.Notifier;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.FPGAClock;
 
@@ -26,7 +27,7 @@ public class USBVisionCamera extends AutoCamera {
      * @param pcm_port PCM port for camera LED ring power source
      */
     public USBVisionCamera(String name, int usb_slot, int pcm_port) {
-        this(name, usb_slot, 0, pcm_port);
+        this(name, usb_slot, PneumaticsModuleType.CTREPCM, pcm_port);
     }
 
     /**
@@ -36,14 +37,14 @@ public class USBVisionCamera extends AutoCamera {
      * 
      * @param name     Camera name
      * @param usb_slot USB slot of camera
-     * @param pcm_id   PCM CAN ID
+     * @param pcmType   PCM CAN Type
      * @param pcm_port PCM port for camera LED ring power source
      */
-    public USBVisionCamera(String name, int usb_slot, int pcm_id, int pcm_port) {
+    public USBVisionCamera(String name, int usb_slot, PneumaticsModuleType pcmType, int pcm_port) {
         super(name, usb_slot);
 
         // Init the relay
-        m_relay = new Solenoid(pcm_id, pcm_port);
+        m_relay = new Solenoid(pcmType, pcm_port);
 
         // Set the desired mode
         m_desiredMode = LEDMode.OFF;

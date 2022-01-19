@@ -1,6 +1,6 @@
 package io.github.frc5024.lib5k.autonomous;
 
-import edu.wpi.first.wpilibj.Sendable;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -20,7 +20,7 @@ import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.RR_HAL;
 public abstract class RobotProgram extends TimedRobot {
     // Internal logger
     public RobotLogger logger = RobotLogger.getInstance();
-
+    
     // Fault reporter
     private FaultReporter faultReporter = FaultReporter.getInstance();
 
@@ -35,7 +35,7 @@ public abstract class RobotProgram extends TimedRobot {
     private ShuffleboardTab dashboard;
     private SendableChooser<AutonomousSequence> chooser;
     private AutonomousSequence autonomous = null;
-
+    
     /**
      * Create a robot program
      * 

@@ -1,8 +1,9 @@
 package io.github.frc5024.lib5k.hardware.generic.sensors;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.smartdashboard.SendableRegistry;
+import edu.wpi.first.util.sendable.SendableRegistry;
 import io.github.frc5024.lib5k.hardware.common.sensors.interfaces.IBinarySensor;
 
 public class LineBreak extends DigitalInput implements IBinarySensor {
@@ -14,11 +15,11 @@ public class LineBreak extends DigitalInput implements IBinarySensor {
      * Pneumatic Control Module
      * 
      * @param dioChannel DigitalIO signal channel
-     * @param pcmID      PCM CAN device ID
+     * @param pcmType      PCM CAN device ID
      * @param pcmChannel PCM device channel
      */
-    public LineBreak(int dioChannel, int pcmID, int pcmChannel) {
-        this(dioChannel, new Solenoid(pcmID, pcmChannel));
+    public LineBreak(int dioChannel, PneumaticsModuleType pcmType, int pcmChannel) {
+        this(dioChannel, new Solenoid(pcmType, pcmChannel));
 
     }
 

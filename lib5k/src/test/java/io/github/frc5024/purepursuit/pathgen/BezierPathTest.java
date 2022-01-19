@@ -8,7 +8,7 @@ import org.knowm.xchart.BitmapEncoder;
 import org.knowm.xchart.XYChart;
 import org.knowm.xchart.BitmapEncoder.BitmapFormat;
 
-import edu.wpi.first.wpilibj.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 
 public class BezierPathTest {
 

@@ -1,5 +1,6 @@
 package io.github.frc5024.lib5k.hardware.limelightvision.products;
 
+
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import io.github.frc5024.lib5k.hardware.limelightvision.BaseLimeLight;
@@ -37,5 +38,7 @@ public class LimeLight2 extends BaseLimeLight {
     public LimeLight2(NetworkTable networkTable, String ipAddress) {
         super(networkTable, ipAddress, 27.0, 20.5);
     }
+
+   
 
 }

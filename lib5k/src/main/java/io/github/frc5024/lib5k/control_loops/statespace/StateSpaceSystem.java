@@ -1,9 +1,9 @@
 package io.github.frc5024.lib5k.control_loops.statespace;
 
-import edu.wpi.first.wpilibj.controller.LinearQuadraticRegulator;
-import edu.wpi.first.wpilibj.estimator.KalmanFilter;
-import edu.wpi.first.wpilibj.system.LinearSystem;
-import edu.wpi.first.wpiutil.math.Num;
+import edu.wpi.first.math.controller.LinearQuadraticRegulator;
+import edu.wpi.first.math.estimator.KalmanFilter;
+import edu.wpi.first.math.system.LinearSystem;
+import edu.wpi.first.math.Num;
 import io.github.frc5024.lib5k.control_loops.models.SystemCharacteristics;
 
 /**

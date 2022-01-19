@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import edu.wpi.first.hal.SimDevice;
 import edu.wpi.first.hal.SimDouble;
-import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import io.github.frc5024.lib5k.control_loops.SlewLimiter;
 import io.github.frc5024.lib5k.utils.interfaces.PeriodicComponent;
 import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.FPGAClock;
@@ -22,7 +22,7 @@ public abstract class EncoderBase implements PeriodicComponent {
     private final int MAX_READINGS = 5;
 
     /* Simulation vars */
-    private SpeedController controller;
+    private MotorController controller;
     private int tpr;
     private double last_time;
     private double gearbox_ratio, max_rpm;
@@ -34,7 +34,7 @@ public abstract class EncoderBase implements PeriodicComponent {
     private static int s_instanceCount = 0;
     private SlewLimiter m_simSlew;
 
-    public void initSimulationDevice(SpeedController controller, int tpr, double gearbox_ratio, double max_rpm,
+    public void initSimulationDevice(MotorController controller, int tpr, double gearbox_ratio, double max_rpm,
             double ramp_time) {
         // Set locals
         this.controller = controller;

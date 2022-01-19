@@ -86,12 +86,12 @@ public class VictorSPXCollection extends SpeedControllerGroup implements IMotorC
 
     }
 
-    @Override
-    public void pidWrite(double output) {
-        this.output = output;
-        super.pidWrite(output);
+    // @Override
+    // public void pidWrite(double output) {
+    //     this.output = output;
+    //     super.pidWrite(output);
 
-    }
+    // }
 
     @Override
     public void setVoltage(double volts) {

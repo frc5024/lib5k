@@ -2,8 +2,8 @@ package io.github.frc5024.purepursuit.pathgen;
 
 import java.util.ArrayList;
 import ca.retrylife.ewmath.MathUtils;
-import edu.wpi.first.wpilibj.geometry.Translation2d;
-import edu.wpi.first.wpilibj.util.Units;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 
 /**
  * This class is used to generate points along a bezier curves

@@ -3,10 +3,10 @@ package ca.retrylife.frc.templates.turrets;
 import java.util.function.Supplier;
 
 import ca.retrylife.ewmath.MathUtils;
-import edu.wpi.first.wpilibj.SpeedController;
-import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
-import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import io.github.frc5024.lib5k.logging.RobotLogger;
 import io.github.frc5024.lib5k.utils.ObjectCounter;
 import io.github.frc5024.libkontrol.statemachines.StateMachine;
@@ -33,7 +33,7 @@ public class ProfiledTurret extends TurretBase {
     private StateMachine<SystemState> stateMachine;
 
     // System I/O
-    private SpeedController motor;
+    private MotorController motor;
     private Supplier<Rotation2d> turretAngleSupplier;
 
     // Configuration
@@ -57,7 +57,7 @@ public class ProfiledTurret extends TurretBase {
      *                            ends
      * @param epsilon             Turret angle epsilon
      */
-    public ProfiledTurret(SpeedController motor, Supplier<Rotation2d> turretAngleSupplier, ProfiledPIDController turretPID,
+    public ProfiledTurret(MotorController motor, Supplier<Rotation2d> turretAngleSupplier, ProfiledPIDController turretPID,
             Rotation2d minDeadzoneAngle, Rotation2d maxDeadzoneAngle, 
             Rotation2d epsilon) {
         super(minDeadzoneAngle, maxDeadzoneAngle);

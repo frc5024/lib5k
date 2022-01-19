@@ -1,10 +1,10 @@
 package io.github.frc5024.lib5k.bases.drivetrain.implementations;
 
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.geometry.Pose2d;
-import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.geometry.Translation2d;
-import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 
 import io.github.frc5024.lib5k.bases.drivetrain.AbstractDriveTrain;
 import io.github.frc5024.lib5k.bases.drivetrain.Chassis;

@@ -1,10 +1,10 @@
 package io.github.frc5024.lib5k.simulation.systems;
 
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
-import edu.wpi.first.wpilibj.system.LinearSystem;
-import edu.wpi.first.wpiutil.math.Matrix;
-import edu.wpi.first.wpiutil.math.numbers.N1;
-import edu.wpi.first.wpiutil.math.numbers.N2;
+import edu.wpi.first.math.system.LinearSystem;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N2;
 import io.github.frc5024.lib5k.control_loops.models.DCBrushedMotor;
 import io.github.frc5024.lib5k.control_loops.models.SystemCharacteristics;
 import io.github.frc5024.lib5k.control_loops.statespace.StateSpaceSystem;

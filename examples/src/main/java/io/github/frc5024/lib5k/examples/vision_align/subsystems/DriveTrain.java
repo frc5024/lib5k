@@ -2,7 +2,7 @@ package io.github.frc5024.lib5k.examples.vision_align.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
-import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import io.github.frc5024.common_drive.gearing.Gear;
 import io.github.frc5024.lib5k.bases.drivetrain.implementations.OpenLoopTankDriveTrain;
 import io.github.frc5024.lib5k.examples.vision_align.RobotConfig;

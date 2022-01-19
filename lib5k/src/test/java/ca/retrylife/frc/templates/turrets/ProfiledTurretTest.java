@@ -7,9 +7,9 @@ import java.util.function.Supplier;
 import org.junit.Test;
 
 import ca.retrylife.ewmath.MathUtils;
-import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
-import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import io.github.frc5024.lib5k.hardware.generic.motors.MockSpeedController;
 import io.github.frc5024.lib5k.logging.RobotLogger;
 

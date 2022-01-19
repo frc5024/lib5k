@@ -1,6 +1,6 @@
 package io.github.frc5024.common_drive.queue;
 
-import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 
 /**
  * A data class for sharing sensor readings from the client to code to the

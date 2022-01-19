@@ -2,10 +2,10 @@ package io.github.frc5024.lib5k.utils;
 
 import java.util.HashMap;
 
-import edu.wpi.first.wpiutil.CircularBuffer;
+import edu.wpi.first.util.CircularBuffer;
 import io.github.frc5024.lib5k.utils.annotations.FieldTested;
-import edu.wpi.first.wpilibj.geometry.Pose2d;
-import edu.wpi.first.wpilibj.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
 
 import ca.retrylife.ewmath.MathUtils;
 

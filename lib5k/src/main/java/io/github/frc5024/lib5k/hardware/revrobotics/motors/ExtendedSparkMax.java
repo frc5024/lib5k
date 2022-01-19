@@ -8,9 +8,9 @@ import com.revrobotics.EncoderType;
 import edu.wpi.first.hal.SimDevice;
 import edu.wpi.first.hal.SimDouble;
 import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.Sendable;
-import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
-import edu.wpi.first.wpilibj.smartdashboard.SendableRegistry;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.util.sendable.SendableRegistry;
 import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.RR_HAL;
 import io.github.frc5024.lib5k.hardware.revrobotics.sensors.SparkMaxEncoder;
 import io.github.frc5024.lib5k.hardware.common.sensors.interfaces.CommonEncoder;
@@ -57,21 +57,7 @@ public class ExtendedSparkMax extends CANSparkMax implements Sendable {
         }
     }
 
-    /**
-     * Returns and object for interfacing with the encoder connected to the encoder
-     * pins or front port of the SPARK MAX.
-     * 
-     * The default encoder type is assumed to be the hall effect for brushless. This
-     * can be modified for brushed DC to use a quadrature encoder.
-     * 
-     * Assumes that the encoder the is integrated encoder, configured as:
-     * EncoderType.kHallEffect, 0 counts per revolution.
-     * 
-     * @return An object for interfacing with the integrated encoder.
-     */
-    public CommonEncoder getCommonEncoder() {
-        return getCommonEncoder(EncoderType.kHallSensor, 0);
-    }
+    
 
     /**
      * Returns and object for interfacing with the encoder connected to the encoder
@@ -80,13 +66,10 @@ public class ExtendedSparkMax extends CANSparkMax implements Sendable {
      * The default encoder type is assumed to be the hall effect for brushless. This
      * can be modified for brushed DC to use a quadrature encoder.
      * 
-     * @param sensorType     The encoder type for the motor: kHallEffect or
-     *                       kQuadrature
-     * @param counts_per_rev The counts per revolution of the encoder
      * @return An object for interfacing with an encoder
      */
-    public CommonEncoder getCommonEncoder(EncoderType sensorType, int counts_per_rev) {
-        return new SparkMaxEncoder(this, sensorType, counts_per_rev);
+    public CommonEncoder getCommonEncoder() {
+        return new SparkMaxEncoder(this);
     }
 
     @Override

@@ -1,7 +1,7 @@
 package io.github.frc5024.common_drive.calculation;
 
 import ca.retrylife.ewmath.MathUtils;
-import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 
 /**
  * Helpers for calculating differential drive kinematics

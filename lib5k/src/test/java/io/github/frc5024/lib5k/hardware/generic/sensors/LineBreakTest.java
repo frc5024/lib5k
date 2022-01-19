@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.simulation.DIOSim;
 
@@ -14,7 +15,7 @@ public class LineBreakTest {
     public void testSolenoidPoweredLineBreakSensor() {
 
         // Solenoid
-        Solenoid powerSource = new Solenoid(0);
+        Solenoid powerSource = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
 
         // Ensure there is no power flowing though the solenoid
         assertFalse("Solenoid disabled", powerSource.get());

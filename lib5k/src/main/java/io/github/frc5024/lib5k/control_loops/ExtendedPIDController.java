@@ -1,6 +1,6 @@
 package io.github.frc5024.lib5k.control_loops;
 
-import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.math.controller.PIDController;
 import io.github.frc5024.lib5k.control_loops.base.Controller;
 import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.FPGAClock;
 
@@ -9,7 +9,7 @@ import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.FPGAClock;
  * few quality-of-life features
  */
 public class ExtendedPIDController extends PIDController implements Controller {
-
+    
     // FeedForward
     private final double feedForward;
 

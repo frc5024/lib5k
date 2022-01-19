@@ -4,7 +4,7 @@ import java.util.function.Consumer;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.Spark;
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import io.github.frc5024.lib5k.hardware.common.motors.interfaces.IMotorCollection;
 import io.github.frc5024.lib5k.hardware.common.motors.interfaces.IRampRateController;
@@ -84,12 +84,14 @@ public class SparkCollection extends SpeedControllerGroup
 
     }
 
-    @Override
-    public void pidWrite(double output) {
-        this.output = output;
-        super.pidWrite(output);
 
-    }
+    
+    // @Override
+    // public void pidWrite(double output) {
+    //     this.output = output;
+    //     super.pidWrite(output);
+
+    // }
 
     @Override
     public void setVoltage(double volts) {

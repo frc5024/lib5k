@@ -1,37 +1,46 @@
 package io.github.frc5024.lib5k.hardware.revrobotics.sensors;
 
+
+
 import io.github.frc5024.lib5k.hardware.common.sensors.simulation.EncoderSimUtil;
+import io.github.frc5024.lib5k.hardware.revrobotics.motors.ExtendedSparkMax;
+import io.github.frc5024.lib5k.hardware.revrobotics.motors.RevMotorFactory;
 import io.github.frc5024.lib5k.hardware.common.sensors.interfaces.EncoderSimulation;
 
 import com.revrobotics.CANEncoder;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.EncoderType;
+import com.revrobotics.REVLibError;
 
-import edu.wpi.first.wpilibj.SpeedController;
 
-public class SparkMaxEncoder extends CANEncoder implements EncoderSimulation {
+
+public class SparkMaxEncoder implements EncoderSimulation{
 
     private CANSparkMax device;
     private int cpr;
     private EncoderSimUtil sim;
     private double offset;
+    private RelativeEncoder deviceEncoder;
 
     /**
      * Create a SparkMaxEncoder
      * 
      * @param device         Master motor controller
-     * @param sensorType     Type of sensor
-     * @param counts_per_rev Counts per rotation of the encoder
      */
-    public SparkMaxEncoder(CANSparkMax device, EncoderType sensorType, int counts_per_rev) {
-        super(device, sensorType, counts_per_rev);
+    public SparkMaxEncoder(CANSparkMax device) {
+        deviceEncoder = device.getEncoder();
         this.device = device;
-        this.cpr = counts_per_rev;
-        offset = getPosition();
+        offset = deviceEncoder.getPosition();
     }
 
-    @Override
-    public void initSimulationDevice(SpeedController controller, double gearbox_ratio, double max_rpm,
+    
+    public void initSimulationDevice(MotorController controller, double gearbox_ratio, double max_rpm,
             double ramp_time) {
         sim = new EncoderSimUtil("SparkMAX", device.getDeviceId(), cpr, controller, gearbox_ratio, max_rpm, ramp_time);
     }
@@ -47,7 +56,7 @@ public class SparkMaxEncoder extends CANEncoder implements EncoderSimulation {
         if (sim != null && sim.simReady()) {
             sim.setInverted(inverted);
         } else {
-            this.setInverted(inverted);
+            deviceEncoder.setInverted(inverted);
         }
     }
 
@@ -59,7 +68,7 @@ public class SparkMaxEncoder extends CANEncoder implements EncoderSimulation {
             return sim.getInverted();
         }
 
-        return super.getInverted();
+        return deviceEncoder.getInverted();
     }
 
     @Override
@@ -68,7 +77,7 @@ public class SparkMaxEncoder extends CANEncoder implements EncoderSimulation {
         if (sim != null && sim.simReady()) {
             return sim.getRotations() - offset;
         }
-        return super.getPosition() - offset;
+        return deviceEncoder.getPosition() - offset;
     }
 
     @Override
@@ -77,12 +86,12 @@ public class SparkMaxEncoder extends CANEncoder implements EncoderSimulation {
         if (sim != null && sim.simReady()) {
             return sim.getVelocity();
         }
-        return super.getVelocity();
+        return deviceEncoder.getVelocity();
     }
 
     @Override
     public void reset() {
-        super.setPosition(0.0);
+        deviceEncoder.setPosition(0.0);
         if (sim != null && sim.simReady()) {
             sim.reset();
         }
@@ -94,4 +103,6 @@ public class SparkMaxEncoder extends CANEncoder implements EncoderSimulation {
             sim.close();
         }
     }
+
+
 }

@@ -1,11 +1,12 @@
 package io.github.frc5024.lib5k.hardware.generic.motors;
 
-import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 
 /**
  * For mocking a speed controller in tests
  */
-public class MockSpeedController implements SpeedController {
+public class MockSpeedController implements MotorController {
 
     private double speed = 0.0;
     private boolean inverted = false;
@@ -30,7 +31,7 @@ public class MockSpeedController implements SpeedController {
         set(0.0);
     }
 
-    @Override
+    @Deprecated(since = "2022", forRemoval = true)
     public void pidWrite(double output) {
         set(output);
 

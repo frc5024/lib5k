@@ -1,6 +1,6 @@
 package io.github.frc5024.lib5k.hardware.common.sensors.interfaces;
 
-import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import io.github.frc5024.lib5k.utils.interfaces.PeriodicComponent;
 
 public interface EncoderSimulation extends PeriodicComponent, CommonEncoder {
@@ -14,7 +14,7 @@ public interface EncoderSimulation extends PeriodicComponent, CommonEncoder {
      * @param ramp_time     The approx amount of time it takes for the motor to go
      *                      from 0-100% under load
      */
-    public void initSimulationDevice(SpeedController controller, double gearbox_ratio, double max_rpm,
+    public void initSimulationDevice(MotorController controller, double gearbox_ratio, double max_rpm,
             double ramp_time);
 
 }

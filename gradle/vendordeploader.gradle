@@ -22,7 +22,7 @@ task exportDeps(type: Zip) {
     include "*.json"
     archiveName "vendordeps.zip"
     destinationDir project.file("$buildDir/libs/")
-}
+} 
 
 // Make vendordeps get exported along with the jar files
 assemble.dependsOn exportDeps

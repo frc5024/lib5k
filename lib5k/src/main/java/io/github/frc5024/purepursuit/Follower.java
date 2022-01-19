@@ -1,7 +1,7 @@
 package io.github.frc5024.purepursuit;
 
-import edu.wpi.first.wpilibj.geometry.Pose2d;
-import edu.wpi.first.wpilibj.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import io.github.frc5024.purepursuit.pathgen.Path;
 
 /**

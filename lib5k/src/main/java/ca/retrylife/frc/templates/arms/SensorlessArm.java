@@ -2,8 +2,9 @@ package ca.retrylife.frc.templates.arms;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import io.github.frc5024.lib5k.logging.RobotLogger;
 import io.github.frc5024.lib5k.logging.RobotLogger.Level;
 import io.github.frc5024.lib5k.utils.ObjectCounter;
@@ -24,6 +25,8 @@ import io.github.frc5024.libkontrol.statemachines.StateMetadata;
 public class SensorlessArm extends SubsystemBase {
     private RobotLogger logger = RobotLogger.getInstance();
 
+    
+
     // System states
     public enum SystemState {
         kLowered, kRaised, kStopped;
@@ -37,7 +40,7 @@ public class SensorlessArm extends SubsystemBase {
     private SystemState userDesiredState = SystemState.kStopped;
 
     // System I/O
-    private SpeedController motor;
+    private MotorController motor;
     private DigitalInput loweredLimitSensor;
     private DigitalInput raisedLimitSensor;
 
@@ -61,7 +64,7 @@ public class SensorlessArm extends SubsystemBase {
      * @param feedForward        How much faster the arm should move going up than
      *                           it should going down
      */
-    public SensorlessArm(SpeedController motor, DigitalInput loweredLimitSensor, DigitalInput raisedLimitSensor,
+    public SensorlessArm(MotorController motor, DigitalInput loweredLimitSensor, DigitalInput raisedLimitSensor,
             double speed, double feedForward) {
 
         // Set locals

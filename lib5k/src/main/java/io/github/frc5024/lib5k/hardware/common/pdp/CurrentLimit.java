@@ -4,7 +4,7 @@ import java.util.function.Consumer;
 
 import edu.wpi.first.wpilibj.Timer;
 
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import edu.wpi.first.wpilibj.PowerDistribution;
 
 public class CurrentLimit {
 
@@ -54,7 +54,7 @@ public class CurrentLimit {
      * 
      * @param pdp the pdp the device is connected to
      */
-    public void run(PowerDistributionPanel pdp){
+    public void run(PowerDistribution pdp){
         double current = pdp.getCurrent(pdpChannel);
 
         // if volts are at allowed levels stop the timer and the timer equals 0 if the device is above the hold start the timer

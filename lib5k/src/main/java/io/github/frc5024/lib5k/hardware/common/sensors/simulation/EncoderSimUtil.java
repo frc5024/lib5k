@@ -3,7 +3,7 @@ package io.github.frc5024.lib5k.hardware.common.sensors.simulation;
 import edu.wpi.first.hal.SimBoolean;
 import edu.wpi.first.hal.SimDevice;
 import edu.wpi.first.hal.SimDouble;
-import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import io.github.frc5024.lib5k.control_loops.SlewLimiter;
 import io.github.frc5024.lib5k.utils.TimeScale;
 import io.github.frc5024.lib5k.utils.interfaces.PeriodicComponent;
@@ -14,7 +14,7 @@ import io.github.frc5024.lib5k.utils.interfaces.PeriodicComponent;
 public class EncoderSimUtil implements PeriodicComponent, AutoCloseable {
 
     /* Simulation vars */
-    private SpeedController controller;
+    private MotorController controller;
     private double gearbox_ratio, max_rpm;
     private int cpr;
 
@@ -40,7 +40,7 @@ public class EncoderSimUtil implements PeriodicComponent, AutoCloseable {
      * @param max_rpm       Max motor RPM
      * @param ramp_time     Amount of time to get from 0 to 100% in seconds
      */
-    public EncoderSimUtil(String name, int id, int cpr, SpeedController controller, double gearbox_ratio,
+    public EncoderSimUtil(String name, int id, int cpr, MotorController controller, double gearbox_ratio,
             double max_rpm, double ramp_time) {
         // Set locals
         this.controller = controller;

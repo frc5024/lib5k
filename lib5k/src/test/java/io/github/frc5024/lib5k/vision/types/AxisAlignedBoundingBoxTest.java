@@ -6,7 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import edu.wpi.first.wpilibj.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import io.github.frc5024.lib5k.utils.RobotMath;
 
 public class AxisAlignedBoundingBoxTest {

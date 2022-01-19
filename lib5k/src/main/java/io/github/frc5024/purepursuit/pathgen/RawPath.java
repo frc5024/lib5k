@@ -2,7 +2,7 @@ package io.github.frc5024.purepursuit.pathgen;
 
 import java.util.ArrayList;
 
-import edu.wpi.first.wpilibj.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 
 /**
  * The RawPath class lets you define Paths completely manually. This is only for

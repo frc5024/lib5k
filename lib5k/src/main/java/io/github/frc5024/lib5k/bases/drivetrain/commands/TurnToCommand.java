@@ -1,6 +1,6 @@
 package io.github.frc5024.lib5k.bases.drivetrain.commands;
 
-import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import io.github.frc5024.lib5k.bases.drivetrain.AbstractDriveTrain;
 import io.github.frc5024.lib5k.logging.RobotLogger;

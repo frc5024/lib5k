@@ -4,7 +4,7 @@ import java.util.function.Consumer;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import io.github.frc5024.lib5k.hardware.common.motors.interfaces.IMotorCollection;
 import io.github.frc5024.lib5k.hardware.common.motors.interfaces.IRampRateController;
@@ -30,8 +30,8 @@ public class MixedMotorCollection extends SpeedControllerGroup
     RobotLogger logger = RobotLogger.getInstance();
 
     /* Motor controllers */
-    private SpeedController master;
-    private SpeedController[] slaves;
+    private MotorController master;
+    private MotorController[] slaves;
 
     /* Telemetry */
     private double output;
@@ -45,7 +45,7 @@ public class MixedMotorCollection extends SpeedControllerGroup
     /* Locals */
     private TimedSlewLimiter slewLimiter;
 
-    public MixedMotorCollection(SpeedController master, SpeedController... slaves) {
+    public MixedMotorCollection(MotorController master, MotorController... slaves) {
         super(master, slaves);
 
         // Set locals
@@ -86,10 +86,11 @@ public class MixedMotorCollection extends SpeedControllerGroup
 
     }
 
-    @Override
+    
+    @Deprecated(since = "2022", forRemoval = true)
     public void pidWrite(double output) {
         this.output = output;
-        super.pidWrite(output);
+        //super.pidWrite(output);
 
     }
 
@@ -149,8 +150,8 @@ public class MixedMotorCollection extends SpeedControllerGroup
      * 
      * @param consumer Method to run
      */
-    public void forEachSlave(Consumer<SpeedController> consumer) {
-        for (SpeedController slave : slaves) {
+    public void forEachSlave(Consumer<MotorController> consumer) {
+        for (MotorController slave : slaves) {
             consumer.accept(slave);
         }
     }

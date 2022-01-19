@@ -117,12 +117,12 @@ public class TalonSRXCollection extends SpeedControllerGroup implements IMotorCo
 
     }
 
-    @Override
-    public void pidWrite(double output) {
-        this.output = output;
-        super.pidWrite(output);
+    // @Override
+    // public void pidWrite(double output) {
+    //     this.output = output;
+    //     super.pidWrite(output);
 
-    }
+    // }
 
     private double getControllerVoltage() {
         if (m_simDevice != null) {

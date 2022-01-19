@@ -5,7 +5,8 @@ import io.github.frc5024.lib5k.hardware.common.sensors.interfaces.EncoderSimulat
 
 import com.ctre.phoenix.motorcontrol.can.BaseTalon;
 
-import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 
 public class TalonEncoder implements EncoderSimulation {
 
@@ -69,7 +70,7 @@ public class TalonEncoder implements EncoderSimulation {
     }
 
     @Override
-    public void initSimulationDevice(SpeedController controller, double gearbox_ratio, double max_rpm,
+    public void initSimulationDevice(MotorController controller, double gearbox_ratio, double max_rpm,
             double ramp_time) {
 
         sim = new EncoderSimUtil("TalonSRX Encoder", talon.getDeviceID(), cpr, controller, gearbox_ratio, max_rpm,

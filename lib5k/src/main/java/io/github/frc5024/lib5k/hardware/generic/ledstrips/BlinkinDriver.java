@@ -1,8 +1,8 @@
 package io.github.frc5024.lib5k.hardware.generic.ledstrips;
 
-import edu.wpi.first.wpilibj.Sendable;
-import edu.wpi.first.wpilibj.Spark;
-import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import io.github.frc5024.lib5k.utils.annotations.FieldTested;
 
 /**

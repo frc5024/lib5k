@@ -1,6 +1,8 @@
 package io.github.frc5024.lib5k.hardware.generic.pneumatics;
 
 import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.wpilibj.PneumaticsControlModule;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.FPGAClock;
 import io.github.frc5024.lib5k.logging.Loggable;
@@ -25,14 +27,14 @@ public class LazySolenoid extends Solenoid implements Loggable {
     /**
      * Create a LazySolenoid
      * 
-     * @param moduleNumber PCM module number (CAN ID)
+     * @param moduleType PCM module number (CAN ID)
      * @param channel      PCM channel
      */
-    public LazySolenoid(int moduleNumber, int channel) {
-        super(moduleNumber, channel);
+    public LazySolenoid(PneumaticsModuleType moduleType, int channel) {
+        super(moduleType, channel);
 
         // Determine component name
-        name = String.format("LazySolenoid (%d:%d)", moduleNumber, channel);
+        name = String.format("LazySolenoid (%s:%d)", moduleType == PneumaticsModuleType.CTREPCM ? "CTRE PCM" : "REV PH", channel);
 
         // Get telemetry table
         telemetryTable = ComponentTelemetry.getInstance().getTableForComponent(name);

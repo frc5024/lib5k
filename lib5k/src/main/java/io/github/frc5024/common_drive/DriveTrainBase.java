@@ -31,6 +31,7 @@ import io.github.frc5024.lib5k.hardware.ni.roborio.fpga.FPGAClock;
 import io.github.frc5024.lib5k.logging.RobotLogger;
 import io.github.frc5024.lib5k.control_loops.ExtendedPIDController;
 import io.github.frc5024.lib5k.hardware.common.drivebase.IDifferentialDrivebase;
+import io.github.frc5024.lib5k.hardware.ctre.motors.CTREMotorFactory;
 
 /**
  * The base for all drivetrains.
@@ -100,6 +101,8 @@ public abstract class DriveTrainBase extends SubsystemBase implements IDifferent
      * @param config Configuration info
      */
     public DriveTrainBase(DriveTrainConfig config) {
+
+        CTREMotorFactory.createTalonFX(1).set(50);
 
         // Set config
         this.config = config;

@@ -110,6 +110,7 @@ public class CTREMotorFactory {
 				);
 		}
 
+
         talon.stopMotor();
 
         return talon;
